@@ -1,0 +1,15 @@
+[package]
+name = "inno-engine-py"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.96"
+publish = false
+description = "Python extension module for the engine's training pools and native network"
+
+[lib]
+name = "inno_engine"
+crate-type = ["cdylib"]
+
+[dependencies]
+inno-engine = { path = "../engine" }
+pyo3 = { version = "=0.29.0", features = ["extension-module", "abi3-py311"] }

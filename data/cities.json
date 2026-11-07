@@ -1,0 +1,3682 @@
+[
+  {
+    "code": "C001",
+    "title": "ATHENS",
+    "set": "Cities",
+    "color": "RED",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C002",
+    "title": "CHANG' AN",
+    "set": "Cities",
+    "color": "RED",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C003",
+    "title": "THEBES",
+    "set": "Cities",
+    "color": "RED",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "CONCEPT",
+      "top_center": "CONCEPT",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C004",
+    "title": "DAMASCUS",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY",
+      "top_center": "AUTHORITY",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C005",
+    "title": "LINZI",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "AUTHORITY",
+      "top_center": "AUTHORITY",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C006",
+    "title": "URUK",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY",
+      "top_center": "AUTHORITY",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C007",
+    "title": "BABYLON",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "uplift",
+      null
+    ]
+  },
+  {
+    "code": "C008",
+    "title": "JERUSALEM",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "AUTHORITY",
+      "top_center": "AUTHORITY",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C009",
+    "title": "MEMPHIS",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "HEALTH",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY",
+      "top_center": "AUTHORITY",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C010",
+    "title": "ATLANTIS",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH",
+      "top_center": "AUTHORITY",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C011",
+    "title": "TROY",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "AUTHORITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "junk",
+      null
+    ]
+  },
+  {
+    "code": "C012",
+    "title": "YIN",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "AUTHORITY",
+      "top_center": "AUTHORITY",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C013",
+    "title": "EPHESUS",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "AUTHORITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C014",
+    "title": "HATTUSA",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "AUTHORITY",
+      "top_center": "AUTHORITY",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C015",
+    "title": "MOHENJO-DARO",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 1,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "AUTHORITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C016",
+    "title": "SPARTA",
+    "set": "Cities",
+    "color": "RED",
+    "age": 2,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "junk",
+      null
+    ]
+  },
+  {
+    "code": "C017",
+    "title": "TIKAL",
+    "set": "Cities",
+    "color": "RED",
+    "age": 2,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY",
+      "top_center": "AUTHORITY",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      4,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C018",
+    "title": "NINEVEH",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 2,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null,
+      "top_center": "HEALTH",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      2,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C019",
+    "title": "TEOTIHUACAN",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 2,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY",
+      "top_center": "HEALTH",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      3,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C020",
+    "title": "MARSEILLE",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 2,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "AUTHORITY",
+      "top_center": "PROSPERITY",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      2,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C021",
+    "title": "NANJING",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 2,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY",
+      "top_center": "AUTHORITY",
+      "top_right": null
+    },
+    "bonuses": [
+      3,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C022",
+    "title": "ALEXANDRIA",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 2,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      2,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C023",
+    "title": "CARTHAGE",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 2,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C024",
+    "title": "LUOYANG",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 2,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "HEALTH",
+      "bottom_right": null,
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      2,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "uplift",
+      null
+    ]
+  },
+  {
+    "code": "C025",
+    "title": "ROME",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 2,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "AUTHORITY",
+      "top_center": "CONCEPT",
+      "top_right": null
+    },
+    "bonuses": [
+      2,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C026",
+    "title": "BARCELONA",
+    "set": "Cities",
+    "color": "RED",
+    "age": 3,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "AUTHORITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      4,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C027",
+    "title": "DELHI",
+    "set": "Cities",
+    "color": "RED",
+    "age": 3,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "HEALTH",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "left",
+      null
+    ]
+  },
+  {
+    "code": "C028",
+    "title": "JAKARTA",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 3,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "junk",
+      null
+    ]
+  },
+  {
+    "code": "C029",
+    "title": "KAIFENG",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 3,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "HEALTH",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "left",
+      null
+    ]
+  },
+  {
+    "code": "C030",
+    "title": "BAGHDAD",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 3,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null,
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      3,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "left",
+      null
+    ]
+  },
+  {
+    "code": "C031",
+    "title": "VENICE",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 3,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C032",
+    "title": "CORDOBA",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 3,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "left",
+      null
+    ]
+  },
+  {
+    "code": "C033",
+    "title": "HANGZHOU",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 3,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "AUTHORITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "uplift",
+      null
+    ]
+  },
+  {
+    "code": "C034",
+    "title": "CONSTANTINOPLE",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 3,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      3,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "left",
+      null
+    ]
+  },
+  {
+    "code": "C035",
+    "title": "MECCA",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 3,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "HEALTH",
+      "top_center": "HEALTH",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      5,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C036",
+    "title": "MILAN",
+    "set": "Cities",
+    "color": "RED",
+    "age": 4,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "uplift",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C037",
+    "title": "TENOCHTITLAN",
+    "set": "Cities",
+    "color": "RED",
+    "age": 4,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      4,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "left",
+      null
+    ]
+  },
+  {
+    "code": "C038",
+    "title": "BEIJING",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 4,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "left",
+      null
+    ]
+  },
+  {
+    "code": "C039",
+    "title": "LISBON",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 4,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C040",
+    "title": "CALICUT",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 4,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH",
+      "top_center": "HEALTH",
+      "top_right": null
+    },
+    "bonuses": [
+      5,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C041",
+    "title": "MANILA",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 4,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      4,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "left",
+      null
+    ]
+  },
+  {
+    "code": "C042",
+    "title": "FRANKFURT",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 4,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C043",
+    "title": "MADRID",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 4,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "left",
+      null
+    ]
+  },
+  {
+    "code": "C044",
+    "title": "FLORENCE",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 4,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null,
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      4,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "left",
+      null
+    ]
+  },
+  {
+    "code": "C045",
+    "title": "SEVILLE",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 4,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "junk",
+      null
+    ]
+  },
+  {
+    "code": "C046",
+    "title": "ALGIERS",
+    "set": "Cities",
+    "color": "RED",
+    "age": 5,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null,
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      5,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "flag",
+      null
+    ]
+  },
+  {
+    "code": "C047",
+    "title": "ZURICH",
+    "set": "Cities",
+    "color": "RED",
+    "age": 5,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "junk",
+      null
+    ]
+  },
+  {
+    "code": "C048",
+    "title": "HOI AN",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 5,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "HEALTH",
+      "top_center": "PROSPERITY",
+      "top_right": null
+    },
+    "bonuses": [
+      7,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C049",
+    "title": "OSAKA",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 5,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT",
+      "top_center": "CONCEPT",
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "search",
+      null
+    ]
+  },
+  {
+    "code": "C050",
+    "title": "AMSTERDAM",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 5,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "uplift",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C051",
+    "title": "STOCKHOLM",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 5,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      5,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "flag",
+      null
+    ]
+  },
+  {
+    "code": "C052",
+    "title": "BOSTON",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 5,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C053",
+    "title": "NAPLES",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 5,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C054",
+    "title": "GDANSK",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 5,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      5,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "flag",
+      null
+    ]
+  },
+  {
+    "code": "C055",
+    "title": "TOKYO",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 5,
+    "effects": [],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "AUTHORITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "flag",
+      null
+    ]
+  },
+  {
+    "code": "C056",
+    "title": "PHILADELPHIA",
+    "set": "Cities",
+    "color": "RED",
+    "age": 6,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "EFFICIENCY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C057",
+    "title": "TEHRAN",
+    "set": "Cities",
+    "color": "RED",
+    "age": 6,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "right",
+      null,
+      "flag",
+      null
+    ]
+  },
+  {
+    "code": "C058",
+    "title": "DUBLIN",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 6,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "right",
+      null,
+      "junk",
+      null
+    ]
+  },
+  {
+    "code": "C059",
+    "title": "PARIS",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 6,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null,
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      7,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "flag",
+      null
+    ]
+  },
+  {
+    "code": "C060",
+    "title": "BOMBAY",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 6,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      6,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "right",
+      null
+    ]
+  },
+  {
+    "code": "C061",
+    "title": "RIO DE JANEIRO",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 6,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      7,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "flag",
+      null
+    ]
+  },
+  {
+    "code": "C062",
+    "title": "BERLIN",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 6,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "right",
+      null,
+      "flag",
+      null
+    ]
+  },
+  {
+    "code": "C063",
+    "title": "EDINBURGH",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 6,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C064",
+    "title": "NEW YORK CITY",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 6,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "uplift",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C065",
+    "title": "VIENNA",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 6,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      6,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "right",
+      null
+    ]
+  },
+  {
+    "code": "C066",
+    "title": "LYON",
+    "set": "Cities",
+    "color": "RED",
+    "age": 7,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "right",
+      null,
+      "flag",
+      null
+    ]
+  },
+  {
+    "code": "C067",
+    "title": "MONTREAL",
+    "set": "Cities",
+    "color": "RED",
+    "age": 7,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "junk",
+      null
+    ]
+  },
+  {
+    "code": "C068",
+    "title": "MELBOURNE",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 7,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "HEALTH",
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      7,
+      7,
+      null,
+      null,
+      7,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C069",
+    "title": "ST. PETERSBURG",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 7,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "right",
+      null,
+      "flag",
+      null
+    ]
+  },
+  {
+    "code": "C070",
+    "title": "LONDON",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 7,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "EFFICIENCY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "uplift",
+      null,
+      "right",
+      null
+    ]
+  },
+  {
+    "code": "C071",
+    "title": "TORONTO",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 7,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      7,
+      7,
+      null,
+      null,
+      7,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C072",
+    "title": "JOHANNESBURG",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 7,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      7,
+      7,
+      null,
+      null,
+      7,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C073",
+    "title": "MUNICH",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 7,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "right",
+      null
+    ]
+  },
+  {
+    "code": "C074",
+    "title": "SAN FRANCISCO",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 7,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": null,
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      9,
+      9,
+      9,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C075",
+    "title": "WASHINGTON",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 7,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "right",
+      null,
+      "flag",
+      null
+    ]
+  },
+  {
+    "code": "C076",
+    "title": "KUALA LUMPUR",
+    "set": "Cities",
+    "color": "RED",
+    "age": 8,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "INDUSTRY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "fountain",
+      null
+    ]
+  },
+  {
+    "code": "C077",
+    "title": "LOS ANGELES",
+    "set": "Cities",
+    "color": "RED",
+    "age": 8,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      9,
+      null,
+      9,
+      null,
+      9,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C078",
+    "title": "CHICAGO",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 8,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      8,
+      8,
+      null,
+      null,
+      8,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C079",
+    "title": "SHANGHAI",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 8,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "fountain",
+      null
+    ]
+  },
+  {
+    "code": "C080",
+    "title": "HAMBURG",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 8,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "junk",
+      null
+    ]
+  },
+  {
+    "code": "C081",
+    "title": "SÃO PAULO",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 8,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      8,
+      8,
+      null,
+      null,
+      8,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C082",
+    "title": "CHONGQING",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 8,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "uplift",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C083",
+    "title": "KYIV",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 8,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C084",
+    "title": "BUENOS AIRES",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 8,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      9,
+      null,
+      9,
+      null,
+      9,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C085",
+    "title": "VANCOUVER",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 8,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C086",
+    "title": "DALLAS",
+    "set": "Cities",
+    "color": "RED",
+    "age": 9,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "EFFICIENCY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "up",
+      null
+    ]
+  },
+  {
+    "code": "C087",
+    "title": "PERTH",
+    "set": "Cities",
+    "color": "RED",
+    "age": 9,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      10,
+      null,
+      10,
+      null,
+      10,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C088",
+    "title": "GUADALAJARA",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 9,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "EFFICIENCY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "plus",
+      null,
+      "up",
+      null
+    ]
+  },
+  {
+    "code": "C089",
+    "title": "MIAMI",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 9,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      9,
+      null,
+      9,
+      null,
+      9,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C090",
+    "title": "SANTIAGO",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 9,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      9,
+      9,
+      null,
+      null,
+      9,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C091",
+    "title": "SYDNEY",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 9,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "up",
+      null,
+      "fountain",
+      null
+    ]
+  },
+  {
+    "code": "C092",
+    "title": "HOUSTON",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 9,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      10,
+      null,
+      10,
+      null,
+      10,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C093",
+    "title": "TAIPEI",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 9,
+    "effects": [],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "up",
+      null,
+      "fountain",
+      null
+    ]
+  },
+  {
+    "code": "C094",
+    "title": "HONG KONG",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 9,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "uplift",
+      null,
+      "up",
+      null
+    ]
+  },
+  {
+    "code": "C095",
+    "title": "MOSCOW",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 9,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "junk",
+      null,
+      "fountain",
+      null
+    ]
+  },
+  {
+    "code": "C096",
+    "title": "SEOUL",
+    "set": "Cities",
+    "color": "RED",
+    "age": 10,
+    "effects": [],
+    "icons": {
+      "top_left": "AVATAR",
+      "bottom_left": "AVATAR",
+      "bottom_center": null,
+      "bottom_right": "AVATAR",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "up",
+      null,
+      "unsplay",
+      null
+    ]
+  },
+  {
+    "code": "C097",
+    "title": "SINGAPORE",
+    "set": "Cities",
+    "color": "RED",
+    "age": 10,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      10,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C098",
+    "title": "COPENHAGEN",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 10,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "up",
+      null,
+      "unsplay",
+      null
+    ]
+  },
+  {
+    "code": "C099",
+    "title": "DUBAI",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 10,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "PROSPERITY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      10,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C100",
+    "title": "BANGKOK",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 10,
+    "effects": [],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": null,
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      11,
+      11,
+      11,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C101",
+    "title": "TEL AVIV",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 10,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "EFFICIENCY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "up",
+      null,
+      "unsplay",
+      null
+    ]
+  },
+  {
+    "code": "C102",
+    "title": "ATLANTA",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 10,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      10,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "plus",
+      null
+    ]
+  },
+  {
+    "code": "C103",
+    "title": "BANGALORE",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 10,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "up",
+      null,
+      "unsplay",
+      null
+    ]
+  },
+  {
+    "code": "C104",
+    "title": "BRUSSELS",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 10,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "AVATAR",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "junk",
+      null
+    ]
+  },
+  {
+    "code": "C105",
+    "title": "LAGOS",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 10,
+    "effects": [],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "up",
+      null,
+      "unsplay",
+      null
+    ]
+  },
+  {
+    "code": "C106",
+    "title": "GUANGZHOU",
+    "set": "Cities",
+    "color": "RED",
+    "age": 11,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "fountain",
+      null,
+      "fountain",
+      null
+    ]
+  },
+  {
+    "code": "C107",
+    "title": "WARSAW",
+    "set": "Cities",
+    "color": "RED",
+    "age": 11,
+    "effects": [],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "EFFICIENCY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      11,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "unsplay",
+      null
+    ]
+  },
+  {
+    "code": "C108",
+    "title": "NAIROBI",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 11,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "fountain",
+      null,
+      "fountain",
+      null
+    ]
+  },
+  {
+    "code": "C109",
+    "title": "SHENZHEN",
+    "set": "Cities",
+    "color": "YELLOW",
+    "age": 11,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      11,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "unsplay",
+      null
+    ]
+  },
+  {
+    "code": "C110",
+    "title": "BEIRUT",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 11,
+    "effects": [],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "AVATAR",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null,
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      11,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "unsplay",
+      null
+    ]
+  },
+  {
+    "code": "C111",
+    "title": "RIYADH",
+    "set": "Cities",
+    "color": "GREEN",
+    "age": 11,
+    "effects": [],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null,
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      12,
+      null,
+      12,
+      12,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C112",
+    "title": "PRAGUE",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 11,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "EFFICIENCY",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      "fountain",
+      null,
+      "fountain",
+      null
+    ]
+  },
+  {
+    "code": "C113",
+    "title": "SEATTLE",
+    "set": "Cities",
+    "color": "BLUE",
+    "age": 11,
+    "effects": [],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "AVATAR",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      11,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "unsplay",
+      null
+    ]
+  },
+  {
+    "code": "C114",
+    "title": "BRISBANE",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 11,
+    "effects": [],
+    "icons": {
+      "top_left": "AVATAR",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "HEALTH",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      11,
+      11,
+      null,
+      11,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "code": "C115",
+    "title": "LIMA",
+    "set": "Cities",
+    "color": "PURPLE",
+    "age": 11,
+    "effects": [],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT",
+      "top_center": null,
+      "top_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      11,
+      null,
+      null,
+      null
+    ],
+    "city_icons": [
+      null,
+      null,
+      null,
+      null,
+      "unsplay",
+      null
+    ]
+  }
+]

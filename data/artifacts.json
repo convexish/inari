@@ -1,0 +1,2857 @@
+[
+  {
+    "code": "A001",
+    "title": "HOLMEGAARD BOWS",
+    "color": "RED",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer your highest top card with {[AUTHORITY]} to my hand! If you don't, junk all cards in the deck of value equal to the value of your lowest top card!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Draw a [2].",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A002",
+    "title": "PAPYRUS OF ANI",
+    "color": "RED",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Return a purple card from your hand. If you do, draw and reveal a card from any set of value two higher. If the drawn card is purple, meld it and self-execute it.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A003",
+    "title": "PAVLOVIAN TUSK",
+    "color": "RED",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Draw three cards of value equal to your top green card. Return one of the drawn cards. Score one of the drawn cards.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A004",
+    "title": "DANCING GIRL",
+    "color": "YELLOW",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer Dancing Girl to your board!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "If Dancing Girl has been on every opponent's board during this action, and it is your turn, you win.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A005",
+    "title": "LURGAN CANOE",
+    "color": "YELLOW",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Meld a card from your hand. Score all other cards of the same color from your board. If you score a card, repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A006",
+    "title": "XIANRENDONG SHARDS",
+    "color": "YELLOW",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Reveal three cards from your hand. Score two, then tuck the other. If you score two cards of the same color, draw three [1].",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A007",
+    "title": "PRIEST-KING",
+    "color": "GREEN",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "Score a card from your hand. If you have a top card matching its color, super-execute that top card if it is your turn, otherwise self-execute it.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": null,
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A008",
+    "title": "ELECTRUM STATER OF EPHESUS",
+    "color": "GREEN",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Draw and reveal a [3]. If you do not have a top card of the drawn card's color, meld it and repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A009",
+    "title": "JISKAIRUMOKO NECKLACE",
+    "color": "GREEN",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "compel",
+        "text": "I COMPEL you to return a card from your score pile! If you do, transfer an achievement of the same value from your achievements to mine, and junk all cards in the deck of that value!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A010",
+    "title": "TREATY OF KADESH",
+    "color": "BLUE",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "compel",
+        "text": "I COMPEL you to return a top card with a demand effect of each color from your board!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "Score a top, non-blue card with a demand effect on your board.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A011",
+    "title": "SIBIDU NEEDLE",
+    "color": "BLUE",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "Draw and reveal a [1]. If you have a top card of matching color and value to the drawn card, score the drawn card and repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A012",
+    "title": "BASUR HOYUK TOKENS",
+    "color": "BLUE",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Draw and reveal a [4]. If you have a top card of the drawn card's color that comes before it in the alphabet, return the drawn card and all cards from your score pile.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A013",
+    "title": "MASK OF WARKA",
+    "color": "PURPLE",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "Choose a color. Each player reveals their hand. If you are the only player to reveal at least one card of that color, return them and claim all available achievements of value matching those cards, ignoring eligibility.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A014",
+    "title": "ARK OF THE COVENANT",
+    "color": "PURPLE",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "Return a card from your hand. Score all cards of the same color on the boards of all players with no top Artifacts.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "If Ark of the Covenant is a top card on any board, transfer it to your hand.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A015",
+    "title": "TALE OF THE SHIPWRECKED SAILOR",
+    "color": "PURPLE",
+    "age": 1,
+    "reference_age": 1,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Choose a color. Draw a [1]. Meld a card of the chosen color from your hand. If you do, splay that color left, and junk an available achievement of value equal to the value of the melded card.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A016",
+    "title": "CHRONICLE OF ZUO",
+    "color": "RED",
+    "age": 2,
+    "reference_age": 2,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "If you have the least {[AUTHORITY]} or the least {[PROSPERITY]}, draw a [3].",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "If you have the least {[CONCEPT]}, draw a [4].",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A017",
+    "title": "BABYLONIAN CHRONICLES",
+    "color": "RED",
+    "age": 2,
+    "reference_age": 2,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer a top non-red card with {[AUTHORITY]} from your board to my board!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "Draw and score a [3].",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A018",
+    "title": "HOLY GRAIL",
+    "color": "YELLOW",
+    "age": 2,
+    "reference_age": 2,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Return a card from your hand. Claim an available achievement of matching value ignoring eligibility.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A019",
+    "title": "TERRACOTTA ARMY",
+    "color": "YELLOW",
+    "age": 2,
+    "reference_age": 2,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "compel",
+        "text": "I COMPEL you to return a top card with no {[AUTHORITY]} from your board!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Score a card from your hand with no {[AUTHORITY]}. If you do, junk all cards in the deck of value equal to the scored card. Otherwise, tuck Terracotta Army.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A020",
+    "title": "HOLY LANCE",
+    "color": "GREEN",
+    "age": 2,
+    "reference_age": 2,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer a top Artifact from your board to my board!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "If Holy Grail is a top card on your board, you win.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A021",
+    "title": "BAGHDAD BATTERY",
+    "color": "GREEN",
+    "age": 2,
+    "reference_age": 2,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Meld a card from your hand. Score a card from your hand. If you do both, and the cards have different values, junk all cards in the decks of both values.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A022",
+    "title": "SEIKILOS EPITAPH",
+    "color": "BLUE",
+    "age": 2,
+    "reference_age": 2,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Draw and meld a [3]. Meld your bottom card of the drawn card's color, then self-execute it.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A023",
+    "title": "ROSETTA STONE",
+    "color": "BLUE",
+    "age": 2,
+    "reference_age": 2,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "Choose a set. Draw two [2] from that set. Meld one and transfer the other to an opponent's board.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A024",
+    "title": "DEAD SEA SCROLLS",
+    "color": "PURPLE",
+    "age": 2,
+    "reference_age": 2,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "Draw an Artifact of value equal to the value of your highest top card. Junk the Artifact deck of that value.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "Choose a player. Junk an available achievement of value equal to the highest top card on that player's board.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A025",
+    "title": "CYRUS CYLINDER",
+    "color": "PURPLE",
+    "age": 2,
+    "reference_age": 2,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Splay left a color on any player's board.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Choose any top purple card other than Cyrus Cylinder on any player's board. Self-execute it.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A026",
+    "title": "EXCALIBUR",
+    "color": "RED",
+    "age": 3,
+    "reference_age": 3,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer a top card of higher value than my top card of the same color from your board to my board!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A027",
+    "title": "MJÖLNIR AMULET",
+    "color": "RED",
+    "age": 3,
+    "reference_age": 3,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "compel",
+        "text": "I COMPEL you to choose a top card on your board! Transfer all cards of that card's color from your board to my score pile!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A028",
+    "title": "MOYLOUGH BELT SHRINE",
+    "color": "YELLOW",
+    "age": 3,
+    "reference_age": 3,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "compel",
+        "text": "I COMPEL you to reveal all cards in your hand and transfer the card of my choice to my board! If you do, junk all cards in the deck of the chosen card's value!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A029",
+    "title": "ALONG THE RIVER DURING THE QINGMING FESTIVAL",
+    "color": "YELLOW",
+    "age": 3,
+    "reference_age": 3,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Draw and reveal a [4]. If it is yellow, tuck it. If it is purple, score it. Otherwise, repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A030",
+    "title": "PHILOSOPHER'S STONE",
+    "color": "GREEN",
+    "age": 3,
+    "reference_age": 3,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Return a card from your hand. Score a number of cards from your hand equal to the value of the card you return. Junk all cards in the deck of value equal to the total value of the cards you score.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A031",
+    "title": "IFE HEAD",
+    "color": "GREEN",
+    "age": 3,
+    "reference_age": 3,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Splay right an unsplayed color on your board. Junk an available achievement of value equal to the number of cards of that color on your board. If you don't, draw a card of that value.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A032",
+    "title": "DUNHUANG STAR CHART",
+    "color": "BLUE",
+    "age": 3,
+    "reference_age": 3,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Return all cards in your hand. Draw a card of value equal to the number of cards you return.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A033",
+    "title": "YATA NO KAGAMI",
+    "color": "BLUE",
+    "age": 3,
+    "reference_age": 3,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Reveal a card from your hand. If you do, splay left its color on your board, then choose a top card other than Yata No Kagami of that color on any board and self-execute it.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "AUTHORITY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A034",
+    "title": "NECRONOMICON",
+    "color": "PURPLE",
+    "age": 3,
+    "reference_age": 3,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Draw and reveal a [3]. If it is: Yellow: Return all cards in your hand. Green: Unsplay all your colors. Red: Return all cards in your score pile. Blue: Draw a [9].",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A035",
+    "title": "SHROUD OF TURIN",
+    "color": "PURPLE",
+    "age": 3,
+    "reference_age": 3,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Return a card from your hand. If you do, return a top card of the same color from your board and a card of the same color from your score pile. If you do all three, claim an available achievement ignoring eligibility.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A036",
+    "title": "EAST INDIA COMPANY CHARTER",
+    "color": "RED",
+    "age": 4,
+    "reference_age": 4,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "non-demand",
+        "text": "Choose a value other than [5]. Return all cards of that value from all score piles. For each score pile from which cards are returned, draw and score a [5]. If you score only [5]s, junk all cards in the deck of the chosen value.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A037",
+    "title": "GALLEON NUESTRA SEÑORA DE ATOCHA",
+    "color": "RED",
+    "age": 4,
+    "reference_age": 4,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer all the cards of the value of my choice from your score pile to my score pile! If you do, transfer a top card on your board of that value to my board!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A038",
+    "title": "MOSES",
+    "color": "YELLOW",
+    "age": 4,
+    "reference_age": 4,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer a top card with {[PROSPERITY]} of each color from your board to my score pile!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Score a top card on your board with {[PROSPERITY]}.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A039",
+    "title": "MONA LISA",
+    "color": "YELLOW",
+    "age": 4,
+    "reference_age": 4,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Choose a number and a color. Draw five [4], then reveal your hand. If you have exactly that many cards of that color, score them, and splay right your cards of that color. Otherwise, return all cards from your hand.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A040",
+    "title": "MOLASSES REEF CARAVEL",
+    "color": "GREEN",
+    "age": 4,
+    "reference_age": 4,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Return all cards from your hand.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Draw three [4]. Meld a green card from your hand. Junk all cards in the deck of value equal to your top green card.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A041",
+    "title": "HUNT-LENOX GLOBE",
+    "color": "GREEN",
+    "age": 4,
+    "reference_age": 4,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "If you have fewer than four cards in your hand, return your top card of each non-green color. Draw a [5] for each card you return.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Meld a card from your hand.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A042",
+    "title": "PETITION OF RIGHT",
+    "color": "BLUE",
+    "age": 4,
+    "reference_age": 4,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer a card from your score pile to my score pile for every color with {[AUTHORITY]} on your board!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Junk an available achievement of value equal to the number of {[AUTHORITY]} on your board.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A043",
+    "title": "DELFT POCKET TELESCOPE",
+    "color": "BLUE",
+    "age": 4,
+    "reference_age": 4,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Return a card from your score pile. If you do, draw a [5] and a [6], then reveal one of the drawn cards that has an icon in common with the returned card. If you cannot, return the drawn cards and repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A044",
+    "title": "CROSS OF CORONADO",
+    "color": "PURPLE",
+    "age": 4,
+    "reference_age": 4,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Reveal your hand. If you have exactly five cards and five colors in your hand, you win.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A045",
+    "title": "ABELL GALLERY HARPSICHORD",
+    "color": "PURPLE",
+    "age": 4,
+    "reference_age": 4,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "For each value of top card on your board appearing exactly once, draw and score a card of that value in ascending order.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A046",
+    "title": "GALLEY WHYDAH",
+    "color": "RED",
+    "age": 5,
+    "reference_age": 5,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "compel",
+        "text": "I COMPEL you to choose a color of which there are more visible cards on your board than on my board! From the bottom up, transfer all cards of that color from my board to my score pile, then from your board to my board!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A047",
+    "title": "SHIP OF THE LINE SUSSEX",
+    "color": "RED",
+    "age": 5,
+    "reference_age": 5,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "non-demand",
+        "text": "If you have no cards in your score pile, choose a color and score all cards of that color on your board. Otherwise, return all cards from your score pile.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A048",
+    "title": "GUJIN TUSHU JICHENG",
+    "color": "YELLOW",
+    "age": 5,
+    "reference_age": 5,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "If it is your turn, choose any other top card on any other board and super-execute it.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A049",
+    "title": "THE DAILY COURANT",
+    "color": "YELLOW",
+    "age": 5,
+    "reference_age": 5,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Draw, reveal, and return a [6]. Draw and meld a card of value equal to the value of your top card of the same color as the returned card. Self-execute the melded card.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A050",
+    "title": "BARQUE-LONGUE LA BELLE",
+    "color": "GREEN",
+    "age": 5,
+    "reference_age": 5,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "non-demand",
+        "text": "Draw and meld a [5]. If the drawn card is not green, repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A051",
+    "title": "HUDSON'S BAY COMPANY ARCHIVES",
+    "color": "GREEN",
+    "age": 5,
+    "reference_age": 5,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Score the bottom card of every color on your board. Meld a card from your score pile. Splay right the color of the melded card. Junk all cards in the deck of value equal to the melded card.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A052",
+    "title": "BOERHAAVE MICROSCOPE",
+    "color": "BLUE",
+    "age": 5,
+    "reference_age": 5,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Return the lowest card in your hand and the lowest top card on your board. Draw and score a card of value equal to the sum of the values of the cards you return.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A053",
+    "title": "PRINCIPIA",
+    "color": "BLUE",
+    "age": 5,
+    "reference_age": 5,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Return your top card of each non-blue color. For each card you return, draw and meld a card of value one higher than the value of the returned card, in ascending order.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A054",
+    "title": "SANDHAM ROOM CRICKET BAT",
+    "color": "PURPLE",
+    "age": 5,
+    "reference_age": 5,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Draw and reveal a [6]. If it is red, claim an available standard achievement, ignoring eligibility. Otherwise, junk an available standard achievement.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A055",
+    "title": "ALMIRA, QUEEN OF CASTILE",
+    "color": "PURPLE",
+    "age": 5,
+    "reference_age": 5,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Meld a card from your hand. If you do, claim an available achievement of matching value, ignoring eligibility. Otherwise, junk all cards in the deck of value equal to the lowest available achievement, if there is one.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A056",
+    "title": "FRIGATE CONSTITUTION",
+    "color": "RED",
+    "age": 6,
+    "reference_age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "compel",
+        "text": "I COMPEL you to reveal a card in your hand! If you do, and its value is equal to the value of any of my top cards, return it and all cards of its color from your board!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A057",
+    "title": "U.S. DECLARATION OF INDEPENDENCE",
+    "color": "RED",
+    "age": 6,
+    "reference_age": 6,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer the highest card in your hand to my hand, the highest card in your score pile to my score pile, and the highest top card with {[INDUSTRY]} from your board to my board!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A058",
+    "title": "QIANLONG'S DRAGON ROBE",
+    "color": "YELLOW",
+    "age": 6,
+    "reference_age": 6,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer your top red card to my score pile! Transfer your top green card to my board! Transfer a yellow card from your score pile to mine! Transfer a purple card from your score pile to my hand!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A059",
+    "title": "PRIDE AND PREJUDICE",
+    "color": "YELLOW",
+    "age": 6,
+    "reference_age": 6,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Draw and meld a [6]. If the drawn card's color is the color with the fewest (or tied) number of visible cards on your board, score the melded card, and repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "HEALTH",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A060",
+    "title": "THE WEALTH OF NATIONS",
+    "color": "GREEN",
+    "age": 6,
+    "reference_age": 6,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Draw and score a [1]. Add up the values of all cards in your score pile, divide by five, and round up. Draw and score a card of value equal to the result. Junk all cards in the deck of that value.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A061",
+    "title": "BUTTONWOOD AGREEMENT",
+    "color": "GREEN",
+    "age": 6,
+    "reference_age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "non-demand",
+        "text": "Choose three colors. Draw and reveal an [8]. If the drawn card is one of the chosen colors, score it and splay up that color on your board. Otherwise, return all cards of that color from your score pile, and unsplay that color.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A062",
+    "title": "KILOGRAM OF THE ARCHIVES",
+    "color": "BLUE",
+    "age": 6,
+    "reference_age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "non-demand",
+        "text": "Return a card from your hand. Return a top card from your board. If you return two cards and their values sum to ten, draw and score a [10]. Otherwise, junk all cards in the deck of value equal to the sum.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A063",
+    "title": "PUFFING BILLY",
+    "color": "BLUE",
+    "age": 6,
+    "reference_age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "non-demand",
+        "text": "Tuck a card from your hand. Splay right its color on your board. Draw a card of value equal to the highest number of icons of the same type in that color on your board.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A064",
+    "title": "MOONLIGHT SONATA",
+    "color": "PURPLE",
+    "age": 6,
+    "reference_age": 6,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Choose a color on your board having the highest top card. Meld your bottom card of that color.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Claim an available standard achievement, ignoring eligibility. Junk an available standard achievement.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A065",
+    "title": "MARCHA REAL",
+    "color": "PURPLE",
+    "age": 6,
+    "reference_age": 6,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Reveal and return two cards from your hand. If they have the same value, draw a card of value one higher. If they have the same color, claim an available achievement, ignoring eligibility.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A066",
+    "title": "SUBMARINE H. L. HUNLEY",
+    "color": "RED",
+    "age": 7,
+    "reference_age": 7,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "compel",
+        "text": "I COMPEL you to draw and meld a [7]! Reveal your bottom card of the melded card's color! If the revealed card is even-valued, return all cards of its color from your board!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A067",
+    "title": "JEDLIK'S ELECTROMAGNETIC SELF-ROTOR",
+    "color": "RED",
+    "age": 7,
+    "reference_age": 7,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Draw and score an [8].",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Draw and meld an [8]. If it is an [8], choose a value, and junk all cards in the deck of that value.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A068",
+    "title": "COLT PATERSON REVOLVER",
+    "color": "YELLOW",
+    "age": 7,
+    "reference_age": 7,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "compel",
+        "text": "I COMPEL you to reveal your hand! Draw a [7]! If the color of the drawn card matches the color of any other card in your hand, return all cards in your hand and all cards in your score pile!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A069",
+    "title": "SINGER MODEL 27",
+    "color": "YELLOW",
+    "age": 7,
+    "reference_age": 7,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "Tuck a card from your hand. If you do, splay up its color, and then tuck all cards from your score pile of that color. If you do, junk an available standard achievement.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A070",
+    "title": "INTERNATIONAL PROTOTYPE METRE BAR",
+    "color": "GREEN",
+    "age": 7,
+    "reference_age": 7,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Choose a value. Draw and reveal three cards of that value. Splay up the colors of the cards. If the number of cards of each of those colors on your board is equal to that value, you win. Otherwise, return the drawn cards.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "INDUSTRY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A071",
+    "title": "HANSEN WRITING BALL",
+    "color": "GREEN",
+    "age": 7,
+    "reference_age": 7,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "compel",
+        "text": "I COMPEL you to draw four [7]! Meld a blue card, then transfer all cards in your hand to my hand!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "Draw and reveal a [7]. If it has no {[EFFICIENCY]}, tuck it and repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "HEALTH",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A072",
+    "title": "PERIODIC TABLE",
+    "color": "BLUE",
+    "age": 7,
+    "reference_age": 7,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Choose two top cards on your board of the same value. If you do, draw a card of value one higher and meld it. If you meld it over one of the chosen cards, repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A073",
+    "title": "CORVETTE CHALLENGER",
+    "color": "BLUE",
+    "age": 7,
+    "reference_age": 7,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Draw and tuck an [8]. Splay up the color of the tucked card. Draw and score a card of value equal to the number of cards of that color on your board. Junk all cards in the deck of that value.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A074",
+    "title": "ROUNDHAY GARDEN SCENE",
+    "color": "PURPLE",
+    "age": 7,
+    "reference_age": 7,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Meld the highest card from your score pile. Draw and score two cards of value equal to the melded card. Self-execute the melded card.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A075",
+    "title": "THE COMMUNIST MANIFESTO",
+    "color": "PURPLE",
+    "age": 7,
+    "reference_age": 7,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "For each player, draw and reveal a [7]. Transfer one of the drawn cards to each other player's board. Meld the last, and self-execute it.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A076",
+    "title": "BATTLESHIP BISMARCK",
+    "color": "RED",
+    "age": 8,
+    "reference_age": 8,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "compel",
+        "text": "I COMPEL you to draw and reveal an [8]! Return all cards of the drawn card's color from your board!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A077",
+    "title": "BATTLESHIP YAMATO",
+    "color": "RED",
+    "age": 8,
+    "reference_age": 11,
+    "effects": [],
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A078",
+    "title": "PLÜSCH BEWEGLICH ROD BEAR",
+    "color": "YELLOW",
+    "age": 8,
+    "reference_age": 8,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Choose a value. Splay up each color on your board with a top card of the chosen value. Return all cards of the chosen value from all score piles.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A079",
+    "title": "ACTION COMICS #1",
+    "color": "YELLOW",
+    "age": 8,
+    "reference_age": 8,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "compel",
+        "text": "I COMPEL you to draw an [8]! If it is green, achieve Action Comics #1 if it is a top card! Otherwise, if it has {[EFFICIENCY]}, return it, and if your top card of its color has {[EFFICIENCY]}, transfer it to my achievements, and repeat this effect!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A080",
+    "title": "LINER TITANIC",
+    "color": "GREEN",
+    "age": 8,
+    "reference_age": 8,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Score your bottom card of each color.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Junk all cards from the deck of lowest value with a card.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A081",
+    "title": "MEIJI-MURA STAMP VENDING MACHINE",
+    "color": "GREEN",
+    "age": 8,
+    "reference_age": 8,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Return a card from your hand. Draw and score three cards of the returned card's value. If you don't, junk all cards in the deck of value equal to the highest scored card.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A082",
+    "title": "PARNELL PITCH DROP",
+    "color": "BLUE",
+    "age": 8,
+    "reference_age": 8,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Draw and meld a card of value one higher than the highest top card on your board. Junk an available standard achievement. If you don't, and the melded card has at least three {[EFFICIENCY]}, you win.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A083",
+    "title": "EARHART'S LOCKHEED ELECTRA 10E",
+    "color": "BLUE",
+    "age": 8,
+    "reference_age": 8,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "For each value below 9, junk a top card of that value from your board, in descending order. Then, if there is a junked card of each value below 9, you win.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "Claim an available achievement, ignoring eligibility.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A084",
+    "title": "GARLAND'S RUBY SLIPPERS",
+    "color": "PURPLE",
+    "age": 8,
+    "reference_age": 8,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "Meld an [8] from your hand. If the melded card has no effects, you win. Otherwise, self-execute it.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A085",
+    "title": "30 WORLD CUP FINAL BALL",
+    "color": "PURPLE",
+    "age": 8,
+    "reference_age": 8,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "compel",
+        "text": "I COMPEL you to return one of your claimed standard achievements!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Draw and reveal an [8]. The single player with the highest top card of the drawn card's color achieves the top card, ignoring eligibility. If they do, repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A086",
+    "title": "CRUSADER RABBIT",
+    "color": "RED",
+    "age": 9,
+    "reference_age": 9,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer the two bottom cards of each color which has a top card with a demand effect to my score pile!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "If you have a top card on your board with a demand effect, score it, and draw a [10].",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A087",
+    "title": "VELCRO SHOES",
+    "color": "RED",
+    "age": 9,
+    "reference_age": 9,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer a [9] from your hand to my hand! If you don't, transfer a [9] from your score pile to my score pile! If you do neither, I win!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "non-demand",
+        "text": "Score your highest top card.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A088",
+    "title": "ROCK AROUND THE CLOCK",
+    "color": "YELLOW",
+    "age": 9,
+    "reference_age": 9,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "For each top card on your board with {[EFFICIENCY]} , draw and score a [9].",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "Junk all cards in the deck of value equal to the number of cards in your score pile.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "EFFICIENCY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A089",
+    "title": "MAGNAVOX ODYSSEY",
+    "color": "YELLOW",
+    "age": 9,
+    "reference_age": 9,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Draw and meld two [10]. If they are the same color, you win.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A090",
+    "title": "PHILIPS COMPACT CASSETTE",
+    "color": "GREEN",
+    "age": 9,
+    "reference_age": 9,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "compel",
+        "text": "I COMPEL you to unsplay all splayed colors on your board!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Splay up two colors on your board.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A091",
+    "title": "SYNCOM 3",
+    "color": "GREEN",
+    "age": 9,
+    "reference_age": 9,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "Return all cards from your hand. Draw and reveal five [9]. If you reveal five colors, you win.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A092",
+    "title": "YEAGER'S BELL X-1A",
+    "color": "BLUE",
+    "age": 9,
+    "reference_age": 9,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "Draw and meld a [9], and self-execute it. If that card has {[EFFICIENCY]}, repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A093",
+    "title": "LUNA 3",
+    "color": "BLUE",
+    "age": 9,
+    "reference_age": 9,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "non-demand",
+        "text": "Return all cards from your score pile. Draw and score a card of value equal to the number of cards you return.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "non-demand",
+        "text": "Choose a value. Junk all cards in that deck.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A094",
+    "title": "THE BIG BANG",
+    "color": "PURPLE",
+    "age": 9,
+    "reference_age": 9,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Self-execute your top blue card. If this causes any change to occur, draw and junk a [10], then repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A095",
+    "title": "MARILYN DIPTYCH",
+    "color": "PURPLE",
+    "age": 9,
+    "reference_age": 9,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "You may score a card from your hand. You may transfer any card from your score pile to your hand. If you have exactly 25 points, you win.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Junk an available standard achievement.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A096",
+    "title": "TANKER EXXON VALDEZ",
+    "color": "RED",
+    "age": 10,
+    "reference_age": 10,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "compel",
+        "text": "I COMPEL you to junk all your cards! You lose!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A097",
+    "title": "MALDIVES",
+    "color": "RED",
+    "age": 10,
+    "reference_age": 10,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "compel",
+        "text": "I COMPEL you to return all cards in your hand but two! Return all cards in your score pile but two!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "Return all cards in your score pile but four.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A098",
+    "title": "DOLLY THE SHEEP",
+    "color": "YELLOW",
+    "age": 10,
+    "reference_age": 10,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "You may score your bottom yellow card. You may draw and tuck a [1]. If your bottom yellow card is Domestication, you win. Otherwise, meld the highest card in your hand, then draw an [11].",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "Junk all available achievements.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "EFFICIENCY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A099",
+    "title": "WHERE'S WALDO",
+    "color": "YELLOW",
+    "age": 10,
+    "reference_age": 10,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "You win.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "AVATAR",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A100",
+    "title": "MUSK'S TESLA ROADSTER",
+    "color": "GREEN",
+    "age": 10,
+    "reference_age": 10,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "non-demand",
+        "text": "If you have the most cards in your score pile, you win. Otherwise, draw and reveal an [11]. Score all cards on your board of the color of the drawn card. If you do, return the drawn card. Otherwise, meld it.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "EFFICIENCY"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A101",
+    "title": "SEIKAN TUNNEL",
+    "color": "GREEN",
+    "age": 10,
+    "reference_age": 10,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "If you have the most cards of a color visible on your board out of all colors on all boards, you win.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A102",
+    "title": "ROVER CURIOSITY",
+    "color": "BLUE",
+    "age": 10,
+    "reference_age": 10,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Draw and meld an Artifact [10], then self-execute it.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A103",
+    "title": "HIGGS BOSON",
+    "color": "BLUE",
+    "age": 10,
+    "reference_age": 10,
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "kind": "non-demand",
+        "text": "Score all cards on your board.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "AVATAR",
+      "bottom_left": "AVATAR",
+      "bottom_center": "AVATAR",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A104",
+    "title": "DELOREAN DMC-12",
+    "color": "PURPLE",
+    "age": 10,
+    "reference_age": 10,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "non-demand",
+        "text": "If Delorean DMC-12 is a top card on any board, junk a top card of each color from each board and all cards in all hands.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A105",
+    "title": "DRAGON'S LAIR",
+    "color": "PURPLE",
+    "age": 10,
+    "reference_age": 10,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "compel",
+        "text": "I COMPEL you to meld the lowest card in your score pile with a unique value! If you do, meld a card of the same color from your hand! If you meld one card total, you lose! Otherwise, junk the top card of each deck!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A106",
+    "title": "16 PSYCHE",
+    "color": "RED",
+    "age": 11,
+    "reference_age": 11,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "kind": "non-demand",
+        "text": "Choose a value different from any top card on your board. Score all cards in the deck of that value. Score all cards in the junk of that value.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  },
+  {
+    "code": "A107",
+    "title": "PIZZA PACAYA",
+    "color": "RED",
+    "age": 11,
+    "reference_age": 11,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "compel",
+        "text": "I COMPEL you to junk all cards from your board! Draw and meld a card of each value in ascending order!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "PROSPERITY"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A108",
+    "title": "WHAT DOES THE FOX SAY",
+    "color": "YELLOW",
+    "age": 11,
+    "reference_age": 11,
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "kind": "non-demand",
+        "text": "Draw two [11]. Meld one of them, then meld the other and if it is your turn, super-execute it, otherwise self-execute it.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "AVATAR",
+      "bottom_right": "AVATAR"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A109",
+    "title": "TASMANIAN TIGER",
+    "color": "YELLOW",
+    "age": 11,
+    "reference_age": 11,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Choose a card in your score pile. Choose a top card of the same color on any player's board. Exchange the two cards. You may return two cards from your hand. If you do, repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A110",
+    "title": "GREENLAND",
+    "color": "GREEN",
+    "age": 11,
+    "reference_age": 11,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "compel",
+        "text": "I COMPEL you to return one of your top cards with {[EFFICIENCY]}! If you do, repeat this effect!",
+        "demand": true,
+        "compel": true
+      },
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Return one of your top cards with {[PROSPERITY]}. If you do, repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "image_slot": 2
+  },
+  {
+    "code": "A111",
+    "title": "SANSKRIT",
+    "color": "GREEN",
+    "age": 11,
+    "reference_age": 11,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Junk all cards in all score piles. If you don't, for each player, choose their highest top card, then for each other different color, transfer their top card of that color to their score pile.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "AVATAR",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A112",
+    "title": "GREAT BARRIER REEF",
+    "color": "BLUE",
+    "age": 11,
+    "reference_age": 11,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Junk all cards on your board other than the top five of each color.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Splay each color on your board aslant.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "HEALTH",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 1
+  },
+  {
+    "code": "A113",
+    "title": "MARTIAN INTERNET",
+    "color": "BLUE",
+    "age": 11,
+    "reference_age": 11,
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "kind": "non-demand",
+        "text": "The game ends in a draw.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": "AVATAR",
+      "bottom_left": "AVATAR",
+      "bottom_center": "AVATAR",
+      "bottom_right": null
+    },
+    "image_slot": 3,
+    "variant": "martian-internet-draw-v1; doc/rules/RULINGS.md"
+  },
+  {
+    "code": "A114",
+    "title": "JUMBO KINGDOM",
+    "color": "PURPLE",
+    "age": 11,
+    "reference_age": 11,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Choose a color on your board. Junk all cards of that color from all boards.",
+        "demand": false,
+        "compel": false
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Choose a valued card in the junk. Score all cards of the chosen card's value in the junk. If you do, and you score fewer than eleven points, repeat this effect.",
+        "demand": false,
+        "compel": false
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "CONCEPT"
+    },
+    "image_slot": 0
+  },
+  {
+    "code": "A115",
+    "title": "OCULUS QUEST",
+    "color": "PURPLE",
+    "age": 11,
+    "reference_age": 11,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "kind": "compel",
+        "text": "I COMPEL you to transfer all cards on your board to your hand!",
+        "demand": true,
+        "compel": true
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "image_slot": 3
+  }
+]

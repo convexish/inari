@@ -1,0 +1,26 @@
+[workspace]
+resolver = "3"
+members = ["engine", "engine-py", "app"]
+
+# Policy: dependencies are exact-pinned; build and test with --locked.
+
+# The full-game tests run ~10x faster optimized. Without crate-local ThinLTO
+# an engine edit rebuilds in seconds instead of half a minute.
+[profile.test]
+opt-level = 1
+lto = "off"
+debug = "line-tables-only"
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+
+# Shipped app builds: whole-program optimization, a smaller and faster exe.
+[profile.dist]
+inherits = "release"
+
+# Fast optimized desktop builds, separate from training's release artifacts.
+[profile.desktop]
+inherits = "release"
+lto = false
+codegen-units = 16

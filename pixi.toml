@@ -1,0 +1,31 @@
+[workspace]
+name = "inari"
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[dependencies]
+python = "3.14.*"
+rust = "1.99.*"
+rust-std-x86_64-pc-windows-gnu = "1.99.*"
+cargo-zigbuild = "*"
+zig = "*"
+
+[tasks]
+check = { cmd = "cargo fmt --all --check && cargo clippy --locked --all-targets -- -D warnings && cargo test --locked", description = "Format, lint and test" }
+play-app = { cmd = "cargo run --locked -p inari --profile desktop --", description = "Run the app" }
+build-windows = { cmd = "cargo zigbuild --locked -p inari --profile desktop --target x86_64-pc-windows-gnu && echo target/x86_64-pc-windows-gnu/desktop/inari.exe", description = "Build the Windows app" }
+dist-windows = { cmd = "cargo zigbuild --locked -p inari --profile dist --target x86_64-pc-windows-gnu && echo target/x86_64-pc-windows-gnu/dist/inari.exe", description = "Build the Windows app to ship (smaller, slower to build)" }
+
+[tasks.package-windows]
+description = "Zip the shipped Windows app: target/inari-<version>-windows.zip"
+depends-on = ["dist-windows"]
+args = [{ arg = "version", default = "dev" }]
+cwd = "target"
+cmd = """
+rm -rf inari-{{ version }}-windows inari-{{ version }}-windows.zip &&
+mkdir inari-{{ version }}-windows &&
+cp x86_64-pc-windows-gnu/dist/inari.exe ../app/dist/README.txt inari-{{ version }}-windows &&
+python -m zipfile -c inari-{{ version }}-windows.zip inari-{{ version }}-windows &&
+rm -rf inari-{{ version }}-windows &&
+echo target/inari-{{ version }}-windows.zip
+"""

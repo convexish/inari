@@ -1,0 +1,2533 @@
+[
+  {
+    "code": "U001",
+    "title": "ASSASSINATION",
+    "color": "RED",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you draw and reveal a [1]! If it has {[AUTHORITY]}, transfer it and the top card on your board of its color to my score pile!"
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If no player has a top green card, claim the Confidence achievement."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U002",
+    "title": "MAZE",
+    "color": "RED",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you score a card from your hand of matching color for each card in my hand! If you don't, and I have a card in my hand, exchange all cards in your hand with all cards in my score pile!"
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U003",
+    "title": "PILGRIMAGE",
+    "color": "RED",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may return a card of value 1 from your hand. If you do, safeguard an available achievement of value equal to the returned card, then repeat this effect using a value one higher."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may junk all cards in the [1] deck."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U004",
+    "title": "HANDSHAKE",
+    "color": "YELLOW",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you transfer all cards from my hand to your hand! Choose two colors of cards in your hand! Transfer all cards in your hand of those colors to my hand!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U005",
+    "title": "TOMB",
+    "color": "YELLOW",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Safeguard an available achievement of value 1 plus the number of achievements you have."
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "You may transfer the lowest available achievement to your hand. If you do, return all yellow cards and all blue cards on your board."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U006",
+    "title": "WOODWORKING",
+    "color": "YELLOW",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw and meld a [2]. If the melded card is a bottom card on your board, score it."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U007",
+    "title": "DANCE",
+    "color": "GREEN",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Transfer a top card on your board with {[AUTHORITY]} to the board of any other player. If you do, meld the lowest top card without {[AUTHORITY]} from that player's board."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U008",
+    "title": "RUMOR",
+    "color": "GREEN",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Return a card from your score pile. If you do, draw a card of value one higher than the card you return."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Transfer a card from your hand to the hand of the player on your left."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U009",
+    "title": "SILK",
+    "color": "GREEN",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Meld a card from your hand."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may score a card from your hand of each color on your board."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U010",
+    "title": "ESPIONAGE",
+    "color": "BLUE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you reveal a card in your hand! If you do, and I have no card in my hand of the same color, transfer it to my hand, then repeat this effect!"
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": null,
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U011",
+    "title": "PALMISTRY",
+    "color": "BLUE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Draw and meld a [1]."
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Return two cards from your hand. If you do, draw and score a [2]."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U012",
+    "title": "PROVERB",
+    "color": "BLUE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Draw, reveal, and return a [1]. If the color of the returned card is yellow or purple, safeguard an available achievement of value equal to a card in your hand, then return all cards from your hand. Otherwise, draw two [1]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U013",
+    "title": "MYTH",
+    "color": "PURPLE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "If you have two cards of the same color in your hand, tuck them both. If you do, splay left that color, and draw and safeguard a card of value equal to the value of your bottom card of that color."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U014",
+    "title": "POLYTHEISM",
+    "color": "PURPLE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Meld a card from your hand with no icon on a card already melded by you during this action due to Polytheism. If you do, repeat this effect."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and tuck a [1]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U015",
+    "title": "SYMBOLOGY",
+    "color": "PURPLE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If you have at least four each of at least four icons on your board, draw a [4]. Otherwise, if you have three of three icons, draw a [3]. Otherwise, if you have two of two icons, draw a [2]."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U016",
+    "title": "PADLOCK",
+    "color": "RED",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you transfer one of your secrets to the available achievements!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "If no card was transferred due to the demand, you may score up to three cards from your hand of different values."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U017",
+    "title": "PASSWORD",
+    "color": "RED",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Draw and reveal a [2]. You may safeguard another card from your hand of the color of the drawn card. If you do, score the drawn card. Otherwise, return all cards from your hand except the drawn card."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U018",
+    "title": "EXILE",
+    "color": "YELLOW",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you return a top card without {[HEALTH]} from your board! Return all cards of the returned card's value from your score pile!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "If exactly one card was returned due to the demand, return Exile if it is a top card on any board and draw a [3]."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "HEALTH",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U019",
+    "title": "FINGERPRINTS",
+    "color": "YELLOW",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may splay your red or yellow cards left."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Safeguard an available achievement of value equal to the number of splayed colors on your board. Transfer a card of that value in your hand to any board."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U020",
+    "title": "CIPHER",
+    "color": "GREEN",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Return all cards from your hand. If you return at least two, draw a card of value one higher than the highest value of card you return."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw a [2]. You may splay your blue cards left."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U021",
+    "title": "COUNTERFEITING",
+    "color": "GREEN",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Score a top card from your board of a value not in your score pile. If you do, repeat this effect."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your green or purple cards left."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U022",
+    "title": "ASTROLOGY",
+    "color": "BLUE",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay left the color of which you have the most cards on your board."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and meld a card of value equal to the number of visible purple cards on your board. If the melded card has no {[PROSPERITY]}, tuck it."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U023",
+    "title": "METEOROLOGY",
+    "color": "BLUE",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and reveal a [3]. If it has {[HEALTH]}, score it. Otherwise, if it has {[PROSPERITY]}, return it and draw two [3]. Otherwise, tuck it."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If you have no {[AUTHORITY]}, claim the Zen achievement."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U024",
+    "title": "PROPAGANDA",
+    "color": "PURPLE",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you meld a card of the color of my choice from your hand! If you do, transfer the card beneath it to my board!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Meld a card from your hand."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U025",
+    "title": "STEGANOGRAPHY",
+    "color": "PURPLE",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "You may splay left a color on your board with {[CONCEPT]}. If you do, safeguard an available achievement of value equal to the number of cards of that color on your board. Otherwise, draw and tuck a [3]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U026",
+    "title": "KNIGHTS TEMPLAR",
+    "color": "RED",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you unsplay a splayed color on your board! If you do, transfer the top card on your board of that color to my score pile!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "You may splay your red or green cards left."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U027",
+    "title": "RED ENVELOPE",
+    "color": "RED",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Choose a value of which you have exactly two or three cards altogether in your hand and score pile. Transfer those cards to the score pile of the player on your right."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may score exactly two or three cards from your hand."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U028",
+    "title": "FREEMASONS",
+    "color": "YELLOW",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "For each color, you may tuck a card from your hand of that color. If you tuck any yellow cards or expansion cards, draw two [3]."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your yellow or blue cards left."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U029",
+    "title": "SECRET POLICE",
+    "color": "YELLOW",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you tuck a card in your hand, then return your top card of its color! If you do, repeat this effect! Otherwise, draw a [3]!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "You may tuck any number of cards of any one color from your hand."
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U030",
+    "title": "CLIFFHANGER",
+    "color": "GREEN",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Reveal a [4] in your safe. If it is: green, tuck it; purple, meld it; red, achieve it regardless of eligibility; yellow, score it; blue, draw a [5]. Otherwise, safeguard the top card of the [4] deck."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U031",
+    "title": "SMUGGLING",
+    "color": "GREEN",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a card of value equal to your top yellow card and a card of value equal to my top yellow card from your score pile to my score pile!"
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U032",
+    "title": "BRETHREN OF PURITY",
+    "color": "BLUE",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and meld a [3] or a card of value one higher than the last card melded due to Brethren of Purity during this action. If you meld over a card with a {[CONCEPT]}, repeat this effect."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U033",
+    "title": "SECRETUM SECRETORUM",
+    "color": "BLUE",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Return five cards from your hand and/or score pile. Draw two cards of value equal to the number of different colors of cards you return. Meld one of the drawn cards and score the other."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U034",
+    "title": "MASQUERADE",
+    "color": "PURPLE",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Safeguard an available achievement of value equal to the number of cards in your hand. If you do, return all cards of that value from your hand. If you return a [4], claim the Anonymity achievement."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your purple cards left."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "U035",
+    "title": "TAQIYYA",
+    "color": "PURPLE",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Choose a color. Transfer all cards of that color on your board into your hand."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw and meld a [3]. If the melded card is a bottom card on your board, score it and any number of cards of its color in your hand."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U036",
+    "title": "NINJA",
+    "color": "RED",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you return a card of the color of my choice from your hand! If you do, transfer the top card of that color from your board to mine!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may splay your red cards right."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U037",
+    "title": "SPANISH INQUISITION",
+    "color": "RED",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": true,
+        "text": "I DEMAND you return all but the highest cards from your hand and all but the highest cards from your score pile!"
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If Spanish Inquisition is a top card on your board, return all red cards from your board."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U038",
+    "title": "APRIL FOOL'S DAY",
+    "color": "YELLOW",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Transfer a card from your hand or score pile to the board of the player on your right. If you don't, claim the Folklore achievement."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Splay your yellow cards right, and unsplay your purple cards, or vice versa."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U039",
+    "title": "HEIRLOOM",
+    "color": "YELLOW",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Transfer one of your secrets to the available achievements and draw a card of value one higher than the transferred card. If you don't, safeguard an available achievement of value equal to the value of your top red card."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U040",
+    "title": "BLACKMAIL",
+    "color": "GREEN",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you reveal your hand! Meld a revealed card of my choice! Reveal your score pile! Self-execute a card revealed due to this effect of my choice, replacing 'may' with 'must'!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U041",
+    "title": "EL DORADO",
+    "color": "GREEN",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and meld a [3], a [2], and a [1]. If all three cards have {[PROSPERITY]}, score all cards in the [5] deck. If at least two have {[PROSPERITY]}, splay your green and blue cards right."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U042",
+    "title": "QUACKERY",
+    "color": "BLUE",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Choose to either score a card from your hand, or draw a [4]."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Return exactly two cards in your hand. If you do, draw a card of value equal to the sum number of {[HEALTH]} and {[CONCEPT]} on the returned cards."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U043",
+    "title": "THE PROPHECIES",
+    "color": "BLUE",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Choose to either draw and safeguard a [4], or draw and reveal a card of value one higher than one of your secrets. If you reveal a red or purple card, meld one of your other secrets. If you do, safeguard the drawn card."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U044",
+    "title": "CONFESSION",
+    "color": "PURPLE",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Return a top card with {[AUTHORITY]} of each color from your board. If you return none, meld a card from your score pile, then draw and score a [4]."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw a [4] for each [4] in your score pile."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U045",
+    "title": "LEGEND",
+    "color": "PURPLE",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Choose a non-purple color. Self-execute your top card of that color. Score your top card of that color. If you do, repeat this effect with the same color if you have scored fewer than nine points due to Legend during this action."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U046",
+    "title": "CABAL",
+    "color": "RED",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you transfer all cards from your hand that have a value matching any of my secrets to my score pile! Draw a [5]!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Safeguard an available achievement of value equal to a top card on your board."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U047",
+    "title": "WITCH TRIAL",
+    "color": "RED",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you draw and reveal a [5]! Return your top card of the color of the drawn card, another card of that color from your hand, and a card from your score pile! If you do, repeat this effect!"
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U048",
+    "title": "CHARTREUSE",
+    "color": "YELLOW",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw and reveal a [3], a [4], a [5], and a [6]. Meld each drawn green card and each drawn yellow card, in any order. Return the other drawn cards."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may splay your green or yellow cards right."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U049",
+    "title": "GALLERY",
+    "color": "YELLOW",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If you have a [2] in your score pile, draw a [6]."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If you have a [1] in your score pile, draw a [7]. Otherwise, draw a [5]."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U050",
+    "title": "BURIED TREASURE",
+    "color": "GREEN",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Choose an odd value. Transfer all cards of that value from all score piles to the available achievements. If you transfer at least four cards, draw and safeguard a card of that value, and score three available standard achievements."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U051",
+    "title": "SECRET HISTORY",
+    "color": "GREEN",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you transfer one of your secrets to my safe!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "If your red and purple cards are splayed right, claim the Mystery achievement. Otherwise, splay your red or purple cards right."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U052",
+    "title": "POPULAR SCIENCE",
+    "color": "BLUE",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and meld a card of value equal to the value of a top green card anywhere."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and meld a card of value one higher than the value of your top yellow card."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay your blue cards right."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U053",
+    "title": "PROBABILITY",
+    "color": "BLUE",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Return all cards from your hand."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and reveal two [6], then return them. If exactly two different icon types appear on the drawn cards, draw and score two [6]. If exactly four different icon types appear, draw a [7]. Draw a [6]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U054",
+    "title": "PANTHEISM",
+    "color": "PURPLE",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Tuck a card from your hand. If you do, draw and tuck a [4], score all cards on your board of the color of one of the tucked cards, and splay right the color on your board of the other tucked card."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and tuck a [4]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U055",
+    "title": "PEN NAME",
+    "color": "PURPLE",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Choose to either splay an unsplayed non-purple color on your board left and self-execute its top card, or meld a card from your hand and splay its color on your board right."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U056",
+    "title": "RED HERRING",
+    "color": "RED",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Splay your red cards left, right, or up."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and tuck a [6]. If the color on your board of the card you tuck is splayed in the same direction as your red cards, splay that color up. Otherwise, unsplay that color."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U057",
+    "title": "SNIPING",
+    "color": "RED",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you unsplay the color on your board of my choice! Meld your bottom card of that color! Transfer your bottom non-top card of that color to my board!"
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "U058",
+    "title": "ATTIC",
+    "color": "YELLOW",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may score or safeguard a card from your hand."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Return a card from your score pile."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and score a card of value equal to a card in your score pile."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U059",
+    "title": "SABOTAGE",
+    "color": "YELLOW",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you draw a [6]! Reveal the cards in your hand! Return the card of my choice from your hand! Tuck your top card and all cards from your score pile of the same color as the returned card!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "U060",
+    "title": "HIKING",
+    "color": "GREEN",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw and reveal a [6]. If the top card on your board of the drawn card's color has {[INDUSTRY]}, tuck the drawn card and draw and reveal a [7]. If the second drawn card has {[HEALTH]}, meld it and draw an [8]."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U061",
+    "title": "SWISS BANK ACCOUNT",
+    "color": "GREEN",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Safeguard an available achievement of value equal to the number of cards in your score pile. If you do, score all cards in your hand of its value."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw a [6] for each secret in your safe."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U062",
+    "title": "PLACEBO",
+    "color": "BLUE",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Return a top card on your board, then you may repeat as many times as you want with the same color. Draw a [7] for each card you return. If you return exactly one [7], draw an [8]."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U063",
+    "title": "RECONNAISSANCE",
+    "color": "BLUE",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you reveal your hand!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and reveal three [7]. Return two of the drawn cards. You may splay the color of the card not returned right."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U064",
+    "title": "ILLUMINATI",
+    "color": "PURPLE",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Reveal a card in your hand. Splay the card's color on your board right. Safeguard the top card on your board of that color. Safeguard an available achievement of value one higher than the secret."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U065",
+    "title": "TRIAD",
+    "color": "PURPLE",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If you have at least three cards in your hand, return a card from your hand and splay the color of the returned card right, tuck a card from your hand, and score a card from your hand."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U066",
+    "title": "CAMOUFLAGE",
+    "color": "RED",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Choose to either junk exactly two top cards of different colors and equal value on your board, then safeguard them, or score exactly two of your secrets of equal value."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw a [7] for each special achievement you have."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U067",
+    "title": "SAFE DEPOSIT BOX",
+    "color": "RED",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may choose to either draw and junk two [7], or exchange all cards in your score pile with all valued cards in the junk."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U068",
+    "title": "MAFIA",
+    "color": "YELLOW",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you transfer your lowest secret to my safe!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Tuck a card from any score pile."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your red or yellow cards right."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "U069",
+    "title": "SUBWAY",
+    "color": "YELLOW",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw and tuck a [7]. If you have at least seven visible cards on your board of the color of the tucked card, draw a [9]. Otherwise, junk all cards on your board of that color, and draw an [8]."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U070",
+    "title": "BLACK MARKET",
+    "color": "GREEN",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may safeguard a card from your hand. If you do, reveal two available standard achievements. You may meld a revealed card with no {[EFFICIENCY]} or {[AVATAR]}. Return each revealed card you do not meld."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U071",
+    "title": "PLOT VOUCHER",
+    "color": "GREEN",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Meld a card from your score pile. Safeguard the lowest available standard achievement. If you do, super-execute the melded card if it is your turn, or if it is not your turn self-execute it."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U072",
+    "title": "COUNTERINTELLIGENCE",
+    "color": "BLUE",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": true,
+        "text": "I DEMAND you tuck a top card on your board with {[CONCEPT]}! If you do, transfer your top card of color matching the tucked card to my board, and draw a [7]!"
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw an [8]."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U073",
+    "title": "PRIVATE EYE",
+    "color": "BLUE",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you reveal your hand! Transfer the card in your hand of my choice to my board! Draw a [7]!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Score one of your secrets."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may splay your blue cards right."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U074",
+    "title": "FORTUNE COOKIE",
+    "color": "PURPLE",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "If you have exactly seven of any icon on your board, draw and score a [7]; exactly eight, splay your green or purple cards right and draw an [8]; exactly nine, draw a [9]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U075",
+    "title": "SLOT MACHINE",
+    "color": "PURPLE",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw and reveal a [1], [2], [3], [4], and [5]. If at least one drawn card is green, splay your green or purple cards right. If at least two are, score all drawn cards, otherwise return them. If at least three are, you win."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U076",
+    "title": "CONCEALMENT",
+    "color": "RED",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you tuck all your secrets!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Safeguard your bottom purple card."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "EFFICIENCY"
+    }
+  },
+  {
+    "code": "U077",
+    "title": "ENIGMA MACHINE",
+    "color": "RED",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Choose to either safeguard all available standard achievements, transfer all your secrets to your hand, or transfer all cards in your hand to the available achievements."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Choose a color you have splayed left and splay it up."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "EFFICIENCY"
+    }
+  },
+  {
+    "code": "U078",
+    "title": "JACKALOPE",
+    "color": "YELLOW",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you transfer the highest card on your board without {[EFFICIENCY]} to my board! If you do, unsplay the transferred card's color on your board!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Unsplay the color on your board with the most visible cards."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U079",
+    "title": "SHANGRI-LA",
+    "color": "YELLOW",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw and tuck an [8]. If it has {[INDUSTRY]}, score it. Otherwise, draw and meld an [8]. If it is an [8], repeat this effect."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U080",
+    "title": "HANDBAG",
+    "color": "GREEN",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may choose to either transfer your bottom card of each color to your hand, or tuck all cards from your score pile, or choose a value and score all cards from your hand of that value."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U081",
+    "title": "HITCHHIKING",
+    "color": "GREEN",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Choose another player. They transfer a card from their hand to your board. If they do, self-execute the card, with that player making all decisions and allowed to look at any card that you can."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U082",
+    "title": "BLACKLIGHT",
+    "color": "BLUE",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Choose to either unsplay one color of your cards, or splay up an unsplayed color on your board and draw a [9]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "U083",
+    "title": "SCOUTING",
+    "color": "BLUE",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and reveal two [9]. Return at least one of the drawn cards. If you return two cards, reveal the top card of the [10] deck. If the color of the revealed card matches the color of at least one of the returned cards, draw a [10]."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U084",
+    "title": "JOY BUZZER",
+    "color": "PURPLE",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you exchange all cards in your hand with all the lowest cards in my hand!"
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may choose a value and score all the cards in your hand of that value. If you do, score your top purple card."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U085",
+    "title": "OPUS DEI",
+    "color": "PURPLE",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Reveal the highest card in your score pile. If you do, splay your cards of the revealed card's color up, and safeguard the revealed card."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw an [8] for every color on your board splayed up."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U086",
+    "title": "IRON CURTAIN",
+    "color": "RED",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Unsplay each splayed color on your board. For each color you unsplay, return your top card of that color and safeguard an available standard achievement."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U087",
+    "title": "MCCARTHYISM",
+    "color": "RED",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you draw and meld an [8]! If Socialism is a top card on your board, you lose!"
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Score your top purple card."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may splay your red or blue cards up."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U088",
+    "title": "MAGIC 8-BALL",
+    "color": "YELLOW",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Choose whether you wish to draw two [10], draw and score two [8], or safeguard two available standard achievements. Draw and tuck an [8]. If it has {[CONCEPT]}, do as you wish. If it is red or purple, repeat this effect."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U089",
+    "title": "SURVEILLANCE",
+    "color": "YELLOW",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you reveal your hand! If each color present in my hand is present in yours, and vice versa, and your hand is not empty, I win!"
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw a [10]."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U090",
+    "title": "AREA 51",
+    "color": "GREEN",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay your green cards up."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Choose to either draw an [11], or safeguard an available standard achievement."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Reveal one of your secrets, and super-execute it if it is your turn."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U091",
+    "title": "TELEPROMPTER",
+    "color": "GREEN",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Reveal the top card of any value deck from any set. Execute the first non-demand dogma effect on the card. If you do, return the revealed card and repeat this effect using the next non-demand effect."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "variant": "effect-based Teleprompter; doc/rules/RULINGS.md"
+  },
+  {
+    "code": "U092",
+    "title": "CONSULTING",
+    "color": "BLUE",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Choose an opponent. Draw and meld two [10]. Self-execute the top card on your board of that player's choice."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U093",
+    "title": "FERMI PARADOX",
+    "color": "BLUE",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Reveal the top card of the [9] deck and the [10] deck. Return the top card of the [9] deck or the [10] deck."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "If you have no cards on your board, you win. Otherwise, transfer all valued cards in the junk to your hand."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U094",
+    "title": "CLOWN CAR",
+    "color": "PURPLE",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you meld a card from my score pile! If the melded card has no {[PROSPERITY]}, repeat this effect!"
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U095",
+    "title": "URBAN LEGEND",
+    "color": "PURPLE",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "For every color on your board with {[INDUSTRY]}, draw a [9]. If you draw five cards, you win."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your yellow or purple cards up."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "U096",
+    "title": "FIGHT CLUB",
+    "color": "RED",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "demand": true,
+        "text": "I DEMAND you transfer one of your secrets to my achievements!"
+      },
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "You may splay your yellow cards up."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AVATAR",
+      "bottom_center": "AVATAR",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U097",
+    "title": "SECRET SANTA",
+    "color": "RED",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": true,
+        "text": "I DEMAND you meld a card from my score pile!"
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and score three [10]."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "AVATAR"
+    }
+  },
+  {
+    "code": "U098",
+    "title": "RIDE-HAILING",
+    "color": "YELLOW",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may splay your green cards up."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Meld a top non-yellow card with {[EFFICIENCY]} from another player's board. If you do, self-execute it. Otherwise, draw an [11]."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U099",
+    "title": "WHATCHAMACALLIT",
+    "color": "YELLOW",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "For each value, in ascending order, if that value is not a value of a top card on your board or a card in your score pile, draw and score a card of that value."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U100",
+    "title": "CRYPTOCURRENCY",
+    "color": "GREEN",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Return all cards from your score pile. For each different value of card you return, draw and score a [10]."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your red cards up."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U101",
+    "title": "DENVER AIRPORT",
+    "color": "GREEN",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may achieve one of your secrets regardless of eligibility."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your purple cards up."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "AVATAR"
+    }
+  },
+  {
+    "code": "U102",
+    "title": "HACKING",
+    "color": "BLUE",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you transfer your two highest secrets to my safe! Transfer the two highest cards in your score pile to my score pile! Meld the two lowest cards from your score pile!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U103",
+    "title": "INHOMOGENEOUS COSMOLOGY",
+    "color": "BLUE",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may place a top card from your board on top of its deck. You may meld a card from your hand. If you do either, repeat this effect."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw an [11] for every color not on your board."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    }
+  },
+  {
+    "code": "U104",
+    "title": "3D PRINTING",
+    "color": "PURPLE",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Return a top or bottom card on your board. Achieve one of your secrets of value equal to the returned card regardless of eligibility, then safeguard an available standard achievement. If you do, repeat this effect."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U105",
+    "title": "ORDER OF THE OCCULT HAND",
+    "color": "PURPLE",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If you have a [3] in your score pile, you lose."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If you have a [7] in your hand, you win."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Meld two cards from your hand. Score four cards from your hand. Splay your blue cards up."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U106",
+    "title": "CLOAKING",
+    "color": "RED",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": true,
+        "text": "I DEMAND you transfer one of your claimed standard achievements to my safe!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "U107",
+    "title": "DARK WEB",
+    "color": "RED",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Unsplay any color on any board."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Choose to either safeguard any number of available standard achievements, or achieve any number of secrets from your safe regardless of eligibility."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    }
+  },
+  {
+    "code": "U108",
+    "title": "ESCAPE ROOM",
+    "color": "YELLOW",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you draw, reveal, and score an [11]! Score a card from your hand of the same color as the drawn card! If you don't, you lose!"
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Score four top non-yellow cards each with {[EFFICIENCY]} of different colors on your board."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U109",
+    "title": "FASHION MASK",
+    "color": "YELLOW",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Tuck a top card with {[PROSPERITY]} or {[INDUSTRY]} of each color on your board. You may safeguard one of the tucked cards."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Score all but the top five each of your yellow and purple cards. Splay those colors aslant."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "U110",
+    "title": "GREEN HYDROGEN",
+    "color": "GREEN",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Score all non-top green cards on your board. Draw and tuck an [11] for each card scored."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U111",
+    "title": "MYSTERY BOX",
+    "color": "GREEN",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Claim an available standard achievement, regardless of eligibility. Self-execute it."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "U112",
+    "title": "ASTROBIOLOGY",
+    "color": "BLUE",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Return a bottom card from your board. Splay that color on your board aslant. Score all cards on your board of that color without {[HEALTH]}."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "AVATAR",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "U113",
+    "title": "QUANTUM COMPUTERS",
+    "color": "BLUE",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you flip a coin! If you lose the flip, you lose!"
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Flip a coin. If you win the flip, this effect is complete. If you lose the flip, return one of your secrets. If you don't, you lose. Otherwise, repeat this effect."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": null,
+      "bottom_right": "EFFICIENCY"
+    }
+  },
+  {
+    "code": "U114",
+    "title": "HOLOGRAPHY",
+    "color": "PURPLE",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "Choose red, blue, or green. Score all but your top five cards of that color, then splay it aslant. If you do both, exchange all the lowest cards in your score pile with all your claimed standard achievements of lower value."
+      }
+    ],
+    "icons": {
+      "top_left": "AVATAR",
+      "bottom_left": "AVATAR",
+      "bottom_center": null,
+      "bottom_right": "AVATAR"
+    }
+  },
+  {
+    "code": "U115",
+    "title": "METAVERSE",
+    "color": "PURPLE",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "For each splayed color on your board, score its top card. If you score fewer than three cards, you lose."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "AVATAR",
+      "bottom_center": "AVATAR",
+      "bottom_right": null
+    }
+  }
+]

@@ -1,0 +1,5 @@
+/target
+/.pixi
+
+# saves + setup when running app locally
+.inari

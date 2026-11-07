@@ -1,0 +1,3720 @@
+[
+  {
+    "code": "E001",
+    "title": "BANGLE",
+    "color": "RED",
+    "age": 1,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      1
+    ],
+    "echoes": [
+      {
+        "slot": 2,
+        "text": "Tuck a [1] from your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Choose to either draw and foreshadow a [2], or tuck a [2] from your forecast."
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "If you have no cards in your forecast, draw and foreshadow a [3]."
+      }
+    ]
+  },
+  {
+    "code": "E012",
+    "title": "RULER",
+    "color": "BLUE",
+    "age": 1,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    },
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Draw a [2]."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw two Echoes [1]. Foreshadow one of them and return the other."
+      }
+    ]
+  },
+  {
+    "code": "E013",
+    "title": "BELL",
+    "color": "PURPLE",
+    "age": 1,
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": null,
+      "bottom_center": "AUTHORITY",
+      "bottom_right": null
+    },
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "You may score a card from your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Draw and foreshadow a [1] and a [2]."
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "If Bell was foreseen, return all cards from all hands."
+      }
+    ]
+  },
+  {
+    "code": "E002",
+    "title": "CANDLES",
+    "color": "RED",
+    "age": 1,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      null,
+      1,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "If no player has fewer points than you, draw a [3] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": true,
+        "text": "I DEMAND you transfer a card with [AUTHORITY] or [CONCEPT] from your hand to my hand! If you do, draw a [1] !"
+      }
+    ]
+  },
+  {
+    "code": "E003",
+    "title": "PLUMBING",
+    "color": "RED",
+    "age": 1,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "bonuses": [
+      null,
+      2,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Score the bottom blue card from your board."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Junk all cards in the [1] deck."
+      }
+    ]
+  },
+  {
+    "code": "E004",
+    "title": "CHOPSTICKS",
+    "color": "YELLOW",
+    "age": 1,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "You may draw and foreshadow a [1] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may junk all cards in the [1] deck. If you do, achieve the highest card in the junk if eligible."
+      }
+    ]
+  },
+  {
+    "code": "E005",
+    "title": "NOODLES",
+    "color": "YELLOW",
+    "age": 1,
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": null,
+      "bottom_center": "AUTHORITY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      1
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "If you have more [1] in your hand than every opponent, draw and score a [2] ."
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Draw and reveal a [1] . If it is yellow, score all [1] from your hand."
+      }
+    ]
+  },
+  {
+    "code": "E006",
+    "title": "SOAP",
+    "color": "YELLOW",
+    "age": 1,
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      null,
+      2,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Choose a color. You may tuck any number of cards of that color from your hand. If you do, and your top card of that color is higher than each opponent's, you may achieve (if eligible) a card from your hand."
+      }
+    ]
+  },
+  {
+    "code": "E007",
+    "title": "COMB",
+    "color": "GREEN",
+    "age": 1,
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Choose a color, then draw and reveal five [1] . Return the drawn cards that do not match the chosen color. If Comb was foreseen, return all cards of the chosen color from all boards."
+      }
+    ]
+  },
+  {
+    "code": "E008",
+    "title": "ICE SKATES",
+    "color": "GREEN",
+    "age": 1,
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If Ice Skates was foreseen, junk all cards in the [1] deck and [2] deck."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Return up to two cards from your hand. For each card you return, either draw and meld a [2] , or draw and foreshadow a [3] ."
+      }
+    ]
+  },
+  {
+    "code": "E009",
+    "title": "UMBRELLA",
+    "color": "GREEN",
+    "age": 1,
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "You may meld a card from your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Return any number of cards from your hand. Score two cards from your hand for every card you return."
+      }
+    ]
+  },
+  {
+    "code": "E010",
+    "title": "DICE",
+    "color": "BLUE",
+    "age": 1,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    },
+    "bonuses": [
+      null,
+      1,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and reveal an Echoes [1] . If the card has a bonus, draw and meld a card of value equal to its bonus."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If Dice was foreseen, draw a [4] , then transfer it to the hand of an opponent with more bonus points than you."
+      }
+    ]
+  },
+  {
+    "code": "E011",
+    "title": "PERFUME",
+    "color": "BLUE",
+    "age": 1,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      1,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Draw and tuck a [1] . If it has [AUTHORITY] , repeat this effect."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top card of different value from any top card on my board from your board to mine! If you do, draw and meld a card of equal value!"
+      }
+    ]
+  },
+  {
+    "code": "E014",
+    "title": "FLUTE",
+    "color": "PURPLE",
+    "age": 1,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      1,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "You may splay one color of your cards left."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you return an expansion card from your hand!"
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and reveal an Echoes [1] . If it has a bonus, draw a [1] ."
+      }
+    ]
+  },
+  {
+    "code": "E015",
+    "title": "PUPPET",
+    "color": "PURPLE",
+    "age": 1,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "bonuses": [
+      null,
+      null,
+      3,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Junk an available achievement of value equal to the value of a card in your score pile."
+      }
+    ]
+  },
+  {
+    "code": "E016",
+    "title": "CROSSBOW",
+    "color": "RED",
+    "age": 2,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    },
+    "bonuses": [
+      3,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you transfer an expansion card from your hand to my score pile!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Transfer a card from your hand to any opponent's board."
+      }
+    ]
+  },
+  {
+    "code": "E017",
+    "title": "HORSESHOES",
+    "color": "RED",
+    "age": 2,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "bonuses": [
+      null,
+      2,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 2,
+        "text": "You may draw and foreshadow a [2] or [3] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top card without [AUTHORITY] or [INDUSTRY] from your board to my board! If you do, draw and meld a [2] !"
+      }
+    ]
+  },
+  {
+    "code": "E018",
+    "title": "TOOTHBRUSH",
+    "color": "YELLOW",
+    "age": 2,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      2,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Tuck all cards of one present value from your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may splay any one color of your cards left."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may junk all cards in the [2] deck. If you do, achieve the highest card in the junk if eligible."
+      }
+    ]
+  },
+  {
+    "code": "E019",
+    "title": "WATERMILL",
+    "color": "YELLOW",
+    "age": 2,
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw a card of value equal to a bonus on your board, if you have one."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Tuck a card from your hand. If Watermill was foreseen, tuck all cards from the deck of value equal to the tucked card."
+      }
+    ]
+  },
+  {
+    "code": "E020",
+    "title": "GLASSBLOWING",
+    "color": "GREEN",
+    "age": 2,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Score an expansion card from your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and foreshadow a card of value three higher than the lowest non-green top card on your board."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Choose [2] or [3] . Junk all cards in that deck."
+      }
+    ]
+  },
+  {
+    "code": "E021",
+    "title": "SCISSORS",
+    "color": "GREEN",
+    "age": 2,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "bonuses": [
+      null,
+      null,
+      2,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Score your bottom yellow card."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "You may choose up to two cards from your hand. For each card chosen, either meld it or score it."
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "If Paper is a top card on any player's board, score it."
+      }
+    ]
+  },
+  {
+    "code": "E022",
+    "title": "LEVER",
+    "color": "BLUE",
+    "age": 2,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 2,
+        "text": "Draw two [2] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return any number of cards from your hand. For every two cards of matching value you return, draw a card of value one higher."
+      }
+    ]
+  },
+  {
+    "code": "E023",
+    "title": "LINGUISTICS",
+    "color": "BLUE",
+    "age": 2,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 2,
+        "text": "Draw a [3] or Draw and foreshadow a [4] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw a card of value equal to a bonus on any board, if there is one. If you do, and Linguistics was foreseen, junk all available achievements of that value."
+      }
+    ]
+  },
+  {
+    "code": "E024",
+    "title": "PAGODA",
+    "color": "PURPLE",
+    "age": 2,
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "bonuses": [
+      null,
+      2,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Draw and foreshadow a [3] . You may tuck another card of matching color from your hand. If you do, meld the drawn card. If you do, and Pagoda was foreseen, meld all cards of that color from all other boards."
+      }
+    ]
+  },
+  {
+    "code": "E025",
+    "title": "CHATURANGA",
+    "color": "PURPLE",
+    "age": 2,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      3,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Meld a card from your hand. Draw and foreshadow a card of value equal to the melded card."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If Chaturanga was foreseen, draw and foreshadow a card of value equal to the number of colors on your board."
+      }
+    ]
+  },
+  {
+    "code": "E026",
+    "title": "LIQUID FIRE",
+    "color": "RED",
+    "age": 3,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": true,
+        "text": "I DEMAND you draw a card of value equal to the highest bonus on your board! Transfer it to my forecast! If it is red, transfer all cards from your hand to my score pile!"
+      }
+    ]
+  },
+  {
+    "code": "E027",
+    "title": "KATANA",
+    "color": "RED",
+    "age": 3,
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you transfer two top cards with [AUTHORITY] from your board to my score pile! If you transfer exactly one and Katana was foreseen, junk all available standard achievements!"
+      }
+    ]
+  },
+  {
+    "code": "E028",
+    "title": "DEODORANT",
+    "color": "YELLOW",
+    "age": 3,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Draw and meld a [3] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If you have a top card with [AUTHORITY] , draw and meld a [3] . Otherwise, draw a [4] ."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If you have a top card with [INDUSTRY] , junk all cards in the [4] deck."
+      }
+    ]
+  },
+  {
+    "code": "E029",
+    "title": "SANDPAPER",
+    "color": "YELLOW",
+    "age": 3,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may return any number of cards from your hand. Draw a [3] for each card you return."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Meld a card from your hand."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If Sandpaper was foreseen, foreshadow all cards in your hand."
+      }
+    ]
+  },
+  {
+    "code": "E030",
+    "title": "CHARITABLE TRUST",
+    "color": "GREEN",
+    "age": 3,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      3
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Draw a [3] or [4] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may meld the last card you drew due to Charitable Trust's echo effect. If you meld a [3] , achieve your top green card, if eligible. If you meld a [4] , return your top green card."
+      }
+    ]
+  },
+  {
+    "code": "E031",
+    "title": "HOMING PIGEONS",
+    "color": "GREEN",
+    "age": 3,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      3,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you return two cards from your score pile whose values each match a card in my hand!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may splay your red or green cards left. If Homing Pigeons was foreseen, splay all your colors left."
+      }
+    ]
+  },
+  {
+    "code": "E032",
+    "title": "ALMANAC",
+    "color": "BLUE",
+    "age": 3,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      4,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Draw and foreshadow an Echoes [4] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may return a card from your forecast with a bonus. If you do, draw and score a card of value one higher than that bonus."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "If Almanac was foreseen, foreshadow all cards in another player's forecast."
+      }
+    ]
+  },
+  {
+    "code": "E033",
+    "title": "MAGNIFYING GLASS",
+    "color": "BLUE",
+    "age": 3,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      3,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Draw a [4] then return a card from your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return exactly three cards of equal value from your hand. If you do, draw a card of value two higher than the cards you return."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay your yellow or blue cards left."
+      }
+    ]
+  },
+  {
+    "code": "E034",
+    "title": "NOVEL",
+    "color": "PURPLE",
+    "age": 3,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      3,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Return all cards from your forecast."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw a [3] ."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your purple cards left."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If all your non-purple top cards share a common icon other than [PROSPERITY] , claim the Supremacy achievement."
+      }
+    ]
+  },
+  {
+    "code": "E035",
+    "title": "SUNGLASSES",
+    "color": "PURPLE",
+    "age": 3,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "bonuses": [
+      null,
+      3,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 2,
+        "text": "Score a card from your hand of a color you have splayed."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "You may either splay your purple cards in the direction one of your other colors is splayed, or you may splay one of your other colors in the direction that your purple cards are splayed."
+      }
+    ]
+  },
+  {
+    "code": "E036",
+    "title": "KOBUKSON",
+    "color": "RED",
+    "age": 4,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      5,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Splay left one color on any player's board."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you return a top card with [AUTHORITY] of each color from your board! Draw and tuck a [4] !"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and tuck a [4] ."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "If Kobukson was foreseen, draw and meld a [5] ."
+      }
+    ]
+  },
+  {
+    "code": "E037",
+    "title": "SHURIKEN",
+    "color": "RED",
+    "age": 4,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer two non-red top cards with [AUTHORITY] or [AVATAR] of different colors from your board to my board! If you do, and Shuriken was foreseen, transfer them to my achievements!"
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your purple cards right."
+      }
+    ]
+  },
+  {
+    "code": "E038",
+    "title": "BAROMETER",
+    "color": "YELLOW",
+    "age": 4,
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Transfer a [5] from your forecast to your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw and foreshadow a card of value two higher than a bonus on any board, if there is one."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may return all cards in your forecast. If any are blue, claim the Destiny achievement."
+      }
+    ]
+  },
+  {
+    "code": "E039",
+    "title": "PENCIL",
+    "color": "YELLOW",
+    "age": 4,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      4
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Draw a [5] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return up to three cards from your hand. If you do, draw that many cards of value one higher than the highest card you return. Return all but one of them, and foreshadow the remaining card."
+      }
+    ]
+  },
+  {
+    "code": "E040",
+    "title": "CHINTZ",
+    "color": "GREEN",
+    "age": 4,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      4
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw a [4] ."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If you have exactly one card in your hand, draw a [4] , then draw and score a [4] ."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If Chintz was foreseen, transfer all cards from your hand to the available achievements."
+      }
+    ]
+  },
+  {
+    "code": "E041",
+    "title": "GLOBE",
+    "color": "GREEN",
+    "age": 4,
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      4,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may return all cards in your hand. If you return blue, green, and yellow cards, draw and foreshadow a [6] , [7] , and [8] , then splay any color on your board right."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "If Globe was foreseen, foreshadow a top card from any board."
+      }
+    ]
+  },
+  {
+    "code": "E042",
+    "title": "SLIDE RULE",
+    "color": "BLUE",
+    "age": 4,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay your yellow cards right."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw a card of value equal to the value of your lowest top card plus the number of colors you have splayed."
+      }
+    ]
+  },
+  {
+    "code": "E043",
+    "title": "TELESCOPE",
+    "color": "BLUE",
+    "age": 4,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      4,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Draw and foreshadow an Echoes [5] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may place a card from your forecast on top of its deck. If you do, exchange all cards in your forecast with an equal number of available standard achievements, and junk all the cards in the [5] deck."
+      }
+    ]
+  },
+  {
+    "code": "E044",
+    "title": "CLOCK",
+    "color": "PURPLE",
+    "age": 4,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      null,
+      5,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "You may splay your color with the most cards right."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": true,
+        "text": "I DEMAND you transfer all cards of value equal to the number of visible cards of the color of my choice on my board from your hand and your score pile to my score pile! Junk an available achievement of that value!"
+      }
+    ]
+  },
+  {
+    "code": "E045",
+    "title": "TOILET",
+    "color": "PURPLE",
+    "age": 4,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Draw and tuck a [4] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you return a card from your score pile matching each different bonus value on my board!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may return a card from your hand and draw a card of the same value."
+      }
+    ]
+  },
+  {
+    "code": "E046",
+    "title": "COKE",
+    "color": "RED",
+    "age": 5,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Draw and tuck a [4] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and reveal a [6] . If it has [INDUSTRY] , meld it and repeat this effect. Otherwise, foreshadow it."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "If Coke was foreseen, score your top card of each non-red color."
+      }
+    ]
+  },
+  {
+    "code": "E047",
+    "title": "OCTANT",
+    "color": "RED",
+    "age": 5,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top card with [HEALTH] or [INDUSTRY] of each non-red color from your board to mine! If you transfer at least one and Octant wasn\u2019t foreseen, draw and foreshadow a [6] !"
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and foreshadow a [6] ."
+      }
+    ]
+  },
+  {
+    "code": "E048",
+    "title": "PRESSURE COOKER",
+    "color": "YELLOW",
+    "age": 5,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      5,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If Pressure Cooker was foreseen, meld all cards from your hand."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Return all cards from your hand. For each top card of different color on your board with a bonus, both draw a card and junk an available achievement of value equal to that bonus."
+      }
+    ]
+  },
+  {
+    "code": "E049",
+    "title": "STOVE",
+    "color": "YELLOW",
+    "age": 5,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      6,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Score a top card from your board without [INDUSTRY] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and tuck a [4] . If your top card of the tucked card's color has value less than 4, draw and score a [4] ."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your green cards right."
+      }
+    ]
+  },
+  {
+    "code": "E050",
+    "title": "PALAMPORE",
+    "color": "GREEN",
+    "age": 5,
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      5
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and score a card of value equal to a bonus that occurs more than once on your board, if there is one."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your purple cards right."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "If you have at least six bonuses on your board, claim the Wealth acievement."
+      }
+    ]
+  },
+  {
+    "code": "E051",
+    "title": "SEED DRILL",
+    "color": "GREEN",
+    "age": 5,
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you return a top card from your board of value less than 3!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Choose the [3] , [4] , or [5] deck. You may junk all cards in the chosen deck. If you do, achieve the highest card in the junk if eligible."
+      }
+    ]
+  },
+  {
+    "code": "E052",
+    "title": "LIGHTNING ROD",
+    "color": "BLUE",
+    "age": 5,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      6
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Draw and tuck a [5] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you draw and tuck a [5] ! Return your top card of the tucked card's color!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Return a top card from your board."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Junk all cards in the [6] deck."
+      }
+    ]
+  },
+  {
+    "code": "E053",
+    "title": "THERMOMETER",
+    "color": "BLUE",
+    "age": 5,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      null,
+      null,
+      5,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Meld your bottom green card."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and meld a card of value one higher than the value of your top yellow card. If the melded card is yellow, or if Thermometer was foreseen and the melded card is red or purple, repeat this effect."
+      }
+    ]
+  },
+  {
+    "code": "E054",
+    "title": "PIANO",
+    "color": "PURPLE",
+    "age": 5,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      5,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Draw a card of a value present in any player's hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If you have five top cards, each with a different value, return five cards from your score pile and then draw and score a card of each of your top cards' values in ascending order."
+      }
+    ]
+  },
+  {
+    "code": "E055",
+    "title": "TUNING FORK",
+    "color": "PURPLE",
+    "age": 5,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Draw a card of value present in any score pile."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Foreshadow a card from your hand. If you do, draw and reveal a card of the same value, and meld it if it is higher than the top card of the same color on your board. If you don't meld it, return it, and you may repeat this effect."
+      }
+    ]
+  },
+  {
+    "code": "E056",
+    "title": "LOOM",
+    "color": "RED",
+    "age": 6,
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      6,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Score your lowest top card."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may return exactly two cards of different value from your score pile. If you do, draw and tuck three [6] ."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "If you have at least five [IMAGE] on your board in one color, claim the Heritage achievement."
+      }
+    ]
+  },
+  {
+    "code": "E057",
+    "title": "SHRAPNEL",
+    "color": "RED",
+    "age": 6,
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you draw and tuck a [6] ! Transfer your top two cards of its color to my score pile! Score the bottom card of its color on my board!"
+      }
+    ]
+  },
+  {
+    "code": "E058",
+    "title": "DENTURES",
+    "color": "YELLOW",
+    "age": 6,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Draw and tuck a [6] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Score your top two non-bottom cards of the color of the last card you tucked due to Dentures. If there are none to score, draw and tuck a [6] , then repeat this effect."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your blue cards right."
+      }
+    ]
+  },
+  {
+    "code": "E059",
+    "title": "MORPHINE",
+    "color": "YELLOW",
+    "age": 6,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      7,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Score an odd-valued card from your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": true,
+        "text": "I DEMAND you return all odd-valued cards in your hand! Draw a [6] !"
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw a card of value one higher than the highest card returned due to the demand."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay your red cards right."
+      }
+    ]
+  },
+  {
+    "code": "E060",
+    "title": "HOT AIR BALLOON",
+    "color": "GREEN",
+    "age": 6,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      7
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Draw and score a [7] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may achieve (if eligible) a top card from an opponent's board if they have an achievement of matching value. If you do, transfer your top green card to that player's board. Otherwise, draw and meld a [7] ."
+      }
+    ]
+  },
+  {
+    "code": "E061",
+    "title": "STEAMBOAT",
+    "color": "GREEN",
+    "age": 6,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    },
+    "bonuses": [
+      null,
+      6,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you draw and reveal a [6] ! If it is blue or yellow, transfer it and all cards in your hand to my hand! If it is red or green, transfer two cards from your score pile to mine!"
+      }
+    ]
+  },
+  {
+    "code": "E062",
+    "title": "BIFOCALS",
+    "color": "BLUE",
+    "age": 6,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Return a card from your forecast."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and foreshadow a [7] . If Bifocals was foreseen, draw and foreshadow a card of value equal to the lowest available standard achievement."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your green cards right. If you do, splay any color of your cards up."
+      }
+    ]
+  },
+  {
+    "code": "E063",
+    "title": "STETHOSCOPE",
+    "color": "BLUE",
+    "age": 6,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Meld a blue or yellow card from your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw a [7] . If you melded a blue card due to Stethoscope's echo effect, draw an [8] , and if Stethoscope was foreseen, also draw a [9] ."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay your yellow cards right."
+      }
+    ]
+  },
+  {
+    "code": "E064",
+    "title": "INDIAN CLUBS",
+    "color": "PURPLE",
+    "age": 6,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      null,
+      null,
+      6,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you return two cards from your score pile! If Indian Clubs was foreseen, return all cards from your score pile!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "For every value of card in your score pile, score a card from your hand of that value."
+      }
+    ]
+  },
+  {
+    "code": "E065",
+    "title": "KALEIDOSCOPE",
+    "color": "PURPLE",
+    "age": 6,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      6,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and meld a [7] . You may splay your cards of that color right."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Junk an available achievement of value equal to the number of [CONCEPT] on your board. If Kaleidoscope was foreseen, junk all available achievements of lower value."
+      }
+    ]
+  },
+  {
+    "code": "E066",
+    "title": "MACHINE GUN",
+    "color": "RED",
+    "age": 7,
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 2,
+        "text": "If you have five top cards, draw and score a [7] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top card with a bonus of each color from your board to my score pile! If you transfer any, junk four available achievements, and draw a [7] !"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Return your top card of each non-red color."
+      }
+    ]
+  },
+  {
+    "code": "E067",
+    "title": "RUBBER",
+    "color": "RED",
+    "age": 7,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      7
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Draw and tuck two [8] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Score a top card from your board without a bonus."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your red cards up."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "If Rubber was foreseen, foreshadow a top card on your board."
+      }
+    ]
+  },
+  {
+    "code": "E068",
+    "title": "ELEVATOR",
+    "color": "YELLOW",
+    "age": 7,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      7,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Score your top or bottom green card."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Choose a value present in your score pile. Choose to score all cards of the chosen value in either all opponents' hands or all their score piles. Draw and foreshadow a card of the chosen value."
+      }
+    ]
+  },
+  {
+    "code": "E069",
+    "title": "FERTILIZER",
+    "color": "YELLOW",
+    "age": 7,
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may return a card from your hand. If you do, transfer all cards from all score piles to your hand of value equal to the returned card."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw and foreshadow a card of value equal to the number of cards in your hand."
+      }
+    ]
+  },
+  {
+    "code": "E070",
+    "title": "JEANS",
+    "color": "GREEN",
+    "age": 7,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      8
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Draw two [8] . Return one, foreshadow the other."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw and reveal two cards of value equal to your top blue card. Meld one, and return the other."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Choose [7] or [8] . Junk all cards in that deck."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "If Jeans was foreseen, transfer a valued card in the junk to your hand."
+      }
+    ]
+  },
+  {
+    "code": "E071",
+    "title": "TELEGRAPH",
+    "color": "GREEN",
+    "age": 7,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may choose another player and a color, and match your splay in that color to theirs."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may splay your blue cards up."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "If Telegraph was foreseen, splay all your splayed colors up."
+      }
+    ]
+  },
+  {
+    "code": "E072",
+    "title": "PHOTOGRAPHY",
+    "color": "BLUE",
+    "age": 7,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      9
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Meld a card from your forecast."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": true,
+        "text": "I DEMAND you transfer your highest top card to your hand!"
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If you have at least three echo effects in one color, claim the History achievement. If you do, and Photography was foreseen, you win."
+      }
+    ]
+  },
+  {
+    "code": "E073",
+    "title": "TYPEWRITER",
+    "color": "BLUE",
+    "age": 7,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Return all cards from your hand, then draw a [6] . For each color of card you return, draw a card of value one higher than the highest card in your hand."
+      }
+    ]
+  },
+  {
+    "code": "E074",
+    "title": "ICE CREAM",
+    "color": "PURPLE",
+    "age": 7,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      8,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Score a non-purple top card from your board without a bonus."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you draw and meld a [1] !"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Choose the [6] , [7] , [8] , or [9] deck. You may junk all cards in the chosen deck. If you do, achieve the highest card in the junk if eligible."
+      }
+    ]
+  },
+  {
+    "code": "E075",
+    "title": "SAXOPHONE",
+    "color": "PURPLE",
+    "age": 7,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "bonuses": [
+      7,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your purple cards up."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If the [IMAGE] for Bell, Flute, Piano, and Saxophone are visible anywhere, you win. Otherwise, draw a [7] for each [IMAGE] that is visible."
+      }
+    ]
+  },
+  {
+    "code": "E076",
+    "title": "BANDAGE",
+    "color": "RED",
+    "age": 8,
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Meld a card from your hand with [HEALTH] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you return a card with [EFFICIENCY] from your score pile! Return a top card with [EFFICIENCY] from your board! If you do both, junk an available achievement for each achievement you have!"
+      }
+    ]
+  },
+  {
+    "code": "E077",
+    "title": "PARACHUTE",
+    "color": "RED",
+    "age": 8,
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you transfer all cards without [EFFICIENCY] in your hand to my hand!"
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "If Parachute was foreseen, junk all cards from all boards."
+      }
+    ]
+  },
+  {
+    "code": "E078",
+    "title": "AIR CONDITIONER",
+    "color": "YELLOW",
+    "age": 8,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      null,
+      null,
+      9,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "You may score a card from your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you return all cards from your score pile of value matching any of your top cards!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Junk all cards in the [9] deck."
+      }
+    ]
+  },
+  {
+    "code": "E079",
+    "title": "TRACTOR",
+    "color": "YELLOW",
+    "age": 8,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Draw a [7] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw and score a [7] ."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw a [7] ."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "If Tractor was foreseen, draw and score seven [7] ."
+      }
+    ]
+  },
+  {
+    "code": "E080",
+    "title": "NYLON",
+    "color": "GREEN",
+    "age": 8,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      8,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and tuck three [8] . If any of the tucked cards are green, repeat this effect."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your red cards up."
+      }
+    ]
+  },
+  {
+    "code": "E081",
+    "title": "SLICED BREAD",
+    "color": "GREEN",
+    "age": 8,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "bonuses": [
+      null,
+      null,
+      9,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Return all cards from your hand and draw two [8] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Return a card from your score pile. Draw and score two cards of value one less than the value of the card you return."
+      }
+    ]
+  },
+  {
+    "code": "E082",
+    "title": "RADIO TELESCOPE",
+    "color": "BLUE",
+    "age": 8,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "For every color on your board with [CONCEPT] , draw a [9] , and if Radio Telescope was foreseen, for every color also draw a [10] . Meld one of the drawn cards and return the rest. If you meld A.I. due to this effect, you win."
+      }
+    ]
+  },
+  {
+    "code": "E083",
+    "title": "X-RAY",
+    "color": "BLUE",
+    "age": 8,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      8
+    ],
+    "echoes": [
+      {
+        "slot": 2,
+        "text": "Draw and tuck an [8] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Choose a value. For every color on your board with [HEALTH] , draw a card of that value. Foreshadow any number of them."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Return all cards from your hand."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may splay your yellow cards up."
+      }
+    ]
+  },
+  {
+    "code": "E084",
+    "title": "CROSSWORD",
+    "color": "PURPLE",
+    "age": 8,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "bonuses": [
+      null,
+      8,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "For each even bonus on your board, draw a card of that value. If Crossword was foreseen, transfer the drawn cards to the available achievements."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "For each odd bonus on your board, return the lowest card from your hand."
+      }
+    ]
+  },
+  {
+    "code": "E085",
+    "title": "TELEVISION",
+    "color": "PURPLE",
+    "age": 8,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      8,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Draw and meld an [8] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Choose a value and an opponent. Transfer a card of that value from their score pile to their board. If they have an achievement of the same value, achieve (if eligible) a card of that value from their score pile."
+      }
+    ]
+  },
+  {
+    "code": "E086",
+    "title": "HELICOPTER",
+    "color": "RED",
+    "age": 9,
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Transfer a top card other than Helicopter from any player's board to its owner's score pile. You may return a card from your hand which shares an icon type with the transferred card. If you do, repeat this effect."
+      }
+    ]
+  },
+  {
+    "code": "E087",
+    "title": "JET",
+    "color": "RED",
+    "age": 9,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      10
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Meld a card from your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you return your top card of the color I last melded due to Jet's echo effect during this action! Junk all available achievements of values equal to the melded card and the returned card!"
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw and foreshadow a [10] ."
+      }
+    ]
+  },
+  {
+    "code": "E088",
+    "title": "ATM",
+    "color": "YELLOW",
+    "age": 9,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      9
+    ],
+    "echoes": [
+      {
+        "slot": 2,
+        "text": "Draw and score a card of any value."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer your highest top non-yellow card without [PROSPERITY] to my board!"
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your purple cards up."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Junk all cards in the [10] deck."
+      }
+    ]
+  },
+  {
+    "code": "E089",
+    "title": "WRISTWATCH",
+    "color": "YELLOW",
+    "age": 9,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      10,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Tuck a top card from your board."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "If Wristwatch was foreseen, return all non-bottom cards from your board."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "For each value in ascending order, if you have a bonus on your board of that value, draw and meld a card of that value."
+      }
+    ]
+  },
+  {
+    "code": "E090",
+    "title": "CREDIT CARD",
+    "color": "GREEN",
+    "age": 9,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      9,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Draw and foreshadow a [9] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may transfer a top non-green card from your board to your hand. If you do, draw and score a card of equal value. If you do, and Credit Card was foreseen, repeat this effect."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your green cards up."
+      }
+    ]
+  },
+  {
+    "code": "E091",
+    "title": "EMAIL",
+    "color": "GREEN",
+    "age": 9,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Draw and foreshadow a [10] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw and foreshadow a [9] . If Email was foreseen, draw and foreshadow an [11] ."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Self-execute your lowest non-green top card."
+      }
+    ]
+  },
+  {
+    "code": "E092",
+    "title": "CALCULATOR",
+    "color": "BLUE",
+    "age": 9,
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Score two bottom non-blue cards of different colors on your board. If you score two and they have a total value less than 12, draw a card of that total value and repeat this effect (once only)."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may splay your blue cards up."
+      }
+    ]
+  },
+  {
+    "code": "E093",
+    "title": "LASER",
+    "color": "BLUE",
+    "age": 9,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Return four cards from your score pile. Return all available standard achievements."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and foreshadow an [11] . Draw and meld a [10] . If Laser was foreseen, draw and meld an [11] ."
+      }
+    ]
+  },
+  {
+    "code": "E094",
+    "title": "KARAOKE",
+    "color": "PURPLE",
+    "age": 9,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      9,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Draw and meld a card of a value present in your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Transfer your bottom card of each color to your hand."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Claim an available achievement of value equal to the card you last melded due to Karaoke's echo effect during this action, regardless of eligibility. If you do, self-execute the melded card."
+      }
+    ]
+  },
+  {
+    "code": "E095",
+    "title": "ROCK",
+    "color": "PURPLE",
+    "age": 9,
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      null,
+      9,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you transfer your top green card to my hand! If Scissors is your new top green card, I win!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may score a top card on your board. If Paper is your top green card, you win."
+      }
+    ]
+  },
+  {
+    "code": "E096",
+    "title": "CAMCORDER",
+    "color": "RED",
+    "age": 10,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "INDUSTRY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you transfer all cards in your hand to my hand! Draw a [9] !"
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Meld all [9] from your hand. If Camcorder wasn't foreseen, return all other cards from your hand, and draw three [9] ."
+      }
+    ]
+  },
+  {
+    "code": "E097",
+    "title": "SOCIAL NETWORKING",
+    "color": "RED",
+    "age": 10,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "AVATAR",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      10,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Score a top non-red card from your board."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "demand": true,
+        "text": "I DEMAND you choose a standard icon type! Transfer all top cards without that icon from your board to my score pile!"
+      },
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "If you have fewer [INDUSTRY] , fewer [PROSPERITY] , and fewer [AUTHORITY] than each opponent, you win."
+      }
+    ]
+  },
+  {
+    "code": "E098",
+    "title": "CELL PHONE",
+    "color": "YELLOW",
+    "age": 10,
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      10,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 3,
+        "text": "Draw and foreshadow an [11] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw a [10] for every color on your board with [EFFICIENCY] ."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may splay your green cards up."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may tuck any number of cards with [EFFICIENCY] from your hand, splaying up each color into which you tuck."
+      }
+    ]
+  },
+  {
+    "code": "E099",
+    "title": "MP3",
+    "color": "YELLOW",
+    "age": 10,
+    "icons": {
+      "top_left": "AVATAR",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      10,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 2,
+        "text": "Draw and score a [10] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "Draw and score a card of value equal to a bonus on your board, if there is one."
+      },
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "Return any number of cards from your hand. For each card returned, claim two available standard achievements for which you are eligible."
+      }
+    ]
+  },
+  {
+    "code": "E100",
+    "title": "GPS",
+    "color": "GREEN",
+    "age": 10,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you return all cards from your forecast!"
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may splay your yellow cards up."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw three [11] . If GPS was foreseen, foreshadow them."
+      }
+    ]
+  },
+  {
+    "code": "E101",
+    "title": "BARCODE",
+    "color": "GREEN",
+    "age": 10,
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you return a card of matching value from your score pile for each bonus on your board!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay any one color of your cards up. If Barcode was foreseen, splay all your colors up."
+      }
+    ]
+  },
+  {
+    "code": "E102",
+    "title": "ARTIFICIAL HEART",
+    "color": "BLUE",
+    "age": 10,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      11
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Claim one available standard achievement, if eligible, doubling your current score for the purpose of checking eligibility. If you do, and Artificial Heart was foreseen, repeat this effect."
+      }
+    ]
+  },
+  {
+    "code": "E103",
+    "title": "HUMAN GENOME",
+    "color": "BLUE",
+    "age": 10,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      10,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 1,
+        "text": "Draw an [11] ."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may draw and score a card of any value. Transfer your bottom red card to your hand. If the values of all the cards in your hand match the values of all the cards in your score pile exactly, you win."
+      }
+    ]
+  },
+  {
+    "code": "E104",
+    "title": "PUZZLE CUBE",
+    "color": "PURPLE",
+    "age": 10,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [
+      {
+        "slot": 0,
+        "text": "Meld a card from your score pile."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may score the bottom card or two bottom cards of one color from your board. If all colors on your board contain the same number of visible cards, you win."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and meld a [10] ."
+      }
+    ]
+  },
+  {
+    "code": "E105",
+    "title": "SUDOKU",
+    "color": "PURPLE",
+    "age": 10,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      11
+    ],
+    "echoes": [
+      {
+        "slot": 2,
+        "text": "You may tuck any number of cards from your hand."
+      }
+    ],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and meld a card of any value. If you have exactly nine different bonus values on your board, you win. Otherwise, self-execute the melded card."
+      }
+    ]
+  },
+  {
+    "code": "E106",
+    "title": "DRONE",
+    "color": "RED",
+    "age": 11,
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw and reveal a [10] . If you have fewer than six cards of its color on your board, splay that color aslant on your board. Otherwise, return the bottom five cards of that color from all boards. If you do, repeat this effect."
+      }
+    ]
+  },
+  {
+    "code": "E107",
+    "title": "EXOSKELETON",
+    "color": "RED",
+    "age": 11,
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "INDUSTRY"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you transfer all but the lowest cards in your hand to my score pile!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may achieve a card from any player's hand, if eligible. If you do, and Exoskeleton was foreseen, repeat this effect."
+      }
+    ]
+  },
+  {
+    "code": "E108",
+    "title": "DIGITAL PET",
+    "color": "YELLOW",
+    "age": 11,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "HEALTH"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you draw and reveal an [11] ! Return all cards from your board and score pile of color matching the drawn card!"
+      }
+    ]
+  },
+  {
+    "code": "E109",
+    "title": "ESPORTS",
+    "color": "YELLOW",
+    "age": 11,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AVATAR",
+      "bottom_center": null,
+      "bottom_right": "AVATAR"
+    },
+    "bonuses": [
+      12,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "For each non-yellow top card on your board, draw and score a card of equal value, in ascending order. If you do, and Esports was foreseen, you win."
+      }
+    ]
+  },
+  {
+    "code": "E110",
+    "title": "ALGOCRACY",
+    "color": "GREEN",
+    "age": 11,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      11
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Choose an icon type. Transfer all cards with that featured icon from all hands and score piles to the hand of the single player with the most of the chosen icon on their board."
+      }
+    ]
+  },
+  {
+    "code": "E111",
+    "title": "ROBOCAR",
+    "color": "GREEN",
+    "age": 11,
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      11,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Choose an opponent. That player chooses a card (unrevealed) in your hand. Meld the chosen card. If you do, and it is your turn, self-execute the card, then repeat this effect."
+      }
+    ]
+  },
+  {
+    "code": "E112",
+    "title": "STREAMING",
+    "color": "BLUE",
+    "age": 11,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    },
+    "bonuses": [
+      11,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Choose a color on your board. Choose to either achieve the top card of that color on your board, if eligible, or score it. If you do either, and Streaming was foreseen, repeat this effect using the same color."
+      }
+    ]
+  },
+  {
+    "code": "E113",
+    "title": "TOUCHSCREEN",
+    "color": "BLUE",
+    "age": 11,
+    "icons": {
+      "top_left": null,
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "bonuses": [
+      null,
+      11,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Splay each color on your board in a direction according to the exact number of cards of that color on your board: two or three, aslant; four or five, up; six or seven, right; eight or more, left. If you splay five colors, you win."
+      }
+    ]
+  },
+  {
+    "code": "E114",
+    "title": "DEEPFAKE",
+    "color": "PURPLE",
+    "age": 11,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "AVATAR",
+      "bottom_right": "AVATAR"
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "If it is your turn, transfer a top card from any board to your board, then super-execute a top card on your board other than Deepfake. If the transferred card is still a top card, transfer it to its original board."
+      }
+    ]
+  },
+  {
+    "code": "E115",
+    "title": "MERITOCRACY",
+    "color": "PURPLE",
+    "age": 11,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    },
+    "bonuses": [
+      null,
+      null,
+      null,
+      12
+    ],
+    "echoes": [],
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": true,
+        "text": "I DEMAND you choose the standard icon of which I have the most among my icon types! Transfer all cards with that visible icon from your board to mine, or if Meritocracy was foreseen, to my achievements!"
+      }
+    ]
+  }
+]

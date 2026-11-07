@@ -1,0 +1,2647 @@
+[
+  {
+    "code": "B001",
+    "title": "ARCHERY",
+    "set": "Base",
+    "color": "RED",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you draw a [1], then transfer the highest card in your hand to my hand!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Junk an available achievement of value 1 or 2."
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B002",
+    "title": "METALWORKING",
+    "set": "Base",
+    "color": "RED",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Draw and reveal a [1]. If it has {[AUTHORITY]}, score it and repeat this effect."
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B003",
+    "title": "OARS",
+    "set": "Base",
+    "color": "RED",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a card with {[PROSPERITY]} from your hand to my score pile! If you do, draw a [1], and repeat this effect!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "If no cards were transferred due to this demand, draw a [1]."
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B004",
+    "title": "AGRICULTURE",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may return a card from your hand. If you do, draw and score a card of value one higher than the card you return."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B005",
+    "title": "DOMESTICATION",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Meld the lowest card in your hand. Draw a [1]."
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B006",
+    "title": "MASONRY",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "You may meld any number of cards from your hand, each with {[AUTHORITY]}."
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "If you have exactly three red cards on your board, claim the Monument achievement."
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": null,
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B007",
+    "title": "CLOTHING",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Meld a card from your hand of a color not on your board."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw and score a [1] for every color present on your board that no opponent has on their board."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B008",
+    "title": "SAILING",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and meld a [1]."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B009",
+    "title": "THE WHEEL",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Draw two [1]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B010",
+    "title": "POTTERY",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may return up to three cards from your hand. If you return any, draw and score a card of value equal to the number of cards you return."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw a [1]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B011",
+    "title": "TOOLS",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return three cards from your hand. If you do, draw and meld a [3]."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return a [3] from your hand. If you do, draw three [1]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B012",
+    "title": "WRITING",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw a [2]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B013",
+    "title": "CITY STATES",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top card with {[AUTHORITY]} from your board to my board if you have at least four {[AUTHORITY]} on your board! If you do, draw a [1]!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B014",
+    "title": "CODE OF LAWS",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may tuck a card from your hand of the same color as any card on your board. If you do, you may splay that color of your cards left."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B015",
+    "title": "MYSTICISM",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 1,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Draw and reveal a [1]. If it is the same color as any card on your board, meld it and draw a [1]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B016",
+    "title": "CONSTRUCTION",
+    "set": "Base",
+    "color": "RED",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you transfer two cards from your hand to my hand! Draw a [2]!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "If you are the only player with five top cards, claim the Empire achievement."
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": null,
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B017",
+    "title": "ROAD BUILDING",
+    "set": "Base",
+    "color": "RED",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Meld one or two cards from your hand. If you meld two, you may transfer your top red card to another player's board. If you do, meld that player's top green card."
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": "AUTHORITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B018",
+    "title": "CANAL BUILDING",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may choose to either exchange all the highest cards in your hand with all the highest cards in your score pile, or junk all cards in the [3] deck."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B019",
+    "title": "FERMENTING",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw a [2] for every color on your board with {[HEALTH]}."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may tuck a green card from your hand. If you don't, junk all cards in the [2] deck, and junk Fermenting if it is a top card on any board."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B020",
+    "title": "CURRENCY",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may return any number of cards from your hand. If you do, draw and score a [2] for every different value of card you return."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B021",
+    "title": "MAPMAKING",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a [1] from your score pile to my score pile!"
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If any card was transferred due to the demand, draw and score a [1]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B022",
+    "title": "CALENDAR",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "If you have more cards in your score pile than in your hand, draw two [3]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "B023",
+    "title": "MATHEMATICS",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return a card from your hand. If you do, draw and meld a card of value one higher than the card you return."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "B024",
+    "title": "MONOTHEISM",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top card on your board of a different color from every card on my board to my score pile! If you do, draw and tuck a [1]!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Draw and tuck a [1]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B025",
+    "title": "PHILOSOPHY",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 2,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay left any one color of your cards."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may score a card from your hand."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "B026",
+    "title": "ENGINEERING",
+    "set": "Base",
+    "color": "RED",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top card with {[AUTHORITY]} of each color from your board to my score pile!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "You may splay your red cards left."
+      }
+    ],
+    "icons": {
+      "top_left": "AUTHORITY",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B027",
+    "title": "OPTICS",
+    "set": "Base",
+    "color": "RED",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and meld a [3]. If it has {[PROSPERITY]}, draw and score a [4]. Otherwise, transfer a card from your score pile to the score pile of an opponent with fewer points than you."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B028",
+    "title": "MACHINERY",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you exchange all cards in your hand with all the highest cards in my hand!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Score a card from your hand with {[AUTHORITY]}."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may splay your red cards left."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B029",
+    "title": "MEDICINE",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you exchange the highest card in your score pile with the lowest card in my score pile!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Junk an available achievement of value 3 or 4."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B030",
+    "title": "COMPASS",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top non-green card with {[HEALTH]} from your board to my board, and then meld a top card without {[HEALTH]} from my board!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B031",
+    "title": "PAPER",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay your green or blue cards left."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Score a top card with {[HEALTH]} from your board. If you do, draw a [4] for every color you have splayed left."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B032",
+    "title": "ALCHEMY",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Draw and reveal a [4] for every color on your board with {[AUTHORITY]}. If any of the drawn cards are red, return all cards from your hand."
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "Meld a card from your hand, then score a card from your hand."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B033",
+    "title": "TRANSLATION",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may meld all cards in your score pile."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If each top card on your board has {[PROSPERITY]}, claim the World achievement."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B034",
+    "title": "EDUCATION",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return the highest card from your score pile. If you do, draw a card of value two higher than the highest card remaining in your score pile."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B035",
+    "title": "FEUDALISM",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 3,
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a card with {[AUTHORITY]} from your hand to my hand! If you do, junk all available special achievements!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "demand": false,
+        "text": "You may splay your yellow or purple cards left. If you do, draw a [3]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "AUTHORITY"
+    }
+  },
+  {
+    "code": "B036",
+    "title": "COLONIALISM",
+    "set": "Base",
+    "color": "RED",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and tuck a [3]. If it is green, junk all cards in the [5] deck. If it has {[PROSPERITY]}, repeat this effect."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B037",
+    "title": "GUNPOWDER",
+    "set": "Base",
+    "color": "RED",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top card with {[AUTHORITY]} from your board to my score pile!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "If any card was transferred due to the demand, draw and score a [2]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B038",
+    "title": "ANATOMY",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you return a card from your score pile! If you do, return a top card of equal value from your board! If you do, junk all cards in the [4] deck!"
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B039",
+    "title": "PERSPECTIVE",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return a card from your hand. If you do, score a card from your hand for every color on your board with {[CONCEPT]}."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B040",
+    "title": "INVENTION",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may choose a color you have splayed left and splay it right. If you do, draw and score a [4]."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If you have five colors splayed, claim the Wonder achievement."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B041",
+    "title": "NAVIGATION",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a [2] or [3] from your score pile to my score pile!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B042",
+    "title": "EXPERIMENTATION",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and meld a [5]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "B043",
+    "title": "PRINTING PRESS",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return a card from your score pile. If you do, draw a card of value two higher than the top purple card on your board."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay your blue cards right."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B044",
+    "title": "ENTERPRISE",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top non-purple card with {[PROSPERITY]} from your board to my board! If you do, draw and meld a [4]!"
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your green cards right."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B045",
+    "title": "REFORMATION",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 4,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may splay your yellow or purple cards right."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may tuck a card from your hand for every splayed color on your board."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B046",
+    "title": "COAL",
+    "set": "Base",
+    "color": "RED",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and tuck a [5]."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your red cards right."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may choose a color. If you do, score your top two cards of that color."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B047",
+    "title": "THE PIRATE CODE",
+    "set": "Base",
+    "color": "RED",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer two cards of value 4 or less from your score pile to my score pile!"
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If any cards were transferred due to the demand, score the lowest top card with {[PROSPERITY]} from your board."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B048",
+    "title": "STATISTICS",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you transfer all the cards of the value of my choice in your score pile to your hand!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may splay your yellow cards right."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B049",
+    "title": "STEAM ENGINE",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and tuck two [4]. Score your bottom yellow card. If it is Steam Engine, junk all cards in the [6] deck."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B050",
+    "title": "BANKING",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top non-green card with {[INDUSTRY]} from your board to my board. If you do, draw and score a [5]!"
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your green cards right."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B051",
+    "title": "MEASUREMENT",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may reveal and return a card from your hand. If you do, splay your cards of that card\u2019s color right and draw a card of value equal to the number of cards of that color on your board."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "HEALTH",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B052",
+    "title": "CHEMISTRY",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your blue cards right."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and score a card of value one higher than the highest top card on your board and then return a card from your score pile."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B053",
+    "title": "PHYSICS",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw three [6] and reveal them. If at least two of the drawn cards are the same color, return all cards in your hand."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B054",
+    "title": "ASTRONOMY",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and reveal a [6]. If the card is green or blue, meld it and repeat this effect."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If all non-purple top cards on your board are value 6 or higher, claim the Universe achievement."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B055",
+    "title": "SOCIETIES",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 5,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top card with {[CONCEPT]} higher than my top card of the same color from your board to my board! If you do, draw a [5]!"
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B056",
+    "title": "INDUSTRIALIZATION",
+    "set": "Base",
+    "color": "RED",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and tuck three [6]. Then, if you are the single player with the most {[EFFICIENCY]}, return your top red card."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your red or purple cards right."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B057",
+    "title": "MACHINE TOOLS",
+    "set": "Base",
+    "color": "RED",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and score a card of value equal to the highest card in your score pile."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B058",
+    "title": "CANNING",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may draw and tuck a [6]. If you tuck a card, score a top card without {[INDUSTRY]} of each color on your board."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your yellow cards right."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B059",
+    "title": "VACCINATION",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you choose a card in your score pile! Return all the cards from your score pile of its value! If you do, draw and meld a [6]!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "If any card was returned as a result of the demand, draw and meld a [7]."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B060",
+    "title": "CLASSIFICATION",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Reveal a card from your hand. Transfer to your hand all cards of that card's color from all opponents' hands. Then, meld all cards of that color from your hand."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B061",
+    "title": "METRIC SYSTEM",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If your green cards are splayed right, you may splay any one color of your cards right."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your green cards right."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B062",
+    "title": "ATOMIC THEORY",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay your blue cards right."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and meld a [7]."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B063",
+    "title": "ENCYCLOPEDIA",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Choose a value. You may meld all the cards of that value in your score pile."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may junk an available achievement of value 5, 6, or 7."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B064",
+    "title": "DEMOCRACY",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return any number of cards from your hand. If you have returned more cards than any opponent due to Democracy so far during this action, draw and score an [8]."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B065",
+    "title": "EMANCIPATION",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 6,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you transfer a card from your hand to my score pile! If you do, draw a [6]!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your red or purple cards right."
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B066",
+    "title": "COMBUSTION",
+    "set": "Base",
+    "color": "RED",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer one card from your score pile to my score pile for every color with {[PROSPERITY]} on my board!"
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Return your bottom red card."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B067",
+    "title": "EXPLOSIVES",
+    "set": "Base",
+    "color": "RED",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you transfer the three highest cards from your hand to my hand! If you transfer any, and have no cards in hand, draw a [7]!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B068",
+    "title": "REFRIGERATION",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you return all but one of the cards in your hand!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may score a card from your hand."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B069",
+    "title": "SANITATION",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you exchange the two highest cards in your hand with the lowest card in my hand!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Choose [7] or [8]. Junk all cards in that deck."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B070",
+    "title": "BICYCLE",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may exchange all cards in your hand with all cards in your score pile."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B071",
+    "title": "ELECTRICITY",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Return your top card of each color without {[INDUSTRY]}, then draw an [8] for each card you return."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B072",
+    "title": "EVOLUTION",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may choose to either draw and score an [8] and then return a card from your score pile, or draw a card of value one higher than the highest card in your score pile."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B073",
+    "title": "PUBLICATIONS",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay your yellow or blue cards up."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may junk an available special achievement or make a special achievement in the junk available."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "B074",
+    "title": "LIGHTING",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may tuck up to three cards from your hand. If you do, draw and score a [7] for every different value of card you tuck."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B075",
+    "title": "RAILROAD",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 7,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Return all cards from your hand."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw three [6]."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may splay up any one color of your cards currently splayed right."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B076",
+    "title": "FLIGHT",
+    "set": "Base",
+    "color": "RED",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If your red cards are splayed up, you may splay any one color of your cards up."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "You may splay your red cards up."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B077",
+    "title": "MOBILITY",
+    "set": "Base",
+    "color": "RED",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you transfer your two highest non-red top cards without {[INDUSTRY]} of different colors to my score pile! If you transfer any cards, draw an [8]!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B078",
+    "title": "ANTIBIOTICS",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may return up to three cards from your hand. For every different value of card that you return, draw two [8]."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B079",
+    "title": "SKYSCRAPERS",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top non-yellow card with {[EFFICIENCY]} from your board to mine! If you do, score your top card of that color, then return all cards of that color from your board, and transfer Skyscrapers to my hand if it is a top card!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B080",
+    "title": "CORPORATIONS",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you transfer a top non-green card with {[INDUSTRY]} from your board to my score pile! If you do, draw and meld an [8]!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and meld an [8]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B081",
+    "title": "MASS MEDIA",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return a card from your hand. If you do, choose a value, and return all cards of that value from all score piles."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may splay your purple cards up."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "B082",
+    "title": "QUANTUM THEORY",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may return up to two cards from your hand. If you return two, draw a [10] and then draw and score a [10]."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B083",
+    "title": "ROCKETRY",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Return a card in any opponent's score pile for every color on your board with {[EFFICIENCY]}."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B084",
+    "title": "EMPIRICISM",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Choose two colors, then draw and reveal a [9]. If the drawn card is one of those colors, meld it and splay your cards of its color up, otherwise unsplay that color."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If you have at least twenty {[CONCEPT]} on your board, you win."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B085",
+    "title": "SOCIALISM",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 8,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may tuck a top card from your board. If you do, tuck all cards from your hand."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may junk an available achievement of value 8, 9, or 10."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B086",
+    "title": "COMPOSITES",
+    "set": "Base",
+    "color": "RED",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you transfer all but one card from your hand to my hand! Also transfer the highest card from your score pile to my score pile!"
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": null,
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B087",
+    "title": "FISSION",
+    "set": "Base",
+    "color": "RED",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you draw a [10]! If it is red, junk each player's non-achievement cards, and the Dogma action is complete!"
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Return a top card other than Fission from any player's board. Draw a [10]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    }
+  },
+  {
+    "code": "B088",
+    "title": "ECOLOGY",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may return a card from your hand. If you do, score a card from your hand and draw two [10]."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "You may junk all cards in the [10] deck."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B089",
+    "title": "SUBURBIA",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may tuck any number of cards from your hand. Draw and score a [1] for each card you tuck."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may junk all cards in the [9] deck."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B090",
+    "title": "COLLABORATION",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": true,
+        "text": "I DEMAND you draw two [9] and reveal them! Transfer the card of my choice to my board, and meld the other!"
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If you have at least ten green cards on your board, you win."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B091",
+    "title": "SATELLITES",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Return all cards from your hand. You may splay your purple cards up."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw three [8]."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Meld a card from your hand, then self-execute it."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    }
+  },
+  {
+    "code": "B092",
+    "title": "COMPUTERS",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "You may splay your red or green cards up."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw and meld a [10], then self-execute it."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": null,
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B093",
+    "title": "GENETICS",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and meld an [11]. Score all cards beneath it."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B094",
+    "title": "SERVICES",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you transfer all the cards of the value of my choice from your score pile to my hand! If you do, transfer a top card without {[HEALTH]} from my board to your hand!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B095",
+    "title": "SPECIALIZATION",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 9,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Reveal a card from your hand. Transfer to your hand the top card of that color from all opponents' boards."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "You may splay your yellow or blue cards up."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "HEALTH",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B096",
+    "title": "MINIATURIZATION",
+    "set": "Base",
+    "color": "RED",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Return a card from your hand. If you return a [10], draw a [10] for every different value of card in your score pile. If you return an [11], junk all cards in the [11] deck."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "CONCEPT"
+    }
+  },
+  {
+    "code": "B097",
+    "title": "ROBOTICS",
+    "set": "Base",
+    "color": "RED",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Score your top green card."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and meld a [10]. If it has {[INDUSTRY]} or {[EFFICIENCY]}, self-execute it."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "AVATAR",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B098",
+    "title": "GLOBALIZATION",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you return a top card with {[HEALTH]} from your board!"
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and meld an [11]. If no player has more {[HEALTH]} than {[INDUSTRY]} on their board, the single player with the most points wins."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B099",
+    "title": "STEM CELLS",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "You may score all cards from your hand."
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Draw an [11]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B100",
+    "title": "DATABASES",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": true,
+        "text": "I DEMAND you return a number of cards from your score pile equal to the value of your highest achievement!"
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": "EFFICIENCY"
+    }
+  },
+  {
+    "code": "B101",
+    "title": "SELF SERVICE",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "If you have at least twice as many achievements as each opponent, you win."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Self-execute any top card other than Self Service on your board."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "AVATAR",
+      "bottom_right": "PROSPERITY"
+    }
+  },
+  {
+    "code": "B102",
+    "title": "BIOENGINEERING",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Score a top card with {[HEALTH]} on any opponent's board."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "If any player has fewer than two {[HEALTH]} on their board, the single player with the most {[HEALTH]} on their board wins."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B103",
+    "title": "SOFTWARE",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw and score a [10]."
+      },
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Draw and meld two [9], then self-execute the second card."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "AVATAR",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B104",
+    "title": "A.I.",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and score a [10]."
+      },
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "If Robotics and Software are top cards on any board, the single player with the lowest score wins."
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B105",
+    "title": "THE INTERNET",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 10,
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "You may splay your green cards up."
+      },
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "Draw and score a [10]."
+      },
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "Draw and meld two [10]."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "AVATAR",
+      "bottom_right": "AVATAR"
+    }
+  },
+  {
+    "code": "B106",
+    "title": "ASTROGEOLOGY",
+    "set": "Base",
+    "color": "RED",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "Draw and reveal an [11]. Splay its color on your board aslant. If you do, transfer all but your top four cards of that color into your hand."
+      },
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": false,
+        "text": "If you have at least eight cards in your hand, you win."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "INDUSTRY",
+      "bottom_right": "INDUSTRY"
+    }
+  },
+  {
+    "code": "B107",
+    "title": "FUSION",
+    "set": "Base",
+    "color": "RED",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "EFFICIENCY",
+        "demand": false,
+        "text": "Score a top card of value 11 on your board. If you do, choose a value one or two lower than the scored card, then repeat this dogma effect using the chosen value."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "EFFICIENCY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B108",
+    "title": "NEAR-FIELD COMM",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "demand": true,
+        "text": "I DEMAND you transfer all the cards of the value of my choice from your score pile to my score pile!"
+      },
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "Reveal and self-execute the highest card in your score pile."
+      }
+    ],
+    "icons": {
+      "top_left": null,
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "AVATAR",
+      "bottom_right": "AVATAR"
+    }
+  },
+  {
+    "code": "B109",
+    "title": "RECLAMATION",
+    "set": "Base",
+    "color": "YELLOW",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Return your three bottom red cards. Draw and meld a card of value equal to half the total sum value of the returned cards, rounded up. If you return three cards, repeat this effect using the color of the melded card."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B110",
+    "title": "HYPERSONICS",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "INDUSTRY",
+        "demand": true,
+        "text": "I DEMAND you return exactly two top cards of different colors from your board of the same value! If you do, return all cards of that value or less in your hand and score pile!"
+      }
+    ],
+    "icons": {
+      "top_left": "INDUSTRY",
+      "bottom_left": "INDUSTRY",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B111",
+    "title": "SPACE TRAFFIC",
+    "set": "Base",
+    "color": "GREEN",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "demand": false,
+        "text": "Draw and tuck an [11]. If you tuck directly under an [11], you lose. Otherwise, score all but your top five cards of the color of the tucked card, splay that color aslant, and if you do not have the highest score, repeat this effect."
+      }
+    ],
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": "EFFICIENCY",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B112",
+    "title": "CLIMATOLOGY",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "demand": true,
+        "text": "I DEMAND you return two top cards from your board each with the icon of my choice other than {[HEALTH]}!"
+      },
+      {
+        "featured_icon": "HEALTH",
+        "demand": false,
+        "text": "Return a top card on your board. Return all cards in your score pile of equal or higher value than the returned card."
+      }
+    ],
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "HEALTH",
+      "bottom_right": "HEALTH"
+    }
+  },
+  {
+    "code": "B113",
+    "title": "SOLAR SAILING",
+    "set": "Base",
+    "color": "BLUE",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": false,
+        "text": "Draw and meld an [11]. If its color is not splayed aslant on your board, return all but your top four cards of that color, and splay that color aslant. If there are at least six cards of that color on your board, you win."
+      }
+    ],
+    "icons": {
+      "top_left": "EFFICIENCY",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "CONCEPT",
+      "bottom_right": null
+    }
+  },
+  {
+    "code": "B114",
+    "title": "ESCAPISM",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "AVATAR",
+        "demand": false,
+        "text": "Reveal and junk a card in your hand. Return from your hand all cards of value equal to the value of the junked card. Draw three cards of that value. Self-execute the junked card."
+      }
+    ],
+    "icons": {
+      "top_left": "AVATAR",
+      "bottom_left": null,
+      "bottom_center": "AVATAR",
+      "bottom_right": "AVATAR"
+    }
+  },
+  {
+    "code": "B115",
+    "title": "WHATABOUTISM",
+    "set": "Base",
+    "color": "PURPLE",
+    "age": 11,
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "demand": true,
+        "text": "I DEMAND you transfer a top card with a demand effect of each color from your board to my board! If you transfer any cards, exchange all cards in your score pile with all cards in my score pile!"
+      }
+    ],
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": null,
+      "bottom_center": "AVATAR",
+      "bottom_right": "CONCEPT"
+    }
+  }
+]
