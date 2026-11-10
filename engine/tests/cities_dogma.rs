@@ -3,10 +3,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn city(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 fn city_on_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
     let card = Card::from_code(code).unwrap();
     let zone = Zone::Board(player, card.color);
@@ -25,10 +21,6 @@ fn figure(f: &mut Fixture, figure: Figure, zone: Option<Zone>) -> CardId {
     f.add(card, zone)
 }
 
-fn blank(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
-    f.tech(color, value, zone, vec![])
-}
-
 fn deck(f: &mut Fixture, value: u8, count: usize) -> Vec<CardId> {
     (0..count)
         .map(|_| blank(f, Color::Green, value, Zone::Deck(Deck::base(value))))
@@ -41,37 +33,6 @@ fn cities() -> Expansions {
 
 fn with_figures() -> Expansions {
     Expansions::FIGURES.union(Expansions::CITIES)
-}
-
-fn dogma(game: &mut Game, card: CardId) {
-    game.take_action(
-        Action::Dogma {
-            card,
-            auspice: false,
-        },
-        ActionKind::Regular,
-    )
-    .unwrap();
-}
-
-fn play(
-    game: &mut Game,
-    mut decide: impl FnMut(&Decision) -> Option<usize>,
-) -> (Status, Vec<Event>) {
-    let mut events = Vec::new();
-    loop {
-        let status = settle(game, &mut events);
-        assert!(game.position().check_conservation());
-        match status {
-            Status::Decision(decision) => {
-                let option = decide(&decision)
-                    .or((decision.options.len() == 1).then_some(0))
-                    .unwrap_or_else(|| panic!("unexpected decision {decision:?}"));
-                game.choose(option).unwrap();
-            }
-            status => return (status, events),
-        }
-    }
 }
 
 /// Answer the endorsement offer, and the first option of any other choice
@@ -291,7 +252,7 @@ fn paying_with_a_flag_city_claims_glory() {
     let mut f = Fixture::default();
     let writing = base_on_board(&mut f, "B012", A);
     city_on_board(&mut f, "C065", A);
-    let stockholm = city(&mut f, "C051", Zone::Hand(A));
+    let stockholm = f.card("C051", Zone::Hand(A));
     deck(&mut f, 2, 2);
     let mut game = Game::new(f.position(), cities()).unwrap();
     dogma(&mut game, writing);

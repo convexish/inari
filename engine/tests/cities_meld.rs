@@ -3,14 +3,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn city(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn blank(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
-    f.tech(color, value, zone, vec![])
-}
-
 fn figure(f: &mut Fixture, figure: Figure, player: Player) -> CardId {
     let card = Card::from_code(figure.code()).unwrap();
     let zone = Zone::Board(player, card.color);
@@ -23,33 +15,6 @@ fn cities() -> Expansions {
 
 fn with_figures() -> Expansions {
     Expansions::FIGURES.union(Expansions::CITIES)
-}
-
-/// Settle, answering each decision with `decide`; fails on a decision
-/// `decide` declines.
-fn play(
-    game: &mut Game,
-    mut decide: impl FnMut(&Decision) -> Option<usize>,
-) -> (Status, Vec<Event>) {
-    let mut events = Vec::new();
-    loop {
-        let status = settle(game, &mut events);
-        assert!(game.position().check_conservation());
-        match status {
-            Status::Decision(decision) => {
-                let option = decide(&decision)
-                    .or((decision.options.len() == 1).then_some(0))
-                    .unwrap_or_else(|| panic!("unexpected decision {decision:?}"));
-                game.choose(option).unwrap();
-            }
-            status => return (status, events),
-        }
-    }
-}
-
-fn meld_action(game: &mut Game, card: CardId) {
-    game.take_action(Action::Meld { card }, ActionKind::Regular)
-        .unwrap();
 }
 
 /// Each physical move as (verb, card, source, destination), with reveals as
@@ -87,7 +52,7 @@ fn steps(events: &[Event]) -> Vec<Step> {
 fn milan_runs_plus_then_uplift_after_the_meld() {
     let mut f = Fixture::default();
     blank(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
-    let milan = city(&mut f, "C036", Zone::Hand(A));
+    let milan = f.card("C036", Zone::Hand(A));
     let under = blank(&mut f, Color::Green, 5, Zone::Deck(Deck::base(5)));
     let five = blank(&mut f, Color::Green, 5, Zone::Deck(Deck::base(5)));
     let six = blank(&mut f, Color::Green, 6, Zone::Deck(Deck::base(6)));
@@ -118,7 +83,7 @@ fn milan_runs_plus_then_uplift_after_the_meld() {
 fn lisbon_draws_twice_and_the_second_draw_routes_again() {
     let mut f = Fixture::default();
     blank(&mut f, Color::Yellow, 1, Zone::Board(A, Color::Yellow));
-    let lisbon = city(&mut f, "C039", Zone::Hand(A));
+    let lisbon = f.card("C039", Zone::Hand(A));
     let five = blank(&mut f, Color::Green, 5, Zone::Deck(Deck::base(5)));
     let six = blank(&mut f, Color::Green, 6, Zone::Deck(Deck::base(6)));
     let mut game = Game::new(f.position(), cities()).unwrap();
@@ -132,11 +97,11 @@ fn lisbon_draws_twice_and_the_second_draw_routes_again() {
 fn bangalore_unsplays_the_opponent_before_its_up_splay_draws_a_city() {
     let mut f = Fixture::default();
     blank(&mut f, Color::Blue, 1, Zone::Board(A, Color::Blue));
-    let bangalore = city(&mut f, "C103", Zone::Hand(A));
+    let bangalore = f.card("C103", Zone::Hand(A));
     blank(&mut f, Color::Blue, 1, Zone::Board(B, Color::Blue));
     blank(&mut f, Color::Blue, 1, Zone::Board(B, Color::Blue));
     blank(&mut f, Color::Green, 10, Zone::Deck(Deck::base(10)));
-    let drawn = city(&mut f, "C096", Zone::Deck(Deck::cities(10)));
+    let drawn = f.card("C096", Zone::Deck(Deck::cities(10)));
     let position = f
         .position()
         .with_splay(B, Color::Blue, Splay::Right)
@@ -157,9 +122,9 @@ fn bangalore_unsplays_the_opponent_before_its_up_splay_draws_a_city() {
 #[test]
 fn effect_melds_run_no_city_icons_and_no_new_color_draw() {
     let mut f = Fixture::default();
-    let milan = city(&mut f, "C036", Zone::Hand(A));
+    let milan = f.card("C036", Zone::Hand(A));
     blank(&mut f, Color::Green, 5, Zone::Deck(Deck::base(5)));
-    city(&mut f, "C039", Zone::Deck(Deck::cities(4)));
+    f.card("C039", Zone::Deck(Deck::cities(4)));
     let mut game = Game::new(f.position(), cities()).unwrap();
     game.start(meld(milan, Zone::Hand(A), A, Color::Red), Context::new(A))
         .unwrap();
@@ -178,7 +143,7 @@ fn a_meld_action_starting_a_color_draws_a_city_for_any_set() {
         }
         let card = blank(&mut f, Color::Green, 1, Zone::Hand(A));
         blank(&mut f, Color::Yellow, 2, Zone::Deck(Deck::base(2)));
-        let two = city(&mut f, "C016", Zone::Deck(Deck::cities(2)));
+        let two = f.card("C016", Zone::Deck(Deck::cities(2)));
         let mut game = Game::new(f.position(), cities()).unwrap();
         meld_action(&mut game, card);
         play(&mut game, |_| None);
@@ -195,7 +160,7 @@ fn mecca(expansions: Expansions, hawking: bool) -> (Game, CardId, [CardId; 4]) {
     if hawking {
         figure(&mut f, Figure::StephenHawking, A);
     }
-    let mecca = city(&mut f, "C035", Zone::Hand(A));
+    let mecca = f.card("C035", Zone::Hand(A));
     let deck = Zone::Deck(Deck::base(3));
     let rest = blank(&mut f, Color::Red, 3, deck);
     let p1 = blank(&mut f, Color::Red, 3, deck);
@@ -271,7 +236,7 @@ fn a_short_or_empty_search_deck_does_not_escalate() {
     for size in [0, 1] {
         let mut f = Fixture::default();
         blank(&mut f, Color::Purple, 1, Zone::Board(A, Color::Purple));
-        let mecca = city(&mut f, "C035", Zone::Hand(A));
+        let mecca = f.card("C035", Zone::Hand(A));
         let mut packet = Vec::new();
         for _ in 0..size {
             packet.push(blank(&mut f, Color::Red, 3, Zone::Deck(Deck::base(3))));
@@ -318,7 +283,7 @@ fn zhang_heng_scoring_dublin_on_its_claim_skips_its_icons() {
     figure(&mut f, Figure::ZhangHeng, A);
     blank(&mut f, Color::Yellow, 1, Zone::Board(A, Color::Yellow));
     blank(&mut f, Color::Yellow, 1, Zone::Board(A, Color::Yellow));
-    let dublin = city(&mut f, "C058", Zone::Hand(A));
+    let dublin = f.card("C058", Zone::Hand(A));
     let tucked = blank(&mut f, Color::Yellow, 3, Zone::Deck(Deck::base(3)));
     let six = blank(&mut f, Color::Green, 6, Zone::AvailableAchievements);
     let position = f
@@ -348,7 +313,7 @@ fn a_melded_figures_when_follows_the_new_color_city_draw() {
     let alexander = Card::from_code(Figure::AlexanderTheGreat.code()).unwrap();
     let alexander = f.add(alexander, Zone::Hand(A));
     blank(&mut f, Color::Yellow, 2, Zone::Deck(Deck::base(2)));
-    let drawn = city(&mut f, "C016", Zone::Deck(Deck::cities(2)));
+    let drawn = f.card("C016", Zone::Deck(Deck::cities(2)));
     let mut game = Game::new(f.position(), with_figures()).unwrap();
     meld_action(&mut game, alexander);
     let (_, events) = play(&mut game, |_| None);
@@ -368,7 +333,7 @@ fn a_melded_figures_when_follows_the_new_color_city_draw() {
 fn montreal_junks_an_achievement_of_its_value_then_draws() {
     let mut f = Fixture::default();
     blank(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
-    let montreal = city(&mut f, "C067", Zone::Hand(A));
+    let montreal = f.card("C067", Zone::Hand(A));
     let six = blank(&mut f, Color::Green, 6, Zone::AvailableAchievements);
     let seven = blank(&mut f, Color::Green, 7, Zone::AvailableAchievements);
     let eight = blank(&mut f, Color::Green, 8, Zone::Deck(Deck::base(8)));
@@ -386,7 +351,7 @@ fn montreal_junks_an_achievement_of_its_value_then_draws() {
 fn a_junk_icon_offers_one_achievement_per_back_and_junks_the_chosen_set() {
     let mut f = Fixture::default();
     blank(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
-    let sparta = city(&mut f, "C016", Zone::Hand(A));
+    let sparta = f.card("C016", Zone::Hand(A));
     let base = f.add(
         Card::from_code("B016").unwrap(),
         Zone::AvailableAchievements,
@@ -395,7 +360,7 @@ fn a_junk_icon_offers_one_achievement_per_back_and_junks_the_chosen_set() {
         Card::from_code("E016").unwrap(),
         Zone::AvailableAchievements,
     );
-    let cities_two = city(&mut f, "C017", Zone::AvailableAchievements);
+    let cities_two = f.card("C017", Zone::AvailableAchievements);
     let mut game = Game::new(f.position(), cities().union(Expansions::ECHOES)).unwrap();
     meld_action(&mut game, sparta);
     let mut offered = Vec::new();
@@ -427,8 +392,8 @@ fn an_exhausting_icon_draw_ends_the_game_before_later_steps() {
     // Singapore (red 10) draws an 11 with its Plus; no 11 remains. It starts
     // a new color, but the game ends before the City draw.
     let mut f = Fixture::default();
-    let singapore = city(&mut f, "C097", Zone::Hand(A));
-    city(&mut f, "C096", Zone::Deck(Deck::cities(10)));
+    let singapore = f.card("C097", Zone::Hand(A));
+    f.card("C096", Zone::Deck(Deck::cities(10)));
     blank(&mut f, Color::Green, 10, Zone::Deck(Deck::base(10)));
     blank(&mut f, Color::Green, 3, Zone::Score(B));
     let mut game = Game::new(f.position(), cities()).unwrap();

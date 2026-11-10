@@ -5,10 +5,6 @@ use common::*;
 
 const ECHOES: Expansions = Expansions::ECHOES;
 
-fn echoes(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 /// A printed Echoes card on top of its color's pile.
 fn on_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
     let card = Card::from_code(code).unwrap();
@@ -39,33 +35,6 @@ fn symbols(f: &mut Fixture, card: CardId, symbols: [Symbol; SLOTS]) {
 
 fn symbol(f: &mut Fixture, card: CardId, slot: usize, symbol: Symbol) {
     f.cards[usize::from(card.0)].symbols[slot] = symbol;
-}
-
-/// One effect (`Card::ECHO` for the echo), outside any Dogma action.
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
-fn dogma(game: &mut Game, card: CardId) {
-    game.take_action(
-        Action::Dogma {
-            card,
-            auspice: false,
-        },
-        ActionKind::Regular,
-    )
-    .unwrap();
 }
 
 /// A Meld action of `driver`, which promotes a card from A's Forecast.
@@ -170,22 +139,12 @@ fn values(position: &Position, zone: Zone) -> Vec<u8> {
     values
 }
 
-fn revealed(events: &[Event]) -> Vec<CardId> {
-    events
-        .iter()
-        .filter_map(|event| match event {
-            Event::Revealed { card, .. } => Some(*card),
-            _ => None,
-        })
-        .collect()
-}
-
 /// Wristwatch visits "each value in ascending order": 1 to 11. A visible bonus 12
 /// (Esports) is not a value, so no [12] is drawn and the game goes on.
 #[test]
 fn wristwatch_ignores_a_visible_bonus_twelve() {
     let mut f = Fixture::default();
-    let watch = echoes(&mut f, "E089", Zone::Junk);
+    let watch = f.card("E089", Zone::Junk);
     on_board(&mut f, "E109", A);
     let two = plain(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
     symbol(&mut f, two, 0, Symbol::Bonus(2));
@@ -202,7 +161,7 @@ fn wristwatch_ignores_a_visible_bonus_twelve() {
 #[test]
 fn wristwatch_echo_keeps_a_two_card_piles_splay() {
     let mut f = Fixture::default();
-    let watch = echoes(&mut f, "E089", Zone::Junk);
+    let watch = f.card("E089", Zone::Junk);
     let bottom = plain(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
     let top = plain(&mut f, Color::Red, 2, Zone::Board(A, Color::Red));
     let position = f.position().with_splay(A, Color::Red, Splay::Up).unwrap();
@@ -259,7 +218,7 @@ fn foreseen_rubber_cannot_foreshadow_the_top_that_sets_a_full_forecasts_limit() 
 fn barcode_splays_one_color_optionally_and_every_color_when_foreseen() {
     for accept in [false, true] {
         let mut f = Fixture::default();
-        let barcode = echoes(&mut f, "E101", Zone::Junk);
+        let barcode = f.card("E101", Zone::Junk);
         for color in [Color::Red, Color::Yellow] {
             for value in [1, 2] {
                 plain(&mut f, color, value, Zone::Board(A, color));
@@ -577,7 +536,7 @@ fn stethoscope_echo_reveals_a_hand_without_blue_or_yellow() {
 #[test]
 fn crossword_returns_the_live_lowest_hand_card_for_each_odd_bonus() {
     let mut f = Fixture::default();
-    let crossword = echoes(&mut f, "E084", Zone::Junk);
+    let crossword = f.card("E084", Zone::Junk);
     for (color, bonus) in [(Color::Red, 1), (Color::Yellow, 3), (Color::Green, 5)] {
         let top = plain(&mut f, color, 1, Zone::Board(A, color));
         symbol(&mut f, top, 0, Symbol::Bonus(bonus));
@@ -605,7 +564,7 @@ fn crossword_returns_the_live_lowest_hand_card_for_each_odd_bonus() {
 fn calculator_needs_two_scored_cards_below_twelve_to_draw() {
     // One non-blue color: a single card is scored.
     let mut f = Fixture::default();
-    let calculator = echoes(&mut f, "E092", Zone::Junk);
+    let calculator = f.card("E092", Zone::Junk);
     let red = plain(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
     for value in [1, 2] {
         plain(&mut f, Color::Blue, value, Zone::Board(A, Color::Blue));
@@ -622,7 +581,7 @@ fn calculator_needs_two_scored_cards_below_twelve_to_draw() {
 
     // Two sixes total 12, not less: no draw and no second pair.
     let mut f = Fixture::default();
-    let calculator = echoes(&mut f, "E092", Zone::Junk);
+    let calculator = f.card("E092", Zone::Junk);
     let mut sixes = Vec::new();
     let mut ones = Vec::new();
     for color in [Color::Red, Color::Yellow] {
@@ -647,7 +606,7 @@ fn calculator_needs_two_scored_cards_below_twelve_to_draw() {
 fn morphine_echo_scores_only_an_odd_hand_card() {
     for with_odd in [false, true] {
         let mut f = Fixture::default();
-        let morphine = echoes(&mut f, "E059", Zone::Junk);
+        let morphine = f.card("E059", Zone::Junk);
         let even = [
             plain(&mut f, Color::Red, 2, Zone::Hand(A)),
             plain(&mut f, Color::Blue, 4, Zone::Hand(A)),
@@ -667,7 +626,7 @@ fn morphine_echo_scores_only_an_odd_hand_card() {
 #[test]
 fn cell_phone_draws_a_ten_for_each_color_showing_efficiency() {
     let mut f = Fixture::default();
-    let phone = echoes(&mut f, "E098", Zone::Junk);
+    let phone = f.card("E098", Zone::Junk);
     let red = plain(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
     symbol(&mut f, red, 0, Symbol::Icon(Icon::Efficiency));
     let shown = plain(&mut f, Color::Green, 1, Zone::Board(A, Color::Green));
@@ -693,7 +652,7 @@ fn cell_phone_draws_a_ten_for_each_color_showing_efficiency() {
 fn sudoku_echo_may_stop_after_any_number_of_tucks() {
     for tucks in [0, 1] {
         let mut f = Fixture::default();
-        let sudoku = echoes(&mut f, "E105", Zone::Junk);
+        let sudoku = f.card("E105", Zone::Junk);
         let red = plain(&mut f, Color::Red, 1, Zone::Hand(A));
         let blue = plain(&mut f, Color::Blue, 2, Zone::Hand(A));
         let mut game = Game::new(f.position(), ECHOES).unwrap();
@@ -730,7 +689,7 @@ fn blackmailed_sudoku_and_cell_phone_tuck_at_least_one_card() {
     // Blackmail melds Sudoku and self-executes it: its echo must tuck.
     let mut f = Fixture::default();
     let blackmail = add_blackmail(&mut f);
-    let sudoku = echoes(&mut f, "E105", Zone::Hand(B));
+    let sudoku = f.card("E105", Zone::Hand(B));
     let tucked = plain(&mut f, Color::Red, 1, Zone::Hand(B));
     // Sudoku's dogma draws and melds a [1]; executing it earns Chain's [11].
     deck(&mut f, Color::Green, 1);
@@ -754,8 +713,7 @@ fn blackmailed_sudoku_and_cell_phone_tuck_at_least_one_card() {
     for blackmailed in [false, true] {
         let mut f = Fixture::default();
         let blackmail = blackmailed.then(|| add_blackmail(&mut f));
-        let phone = echoes(
-            &mut f,
+        let phone = f.card(
             "E098",
             if blackmailed {
                 Zone::Hand(B)
@@ -829,7 +787,7 @@ fn foreseen_credit_card_stops_repeating_after_an_age_skipped_draw() {
 fn foreseen_esports_does_not_win_after_an_age_skipped_draw() {
     for skipped in [false, true] {
         let mut f = Fixture::default();
-        let esports = echoes(&mut f, "E109", Zone::Forecast(A));
+        let esports = f.card("E109", Zone::Forecast(A));
         let driver = plain(&mut f, Color::Yellow, 11, Zone::Hand(A));
         plain(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
         plain(&mut f, Color::Blue, 2, Zone::Board(A, Color::Blue));

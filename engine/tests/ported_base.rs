@@ -16,21 +16,6 @@ fn icons(f: &mut Fixture, card: CardId, icon: Icon, count: usize) {
     symbols[..count].fill(Symbol::Icon(icon));
 }
 
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
 fn finish(game: &mut Game, events: &mut Vec<Event>) -> Status {
     for _ in 0..100 {
         match settle(game, events) {
@@ -48,17 +33,6 @@ fn choose(game: &mut Game, menu: &Decision, option: &Alternative) {
         .position(|candidate| candidate == option)
         .unwrap_or_else(|| panic!("{option:?} not offered: {:?}", menu.options));
     game.choose(index).unwrap();
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
 }
 
 const ECHOES_ONE: Deck = Deck {

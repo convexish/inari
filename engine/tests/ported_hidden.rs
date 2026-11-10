@@ -30,16 +30,6 @@ fn beliefs(game: &Game, viewer: Player, zone: Zone) -> Vec<BeliefSlot> {
     game.tracker(viewer).unwrap().belief(zone)
 }
 
-fn revealed(events: &[Event]) -> Vec<CardId> {
-    events
-        .iter()
-        .filter_map(|event| match event {
-            Event::Revealed { card, .. } => Some(*card),
-            _ => None,
-        })
-        .collect()
-}
-
 /// The index of `card`'s first reveal and of its first movement.
 fn reveal_then_move(events: &[Event], card: CardId) -> (Option<usize>, Option<usize>) {
     let reveal = events
@@ -57,17 +47,6 @@ fn known_in(game: &Game, viewer: Player, zone: Zone, card: CardId) -> bool {
         .any(|slot| slot.known() == Some(card))
 }
 
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
-}
-
 /// Settle, choosing the first preferred card offered, else option 0.
 fn play(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
     for _ in 0..300 {
@@ -83,21 +62,6 @@ fn play(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Statu
         }
     }
     panic!("did not terminate");
-}
-
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
 }
 
 /// A sampled world continues its own random stream, not the real game's: a shuffle of a
@@ -409,13 +373,6 @@ fn achieving_from_a_private_pile_keeps_only_the_owners_knowledge() {
                 }
             }
         }
-    }
-}
-
-/// Each self-execution keyword earns a Chain draw of an [11].
-fn elevens(f: &mut Fixture, count: usize) {
-    for i in 0..count {
-        f.tech(Color::ALL[i % 5], 11, Zone::Deck(Deck::base(11)), vec![]);
     }
 }
 

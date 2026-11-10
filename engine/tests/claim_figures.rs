@@ -3,26 +3,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn performed(card: CardId, value: u8) -> Status {
-    Status::Complete(ReturnValue::Operation(OperationOutcome {
-        disposition: Disposition::Performed,
-        card: Some(card),
-        value: Some(value),
-        short: false,
-    }))
-}
-
-/// A draw that took a card above its requested age (an empty age was
-/// skipped): performed, but short of the requested value.
-fn escalated(card: CardId, value: u8) -> Status {
-    Status::Complete(ReturnValue::Operation(OperationOutcome {
-        disposition: Disposition::Performed,
-        card: Some(card),
-        value: Some(value),
-        short: true,
-    }))
-}
-
 fn score(card: CardId, player: Player) -> Operation {
     Operation::Move {
         verb: Verb::Score,

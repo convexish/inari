@@ -5,68 +5,11 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
-    for (slot, &icon) in icons.iter().enumerate() {
-        f.cards[usize::from(card.0)].symbols[slot] = Symbol::Icon(icon);
-    }
-}
-
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
-}
-
-/// Choose preferred known cards where offered, else the first option.
-fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
-    for _ in 0..300 {
-        match settle(game, events) {
-            Status::Decision(menu) => {
-                let index = preferred
-                    .iter()
-                    .find_map(|&card| pick_known(&menu, card))
-                    .unwrap_or(0);
-                game.choose(index).unwrap();
-            }
-            status => return status,
-        }
-    }
-    panic!("did not terminate");
-}
-
-fn complete(status: Status) {
-    assert!(matches!(status, Status::Complete(_)), "{status:?}");
-}
-
 #[test]
 fn assassination_takes_an_authority_draw_with_its_top_and_claims_confidence() {
     for authority in [true, false] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U001", Zone::Board(A, Color::Red));
+        let card = f.card("U001", Zone::Board(A, Color::Red));
         let drawn = f.tech(Color::Blue, 1, Zone::Deck(Deck::base(1)), vec![]);
         if authority {
             icons(&mut f, drawn, &[Icon::Authority]);
@@ -98,7 +41,7 @@ fn assassination_takes_an_authority_draw_with_its_top_and_claims_confidence() {
 fn maze_scores_by_the_demanders_colors_or_exchanges_hand_and_score() {
     for matching in [true, false] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U002", Zone::Board(A, Color::Red));
+        let card = f.card("U002", Zone::Board(A, Color::Red));
         let mine = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
         let scored = f.tech(Color::Yellow, 5, Zone::Score(A), vec![]);
         let theirs = f.tech(
@@ -128,7 +71,7 @@ fn maze_reveals_the_remaining_hand_only_once_for_multiple_missing_matches() {
     for tracked in [false, true] {
         for matches in 0..=3 {
             let mut f = Fixture::default();
-            let maze = unseen(&mut f, "U002", Zone::Board(A, Color::Red));
+            let maze = f.card("U002", Zone::Board(A, Color::Red));
             let demanding: Vec<_> = (0..3)
                 .map(|_| f.tech(Color::Yellow, 1, Zone::Hand(A), vec![]))
                 .collect();
@@ -175,7 +118,7 @@ fn maze_reveals_the_remaining_hand_only_once_for_multiple_missing_matches() {
 #[test]
 fn pilgrimage_returns_rising_values_and_safeguards_each() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U003", Zone::Board(A, Color::Red));
+    let card = f.card("U003", Zone::Board(A, Color::Red));
     let one = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
     let two = f.tech(Color::Green, 2, Zone::Hand(A), vec![]);
     let four = f.tech(Color::Yellow, 4, Zone::Hand(A), vec![]);
@@ -195,7 +138,7 @@ fn pilgrimage_returns_rising_values_and_safeguards_each() {
 #[test]
 fn handshake_hands_over_everything_then_two_colors_back() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U004", Zone::Board(A, Color::Yellow));
+    let card = f.card("U004", Zone::Board(A, Color::Yellow));
     let red1 = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let blue2 = f.tech(Color::Blue, 2, Zone::Hand(A), vec![]);
     let red3 = f.tech(Color::Red, 3, Zone::Hand(B), vec![]);
@@ -235,7 +178,7 @@ fn handshake_hands_over_everything_then_two_colors_back() {
 #[test]
 fn handshake_takes_same_back_cards_without_an_order_choice() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U004", Zone::Board(A, Color::Yellow));
+    let card = f.card("U004", Zone::Board(A, Color::Yellow));
     let red = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let blue = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
     let green = f.tech(Color::Green, 2, Zone::Hand(A), vec![]);
@@ -260,7 +203,7 @@ fn handshake_takes_same_back_cards_without_an_order_choice() {
 #[test]
 fn tomb_safeguards_by_achievement_count_and_returns_yellow_and_blue_for_the_lowest() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U005", Zone::Board(A, Color::Yellow));
+    let card = f.card("U005", Zone::Board(A, Color::Yellow));
     f.tech(Color::Red, 1, Zone::Achievements(A), vec![]);
     let s1 = f.tech(Color::Purple, 1, Zone::AvailableAchievements, vec![]);
     let s2 = f.tech(Color::Purple, 2, Zone::AvailableAchievements, vec![]);
@@ -293,7 +236,7 @@ fn tomb_safeguards_by_achievement_count_and_returns_yellow_and_blue_for_the_lowe
 fn woodworking_scores_the_melded_card_only_when_it_is_a_bottom_card() {
     for existing in [false, true] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U006", Zone::Board(A, Color::Yellow));
+        let card = f.card("U006", Zone::Board(A, Color::Yellow));
         let two = f.tech(Color::Green, 2, Zone::Deck(Deck::base(2)), vec![]);
         if existing {
             f.tech(Color::Green, 1, Zone::Board(A, Color::Green), vec![]);
@@ -315,7 +258,7 @@ fn woodworking_scores_the_melded_card_only_when_it_is_a_bottom_card() {
 #[test]
 fn dance_gives_an_authority_top_and_melds_their_lowest_other_top() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U007", Zone::Board(A, Color::Green));
+    let card = f.card("U007", Zone::Board(A, Color::Green));
     let given = f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);
     icons(&mut f, given, &[Icon::Authority]);
     let blue = f.tech(Color::Blue, 3, Zone::Board(B, Color::Blue), vec![]);
@@ -333,7 +276,7 @@ fn dance_gives_an_authority_top_and_melds_their_lowest_other_top() {
 #[test]
 fn rumor_returns_a_score_card_for_one_higher_and_passes_a_hand_card() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U008", Zone::Board(A, Color::Green));
+    let card = f.card("U008", Zone::Board(A, Color::Green));
     let three = f.tech(Color::Red, 3, Zone::Score(A), vec![]);
     let four = f.tech(Color::Blue, 4, Zone::Deck(Deck::base(4)), vec![]);
     let hand = f.tech(Color::Yellow, 1, Zone::Hand(A), vec![]);
@@ -351,7 +294,7 @@ fn rumor_returns_a_score_card_for_one_higher_and_passes_a_hand_card() {
 #[test]
 fn silk_may_score_one_hand_card_per_board_color() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U009", Zone::Board(A, Color::Green));
+    let card = f.card("U009", Zone::Board(A, Color::Green));
     f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let red_a = f.tech(Color::Red, 2, Zone::Hand(A), vec![]);
     let red_b = f.tech(Color::Red, 3, Zone::Hand(A), vec![]);
@@ -376,7 +319,7 @@ fn silk_may_score_one_hand_card_per_board_color() {
 fn silk_reveals_the_remaining_hand_when_a_board_color_goes_unscored() {
     for yellow_on_board in [true, false] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U009", Zone::Board(A, Color::Green));
+        let card = f.card("U009", Zone::Board(A, Color::Green));
         f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
         if yellow_on_board {
             f.tech(Color::Yellow, 1, Zone::Board(A, Color::Yellow), vec![]);
@@ -409,7 +352,7 @@ fn silk_reveals_the_remaining_hand_when_a_board_color_goes_unscored() {
 #[test]
 fn espionage_takes_revealed_cards_of_colors_the_demander_lacks_and_proves_it() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U010", Zone::Board(A, Color::Blue));
+    let card = f.card("U010", Zone::Board(A, Color::Blue));
     let red = f.tech(Color::Red, 1, Zone::Hand(B), vec![]);
     let blue = f.tech(Color::Blue, 2, Zone::Hand(B), vec![]);
     let mine = f.tech(Color::Blue, 5, Zone::Hand(A), vec![]);
@@ -444,7 +387,7 @@ fn espionage_takes_revealed_cards_of_colors_the_demander_lacks_and_proves_it() {
 fn palmistry_rewards_only_a_full_two_card_return() {
     for cards in [1, 2] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U011", Zone::Board(A, Color::Blue));
+        let card = f.card("U011", Zone::Board(A, Color::Blue));
         for i in 0..cards {
             f.tech(Color::ALL[i], 1, Zone::Hand(A), vec![]);
         }
@@ -467,7 +410,7 @@ fn palmistry_rewards_only_a_full_two_card_return() {
 fn proverb_branches_on_the_returned_color() {
     for yellow in [true, false] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U012", Zone::Board(A, Color::Blue));
+        let card = f.card("U012", Zone::Board(A, Color::Blue));
         let extra = [
             f.tech(Color::Red, 1, Zone::Deck(Deck::base(1)), vec![]),
             f.tech(Color::Green, 1, Zone::Deck(Deck::base(1)), vec![]),
@@ -505,7 +448,7 @@ fn proverb_branches_on_the_returned_color() {
 #[test]
 fn myth_tucks_a_same_color_pair_splays_and_safeguards_by_the_bottom() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U013", Zone::Board(A, Color::Purple));
+    let card = f.card("U013", Zone::Board(A, Color::Purple));
     let red1 = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let red2 = f.tech(Color::Red, 2, Zone::Hand(A), vec![]);
     let blue = f.tech(Color::Blue, 3, Zone::Hand(A), vec![]);
@@ -528,7 +471,7 @@ fn myth_tucks_a_same_color_pair_splays_and_safeguards_by_the_bottom() {
 #[test]
 fn polytheism_melds_cards_with_no_icon_already_melded_this_action() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U014", Zone::Board(A, Color::Purple));
+    let card = f.card("U014", Zone::Board(A, Color::Purple));
     let first = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     icons(&mut f, first, &[Icon::Authority]);
     let shares = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
@@ -551,7 +494,7 @@ fn polytheism_melds_cards_with_no_icon_already_melded_this_action() {
 #[test]
 fn symbology_counts_each_city_icon_kind_as_an_icon_type() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U015", Zone::Board(B, Color::Purple));
+    let card = f.card("U015", Zone::Board(B, Color::Purple));
     f.add(
         Card::from_code("C039").unwrap(),
         Zone::Board(A, Color::Yellow),
@@ -569,7 +512,7 @@ fn symbology_counts_each_city_icon_kind_as_an_icon_type() {
 #[test]
 fn symbology_counts_visible_bonuses_as_one_icon_type() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U015", Zone::Board(B, Color::Purple));
+    let card = f.card("U015", Zone::Board(B, Color::Purple));
     let top = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     icons(&mut f, top, &[Icon::Industry, Icon::Industry]);
     f.cards[usize::from(top.0)].symbols[2] = Symbol::Bonus(3);
@@ -593,7 +536,7 @@ fn symbology_draws_by_the_largest_square_of_icon_types() {
         (1, 1, None),
     ] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U015", Zone::Board(A, Color::Purple));
+        let card = f.card("U015", Zone::Board(A, Color::Purple));
         let kinds = [
             Icon::Health,
             Icon::Prosperity,

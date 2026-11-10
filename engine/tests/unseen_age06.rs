@@ -5,67 +5,11 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
-    for (slot, &icon) in icons.iter().enumerate() {
-        f.cards[usize::from(card.0)].symbols[slot] = Symbol::Icon(icon);
-    }
-}
-
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
-}
-
-fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
-    for _ in 0..300 {
-        match settle(game, events) {
-            Status::Decision(menu) => {
-                let index = preferred
-                    .iter()
-                    .find_map(|&card| pick_known(&menu, card))
-                    .unwrap_or(0);
-                game.choose(index).unwrap();
-            }
-            status => return status,
-        }
-    }
-    panic!("did not terminate");
-}
-
-fn complete(status: Status) {
-    assert!(matches!(status, Status::Complete(_)), "{status:?}");
-}
-
 #[test]
 fn red_herring_offers_three_red_splays_and_judges_the_tucked_color_against_red() {
     for (blue, expected) in [(Splay::Right, Splay::Up), (Splay::Left, Splay::None)] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U056", Zone::Board(A, Color::Red));
+        let card = f.card("U056", Zone::Board(A, Color::Red));
         f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
         f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
         f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);
@@ -91,7 +35,7 @@ fn red_herring_offers_three_red_splays_and_judges_the_tucked_color_against_red()
 #[test]
 fn red_herring_offers_the_current_direction_as_a_no_op() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U056", Zone::Board(A, Color::Red));
+    let card = f.card("U056", Zone::Board(A, Color::Red));
     f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let position = f.position().with_splay(A, Color::Red, Splay::Left).unwrap();
     let mut game = Game::new(position, Expansions::UNSEEN).unwrap();
@@ -120,7 +64,7 @@ fn red_herring_offers_the_current_direction_as_a_no_op() {
 #[test]
 fn sniping_unsplays_melds_the_bottom_and_takes_the_new_bottom() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U057", Zone::Board(A, Color::Red));
+    let card = f.card("U057", Zone::Board(A, Color::Red));
     let one = f.tech(Color::Blue, 1, Zone::Board(B, Color::Blue), vec![]);
     let three = f.tech(Color::Blue, 3, Zone::Board(B, Color::Blue), vec![]);
     let five = f.tech(Color::Blue, 5, Zone::Board(B, Color::Blue), vec![]);
@@ -141,7 +85,7 @@ fn sniping_unsplays_melds_the_bottom_and_takes_the_new_bottom() {
 #[test]
 fn attic_safeguards_or_scores_returns_from_score_and_draws_a_scored_value() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U058", Zone::Board(A, Color::Yellow));
+    let card = f.card("U058", Zone::Board(A, Color::Yellow));
     let hand = f.tech(Color::Blue, 2, Zone::Hand(A), vec![]);
     let scored = f.tech(Color::Green, 3, Zone::Score(A), vec![]);
     let kept = f.tech(Color::Red, 4, Zone::Score(A), vec![]);
@@ -165,7 +109,7 @@ fn attic_safeguards_or_scores_returns_from_score_and_draws_a_scored_value() {
 #[test]
 fn sabotage_returns_the_demanders_pick_and_tucks_its_color_from_board_and_score() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U059", Zone::Board(A, Color::Yellow));
+    let card = f.card("U059", Zone::Board(A, Color::Yellow));
     let red_hand = f.tech(Color::Red, 2, Zone::Hand(B), vec![]);
     let red_bottom = f.tech(Color::Red, 1, Zone::Board(B, Color::Red), vec![]);
     let red_top = f.tech(Color::Red, 4, Zone::Board(B, Color::Red), vec![]);
@@ -194,7 +138,7 @@ fn sabotage_returns_the_demanders_pick_and_tucks_its_color_from_board_and_score(
 fn hiking_tucks_under_an_industry_top_and_melds_a_healthy_seven() {
     for industry in [true, false] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U060", Zone::Board(A, Color::Green));
+        let card = f.card("U060", Zone::Board(A, Color::Green));
         let blue_top = f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);
         if industry {
             icons(&mut f, blue_top, &[Icon::Industry]);
@@ -225,7 +169,7 @@ fn hiking_tucks_under_an_industry_top_and_melds_a_healthy_seven() {
 #[test]
 fn swiss_bank_account_safeguards_by_score_count_and_draws_per_secret() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U061", Zone::Board(A, Color::Green));
+    let card = f.card("U061", Zone::Board(A, Color::Green));
     f.tech(Color::Red, 1, Zone::Score(A), vec![]);
     f.tech(Color::Blue, 1, Zone::Score(A), vec![]);
     f.tech(Color::Green, 1, Zone::AvailableAchievements, vec![]);
@@ -249,7 +193,7 @@ fn swiss_bank_account_safeguards_by_score_count_and_draws_per_secret() {
 #[test]
 fn placebo_repeats_returns_down_one_color_and_rewards_a_single_boxed_seven() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U062", Zone::Board(A, Color::Blue));
+    let card = f.card("U062", Zone::Board(A, Color::Blue));
     let red_bottom = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let red_middle = f.tech(Color::Red, 3, Zone::Board(A, Color::Red), vec![]);
     let red_top = f.tech(Color::Red, 7, Zone::Board(A, Color::Red), vec![]);
@@ -294,7 +238,7 @@ fn placebo_repeats_returns_down_one_color_and_rewards_a_single_boxed_seven() {
 #[test]
 fn reconnaissance_returns_two_of_three_sevens_and_may_splay_the_survivor() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U063", Zone::Board(A, Color::Blue));
+    let card = f.card("U063", Zone::Board(A, Color::Blue));
     let secret_hand = f.tech(Color::Red, 1, Zone::Hand(B), vec![]);
     f.tech(Color::Green, 1, Zone::Board(A, Color::Green), vec![]);
     f.tech(Color::Green, 2, Zone::Board(A, Color::Green), vec![]);
@@ -323,7 +267,7 @@ fn reconnaissance_returns_two_of_three_sevens_and_may_splay_the_survivor() {
 #[test]
 fn illuminati_splays_the_revealed_color_and_safeguards_its_top_and_one_higher() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U064", Zone::Board(A, Color::Purple));
+    let card = f.card("U064", Zone::Board(A, Color::Purple));
     f.tech(Color::Blue, 2, Zone::Hand(A), vec![]);
     let bottom = f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
     let middle = f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);
@@ -347,7 +291,7 @@ fn illuminati_splays_the_revealed_color_and_safeguards_its_top_and_one_higher() 
 fn triad_needs_three_hand_cards_then_returns_splays_tucks_and_scores() {
     for cards in [3, 2] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U065", Zone::Board(A, Color::Purple));
+        let card = f.card("U065", Zone::Board(A, Color::Purple));
         let red = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
         let blue = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
         let green = if cards == 3 {
@@ -384,7 +328,7 @@ fn sabotage_reveals_the_whole_score_pile_including_von_brauns_junk() {
     // Wernher von Braun makes the junk part of B's score pile. The whole score pile is
     // revealed as the proof, junk included.
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U059", Zone::Board(A, Color::Yellow));
+    let card = f.card("U059", Zone::Board(A, Color::Yellow));
     let von_braun = Card::from_code(Figure::WernherVonBraun.code())
         .unwrap()
         .color;

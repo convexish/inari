@@ -23,17 +23,6 @@ fn source(f: &mut Fixture, instructions: Vec<Instruction>) -> CardId {
     card
 }
 
-fn dogma(game: &mut Game, card: CardId) {
-    game.take_action(
-        Action::Dogma {
-            card,
-            auspice: false,
-        },
-        ActionKind::Regular,
-    )
-    .unwrap();
-}
-
 #[test]
 fn kepler_counts_distinct_own_top_values_above_three_once() {
     let mut f = Fixture::default();

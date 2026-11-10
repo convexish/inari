@@ -3,10 +3,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 fn finish(game: &mut Game, events: &mut Vec<Event>) -> Status {
     for _ in 0..100 {
         match settle(game, events) {
@@ -53,11 +49,11 @@ fn each_counts_basic_pairs_live_and_independently_without_physical_claim_costs()
     let maxwell = f.figure(Figure::JamesClerkMaxwell, Zone::Board(A, Color::Blue));
     f.figure(Figure::NiccoloMachiavelli, Zone::Board(A, Color::Purple));
     let polhem = f.figure(Figure::ChristopherPolhem, Zone::Board(A, Color::Yellow));
-    base(&mut f, "B007", Zone::Board(A, Color::Green));
-    base(&mut f, "B008", Zone::Board(A, Color::Green));
-    let claim = base(&mut f, "B001", Zone::AvailableAchievements);
-    base(&mut f, "B062", Zone::Score(A));
-    let cover = base(&mut f, "B001", Zone::Hand(A));
+    f.card("B007", Zone::Board(A, Color::Green));
+    f.card("B008", Zone::Board(A, Color::Green));
+    let claim = f.card("B001", Zone::AvailableAchievements);
+    f.card("B062", Zone::Score(A));
+    let cover = f.card("B001", Zone::Hand(A));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     assert_eq!(game.position().basic_icon_count(A, Icon::Avatar), 4);
     assert_eq!(game.position().icon_count(A, Icon::Avatar), 5);
@@ -125,12 +121,12 @@ fn second_regular_foreign_dogma_replaces_once_preserving_demander_and_suppressin
     let brin = f.figure(Figure::SergeyBrin, Zone::Board(A, Color::Green));
     let duke = f.figure(Figure::DukeEllington, Zone::Board(A, Color::Purple));
     f.figure(Figure::AlfredNobel, Zone::Board(B, Color::Green));
-    let gunpowder = base(&mut f, "B037", Zone::Board(B, Color::Red));
-    let payment = base(&mut f, "B024", Zone::Board(B, Color::Purple));
-    let reward = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
-    let protected = base(&mut f, "B075", Zone::Deck(Deck::base(7)));
-    let spare = base(&mut f, "B099", Zone::Deck(Deck::base(10)));
-    let draw = base(&mut f, "B105", Zone::Deck(Deck::base(10)));
+    let gunpowder = f.card("B037", Zone::Board(B, Color::Red));
+    let payment = f.card("B024", Zone::Board(B, Color::Purple));
+    let reward = f.card("B021", Zone::Deck(Deck::base(2)));
+    let protected = f.card("B075", Zone::Deck(Deck::base(7)));
+    let spare = f.card("B099", Zone::Deck(Deck::base(10)));
+    let draw = f.card("B105", Zone::Deck(Deck::base(10)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     assert_eq!(game.position().dogma_source_owner(A, gunpowder), Some(B));
     assert_eq!(game.position().basic_icon_count(A, Icon::Industry), 0);
@@ -204,9 +200,9 @@ fn first_regular_and_free_foreign_dogmas_keep_ordinary_participant_rules() {
         f.figure(Figure::NelsonMandela, Zone::Board(A, Color::Red));
         f.figure(Figure::SergeyBrin, Zone::Board(A, Color::Green));
         f.figure(Figure::DukeEllington, Zone::Board(A, Color::Purple));
-        let gunpowder = base(&mut f, "B037", Zone::Board(B, Color::Red));
-        let payment = base(&mut f, "B024", Zone::Board(B, Color::Purple));
-        let reward = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
+        let gunpowder = f.card("B037", Zone::Board(B, Color::Red));
+        let payment = f.card("B024", Zone::Board(B, Color::Purple));
+        let reward = f.card("B021", Zone::Deck(Deck::base(2)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         for _ in 0..previous {
             game.begin_action(ActionKind::Regular).unwrap();
@@ -243,7 +239,7 @@ fn opponents_second_regular_dogma_does_not_borrow_mandelas_replacement() {
     let mut f = Fixture::default();
     f.figure(Figure::NelsonMandela, Zone::Board(A, Color::Red));
     let writing = f.writing(Zone::Board(B, Color::Blue));
-    let draw = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
+    let draw = f.card("B021", Zone::Deck(Deck::base(2)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     game.begin_turn(B).unwrap();
     game.begin_action(ActionKind::Regular).unwrap();
@@ -270,9 +266,9 @@ fn second_regular_retains_foreign_source_after_its_own_demand_transfers_it() {
     let mut f = Fixture::default();
     let mandela = f.figure(Figure::NelsonMandela, Zone::Board(A, Color::Red));
     let brin = f.figure(Figure::SergeyBrin, Zone::Board(A, Color::Green));
-    let monotheism = base(&mut f, "B024", Zone::Board(B, Color::Purple));
-    let own = base(&mut f, "B001", Zone::Deck(Deck::base(1)));
-    let demanded = base(&mut f, "B012", Zone::Deck(Deck::base(1)));
+    let monotheism = f.card("B024", Zone::Board(B, Color::Purple));
+    let own = f.card("B001", Zone::Deck(Deck::base(1)));
+    let demanded = f.card("B012", Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     game.begin_action(ActionKind::Regular).unwrap();
     let mut without_permission = game.clone();
@@ -342,7 +338,7 @@ fn own_second_regular_dogma_runs_its_native_non_demand_under_suppression() {
     f.figure(Figure::NelsonMandela, Zone::Board(A, Color::Red));
     f.figure(Figure::DukeEllington, Zone::Board(A, Color::Purple));
     let writing = f.writing(Zone::Board(A, Color::Blue));
-    let draw = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
+    let draw = f.card("B021", Zone::Deck(Deck::base(2)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     game.begin_action(ActionKind::Regular).unwrap();
     game.take_action(

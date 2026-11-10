@@ -1,26 +1,23 @@
 use super::common::*;
 use super::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
 fn fixture(expansions: Expansions, code: &str) -> (Position, CardId) {
     let mut f = Fixture::default();
-    let source = base(&mut f, code, Zone::Junk);
+    let source = f.card(code, Zone::Junk);
     if code == "B069" {
         for code in ["B067", "B068", "B071"] {
-            base(&mut f, code, Zone::Deck(Deck::base(7)));
+            f.card(code, Zone::Deck(Deck::base(7)));
         }
     } else {
         for code in ["B001", "B002", "B008"] {
-            base(&mut f, code, Zone::Score(A));
+            f.card(code, Zone::Score(A));
         }
         if code == "B081" {
-            base(&mut f, "B016", Zone::Hand(A));
+            f.card("B016", Zone::Hand(A));
             if expansions.figures() {
                 f.figure(Figure::Gilgamesh, Zone::Score(B));
             } else {
-                base(&mut f, "B004", Zone::Score(B));
+                f.card("B004", Zone::Score(B));
             }
         } else if expansions.figures() && code != "B063" {
             f.figure(Figure::Gilgamesh, Zone::Score(A));
@@ -219,9 +216,9 @@ fn foreign_control_and_open_stops_keep_every_order() {
 #[test]
 fn chosen_register_and_retained_card_are_independent_and_absence_is_not_zero() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B063", Zone::Junk);
-    let retained = base(&mut f, "B016", Zone::Score(A));
-    let chosen = base(&mut f, "B001", Zone::Score(A));
+    let source = f.card("B063", Zone::Junk);
+    let retained = f.card("B016", Zone::Score(A));
+    let chosen = f.card("B001", Zone::Score(A));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     start(&mut game, source, "B063");
     let menu = decision(&mut game, &mut Vec::new());
@@ -309,9 +306,9 @@ fn introduced_age_zero_extends_ordinary_domain_but_not_printed_boxes() {
     }
     // Encyclopedia: an absent value is the same as declining its meld.
     let mut f = Fixture::default();
-    let source = base(&mut f, "B063", Zone::Junk);
+    let source = f.card("B063", Zone::Junk);
     for code in ["B001", "B019", "B037", "B039"] {
-        base(&mut f, code, Zone::Score(A));
+        f.card(code, Zone::Score(A));
     }
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     start(&mut game, source, "B063");
@@ -319,11 +316,11 @@ fn introduced_age_zero_extends_ordinary_domain_but_not_printed_boxes() {
     assert_eq!(menu.options, [1, 2, 4].map(Alternative::Value).to_vec());
     // Sanitation boxed past 11: a nonempty 11 keeps the choice open.
     let mut f = Fixture::default();
-    let source = base(&mut f, "B069", Zone::Junk);
+    let source = f.card("B069", Zone::Junk);
     for code in ["B067", "B068", "B071"] {
-        base(&mut f, code, Zone::Deck(Deck::base(7)));
+        f.card(code, Zone::Deck(Deck::base(7)));
     }
-    let eleven = base(&mut f, "B106", Zone::Deck(Deck::base(11)));
+    let eleven = f.card("B106", Zone::Deck(Deck::base(11)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     let mut boxed = BoxedValues::default();
     boxed.increase(4).unwrap();
@@ -394,11 +391,11 @@ fn live_membership_and_movement_dependencies_restore_ordinary_menus() {
 #[test]
 fn swapped_hidden_score_worlds_have_identical_back_only_return_menus() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B081", Zone::Junk);
-    base(&mut f, "B016", Zone::Hand(A));
-    let one = base(&mut f, "B001", Zone::Score(B));
-    let two = base(&mut f, "B002", Zone::Score(B));
-    let three = base(&mut f, "B008", Zone::Score(B));
+    let source = f.card("B081", Zone::Junk);
+    f.card("B016", Zone::Hand(A));
+    let one = f.card("B001", Zone::Score(B));
+    let two = f.card("B002", Zone::Score(B));
+    let three = f.card("B008", Zone::Score(B));
     f.figure(Figure::Gilgamesh, Zone::Score(B));
     let position = f.position();
     let mut alternate = position.clone();
@@ -439,10 +436,10 @@ fn swapped_hidden_score_worlds_have_identical_back_only_return_menus() {
 #[test]
 fn suppression_never_erases_live_score_membership_but_exact_decks_ignore_pile_hooks() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B063", Zone::Junk);
+    let source = f.card("B063", Zone::Junk);
     f.figure(Figure::Michelangelo, Zone::Board(A, Color::Yellow));
-    let borrowed = base(&mut f, "B001", Zone::Hand(A));
-    let physical = base(&mut f, "B008", Zone::Score(A));
+    let borrowed = f.card("B001", Zone::Hand(A));
+    let physical = f.card("B008", Zone::Score(A));
     let game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     let mut context = Context::new(A);
     context.source_card = Some(source);
@@ -473,11 +470,11 @@ fn suppression_never_erases_live_score_membership_but_exact_decks_ignore_pile_ho
     assert_eq!(reduced, targets);
 
     let mut f = Fixture::default();
-    let source = base(&mut f, "B069", Zone::Junk);
+    let source = f.card("B069", Zone::Junk);
     f.figure(Figure::Homer, Zone::Board(A, Color::Purple));
     f.figure(Figure::Nightingale, Zone::Board(B, Color::Yellow));
     for code in ["B067", "B068", "B071"] {
-        base(&mut f, code, Zone::Deck(Deck::base(7)));
+        f.card(code, Zone::Deck(Deck::base(7)));
     }
     let mut reduced = Game::new(f.position(), Expansions::FIGURES).unwrap();
     let mut manual = reduced.clone();
@@ -500,22 +497,18 @@ fn sanitation_skips_its_deck_choice_only_when_both_boxed_decks_are_empty() {
         let decoy_age = if archimedes { 7 } else { 9 };
         for (empty, decoy) in (0..4).flat_map(|empty| [(empty, false), (empty, true)]) {
             let mut f = Fixture::default();
-            let source = base(&mut f, "B069", Zone::Junk);
+            let source = f.card("B069", Zone::Junk);
             if archimedes {
                 f.figure(Figure::Archimedes, Zone::Board(A, Color::Blue));
             }
             for age in [low, low + 1] {
                 if empty & (1 << (age - low)) == 0 {
-                    base(
-                        &mut f,
-                        AGED[usize::from(age - 7)],
-                        Zone::Deck(Deck::base(age)),
-                    );
+                    f.card(AGED[usize::from(age - 7)], Zone::Deck(Deck::base(age)));
                 }
             }
             if decoy {
                 let code = AGED[usize::from(decoy_age - 7)];
-                base(&mut f, code, Zone::Deck(Deck::base(decoy_age)));
+                f.card(code, Zone::Deck(Deck::base(decoy_age)));
             }
             let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
             let before = game.position.clone();
@@ -554,10 +547,10 @@ fn sanitation_skips_its_deck_choice_only_when_both_boxed_decks_are_empty() {
 #[test]
 fn sanitation_empty_deck_skip_matches_both_unreduced_choices_under_archimedes() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B069", Zone::Junk);
+    let source = f.card("B069", Zone::Junk);
     f.figure(Figure::Archimedes, Zone::Board(A, Color::Blue));
     // Only the unboxed 7 deck has cards; Archimedes names 8 and 9.
-    base(&mut f, "B068", Zone::Deck(Deck::base(7)));
+    f.card("B068", Zone::Deck(Deck::base(7)));
     let mut reduced = Game::new(f.position(), Expansions::FIGURES)
         .unwrap()
         .with_tracking()

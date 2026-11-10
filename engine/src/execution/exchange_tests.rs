@@ -1,9 +1,6 @@
 use super::*;
 use common::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
 fn start(game: &mut Game, source: CardId, effect: u16, boxed: BoxedValues, suppressed: bool) {
     let mut context = Context::new(A);
     context.demander = B;
@@ -48,17 +45,17 @@ fn ordinary_cases(expansions: Expansions) {
     for code in ["B028", "B029", "B069"] {
         for (left_count, right_count) in [(0, 0), (0, 1), (1, 0), (1, 1), (3, 2)] {
             let mut f = Fixture::default();
-            let source = base(&mut f, code, Zone::Junk);
+            let source = f.card(code, Zone::Junk);
             let zones = if code == "B029" {
                 [Zone::Score(A), Zone::Score(B)]
             } else {
                 [Zone::Hand(A), Zone::Hand(B)]
             };
             for code in ["B032", "B033", "B034"].into_iter().take(left_count) {
-                base(&mut f, code, zones[0]);
+                f.card(code, zones[0]);
             }
             for code in ["B001", "B004"].into_iter().take(right_count) {
-                base(&mut f, code, zones[1]);
+                f.card(code, zones[1]);
             }
             let mut game = Game::seeded(f.position(), expansions, 37).unwrap();
             start(&mut game, source, 0, BoxedValues::default(), false);
@@ -102,10 +99,10 @@ fn empty_sides_and_partial_quotas_are_one_grouped_exchange_with_and_without_figu
 #[test]
 fn machinery_uses_each_sides_original_extrema_and_has_separate_followups() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B028", Zone::Junk);
-    let low = base(&mut f, "B001", Zone::Hand(B));
-    let high = base(&mut f, "B032", Zone::Hand(B));
-    let own = base(&mut f, "B077", Zone::Hand(A));
+    let source = f.card("B028", Zone::Junk);
+    let low = f.card("B001", Zone::Hand(B));
+    let high = f.card("B032", Zone::Hand(B));
+    let own = f.card("B077", Zone::Hand(A));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     start(&mut game, source, 0, BoxedValues::default(), false);
     finish(&mut game, &mut Vec::new());
@@ -128,10 +125,10 @@ fn machinery_uses_each_sides_original_extrema_and_has_separate_followups() {
 #[test]
 fn sanitation_takes_next_highest_after_unique_highest() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B069", Zone::Junk);
-    let low = base(&mut f, "B001", Zone::Hand(A));
-    let middle = base(&mut f, "B032", Zone::Hand(A));
-    let high = base(&mut f, "B077", Zone::Hand(A));
+    let source = f.card("B069", Zone::Junk);
+    let low = f.card("B001", Zone::Hand(A));
+    let middle = f.card("B032", Zone::Hand(A));
+    let high = f.card("B077", Zone::Hand(A));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     start(&mut game, source, 0, BoxedValues::default(), false);
     finish(&mut game, &mut Vec::new());
@@ -142,9 +139,9 @@ fn sanitation_takes_next_highest_after_unique_highest() {
 #[test]
 fn private_exchange_groups_only_public_backs_and_samples_native_rng() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B029", Zone::Junk);
-    base(&mut f, "B001", Zone::Score(B));
-    base(&mut f, "B004", Zone::Score(B));
+    let source = f.card("B029", Zone::Junk);
+    f.card("B001", Zone::Score(B));
+    f.card("B004", Zone::Score(B));
     f.figure(Figure::Gilgamesh, Zone::Score(B));
     let mut game = Game::seeded(f.position(), Expansions::FIGURES, 71).unwrap();
     start(&mut game, source, 0, BoxedValues::default(), false);
@@ -190,8 +187,8 @@ fn private_exchange_groups_only_public_backs_and_samples_native_rng() {
 #[test]
 fn private_singleton_is_automatic_and_consumes_no_rng() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B029", Zone::Junk);
-    base(&mut f, "B001", Zone::Score(B));
+    let source = f.card("B029", Zone::Junk);
+    f.card("B001", Zone::Score(B));
     let mut game = Game::seeded(f.position(), Expansions::BASE, 91).unwrap();
     let rng = game.rng.clone();
     start(&mut game, source, 0, BoxedValues::default(), false);
@@ -205,9 +202,9 @@ fn private_singleton_is_automatic_and_consumes_no_rng() {
 fn branches(expansions: Expansions) {
     for code in ["B018", "B072"] {
         let mut f = Fixture::default();
-        let source = base(&mut f, code, Zone::Junk);
-        base(&mut f, "B001", Zone::Hand(A));
-        base(&mut f, "B032", Zone::Deck(Deck::base(3)));
+        let source = f.card(code, Zone::Junk);
+        f.card("B001", Zone::Hand(A));
+        f.card("B032", Zone::Deck(Deck::base(3)));
         let mut game = Game::new(f.position(), expansions).unwrap();
         let before = game.position.clone();
         let rng = game.rng.clone();
@@ -221,9 +218,9 @@ fn branches(expansions: Expansions) {
     }
     for increase in [0, 1, 9] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B018", Zone::Junk);
-        let three = base(&mut f, "B032", Zone::Deck(Deck::base(3)));
-        let four = base(&mut f, "B036", Zone::Deck(Deck::base(4)));
+        let source = f.card("B018", Zone::Junk);
+        let three = f.card("B032", Zone::Deck(Deck::base(3)));
+        let four = f.card("B036", Zone::Deck(Deck::base(4)));
         let mut game = Game::new(f.position(), expansions).unwrap();
         let mut boxed = BoxedValues::default();
         boxed.increase(increase).unwrap();
@@ -258,10 +255,10 @@ fn whole_branch_decline_and_exact_boxed_deck_boundaries() {
 fn evolution_score_then_mandatory_return_and_unboxed_highest_plus_one() {
     for branch_index in [0, 1] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B072", Zone::Junk);
-        let low = base(&mut f, "B001", Zone::Score(A));
-        let computed = base(&mut f, "B018", Zone::Deck(Deck::base(2)));
-        let drawn = base(&mut f, "B088", Zone::Deck(Deck::base(9)));
+        let source = f.card("B072", Zone::Junk);
+        let low = f.card("B001", Zone::Score(A));
+        let computed = f.card("B018", Zone::Deck(Deck::base(2)));
+        let drawn = f.card("B088", Zone::Deck(Deck::base(9)));
         let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
         let mut boxed = BoxedValues::default();
         boxed.increase(1).unwrap();
@@ -282,10 +279,10 @@ fn evolution_score_then_mandatory_return_and_unboxed_highest_plus_one() {
 #[test]
 fn medicine_followup_is_mandatory_standard_three_or_four_not_boxed() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B029", Zone::Junk);
-    let two = base(&mut f, "B018", Zone::AvailableAchievements);
-    let three = base(&mut f, "B032", Zone::AvailableAchievements);
-    let five = base(&mut f, "B046", Zone::AvailableAchievements);
+    let source = f.card("B029", Zone::Junk);
+    let two = f.card("B018", Zone::AvailableAchievements);
+    let three = f.card("B032", Zone::AvailableAchievements);
+    let five = f.card("B046", Zone::AvailableAchievements);
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     let mut boxed = BoxedValues::default();
     boxed.increase(2).unwrap();
@@ -305,13 +302,13 @@ fn medicine_followup_is_mandatory_standard_three_or_four_not_boxed() {
 fn overlap_is_frozen_and_zero_movers_do_not_invoke_yi() {
     for overlap_only in [false, true] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B018", Zone::Junk);
+        let source = f.card("B018", Zone::Junk);
         f.figure(Figure::Michelangelo, Zone::Board(A, Color::Yellow));
-        let hand = base(&mut f, "B032", Zone::Hand(A));
+        let hand = f.card("B032", Zone::Hand(A));
         let score = if overlap_only {
             None
         } else {
-            Some(base(&mut f, "B033", Zone::Score(A)))
+            Some(f.card("B033", Zone::Score(A)))
         };
         if overlap_only {
             f.figure(Figure::YiSunSin, Zone::Board(B, Color::Red));
@@ -336,12 +333,12 @@ fn overlap_is_frozen_and_zero_movers_do_not_invoke_yi() {
 fn yi_replaces_the_entire_selected_exchange_once_unless_suppressed() {
     for suppressed in [false, true] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B069", Zone::Junk);
+        let source = f.card("B069", Zone::Junk);
         f.figure(Figure::YiSunSin, Zone::Board(A, Color::Red));
-        base(&mut f, "B032", Zone::Hand(A));
-        base(&mut f, "B033", Zone::Hand(A));
-        base(&mut f, "B001", Zone::Hand(B));
-        let draw = base(&mut f, "B036", Zone::Deck(Deck::base(4)));
+        f.card("B032", Zone::Hand(A));
+        f.card("B033", Zone::Hand(A));
+        f.card("B001", Zone::Hand(B));
+        let draw = f.card("B036", Zone::Deck(Deck::base(4)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         start(&mut game, source, 0, BoxedValues::default(), suppressed);
         let mut events = Vec::new();
@@ -390,10 +387,9 @@ fn outcomes(mut game: Game, depth: usize) -> Vec<(Position, Rng, Status)> {
 fn oracle(expansions: Expansions) {
     for code in ["B018", "B069"] {
         let mut f = Fixture::default();
-        let source = base(&mut f, code, Zone::Junk);
+        let source = f.card(code, Zone::Junk);
         for card in ["B032", "B033", "B034"] {
-            base(
-                &mut f,
+            f.card(
                 card,
                 if code == "B018" {
                     Zone::Deck(Deck::base(3))

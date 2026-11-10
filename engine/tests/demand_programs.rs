@@ -3,10 +3,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn card(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 fn board(f: &mut Fixture, code: &str, player: Player) -> CardId {
     let definition = Card::from_code(code).unwrap();
     let color = definition.color;
@@ -96,11 +92,8 @@ fn moves(events: &[Event]) -> Vec<&Movement> {
 fn archery_draws_before_selecting_every_highest_tie_and_uses_the_actual_demander() {
     let mut f = Fixture::default();
     let source = board(&mut f, "B001", A);
-    let high = [
-        card(&mut f, "B037", Zone::Hand(B)),
-        card(&mut f, "B042", Zone::Hand(B)),
-    ];
-    let drawn = card(&mut f, "B008", Zone::Deck(Deck::base(1)));
+    let high = [f.card("B037", Zone::Hand(B)), f.card("B042", Zone::Hand(B))];
+    let drawn = f.card("B008", Zone::Deck(Deck::base(1)));
     let initial = f.position();
     for index in 0..2 {
         let mut game = Game::new(initial.clone(), Expansions::BASE).unwrap();
@@ -129,11 +122,11 @@ fn archery_preserves_hidden_standard_supply_and_plain_values_ignore_archimedes()
     figure(&mut f, Figure::Archimedes, A);
     figure(&mut f, Figure::JohnLoudonMcAdam, A);
     let supply = [
-        card(&mut f, "B004", Zone::AvailableAchievements),
-        card(&mut f, "B023", Zone::AvailableAchievements),
+        f.card("B004", Zone::AvailableAchievements),
+        f.card("B023", Zone::AvailableAchievements),
     ];
-    let three = card(&mut f, "B034", Zone::AvailableAchievements);
-    let owned = card(&mut f, "B008", Zone::Achievements(A));
+    let three = f.card("B034", Zone::AvailableAchievements);
+    let owned = f.card("B008", Zone::Achievements(A));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut game, source, 1, A, A);
     let mut events = Vec::new();
@@ -164,7 +157,7 @@ fn archery_preserves_hidden_standard_supply_and_plain_values_ignore_archimedes()
 fn archery_empty_supply_does_nothing_and_draw_exhaustion_precedes_transfer() {
     let mut f = Fixture::default();
     let source = board(&mut f, "B001", A);
-    let held = card(&mut f, "B042", Zone::Hand(B));
+    let held = f.card("B042", Zone::Hand(B));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 1, A, A);
     done(&mut game, &mut Vec::new());
@@ -183,9 +176,9 @@ fn mapmaking_counts_original_transfer_and_adjusts_filter_and_reward_in_separate_
     let mut f = Fixture::default();
     let source = board(&mut f, "B021", A);
     figure(&mut f, Figure::Archimedes, A);
-    let plain_one = card(&mut f, "B004", Zone::Score(B));
-    let transferred = card(&mut f, "B023", Zone::Score(B));
-    let reward = card(&mut f, "B024", Zone::Deck(Deck::base(2)));
+    let plain_one = f.card("B004", Zone::Score(B));
+    let transferred = f.card("B023", Zone::Score(B));
+    let reward = f.card("B024", Zone::Deck(Deck::base(2)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     action(&mut game, source);
     let mut events = Vec::new();
@@ -214,15 +207,15 @@ fn mapmaking_uses_the_demanders_archimedes_not_the_victims_in_dogma_and_super_ex
             let source = board(&mut f, "B021", if copied { B } else { A });
             figure(&mut f, Figure::Archimedes, owner);
             let ones = [
-                card(&mut f, "B004", Zone::Score(B)),
-                card(&mut f, "B008", Zone::Score(B)),
+                f.card("B004", Zone::Score(B)),
+                f.card("B008", Zone::Score(B)),
             ];
             let twos = [
-                card(&mut f, "B023", Zone::Score(B)),
-                card(&mut f, "B024", Zone::Score(B)),
+                f.card("B023", Zone::Score(B)),
+                f.card("B024", Zone::Score(B)),
             ];
-            let plain_reward = card(&mut f, "B010", Zone::Deck(Deck::base(1)));
-            let boosted_reward = card(&mut f, "B022", Zone::Deck(Deck::base(2)));
+            let plain_reward = f.card("B010", Zone::Deck(Deck::base(1)));
+            let boosted_reward = f.card("B022", Zone::Deck(Deck::base(2)));
             let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
             if copied {
                 let mut context = Context::new(A);
@@ -281,7 +274,7 @@ fn mapmaking_and_gunpowder_shared_followups_read_the_same_empty_demand_summary()
         } else {
             board(&mut f, "B057", B);
         }
-        card(&mut f, "B004", Zone::Score(B));
+        f.card("B004", Zone::Score(B));
         let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
         action(&mut game, source);
         let mut events = Vec::new();
@@ -298,13 +291,13 @@ fn navigation_keeps_all_boxed_value_ties_without_a_decline_or_false_exhaustion()
     let mut f = Fixture::default();
     let source = board(&mut f, "B041", A);
     figure(&mut f, Figure::Archimedes, A);
-    let two = card(&mut f, "B023", Zone::Score(B));
+    let two = f.card("B023", Zone::Score(B));
     let matches = [
-        card(&mut f, "B034", Zone::Score(B)),
-        card(&mut f, "B035", Zone::Score(B)),
-        card(&mut f, "B042", Zone::Score(B)),
+        f.card("B034", Zone::Score(B)),
+        f.card("B035", Zone::Score(B)),
+        f.card("B042", Zone::Score(B)),
     ];
-    let five = card(&mut f, "B052", Zone::Score(B));
+    let five = f.card("B052", Zone::Score(B));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut game, source, 0, B, A);
     let mut events = Vec::new();
@@ -327,7 +320,7 @@ fn monotheism_compares_colors_with_demander_not_executor_or_source_owner() {
     let source = board(&mut f, "B024", B);
     board(&mut f, "B008", A);
     let excluded = board(&mut f, "B021", B);
-    let reward = card(&mut f, "B004", Zone::Deck(Deck::base(1)));
+    let reward = f.card("B004", Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     // The retained printed source itself is a legal top to transfer: source
     // ownership does not change the player saying "my board" in the demand.
@@ -361,7 +354,7 @@ fn monotheism_demand_with_no_new_color_has_no_reward_but_its_second_effect_is_in
     let mut f = Fixture::default();
     let source = board(&mut f, "B024", A);
     board(&mut f, "B035", B);
-    let reward = card(&mut f, "B004", Zone::Deck(Deck::base(1)));
+    let reward = f.card("B004", Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 0, B, A);
     let mut events = Vec::new();
@@ -411,7 +404,7 @@ fn top_icon_filters_use_printed_cards_and_keep_all_eligible_noncolor_choices() {
         let eligible = candidates.map(|c| board(&mut f, c, B));
         let excluded = board(&mut f, excluded, B);
         let plain = board(&mut f, plain, B);
-        let reward = card(&mut f, reward_code, Zone::Deck(Deck::base(age)));
+        let reward = f.card(reward_code, Zone::Deck(Deck::base(age)));
         let initial = f.position();
         for index in 0..2 {
             let mut game = Game::new(initial.clone(), Expansions::BASE).unwrap();
@@ -480,8 +473,8 @@ fn feudalism_junks_available_specials_only_after_a_successful_original_transfer(
     for pay in [false, true] {
         let mut f = Fixture::default();
         let source = board(&mut f, "B035", A);
-        let ineligible = card(&mut f, "B004", Zone::Hand(B));
-        let payment = pay.then(|| card(&mut f, "B001", Zone::Hand(B)));
+        let ineligible = f.card("B004", Zone::Hand(B));
+        let payment = pay.then(|| f.card("B001", Zone::Hand(B)));
         let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
         game.start(
             Operation::ClaimSpecial {
@@ -541,7 +534,7 @@ fn feudalism_splay_is_optional_and_only_an_actual_splay_earns_its_boxed_draw() {
         board(&mut f, "B004", A);
         board(&mut f, "B005", A);
         figure(&mut f, Figure::Archimedes, A);
-        let reward = card(&mut f, "B042", Zone::Deck(Deck::base(4)));
+        let reward = f.card("B042", Zone::Deck(Deck::base(4)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         invoke(&mut game, source, 1, A, A);
         let mut events = Vec::new();
@@ -619,7 +612,7 @@ fn enterprise_and_banking_keep_their_independent_optional_green_splay() {
 fn corporations_independent_draw_and_meld_has_the_executors_attribution() {
     let mut f = Fixture::default();
     let source = board(&mut f, "B080", A);
-    let reward = card(&mut f, "B082", Zone::Deck(Deck::base(8)));
+    let reward = f.card("B082", Zone::Deck(Deck::base(8)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 1, B, A);
     let mut events = Vec::new();
@@ -632,7 +625,7 @@ fn corporations_independent_draw_and_meld_has_the_executors_attribution() {
 fn private_front_filters_fail_closed_but_highest_back_selection_remains_private() {
     let mut f = Fixture::default();
     let feudalism = board(&mut f, "B035", A);
-    card(&mut f, "B001", Zone::Hand(B));
+    f.card("B001", Zone::Hand(B));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     let mut context = Context::new(B);
     context.controller = A;
@@ -653,8 +646,8 @@ fn private_front_filters_fail_closed_but_highest_back_selection_remains_private(
 
     let mut f = Fixture::default();
     let archery = board(&mut f, "B001", A);
-    let ties = ["B037", "B042"].map(|code| card(&mut f, code, Zone::Hand(B)));
-    let drawn = card(&mut f, "B008", Zone::Deck(Deck::base(1)));
+    let ties = ["B037", "B042"].map(|code| f.card(code, Zone::Hand(B)));
+    let drawn = f.card("B008", Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     game.start(
         Operation::ExecuteEffect {
@@ -701,9 +694,9 @@ fn original_transfer_summary_survives_a_first_reaction_but_not_instead_replaceme
             },
             B,
         );
-        let payment = card(&mut f, "B004", Zone::Score(B));
-        let reward = card(&mut f, "B008", Zone::Deck(Deck::base(1)));
-        let junked = card(&mut f, "B075", Zone::Deck(Deck::base(7)));
+        let payment = f.card("B004", Zone::Score(B));
+        let reward = f.card("B008", Zone::Deck(Deck::base(1)));
+        let junked = f.card("B075", Zone::Deck(Deck::base(7)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         action(&mut game, source);
         let mut events = Vec::new();
@@ -737,15 +730,15 @@ fn compound_yi_replacement_cannot_earn_mapmaking_or_gunpowder_followup_even_afte
         let source = board(&mut f, code, A);
         figure(&mut f, Figure::YiSunSin, B);
         let original = if code == "B021" {
-            card(&mut f, "B004", Zone::Score(B))
+            f.card("B004", Zone::Score(B))
         } else {
             board(&mut f, "B005", B)
         };
-        let reaction = card(&mut f, "B042", Zone::Deck(Deck::base(4)));
+        let reaction = f.card("B042", Zone::Deck(Deck::base(4)));
         let untouched = if code == "B021" {
-            card(&mut f, "B008", Zone::Deck(Deck::base(1)))
+            f.card("B008", Zone::Deck(Deck::base(1)))
         } else {
-            card(&mut f, "B023", Zone::Deck(Deck::base(2)))
+            f.card("B023", Zone::Deck(Deck::base(2)))
         };
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         action(&mut game, source);
@@ -775,7 +768,7 @@ fn gunpowders_actual_transfer_earns_a_score_but_reward_exhaustion_keeps_the_tran
         let mut f = Fixture::default();
         let source = board(&mut f, "B037", A);
         let original = board(&mut f, "B005", B);
-        let reward = supply.then(|| card(&mut f, "B023", Zone::Deck(Deck::base(2))));
+        let reward = supply.then(|| f.card("B023", Zone::Deck(Deck::base(2))));
         let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
         action(&mut game, source);
         let mut events = Vec::new();
@@ -807,11 +800,11 @@ fn compound_replacement_does_not_satisfy_any_conditional_transfer_reward() {
         let source = board(&mut f, code, A);
         figure(&mut f, Figure::YiSunSin, A);
         let payment = if hand {
-            card(&mut f, payment_code, Zone::Hand(B))
+            f.card(payment_code, Zone::Hand(B))
         } else {
             board(&mut f, payment_code, B)
         };
-        let reaction = card(&mut f, "B042", Zone::Deck(Deck::base(4)));
+        let reaction = f.card("B042", Zone::Deck(Deck::base(4)));
         // No printed reward supply: erroneously earning one would exhaust.
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         invoke(&mut game, source, 0, B, A);
@@ -855,7 +848,7 @@ fn archery_available_membership_honors_mc_adam_aliases_without_exposing_supply_f
     // catalog has no age-1/2 Industry card. No fake gameplay hook is introduced.
     let alias = f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);
     f.cards[usize::from(alias.0)].symbols[0] = Symbol::Icon(Icon::Industry);
-    let supply = card(&mut f, "B004", Zone::AvailableAchievements);
+    let supply = f.card("B004", Zone::AvailableAchievements);
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut game, source, 1, A, A);
     let mut events = Vec::new();
@@ -876,8 +869,8 @@ fn galileo_uses_live_available_achievement_aliases_from_their_actual_board_origi
     figure(&mut f, Figure::GalileoGalilei, A);
     figure(&mut f, Figure::JohnLoudonMcAdam, A);
     let alias = board(&mut f, "B037", A);
-    let supply = card(&mut f, "B034", Zone::AvailableAchievements);
-    let melding = card(&mut f, "B008", Zone::Hand(A));
+    let supply = f.card("B034", Zone::AvailableAchievements);
+    let melding = f.card("B008", Zone::Hand(A));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     game.start(
         meld(melding, Zone::Hand(A), A, Color::Green),

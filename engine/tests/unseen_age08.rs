@@ -5,62 +5,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
-    for (slot, &icon) in icons.iter().enumerate() {
-        f.cards[usize::from(card.0)].symbols[slot] = Symbol::Icon(icon);
-    }
-}
-
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
-}
-
-fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
-    for _ in 0..300 {
-        match settle(game, events) {
-            Status::Decision(menu) => {
-                let index = preferred
-                    .iter()
-                    .find_map(|&card| pick_known(&menu, card))
-                    .unwrap_or(0);
-                game.choose(index).unwrap();
-            }
-            status => return status,
-        }
-    }
-    panic!("did not terminate");
-}
-
-fn complete(status: Status) {
-    assert!(matches!(status, Status::Complete(_)), "{status:?}");
-}
-
 fn run_declining(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
     for _ in 0..300 {
         match settle(game, events) {
@@ -81,7 +25,7 @@ fn run_declining(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId])
 #[test]
 fn concealment_tucks_every_secret_and_safeguards_the_bottom_purple() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U076", Zone::Board(A, Color::Red));
+    let card = f.card("U076", Zone::Board(A, Color::Red));
     let red = f.tech(Color::Red, 2, Zone::Safe(B), vec![]);
     let blue = f.tech(Color::Blue, 3, Zone::Safe(B), vec![]);
     let red_top = f.tech(Color::Red, 5, Zone::Board(B, Color::Red), vec![]);
@@ -106,7 +50,7 @@ fn concealment_tucks_every_secret_and_safeguards_the_bottom_purple() {
 fn enigma_machine_offers_three_bulk_moves_and_resplays_a_left_color_up() {
     for branch in 0..3 {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U077", Zone::Board(A, Color::Red));
+        let card = f.card("U077", Zone::Board(A, Color::Red));
         let achievement = f.tech(Color::Green, 1, Zone::AvailableAchievements, vec![]);
         let secret = f.tech(Color::Blue, 2, Zone::Safe(A), vec![]);
         let hand = f.tech(Color::Yellow, 3, Zone::Hand(A), vec![]);
@@ -137,7 +81,7 @@ fn enigma_machine_offers_three_bulk_moves_and_resplays_a_left_color_up() {
     // With room for one of two achievements, the player orders the batch:
     // the chosen back enters and the other stays available.
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U077", Zone::Board(A, Color::Red));
+    let card = f.card("U077", Zone::Board(A, Color::Red));
     f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);
     let one = f.tech(Color::Green, 1, Zone::AvailableAchievements, vec![]);
@@ -167,7 +111,7 @@ fn enigma_machine_offers_three_bulk_moves_and_resplays_a_left_color_up() {
     assert_eq!(position.cards(Zone::AvailableAchievements), &[one]);
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U077", Zone::Board(A, Color::Red));
+    let card = f.card("U077", Zone::Board(A, Color::Red));
     f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
     f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);
@@ -193,7 +137,7 @@ fn enigma_machine_offers_three_bulk_moves_and_resplays_a_left_color_up() {
 #[test]
 fn jackalope_takes_the_highest_plain_top_and_unsplays_the_most_visible_color() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U078", Zone::Board(A, Color::Yellow));
+    let card = f.card("U078", Zone::Board(A, Color::Yellow));
     let efficient = f.tech(Color::Red, 9, Zone::Board(B, Color::Red), vec![]);
     icons(&mut f, efficient, &[Icon::Efficiency]);
     f.tech(Color::Blue, 1, Zone::Board(B, Color::Blue), vec![]);
@@ -212,7 +156,7 @@ fn jackalope_takes_the_highest_plain_top_and_unsplays_the_most_visible_color() {
     assert_eq!(position.splay(B, Color::Blue), Splay::None);
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U078", Zone::Board(A, Color::Yellow));
+    let card = f.card("U078", Zone::Board(A, Color::Yellow));
     for _ in 0..3 {
         f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     }
@@ -239,7 +183,7 @@ fn jackalope_takes_the_highest_plain_top_and_unsplays_the_most_visible_color() {
 #[test]
 fn shangri_la_scores_an_industry_tuck_or_melds_and_repeats_on_an_eight() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U079", Zone::Board(A, Color::Yellow));
+    let card = f.card("U079", Zone::Board(A, Color::Yellow));
     f.tech(Color::Green, 1, Zone::Board(A, Color::Green), vec![]);
     let ten = f.tech(Color::Yellow, 10, Zone::Deck(Deck::base(10)), vec![]);
     let nine = f.tech(Color::Red, 9, Zone::Deck(Deck::base(9)), vec![]);
@@ -268,7 +212,7 @@ fn shangri_la_scores_an_industry_tuck_or_melds_and_repeats_on_an_eight() {
 fn handbag_offers_bottoms_to_hand_score_tucks_or_scoring_a_value() {
     for branch in [Some(0), Some(1), Some(2), None] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U080", Zone::Board(A, Color::Green));
+        let card = f.card("U080", Zone::Board(A, Color::Green));
         let red_bottom = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
         let red_top = f.tech(Color::Red, 4, Zone::Board(A, Color::Red), vec![]);
         // Handbag itself is the bottom green card.
@@ -324,7 +268,7 @@ fn handbag_offers_bottoms_to_hand_score_tucks_or_scoring_a_value() {
 #[test]
 fn hitchhiking_lets_the_donor_decide_inside_the_recipients_self_execution() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U081", Zone::Board(A, Color::Green));
+    let card = f.card("U081", Zone::Board(A, Color::Green));
     // The donated card scores a card from the executor's hand: the donor
     // picks which one, seeing A's hand.
     let gift = f.tech(
@@ -367,7 +311,7 @@ fn blacklight_unsplays_a_color_or_splays_one_up_and_draws() {
         (1, Color::Blue, 2),
     ] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U082", Zone::Board(A, Color::Blue));
+        let card = f.card("U082", Zone::Board(A, Color::Blue));
         f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
         f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);
         f.tech(Color::Green, 1, Zone::Board(A, Color::Green), vec![]);
@@ -416,7 +360,7 @@ fn blacklight_unsplays_a_color_or_splays_one_up_and_draws() {
 #[test]
 fn blacklight_draws_a_nine_with_no_unsplayed_color() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U082", Zone::Board(A, Color::Blue));
+    let card = f.card("U082", Zone::Board(A, Color::Blue));
     f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
     let nine = f.tech(Color::Yellow, 9, Zone::Deck(Deck::base(9)), vec![]);
     let position = f
@@ -437,7 +381,7 @@ fn blacklight_draws_a_nine_with_no_unsplayed_color() {
 fn scouting_returns_at_least_one_nine_and_rewards_a_matching_ten_deck_top() {
     for (return_both, matches) in [(true, true), (true, false), (false, true)] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U083", Zone::Board(A, Color::Blue));
+        let card = f.card("U083", Zone::Board(A, Color::Blue));
         let ten = f.tech(Color::Green, 10, Zone::Deck(Deck::base(10)), vec![]);
         let top = f.tech(
             if matches { Color::Red } else { Color::Purple },
@@ -476,7 +420,7 @@ fn scouting_returns_at_least_one_nine_and_rewards_a_matching_ten_deck_top() {
 #[test]
 fn joy_buzzer_swaps_the_hand_for_the_demanders_lowest_and_scores_a_value_then_purple() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U084", Zone::Board(A, Color::Purple));
+    let card = f.card("U084", Zone::Board(A, Color::Purple));
     let victim = f.tech(Color::Red, 7, Zone::Hand(B), vec![]);
     let lows = [
         f.tech(Color::Blue, 2, Zone::Hand(A), vec![]),
@@ -513,7 +457,7 @@ fn joy_buzzer_swaps_the_hand_for_the_demanders_lowest_and_scores_a_value_then_pu
 #[test]
 fn opus_dei_reveals_the_highest_score_card_splays_its_color_up_and_draws_per_up_splay() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U085", Zone::Board(A, Color::Purple));
+    let card = f.card("U085", Zone::Board(A, Color::Purple));
     f.tech(Color::Red, 2, Zone::Score(A), vec![]);
     let highest = f.tech(Color::Blue, 6, Zone::Score(A), vec![]);
     f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);

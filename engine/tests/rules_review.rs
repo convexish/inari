@@ -9,59 +9,6 @@ fn on_board(f: &mut Fixture, card: Card, player: Player) -> CardId {
     f.add(card, Zone::Board(player, color))
 }
 
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
-}
-
-/// Play to the end, preferring these cards and otherwise the first option.
-fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
-    for _ in 0..300 {
-        match settle(game, events) {
-            Status::Decision(menu) => {
-                let index = preferred
-                    .iter()
-                    .find_map(|&card| pick_known(&menu, card))
-                    .unwrap_or(0);
-                game.choose(index).unwrap();
-            }
-            status => return status,
-        }
-    }
-    panic!("did not terminate");
-}
-
-fn revealed(events: &[Event]) -> Vec<CardId> {
-    events
-        .iter()
-        .filter_map(|event| match event {
-            Event::Revealed { card, .. } => Some(*card),
-            _ => None,
-        })
-        .collect()
-}
-
 fn scored(events: &[Event]) -> usize {
     events
         .iter()

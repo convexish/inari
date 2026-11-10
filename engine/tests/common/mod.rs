@@ -109,6 +109,11 @@ impl Fixture {
         self.add(Card::from_code("B042").unwrap(), zone)
     }
 
+    /// The printed card with this publisher code, from any set.
+    pub fn card(&mut self, code: &str, zone: Zone) -> CardId {
+        self.add(Card::from_code(code).unwrap(), zone)
+    }
+
     pub fn figure(&mut self, figure: Figure, zone: Zone) -> CardId {
         self.add(Card::from_code(figure.code()).unwrap(), zone)
     }
@@ -176,3 +181,138 @@ pub const CHOSEN_SCORE: Selector = build::filtered(
     &build::SCORE,
     &[Filter::Has(Test::Value(Cmp::Equal, Expr::Chosen))],
 );
+
+/// A blank Base card of this value.
+pub fn blank(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
+    f.tech(color, value, zone, vec![])
+}
+
+pub fn complete(status: Status) {
+    assert!(matches!(status, Status::Complete(_)), "{status:?}");
+}
+
+/// A full Dogma of the demand by A against B, so the owner's effect reads
+/// the demand's results.
+pub fn dogma(game: &mut Game, card: CardId) {
+    game.take_action(
+        Action::Dogma {
+            card,
+            auspice: false,
+        },
+        ActionKind::Regular,
+    )
+    .unwrap();
+}
+
+/// Start `card`'s effect `index` for `executor`, as `demander`'s Dogma.
+pub fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
+    let mut context = Context::new(executor);
+    context.demander = demander;
+    context.source_owner = demander;
+    game.start(
+        Operation::ExecuteEffect {
+            card,
+            effect: index,
+            boxed: BoxedValues::default(),
+        },
+        context,
+    )
+    .unwrap();
+}
+
+/// Each self-execution keyword earns a Chain draw of an [11].
+pub fn elevens(f: &mut Fixture, count: usize) {
+    for i in 0..count {
+        f.tech(Color::ALL[i % 5], 11, Zone::Deck(Deck::base(11)), vec![]);
+    }
+}
+
+/// A draw that took a card above its requested age (an empty age was
+/// skipped): performed, but short of the requested value.
+pub fn escalated(card: CardId, value: u8) -> Status {
+    Status::Complete(ReturnValue::Operation(OperationOutcome {
+        disposition: Disposition::Performed,
+        card: Some(card),
+        value: Some(value),
+        short: true,
+    }))
+}
+
+pub fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
+    for (slot, &icon) in icons.iter().enumerate() {
+        f.cards[usize::from(card.0)].symbols[slot] = Symbol::Icon(icon);
+    }
+}
+
+pub fn meld_action(game: &mut Game, card: CardId) {
+    game.take_action(Action::Meld { card }, ActionKind::Regular)
+        .unwrap();
+}
+
+pub fn performed(card: CardId, value: u8) -> Status {
+    Status::Complete(ReturnValue::Operation(OperationOutcome {
+        disposition: Disposition::Performed,
+        card: Some(card),
+        value: Some(value),
+        short: false,
+    }))
+}
+
+pub fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
+    menu.options.iter().position(|option| {
+        matches!(
+            option,
+            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
+            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
+            if *c == card
+        )
+    })
+}
+
+/// Settle, answering each decision with `decide`; a lone option is taken.
+pub fn play(
+    game: &mut Game,
+    mut decide: impl FnMut(&Decision) -> Option<usize>,
+) -> (Status, Vec<Event>) {
+    let mut events = Vec::new();
+    loop {
+        let status = settle(game, &mut events);
+        assert!(game.position().check_conservation());
+        match status {
+            Status::Decision(decision) => {
+                let option = decide(&decision)
+                    .or((decision.options.len() == 1).then_some(0))
+                    .unwrap_or_else(|| panic!("unexpected decision {decision:?}"));
+                game.choose(option).unwrap();
+            }
+            status => return (status, events),
+        }
+    }
+}
+
+pub fn revealed(events: &[Event]) -> Vec<CardId> {
+    events
+        .iter()
+        .filter_map(|event| match event {
+            Event::Revealed { card, .. } => Some(*card),
+            _ => None,
+        })
+        .collect()
+}
+
+/// Play to the end, preferring these cards and otherwise the first option.
+pub fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
+    for _ in 0..300 {
+        match settle(game, events) {
+            Status::Decision(menu) => {
+                let index = preferred
+                    .iter()
+                    .find_map(|&card| pick_known(&menu, card))
+                    .unwrap_or(0);
+                game.choose(index).unwrap();
+            }
+            status => return status,
+        }
+    }
+    panic!("did not terminate");
+}

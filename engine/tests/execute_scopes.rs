@@ -32,13 +32,6 @@ fn caller(f: &mut Fixture, color: Color, execute: Instruction) -> CardId {
 
 const SELF: ExecutionMode = ExecutionMode::SelfExecute;
 
-/// Each self-execution keyword earns a Chain draw of an [11].
-fn elevens(f: &mut Fixture, count: usize) {
-    for i in 0..count {
-        f.tech(Color::ALL[i % 5], 11, Zone::Deck(Deck::base(11)), vec![]);
-    }
-}
-
 /// Blackmail's must: Tools' commitment cannot be declined, Pottery's "may return up to
 /// three" must return at least one, and Road Building's "one or two", with no "may",
 /// still stops after one.

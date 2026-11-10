@@ -6,44 +6,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
-}
-
-/// Choose the preferred known card where offered, else the first option.
-fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
-    for _ in 0..300 {
-        match settle(game, events) {
-            Status::Decision(menu) => {
-                let index = preferred
-                    .iter()
-                    .find_map(|&card| pick_known(&menu, card))
-                    .unwrap_or(0);
-                game.choose(index).unwrap();
-            }
-            status => return status,
-        }
-    }
-    panic!("did not terminate");
-}
-
-fn elevens(f: &mut Fixture, count: usize) {
-    for i in 0..count {
-        f.tech(Color::ALL[i % 5], 11, Zone::Deck(Deck::base(11)), vec![]);
-    }
-}
-
 /// Heirloom: a secret goes to the supply and a card one higher is drawn. With no secret
 /// the player draws a 0. Unless the drawn card is exactly one higher than the
 /// transferred one, the player safeguards the achievement of the top red card's value.
@@ -56,7 +18,7 @@ fn heirloom_transfers_a_secret_or_safeguards_by_top_red_value() {
         (true, false, true),
     ] {
         let mut f = Fixture::default();
-        let heirloom = unseen(&mut f, "U039", Zone::Board(A, Color::Yellow));
+        let heirloom = f.card("U039", Zone::Board(A, Color::Yellow));
         f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);
         let secret = has_secret.then(|| f.tech(Color::Blue, 3, Zone::Safe(A), vec![]));
         // A drawn 0 skips the empty [1]-[3] decks.
@@ -102,7 +64,7 @@ fn heirloom_transfers_a_secret_or_safeguards_by_top_red_value() {
 fn blackmail_melds_and_executes_the_demanders_choices_under_must() {
     let mut f = Fixture::default();
     elevens(&mut f, 1);
-    let blackmail = unseen(&mut f, "U040", Zone::Board(A, Color::Green));
+    let blackmail = f.card("U040", Zone::Board(A, Color::Green));
     // The victim's red card: "you may return a card from your hand".
     let red = f.tech(
         Color::Red,
@@ -170,7 +132,7 @@ fn blackmailed_self_service_earns_its_victim_chain_for_its_own_keyword() {
     for _ in 0..2 {
         f.tech(Color::Red, 1, Zone::Deck(Deck::base(1)), vec![]);
     }
-    let blackmail = unseen(&mut f, "U040", Zone::Board(A, Color::Green));
+    let blackmail = f.card("U040", Zone::Board(A, Color::Green));
     f.add(Card::from_code("B101").unwrap(), Zone::Hand(B));
     f.add(
         Card::from_code("B005").unwrap(),
@@ -205,7 +167,7 @@ fn blackmailed_self_service_earns_its_victim_chain_for_its_own_keyword() {
 #[test]
 fn legend_repeats_with_its_color_until_nine_points() {
     let mut f = Fixture::default();
-    let legend = unseen(&mut f, "U045", Zone::Board(A, Color::Purple));
+    let legend = f.card("U045", Zone::Board(A, Color::Purple));
     let bottom = f.tech(Color::Red, 6, Zone::Board(A, Color::Red), vec![]);
     let middle = f.tech(Color::Red, 5, Zone::Board(A, Color::Red), vec![]);
     let top = f.tech(Color::Red, 4, Zone::Board(A, Color::Red), vec![]);
@@ -245,7 +207,7 @@ fn legend_repeats_with_its_color_until_nine_points() {
 #[test]
 fn legend_counts_a_card_scored_again() {
     let mut f = Fixture::default();
-    let legend = unseen(&mut f, "U045", Zone::Board(A, Color::Purple));
+    let legend = f.card("U045", Zone::Board(A, Color::Purple));
     let bottom = f.tech(Color::Red, 6, Zone::Board(A, Color::Red), vec![]);
     let middle = f.tech(
         Color::Red,
@@ -294,7 +256,7 @@ fn legend_counts_a_card_scored_again() {
 #[test]
 fn chartreuse_melds_green_and_yellow_draws_and_returns_the_rest() {
     let mut f = Fixture::default();
-    let chartreuse = unseen(&mut f, "U048", Zone::Board(A, Color::Yellow));
+    let chartreuse = f.card("U048", Zone::Board(A, Color::Yellow));
     let three = f.tech(Color::Green, 3, Zone::Deck(Deck::base(3)), vec![]);
     let four = f.tech(Color::Red, 4, Zone::Deck(Deck::base(4)), vec![]);
     let five = f.tech(Color::Yellow, 5, Zone::Deck(Deck::base(5)), vec![]);
@@ -361,7 +323,7 @@ fn chartreuse_melds_green_and_yellow_draws_and_returns_the_rest() {
 #[test]
 fn iron_curtain_unsplays_then_returns_and_safeguards_per_color() {
     let mut f = Fixture::default();
-    let iron = unseen(&mut f, "U086", Zone::Board(A, Color::Red));
+    let iron = f.card("U086", Zone::Board(A, Color::Red));
     f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);
     let blue_under = f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
     let blue_top = f.tech(Color::Blue, 3, Zone::Board(A, Color::Blue), vec![]);
@@ -412,7 +374,7 @@ fn iron_curtain_unsplays_then_returns_and_safeguards_per_color() {
 #[test]
 fn three_d_printing_achieves_matching_secrets_and_repeats_while_both_happen() {
     let mut f = Fixture::default();
-    let printing = unseen(&mut f, "U104", Zone::Board(A, Color::Purple));
+    let printing = f.card("U104", Zone::Board(A, Color::Purple));
     let five = f.tech(Color::Red, 5, Zone::Board(A, Color::Red), vec![]);
     let seven = f.tech(Color::Red, 7, Zone::Board(A, Color::Red), vec![]);
     let secret_seven = f.tech(Color::Blue, 7, Zone::Safe(A), vec![]);

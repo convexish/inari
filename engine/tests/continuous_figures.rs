@@ -3,10 +3,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 fn finish(game: &mut Game, events: &mut Vec<Event>) -> Status {
     match settle(game, events) {
         Status::Decision(menu) => panic!("unexpected choice: {menu:?}"),
@@ -34,10 +30,10 @@ fn machiavelli_unsplays_only_the_matching_opponent_color_before_original_splay()
     let mut f = Fixture::default();
     f.figure(Figure::NiccoloMachiavelli, Zone::Board(A, Color::Purple));
     for player in [A, B] {
-        base(&mut f, "B001", Zone::Board(player, Color::Red));
-        base(&mut f, "B002", Zone::Board(player, Color::Red));
-        base(&mut f, "B010", Zone::Board(player, Color::Blue));
-        base(&mut f, "B012", Zone::Board(player, Color::Blue));
+        f.card("B001", Zone::Board(player, Color::Red));
+        f.card("B002", Zone::Board(player, Color::Red));
+        f.card("B010", Zone::Board(player, Color::Blue));
+        f.card("B012", Zone::Board(player, Color::Blue));
     }
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     splay(&mut game, B, Color::Red, Splay::Right);
@@ -83,11 +79,11 @@ fn machiavelli_virtual_achievements_compose_with_nobel_without_claim_cost_or_pol
     let machiavelli = f.figure(Figure::NiccoloMachiavelli, Zone::Board(A, Color::Purple));
     f.figure(Figure::AlfredNobel, Zone::Board(A, Color::Green));
     f.figure(Figure::ChristopherPolhem, Zone::Board(A, Color::Yellow));
-    base(&mut f, "B001", Zone::Board(A, Color::Red));
-    base(&mut f, "B002", Zone::Board(A, Color::Red));
-    let claim = base(&mut f, "B001", Zone::AvailableAchievements);
-    base(&mut f, "B062", Zone::Score(A));
-    let cover = base(&mut f, "B014", Zone::Hand(A));
+    f.card("B001", Zone::Board(A, Color::Red));
+    f.card("B002", Zone::Board(A, Color::Red));
+    let claim = f.card("B001", Zone::AvailableAchievements);
+    f.card("B062", Zone::Score(A));
+    let cover = f.card("B014", Zone::Hand(A));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     let score = game.position().score(A);
     let eligible = game.position().eligible_for_achievement(A, claim);
@@ -129,8 +125,8 @@ fn catherine_each_uses_basic_concepts_independently_of_maxwell_and_disappears_on
     let maxwell = Card::from_code(Figure::JamesClerkMaxwell.code()).unwrap();
     let color = maxwell.color;
     f.add(maxwell, Zone::Board(A, color));
-    base(&mut f, "B001", Zone::Hand(A));
-    base(&mut f, "B002", Zone::Hand(A));
+    f.card("B001", Zone::Hand(A));
+    f.card("B002", Zone::Hand(A));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     for icon in [Icon::Concept, Icon::Efficiency] {
         let basic = game.position().basic_icon_count(A, icon);
@@ -171,8 +167,8 @@ fn catherine_transfers_the_melder_top_with_suppression_then_preserves_original_o
         let mut f = Fixture::default();
         f.figure(Figure::CatherineTheGreat, Zone::Board(A, Color::Purple));
         f.figure(Figure::YiSunSin, Zone::Board(B, Color::Red));
-        let top = base(&mut f, "B012", Zone::Board(player, Color::Blue));
-        let incoming = base(&mut f, "B011", Zone::Hand(player));
+        let top = f.card("B012", Zone::Board(player, Color::Blue));
+        let incoming = f.card("B011", Zone::Hand(player));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         game.start(
             meld(incoming, Zone::Hand(player), player, Color::Blue),
@@ -240,13 +236,13 @@ fn catherine_can_transfer_itself_and_resume_the_exact_pending_board_meld() {
 #[test]
 fn brin_foreign_sailing_survives_source_and_permission_removal_and_rewards_activator() {
     let mut f = Fixture::default();
-    base(&mut f, "B007", Zone::Board(A, Color::Green));
+    f.card("B007", Zone::Board(A, Color::Green));
     let brin = f.figure(Figure::SergeyBrin, Zone::Board(A, Color::Green));
     f.figure(Figure::CatherineTheGreat, Zone::Board(A, Color::Purple));
     let sailing = f.sailing(Zone::Board(B, Color::Green));
-    let own_draw = base(&mut f, "B009", Zone::Deck(Deck::base(1)));
-    let shared_draw = base(&mut f, "B007", Zone::Deck(Deck::base(1)));
-    base(&mut f, "B062", Zone::Deck(Deck::base(6)));
+    let own_draw = f.card("B009", Zone::Deck(Deck::base(1)));
+    let shared_draw = f.card("B007", Zone::Deck(Deck::base(1)));
+    f.card("B062", Zone::Deck(Deck::base(6)));
     let reward = f.figure(Figure::CatherineTheGreat, Zone::Deck(Deck::figures(6)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     assert_eq!(game.position().dogma_source_owner(A, sailing), Some(B));
@@ -386,7 +382,7 @@ fn brin_does_not_splay_for_own_dogma_and_foreign_permission_disappears_under_cov
     let writing = f.writing(Zone::Board(A, Color::Blue));
     let foreign = f.sailing(Zone::Board(B, Color::Green));
     let cover = f.sailing(Zone::Hand(A));
-    let draw = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
+    let draw = f.card("B021", Zone::Deck(Deck::base(2)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     game.take_action(
         Action::Dogma {
@@ -411,7 +407,7 @@ fn brin_does_not_splay_for_own_dogma_and_foreign_permission_disappears_under_cov
 fn catherine_pending_meld_clones_across_every_transfer_and_source_removal_boundary() {
     let mut f = Fixture::default();
     let catherine = f.figure(Figure::CatherineTheGreat, Zone::Board(A, Color::Purple));
-    let incoming = base(&mut f, "B014", Zone::Hand(A));
+    let incoming = f.card("B014", Zone::Hand(A));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     game.start(
         meld(incoming, Zone::Hand(A), A, Color::Purple),

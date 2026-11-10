@@ -2,9 +2,6 @@ mod common;
 use common::*;
 use inno_engine::*;
 
-fn add(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
 fn native(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
     let code = BASE_METADATA
         .iter()
@@ -15,7 +12,7 @@ fn native(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
         })
         .unwrap()
         .code;
-    add(f, code, zone)
+    f.card(code, zone)
 }
 fn invoke(game: &mut Game, card: CardId, effect: u16) {
     game.start(
@@ -62,7 +59,7 @@ fn finish(game: &mut Game, events: &mut Vec<Event>, value: Option<u8>) -> Status
 #[test]
 fn fission_red_draw_sweeps_physical_ownership_and_keeps_turn_tail() {
     let mut f = Fixture::default();
-    let fission = add(&mut f, "B087", Zone::Board(A, Color::Red));
+    let fission = f.card("B087", Zone::Board(A, Color::Red));
     let buried = native(&mut f, Color::Blue, 1, Zone::Board(B, Color::Blue));
     let top = native(&mut f, Color::Blue, 2, Zone::Board(B, Color::Blue));
     let hand = native(&mut f, Color::Yellow, 1, Zone::Hand(A));
@@ -70,7 +67,7 @@ fn fission_red_draw_sweeps_physical_ownership_and_keeps_turn_tail() {
     let achievement = native(&mut f, Color::Purple, 1, Zone::Achievements(B));
     let supply = native(&mut f, Color::Purple, 2, Zone::AvailableAchievements);
     let spare = native(&mut f, Color::Green, 10, Zone::Deck(Deck::base(10)));
-    let red = add(&mut f, "B097", Zone::Deck(Deck::base(10)));
+    let red = f.card("B097", Zone::Deck(Deck::base(10)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     game.take_action(
         Action::Dogma {
@@ -126,12 +123,12 @@ fn fission_nested_in_a_meld_action_preserves_the_turn_tail() {
             let sunshu = Card::from_code("F004").unwrap();
             let color = sunshu.color;
             let sunshu = f.add(sunshu, Zone::Board(A, color));
-            let fission = add(&mut f, "B087", Zone::Board(A, Color::Red));
+            let fission = f.card("B087", Zone::Board(A, Color::Red));
             let priest = f.add(Card::from_code("A007").unwrap(), Zone::Hand(A));
             let payment = native(&mut f, Color::Red, 1, Zone::Hand(A));
             let chain = native(&mut f, Color::Blue, 11, Zone::Deck(Deck::base(11)));
             let spare = native(&mut f, Color::Green, 10, Zone::Deck(Deck::base(10)));
-            let red = add(&mut f, "B097", Zone::Deck(Deck::base(10)));
+            let red = f.card("B097", Zone::Deck(Deck::base(10)));
             let mut achievements = Vec::new();
             if wins {
                 // The Chain award reaches the threshold. Fission must still run
@@ -142,7 +139,7 @@ fn fission_nested_in_a_meld_action_preserves_the_turn_tail() {
                         .find(|card| !f.cards.iter().any(|used| used.code == card.code))
                         .unwrap()
                         .code;
-                    achievements.push(add(&mut f, code, Zone::Achievements(A)));
+                    achievements.push(f.card(code, Zone::Achievements(A)));
                 }
             }
             achievements.push(chain);
@@ -203,7 +200,7 @@ fn fission_nested_in_a_meld_action_preserves_the_turn_tail() {
 #[test]
 fn fission_nondemand_excludes_native_fission_but_draws_without_return() {
     let mut f = Fixture::default();
-    let source = add(&mut f, "B087", Zone::Board(A, Color::Red));
+    let source = f.card("B087", Zone::Board(A, Color::Red));
     let drawn = native(&mut f, Color::Green, 10, Zone::Deck(Deck::base(10)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 1);
@@ -223,7 +220,7 @@ fn fission_nondemand_excludes_native_fission_but_draws_without_return() {
 #[test]
 fn fusion_uses_each_original_scored_value_not_initial_eleven() {
     let mut f = Fixture::default();
-    let source = add(&mut f, "B107", Zone::Board(A, Color::Red));
+    let source = f.card("B107", Zone::Board(A, Color::Red));
     let nine = native(&mut f, Color::Blue, 9, Zone::Board(A, Color::Blue));
     let seven = native(&mut f, Color::Green, 7, Zone::Board(A, Color::Green));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
@@ -254,7 +251,7 @@ fn fusion_uses_each_original_scored_value_not_initial_eleven() {
 #[test]
 fn reclamation_partial_sum_rounds_up_and_does_not_repeat() {
     let mut f = Fixture::default();
-    let source = add(&mut f, "B109", Zone::Board(A, Color::Yellow));
+    let source = f.card("B109", Zone::Board(A, Color::Yellow));
     let one = native(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
     let two = native(&mut f, Color::Red, 2, Zone::Board(A, Color::Red));
     let drawn = native(&mut f, Color::Blue, 2, Zone::Deck(Deck::base(2)));
@@ -292,9 +289,9 @@ fn reclamation_partial_sum_rounds_up_and_does_not_repeat() {
 #[test]
 fn reclamation_repeats_original_drawn_color_and_recomputes_sum() {
     let mut f = Fixture::default();
-    let source = add(&mut f, "B109", Zone::Board(A, Color::Yellow));
+    let source = f.card("B109", Zone::Board(A, Color::Yellow));
     for code in ["B001", "B002", "B003"] {
-        add(&mut f, code, Zone::Board(A, Color::Red));
+        f.card(code, Zone::Board(A, Color::Red));
     }
     let drawn = native(&mut f, Color::Blue, 2, Zone::Deck(Deck::base(2)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
@@ -324,7 +321,7 @@ fn reclamation_repeats_original_drawn_color_and_recomputes_sum() {
 #[test]
 fn reclamation_empty_red_draws_age_zero_fallback_and_high_sum_exhausts() {
     let mut f = Fixture::default();
-    let source = add(&mut f, "B109", Zone::Board(A, Color::Yellow));
+    let source = f.card("B109", Zone::Board(A, Color::Yellow));
     let one = native(&mut f, Color::Green, 1, Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 0);
@@ -339,9 +336,9 @@ fn reclamation_empty_red_draws_age_zero_fallback_and_high_sum_exhausts() {
     );
 
     let mut f = Fixture::default();
-    let source = add(&mut f, "B109", Zone::Board(A, Color::Yellow));
+    let source = f.card("B109", Zone::Board(A, Color::Yellow));
     for code in ["B087", "B097", "B106"] {
-        add(&mut f, code, Zone::Board(A, Color::Red));
+        f.card(code, Zone::Board(A, Color::Red));
     }
     native(&mut f, Color::Purple, 1, Zone::Score(B));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
@@ -352,7 +349,7 @@ fn reclamation_empty_red_draws_age_zero_fallback_and_high_sum_exhausts() {
 #[test]
 fn space_traffic_eliminates_ownership_without_jackie_victory_reaction() {
     let mut f = Fixture::default();
-    let source = add(&mut f, "B111", Zone::Board(A, Color::Green));
+    let source = f.card("B111", Zone::Board(A, Color::Green));
     let drawn = native(&mut f, Color::Green, 11, Zone::Deck(Deck::base(11)));
     let jackie = f.figure(
         Figure::JackieChan,
@@ -379,7 +376,7 @@ fn space_traffic_eliminates_ownership_without_jackie_victory_reaction() {
 #[test]
 fn space_traffic_tied_score_stops_and_scores_only_below_top_five() {
     let mut f = Fixture::default();
-    let source = add(&mut f, "B111", Zone::Board(A, Color::Green));
+    let source = f.card("B111", Zone::Board(A, Color::Green));
     let mut red = Vec::new();
     for age in 1..=5 {
         red.push(native(&mut f, Color::Red, age, Zone::Board(A, Color::Red)));
@@ -400,10 +397,10 @@ fn space_traffic_tied_score_stops_and_scores_only_below_top_five() {
 #[test]
 fn reclamation_lets_the_player_order_returns_that_share_a_deck() {
     let mut f = Fixture::default();
-    let source = add(&mut f, "B109", Zone::Board(A, Color::Yellow));
+    let source = f.card("B109", Zone::Board(A, Color::Yellow));
     let reds: Vec<_> = ["B001", "B002", "B003"]
         .into_iter()
-        .map(|code| add(&mut f, code, Zone::Board(A, Color::Red)))
+        .map(|code| f.card(code, Zone::Board(A, Color::Red)))
         .collect();
     let higher = native(&mut f, Color::Red, 4, Zone::Board(A, Color::Red));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
@@ -427,7 +424,7 @@ fn reclamation_lets_the_player_order_returns_that_share_a_deck() {
 #[test]
 fn reclamation_does_not_order_returns_to_different_decks() {
     let mut f = Fixture::default();
-    let source = add(&mut f, "B109", Zone::Board(A, Color::Yellow));
+    let source = f.card("B109", Zone::Board(A, Color::Yellow));
     let one = native(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
     let two = native(&mut f, Color::Red, 2, Zone::Board(A, Color::Red));
     let three = native(&mut f, Color::Red, 3, Zone::Board(A, Color::Red));
@@ -458,12 +455,12 @@ fn events_until_decision(game: &mut Game, events: &mut Vec<Event>) -> Vec<CardId
 #[test]
 fn fission_keeps_its_sweep_order_while_a_buried_junk_karma_could_surface() {
     let mut f = Fixture::default();
-    let fission = add(&mut f, "B087", Zone::Board(A, Color::Red));
+    let fission = f.card("B087", Zone::Board(A, Color::Red));
     native(&mut f, Color::Yellow, 1, Zone::Hand(A));
     f.figure(Figure::RodSerling, Zone::Board(B, Color::Purple));
     f.tech(Color::Purple, 5, Zone::Board(B, Color::Purple), vec![]);
     f.tech(Color::Blue, 3, Zone::Safe(B), vec![]);
-    add(&mut f, "B097", Zone::Deck(Deck::base(10)));
+    f.card("B097", Zone::Deck(Deck::base(10)));
     let mut game = Game::new(f.position(), Expansions::FIGURES.union(Expansions::UNSEEN)).unwrap();
     game.take_action(
         Action::Dogma {

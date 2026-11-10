@@ -1,9 +1,6 @@
 use super::common::*;
 use super::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
 fn invoke(game: &mut Game, card: CardId, effect: u16) {
     game.start(
         Operation::ExecuteEffect {
@@ -48,7 +45,7 @@ fn finish(game: &mut Game, events: &mut Vec<Event>) -> Status {
 fn depth_boundaries_and_ordinary_buried_admission_remain_distinct() {
     let mut f = Fixture::default();
     let cards =
-        ["B001", "B002", "B003", "B016"].map(|code| base(&mut f, code, Zone::Board(A, Color::Red)));
+        ["B001", "B002", "B003", "B016"].map(|code| f.card(code, Zone::Board(A, Color::Red)));
     let game = Game::new(f.position(), Expansions::BASE).unwrap();
     let select = |region| {
         game.select_board(
@@ -110,10 +107,10 @@ fn depth_boundaries_and_ordinary_buried_admission_remain_distinct() {
 #[test]
 fn retained_depth_follows_identity_on_another_board_not_original_color_alone() {
     let mut f = Fixture::default();
-    let below = base(&mut f, "B001", Zone::Board(B, Color::Red));
-    let retained = base(&mut f, "B002", Zone::Board(B, Color::Red));
-    base(&mut f, "B003", Zone::Board(B, Color::Red));
-    base(&mut f, "B016", Zone::Board(A, Color::Red));
+    let below = f.card("B001", Zone::Board(B, Color::Red));
+    let retained = f.card("B002", Zone::Board(B, Color::Red));
+    f.card("B003", Zone::Board(B, Color::Red));
+    f.card("B016", Zone::Board(A, Color::Red));
     let game = Game::new(f.position(), Expansions::BASE).unwrap();
     let selected = game
         .select_board(
@@ -149,8 +146,8 @@ fn retained_depth_follows_identity_on_another_board_not_original_color_alone() {
 #[test]
 fn coal_chooses_one_color_and_scores_sequential_new_tops() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B046", Zone::Junk);
-    let cards = ["B001", "B002", "B003"].map(|code| base(&mut f, code, Zone::Board(A, Color::Red)));
+    let source = f.card("B046", Zone::Junk);
+    let cards = ["B001", "B002", "B003"].map(|code| f.card(code, Zone::Board(A, Color::Red)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 2);
     let menu = decision(&mut game, &mut Vec::new());
@@ -184,10 +181,10 @@ fn coal_chooses_one_color_and_scores_sequential_new_tops() {
 #[test]
 fn steam_engine_scores_the_new_physical_bottom_after_two_tucks() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B049", Zone::Board(A, Color::Yellow));
-    let first = base(&mut f, "B038", Zone::Deck(Deck::base(4)));
-    let second = base(&mut f, "B039", Zone::Deck(Deck::base(4)));
-    let untouched = base(&mut f, "B056", Zone::Deck(Deck::base(6)));
+    let source = f.card("B049", Zone::Board(A, Color::Yellow));
+    let first = f.card("B038", Zone::Deck(Deck::base(4)));
+    let second = f.card("B039", Zone::Deck(Deck::base(4)));
+    let untouched = f.card("B056", Zone::Deck(Deck::base(6)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 0);
     finish(&mut game, &mut Vec::new());
@@ -202,10 +199,10 @@ fn steam_engine_scores_the_new_physical_bottom_after_two_tucks() {
 #[test]
 fn measurement_reveals_returns_then_draws_live_stack_size_without_splay_success() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B051", Zone::Junk);
-    let returned = base(&mut f, "B016", Zone::Hand(A));
-    base(&mut f, "B001", Zone::Board(A, Color::Red));
-    let drawn = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+    let source = f.card("B051", Zone::Junk);
+    let returned = f.card("B016", Zone::Hand(A));
+    f.card("B001", Zone::Board(A, Color::Red));
+    let drawn = f.card("B004", Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 0);
     let mut events = Vec::new();
@@ -224,12 +221,12 @@ fn measurement_reveals_returns_then_draws_live_stack_size_without_splay_success(
 #[test]
 fn combustion_counts_demanders_colors_and_returns_buried_bottom() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B066", Zone::Junk);
-    let bottom = base(&mut f, "B001", Zone::Board(A, Color::Red));
-    let top = base(&mut f, "B002", Zone::Board(A, Color::Red));
-    base(&mut f, "B003", Zone::Board(B, Color::Red));
-    base(&mut f, "B008", Zone::Board(B, Color::Green));
-    let score = ["B004", "B010"].map(|code| base(&mut f, code, Zone::Score(A)));
+    let source = f.card("B066", Zone::Junk);
+    let bottom = f.card("B001", Zone::Board(A, Color::Red));
+    let top = f.card("B002", Zone::Board(A, Color::Red));
+    f.card("B003", Zone::Board(B, Color::Red));
+    f.card("B008", Zone::Board(B, Color::Green));
+    let score = ["B004", "B010"].map(|code| f.card(code, Zone::Score(A)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     let mut context = Context::new(A);
     context.demander = B;
@@ -258,10 +255,9 @@ fn combustion_counts_demanders_colors_and_returns_buried_bottom() {
 #[test]
 fn genetics_scores_buried_cards_beneath_original_draw_not_drawn_identity() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B093", Zone::Junk);
-    let below =
-        ["B010", "B032", "B042"].map(|code| base(&mut f, code, Zone::Board(A, Color::Blue)));
-    let drawn = base(&mut f, "B113", Zone::Deck(Deck::base(11)));
+    let source = f.card("B093", Zone::Junk);
+    let below = ["B010", "B032", "B042"].map(|code| f.card(code, Zone::Board(A, Color::Blue)));
+    let drawn = f.card("B113", Zone::Deck(Deck::base(11)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 0);
     finish(&mut game, &mut Vec::new());
@@ -276,10 +272,10 @@ fn genetics_scores_buried_cards_beneath_original_draw_not_drawn_identity() {
 #[test]
 fn astrogeology_transfers_exactly_below_four_and_preserves_top_suffix() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B106", Zone::Junk);
+    let source = f.card("B106", Zone::Junk);
     let stack = ["B001", "B002", "B003", "B016", "B037", "B046"]
-        .map(|code| base(&mut f, code, Zone::Board(A, Color::Red)));
-    let drawn = base(&mut f, "B107", Zone::Deck(Deck::base(11)));
+        .map(|code| f.card(code, Zone::Board(A, Color::Red)));
+    let drawn = f.card("B107", Zone::Deck(Deck::base(11)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 0);
     finish(&mut game, &mut Vec::new());
@@ -295,11 +291,11 @@ fn astrogeology_transfers_exactly_below_four_and_preserves_top_suffix() {
 
 fn solar_fixture() -> (Position, CardId) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B113", Zone::Junk);
+    let source = f.card("B113", Zone::Junk);
     for code in ["B010", "B011", "B032", "B042", "B043", "B093"] {
-        base(&mut f, code, Zone::Board(A, Color::Blue));
+        f.card(code, Zone::Board(A, Color::Blue));
     }
-    base(&mut f, "B112", Zone::Deck(Deck::base(11)));
+    f.card("B112", Zone::Deck(Deck::base(11)));
     (f.position(), source)
 }
 fn outcomes(mut game: Game, depth: usize) -> Vec<Position> {
@@ -346,12 +342,12 @@ fn solar_return_origin_oracle_preserves_same_origin_orders_and_exact_canonical_r
 #[test]
 fn covered_figure_disables_depth_origin_proof_and_clears_prior_prefix() {
     let mut f = Fixture::default();
-    let retained = base(&mut f, "B113", Zone::Hand(A));
+    let retained = f.card("B113", Zone::Hand(A));
     // Maxwell guards returns. Covered in the very stack being returned, he
     // could be exposed mid-phase; elsewhere he could not.
     f.figure(Figure::JamesClerkMaxwell, Zone::Board(A, Color::Blue));
-    base(&mut f, "B010", Zone::Board(A, Color::Blue));
-    base(&mut f, "B032", Zone::Board(A, Color::Blue));
+    f.card("B010", Zone::Board(A, Color::Blue));
+    f.card("B032", Zone::Board(A, Color::Blue));
     let game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     let from = Selector::Board(
         Who::Executor,

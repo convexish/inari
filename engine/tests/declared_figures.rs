@@ -91,17 +91,6 @@ fn meld_op(game: &Game, card: CardId, player: Player) -> Operation {
     )
 }
 
-fn dogma(game: &mut Game, card: CardId) {
-    game.take_action(
-        Action::Dogma {
-            card,
-            auspice: false,
-        },
-        ActionKind::Regular,
-    )
-    .unwrap();
-}
-
 fn hand(game: &Game, player: Player) -> Vec<CardId> {
     game.position().cards(Zone::Hand(player)).to_vec()
 }

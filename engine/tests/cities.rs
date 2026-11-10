@@ -3,19 +3,10 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn city(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 fn city_on_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
     let card = Card::from_code(code).unwrap();
     let zone = Zone::Board(player, card.color);
     f.add(card, zone)
-}
-
-/// A blank Base card of this value.
-fn blank(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
-    f.tech(color, value, zone, vec![])
 }
 
 fn pile(f: &mut Fixture, player: Player, color: Color, values: &[u8]) -> Vec<CardId> {
@@ -97,8 +88,8 @@ fn a_splay_draws_a_city_for_its_executor_and_returns_the_splay() {
     pile(&mut f, A, Color::Red, &[1, 3]);
     pile(&mut f, A, Color::Blue, &[2]);
     blank(&mut f, Color::Green, 3, Zone::Deck(Deck::base(3)));
-    let under = city(&mut f, "C029", Zone::Deck(Deck::cities(3)));
-    let top = city(&mut f, "C027", Zone::Deck(Deck::cities(3)));
+    let under = f.card("C029", Zone::Deck(Deck::cities(3)));
+    let top = f.card("C027", Zone::Deck(Deck::cities(3)));
     let mut game = Game::new(f.position(), cities()).unwrap();
 
     let (status, events) = run(&mut game, splay(A, Color::Red, Splay::Left), A);
@@ -121,8 +112,8 @@ fn a_foreign_splay_draws_for_the_executor_at_their_own_highest_top() {
     pile(&mut f, B, Color::Red, &[4, 5]);
     blank(&mut f, Color::Green, 2, Zone::Deck(Deck::base(2)));
     blank(&mut f, Color::Green, 5, Zone::Deck(Deck::base(5)));
-    let two = city(&mut f, "C016", Zone::Deck(Deck::cities(2)));
-    city(&mut f, "C046", Zone::Deck(Deck::cities(5)));
+    let two = f.card("C016", Zone::Deck(Deck::cities(2)));
+    f.card("C046", Zone::Deck(Deck::cities(5)));
     let mut game = Game::new(f.position(), cities()).unwrap();
 
     let (status, _) = run(&mut game, splay(B, Color::Red, Splay::Right), A);
@@ -137,7 +128,7 @@ fn unsplays_repeats_and_single_cards_draw_nothing() {
     pile(&mut f, A, Color::Red, &[1, 1]);
     pile(&mut f, A, Color::Blue, &[1]);
     pile(&mut f, B, Color::Red, &[1, 1]);
-    city(&mut f, "C001", Zone::Deck(Deck::cities(1)));
+    f.card("C001", Zone::Deck(Deck::cities(1)));
     blank(&mut f, Color::Green, 1, Zone::Deck(Deck::base(1)));
     let position = f
         .position()
@@ -166,8 +157,8 @@ fn a_held_city_skips_the_draw_and_a_base_fallback_does_not() {
     // Holding a City: no draw.
     let mut f = Fixture::default();
     pile(&mut f, A, Color::Red, &[1, 1]);
-    city(&mut f, "C002", Zone::Hand(A));
-    city(&mut f, "C001", Zone::Deck(Deck::cities(1)));
+    f.card("C002", Zone::Hand(A));
+    f.card("C001", Zone::Deck(Deck::cities(1)));
     blank(&mut f, Color::Green, 1, Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), cities()).unwrap();
     let (_, events) = run(&mut game, splay(A, Color::Red, Splay::Left), A);
@@ -193,9 +184,9 @@ fn city_draws_skip_empty_base_ages_before_choosing_the_cities_deck() {
         pile(&mut f, A, Color::Red, &[1, 3]);
         // Base 3 is empty, so the request escalates to 4 even though a
         // Cities 3 card remains.
-        city(&mut f, "C027", Zone::Deck(Deck::cities(3)));
+        f.card("C027", Zone::Deck(Deck::cities(3)));
         let base = blank(&mut f, Color::Green, 4, Zone::Deck(Deck::base(4)));
-        let four = cities_four.then(|| city(&mut f, "C036", Zone::Deck(Deck::cities(4))));
+        let four = cities_four.then(|| f.card("C036", Zone::Deck(Deck::cities(4))));
         let mut game = Game::new(f.position(), cities()).unwrap();
         run(&mut game, splay(A, Color::Red, Splay::Right), A);
         assert_eq!(game.position().cards(Zone::Hand(A)), [four.unwrap_or(base)]);
@@ -207,7 +198,7 @@ fn an_exhausting_city_draw_ends_the_game_after_the_splay() {
     let mut f = Fixture::default();
     pile(&mut f, A, Color::Red, &[9, 10]);
     blank(&mut f, Color::Green, 9, Zone::Deck(Deck::base(9)));
-    city(&mut f, "C096", Zone::Deck(Deck::cities(10)));
+    f.card("C096", Zone::Deck(Deck::cities(10)));
     blank(&mut f, Color::Yellow, 5, Zone::Score(A));
     let mut game = Game::new(f.position(), cities()).unwrap();
     let (status, _) = run(&mut game, splay(A, Color::Red, Splay::Up), A);
@@ -226,7 +217,7 @@ fn melding_an_arrow_city_onto_its_splay_claims_tradition_repute_or_fame() {
     ] {
         let mut f = Fixture::default();
         pile(&mut f, A, Color::Red, &[1, 1]);
-        let card = city(&mut f, code, Zone::Hand(A));
+        let card = f.card(code, Zone::Hand(A));
         let position = f.position().with_splay(A, Color::Red, direction).unwrap();
         let mut game = Game::new(position, cities()).unwrap();
         let value = game.position().card(card).value;
@@ -251,7 +242,7 @@ fn a_mismatched_or_later_splay_earns_no_arrow_achievement() {
     for direction in [Splay::Right, Splay::Aslant, Splay::None] {
         let mut f = Fixture::default();
         pile(&mut f, A, Color::Red, &[1, 1]);
-        let delhi = city(&mut f, "C027", Zone::Hand(A));
+        let delhi = f.card("C027", Zone::Hand(A));
         blank(&mut f, Color::Green, 3, Zone::Deck(Deck::base(3)));
         let position = f.position().with_splay(A, Color::Red, direction).unwrap();
         let mut game = Game::new(position, cities()).unwrap();
@@ -269,7 +260,7 @@ fn a_mismatched_or_later_splay_earns_no_arrow_achievement() {
     // Aslant is not Up for Fame.
     let mut f = Fixture::default();
     pile(&mut f, A, Color::Red, &[1, 1]);
-    let dallas = city(&mut f, "C086", Zone::Hand(A));
+    let dallas = f.card("C086", Zone::Hand(A));
     let position = f
         .position()
         .with_splay(A, Color::Red, Splay::Aslant)
@@ -298,7 +289,7 @@ fn junk(card: CardId, physical: Zone, logical: LogicalZone) -> Operation {
 fn junking_a_flag_or_fountain_city_from_your_hand_claims_glory_or_victory() {
     for (code, special) in [("C046", Special::Glory), ("C076", Special::Victory)] {
         let mut f = Fixture::default();
-        let card = city(&mut f, code, Zone::Hand(A));
+        let card = f.card(code, Zone::Hand(A));
         let mut game = Game::new(f.position(), cities()).unwrap();
         run(
             &mut game,
@@ -315,9 +306,9 @@ fn junking_a_flag_or_fountain_city_from_your_hand_claims_glory_or_victory() {
 #[test]
 fn junking_someone_elses_hand_or_another_zone_earns_nothing() {
     let mut f = Fixture::default();
-    let theirs = city(&mut f, "C046", Zone::Hand(B));
+    let theirs = f.card("C046", Zone::Hand(B));
     let board = city_on_board(&mut f, "C051", A);
-    let scored = city(&mut f, "C054", Zone::Score(A));
+    let scored = f.card("C054", Zone::Score(A));
     let mut game = Game::new(f.position(), cities()).unwrap();
     for request in [
         junk(theirs, Zone::Hand(B), LogicalZone::Physical(Zone::Hand(B))),
@@ -341,7 +332,7 @@ fn junking_someone_elses_hand_or_another_zone_earns_nothing() {
 #[test]
 fn an_owned_token_is_not_claimed_again() {
     let mut f = Fixture::default();
-    let card = city(&mut f, "C046", Zone::Hand(A));
+    let card = f.card("C046", Zone::Hand(A));
     let mut game = Game::new(f.position(), cities()).unwrap();
     run(
         &mut game,
@@ -376,7 +367,7 @@ fn meiji_borrowed_hands_count_for_glory_and_the_held_city_check() {
     let card = meiji();
     let zone = Zone::Board(A, card.color);
     f.add(card, zone);
-    let theirs = city(&mut f, "C046", Zone::Hand(B));
+    let theirs = f.card("C046", Zone::Hand(B));
     let mut game = Game::new(f.position(), with_figures()).unwrap();
     assert!(game.position().meiji_active(A));
     run(
@@ -396,9 +387,9 @@ fn meiji_borrowed_hands_count_for_glory_and_the_held_city_check() {
     f.add(card, Zone::Board(A, color));
     let other = Color::ALL.into_iter().find(|&c| c != color).unwrap();
     pile(&mut f, A, other, &[1, 1]);
-    city(&mut f, "C002", Zone::Hand(B));
+    f.card("C002", Zone::Hand(B));
     blank(&mut f, Color::Green, 4, Zone::Deck(Deck::base(4)));
-    city(&mut f, "C036", Zone::Deck(Deck::cities(4)));
+    f.card("C036", Zone::Deck(Deck::cities(4)));
     let mut game = Game::new(f.position(), with_figures()).unwrap();
     let (_, events) = run(&mut game, splay(A, other, Splay::Left), A);
     assert!(drawn(&events).is_empty());
@@ -411,7 +402,7 @@ fn a_replaced_meld_earns_nothing() {
     let zone = Zone::Board(B, card.color);
     f.add(card, zone);
     pile(&mut f, A, Color::Red, &[1, 1]);
-    let delhi = city(&mut f, "C027", Zone::Hand(A));
+    let delhi = f.card("C027", Zone::Hand(A));
     let position = f.position().with_splay(A, Color::Red, Splay::Left).unwrap();
     let mut game = Game::new(position, with_figures()).unwrap();
     game.start(meld(delhi, Zone::Hand(A), A, Color::Red), Context::new(A))
@@ -443,11 +434,11 @@ fn hedy_meld(base_nine: usize) -> (Game, CardId) {
     assert_eq!(hedy.color, Color::Green);
     f.add(hedy, Zone::Board(A, Color::Green));
     pile(&mut f, A, Color::Red, &[1, 1]);
-    let delhi = city(&mut f, "C027", Zone::Hand(A));
+    let delhi = f.card("C027", Zone::Hand(A));
     for _ in 0..base_nine {
         blank(&mut f, Color::Yellow, 9, Zone::Deck(Deck::base(9)));
     }
-    city(&mut f, "C091", Zone::Deck(Deck::cities(9)));
+    f.card("C091", Zone::Deck(Deck::cities(9)));
     blank(&mut f, Color::Yellow, 5, Zone::Score(A));
     let position = f.position().with_splay(A, Color::Red, Splay::Left).unwrap();
     (Game::new(position, with_figures()).unwrap(), delhi)
@@ -677,7 +668,7 @@ fn self_executing_a_city_inside_a_self_execution_earns_no_chain() {
         Card::from_code("B114").unwrap(),
         Zone::Board(A, Color::Purple),
     );
-    city(&mut f, "C086", Zone::Hand(A));
+    f.card("C086", Zone::Hand(A));
     for _ in 0..3 {
         blank(&mut f, Color::Green, 9, Zone::Deck(Deck::base(9)));
     }

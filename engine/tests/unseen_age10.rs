@@ -6,66 +6,10 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
-    for (slot, &icon) in icons.iter().enumerate() {
-        f.cards[usize::from(card.0)].symbols[slot] = Symbol::Icon(icon);
-    }
-}
-
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
-}
-
-fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
-    for _ in 0..300 {
-        match settle(game, events) {
-            Status::Decision(menu) => {
-                let index = preferred
-                    .iter()
-                    .find_map(|&card| pick_known(&menu, card))
-                    .unwrap_or(0);
-                game.choose(index).unwrap();
-            }
-            status => return status,
-        }
-    }
-    panic!("did not terminate");
-}
-
-fn complete(status: Status) {
-    assert!(matches!(status, Status::Complete(_)), "{status:?}");
-}
-
 #[test]
 fn fight_club_takes_a_secret_as_an_achievement_and_may_splay_yellow() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U096", Zone::Board(A, Color::Red));
+    let card = f.card("U096", Zone::Board(A, Color::Red));
     let secret = f.tech(Color::Blue, 3, Zone::Safe(B), vec![]);
     f.tech(Color::Yellow, 1, Zone::Board(A, Color::Yellow), vec![]);
     f.tech(Color::Yellow, 2, Zone::Board(A, Color::Yellow), vec![]);
@@ -84,7 +28,7 @@ fn fight_club_takes_a_secret_as_an_achievement_and_may_splay_yellow() {
 #[test]
 fn secret_santa_makes_the_victim_meld_from_the_demanders_score_and_scores_three_tens() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U097", Zone::Board(A, Color::Red));
+    let card = f.card("U097", Zone::Board(A, Color::Red));
     let scored = f.tech(Color::Green, 2, Zone::Score(A), vec![]);
     let tens: Vec<_> = (0..3)
         .map(|_| f.tech(Color::Yellow, 10, Zone::Deck(Deck::base(10)), vec![]))
@@ -105,7 +49,7 @@ fn secret_santa_makes_the_victim_meld_from_the_demanders_score_and_scores_three_
 fn ride_hailing_melds_a_foreign_efficient_top_and_executes_it_or_draws_an_eleven() {
     for eligible in [true, false] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U098", Zone::Board(A, Color::Yellow));
+        let card = f.card("U098", Zone::Board(A, Color::Yellow));
         let red = f.tech(
             Color::Red,
             1,
@@ -138,7 +82,7 @@ fn ride_hailing_melds_a_foreign_efficient_top_and_executes_it_or_draws_an_eleven
 #[test]
 fn whatchamacallit_draws_and_scores_each_value_missing_from_tops_and_score() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U099", Zone::Board(A, Color::Yellow));
+    let card = f.card("U099", Zone::Board(A, Color::Yellow));
     f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let three = f.tech(Color::Green, 3, Zone::Score(A), vec![]);
     let mut expected = vec![three];
@@ -164,7 +108,7 @@ fn whatchamacallit_draws_and_scores_each_value_missing_from_tops_and_score() {
 #[test]
 fn cryptocurrency_returns_the_score_pile_and_scores_a_ten_per_distinct_value() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U100", Zone::Board(A, Color::Green));
+    let card = f.card("U100", Zone::Board(A, Color::Green));
     f.tech(Color::Red, 2, Zone::Score(A), vec![]);
     f.tech(Color::Blue, 2, Zone::Score(A), vec![]);
     f.tech(Color::Green, 5, Zone::Score(A), vec![]);
@@ -185,7 +129,7 @@ fn cryptocurrency_returns_the_score_pile_and_scores_a_ten_per_distinct_value() {
 #[test]
 fn denver_airport_may_achieve_a_secret_regardless_of_eligibility() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U101", Zone::Board(A, Color::Green));
+    let card = f.card("U101", Zone::Board(A, Color::Green));
     let secret = f.tech(Color::Blue, 9, Zone::Safe(A), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     effect(&mut game, card, 0, A, A);
@@ -200,7 +144,7 @@ fn denver_airport_may_achieve_a_secret_regardless_of_eligibility() {
 #[test]
 fn hacking_moves_the_two_highest_secrets_and_scores_and_melds_the_two_lowest() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U102", Zone::Board(A, Color::Blue));
+    let card = f.card("U102", Zone::Board(A, Color::Blue));
     let secrets = [
         f.tech(Color::Red, 1, Zone::Safe(B), vec![]),
         f.tech(Color::Red, 2, Zone::Safe(B), vec![]),
@@ -232,7 +176,7 @@ fn hacking_moves_the_two_highest_secrets_and_scores_and_melds_the_two_lowest() {
 #[test]
 fn inhomogeneous_cosmology_repeats_while_a_top_is_placed_or_a_card_melded() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U103", Zone::Board(A, Color::Blue));
+    let card = f.card("U103", Zone::Board(A, Color::Blue));
     let red = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let blue = f.tech(Color::Blue, 2, Zone::Hand(A), vec![]);
     let one = f.tech(Color::Green, 1, Zone::Deck(Deck::base(1)), vec![]);
@@ -262,7 +206,7 @@ fn inhomogeneous_cosmology_repeats_while_a_top_is_placed_or_a_card_melded() {
     assert!(position.cards(Zone::Hand(A)).is_empty());
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U103", Zone::Board(A, Color::Blue));
+    let card = f.card("U103", Zone::Board(A, Color::Blue));
     f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     for _ in 0..4 {
         f.tech(Color::Yellow, 11, Zone::Deck(Deck::base(11)), vec![]);
@@ -276,7 +220,7 @@ fn inhomogeneous_cosmology_repeats_while_a_top_is_placed_or_a_card_melded() {
 #[test]
 fn order_of_the_occult_hand_loses_on_a_scored_three_wins_on_a_held_seven_and_reshapes() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U105", Zone::Board(A, Color::Purple));
+    let card = f.card("U105", Zone::Board(A, Color::Purple));
     f.tech(Color::Red, 3, Zone::Score(A), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     effect(&mut game, card, 0, A, A);
@@ -284,14 +228,14 @@ fn order_of_the_occult_hand_loses_on_a_scored_three_wins_on_a_held_seven_and_res
     assert_eq!(run(&mut game, &mut events, &[]), Status::Winner(B));
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U105", Zone::Board(A, Color::Purple));
+    let card = f.card("U105", Zone::Board(A, Color::Purple));
     f.tech(Color::Red, 7, Zone::Hand(A), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     effect(&mut game, card, 1, A, A);
     assert_eq!(run(&mut game, &mut events, &[]), Status::Winner(A));
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U105", Zone::Board(A, Color::Purple));
+    let card = f.card("U105", Zone::Board(A, Color::Purple));
     let blue_low = f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
     let melds = [
         f.tech(Color::Blue, 4, Zone::Hand(A), vec![]),

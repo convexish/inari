@@ -2,9 +2,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
 fn invoke(g: &mut Game, card: CardId, effect: u16) {
     g.start(
         Operation::ExecuteEffect {
@@ -46,13 +43,13 @@ fn decline(g: &mut Game, events: &mut Vec<Event>) {
 fn fermenting_draws(expansions: Expansions) {
     for splay in [Splay::None, Splay::Left, Splay::Right, Splay::Up] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B019", Zone::Board(A, Color::Yellow));
-        base(&mut f, "B008", Zone::Board(A, Color::Green));
-        base(&mut f, "B021", Zone::Board(A, Color::Green));
-        base(&mut f, "B010", Zone::Board(B, Color::Blue));
+        let source = f.card("B019", Zone::Board(A, Color::Yellow));
+        f.card("B008", Zone::Board(A, Color::Green));
+        f.card("B021", Zone::Board(A, Color::Green));
+        f.card("B010", Zone::Board(B, Color::Blue));
         let supply: Vec<_> = ["B016", "B020", "B018"]
             .into_iter()
-            .map(|code| base(&mut f, code, Zone::Deck(Deck::base(2))))
+            .map(|code| f.card(code, Zone::Deck(Deck::base(2))))
             .collect();
         let mut g = Game::new(f.position(), expansions).unwrap();
         if splay != Splay::None {
@@ -81,7 +78,7 @@ fn fermenting_draws(expansions: Expansions) {
         );
     }
     let mut f = Fixture::default();
-    let source = base(&mut f, "B019", Zone::Junk);
+    let source = f.card("B019", Zone::Junk);
     let mut g = Game::new(f.position(), expansions).unwrap();
     invoke(&mut g, source, 0);
     finish(&mut g, &mut Vec::new());
@@ -97,13 +94,13 @@ fn fermenting_payment(expansions: Expansions) {
     for owner in [A, B] {
         for buried in [false, true] {
             let mut f = Fixture::default();
-            let source = base(&mut f, "B019", Zone::Board(owner, Color::Yellow));
+            let source = f.card("B019", Zone::Board(owner, Color::Yellow));
             if buried {
-                base(&mut f, "B004", Zone::Board(owner, Color::Yellow));
+                f.card("B004", Zone::Board(owner, Color::Yellow));
             }
-            let green = base(&mut f, "B008", Zone::Hand(A));
-            let deck = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
-            let spare = base(&mut f, "B028", Zone::Deck(Deck::base(3)));
+            let green = f.card("B008", Zone::Hand(A));
+            let deck = f.card("B021", Zone::Deck(Deck::base(2)));
+            let spare = f.card("B028", Zone::Deck(Deck::base(3)));
             let mut g = Game::new(f.position(), expansions).unwrap();
             invoke(&mut g, source, 1);
             let mut paid = g.clone();
@@ -134,11 +131,11 @@ fn fermenting_decline_uses_live_named_top_on_either_board_and_payment_skips_junk
 #[test]
 fn fermenting_archimedes_changes_both_boxes_not_the_color_quota() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B019", Zone::Board(A, Color::Yellow));
+    let source = f.card("B019", Zone::Board(A, Color::Yellow));
     f.figure(Figure::Archimedes, Zone::Board(A, Color::Blue));
-    let untouched = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
-    let junked = base(&mut f, "B028", Zone::Deck(Deck::base(3)));
-    let drawn = base(&mut f, "B026", Zone::Deck(Deck::base(3)));
+    let untouched = f.card("B021", Zone::Deck(Deck::base(2)));
+    let junked = f.card("B028", Zone::Deck(Deck::base(3)));
+    let drawn = f.card("B026", Zone::Deck(Deck::base(3)));
     let mut g = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut g, source, 0);
     finish(&mut g, &mut Vec::new());
@@ -152,8 +149,7 @@ fn fermenting_archimedes_changes_both_boxes_not_the_color_quota() {
 fn perspective(expansions: Expansions) {
     for on_board in [false, true] {
         let mut f = Fixture::default();
-        let source = base(
-            &mut f,
+        let source = f.card(
             "B039",
             if on_board {
                 Zone::Board(A, Color::Yellow)
@@ -162,11 +158,11 @@ fn perspective(expansions: Expansions) {
             },
         );
         if on_board {
-            base(&mut f, "B012", Zone::Board(A, Color::Blue));
+            f.card("B012", Zone::Board(A, Color::Blue));
         }
-        base(&mut f, "B001", Zone::Board(B, Color::Red));
-        let payment = base(&mut f, "B004", Zone::Hand(A));
-        let score = base(&mut f, "B008", Zone::Hand(A));
+        f.card("B001", Zone::Board(B, Color::Red));
+        let payment = f.card("B004", Zone::Hand(A));
+        let score = f.card("B008", Zone::Hand(A));
         let mut g = Game::new(f.position(), expansions).unwrap();
         invoke(&mut g, source, 0);
         let mut declined = g.clone();
@@ -191,10 +187,10 @@ fn perspective_optional_original_return_then_mandatory_as_possible_snapshot() {
 #[test]
 fn perspective_homer_replacement_does_not_pay_with_a_reaction_child() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B039", Zone::Board(A, Color::Yellow));
+    let source = f.card("B039", Zone::Board(A, Color::Yellow));
     f.figure(Figure::Homer, Zone::Board(A, Color::Purple));
     let payment = f.figure(Figure::Gilgamesh, Zone::Hand(A));
-    let stays = base(&mut f, "B004", Zone::Hand(A));
+    let stays = f.card("B004", Zone::Hand(A));
     let mut g = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut g, source, 0);
     choose_card(&mut g, &mut Vec::new(), payment);
@@ -206,11 +202,11 @@ fn perspective_homer_replacement_does_not_pay_with_a_reaction_child() {
 
 fn rocketry(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B083", Zone::Board(A, Color::Blue));
-    base(&mut f, "B075", Zone::Board(A, Color::Purple));
-    let first = base(&mut f, "B001", Zone::Score(B));
-    let second = base(&mut f, "B002", Zone::Score(B));
-    let third = base(&mut f, "B004", Zone::Score(B));
+    let source = f.card("B083", Zone::Board(A, Color::Blue));
+    f.card("B075", Zone::Board(A, Color::Purple));
+    let first = f.card("B001", Zone::Score(B));
+    let second = f.card("B002", Zone::Score(B));
+    let third = f.card("B004", Zone::Score(B));
     let mut g = Game::seeded(f.position(), expansions, 37).unwrap();
     invoke(&mut g, source, 0);
     // A single public back group autoexecutes despite three hidden identities.
@@ -238,11 +234,11 @@ fn rocketry_samples_hidden_score_backs_and_counts_colors_not_symbols() {
 #[test]
 fn rocketry_counts_no_color_from_catherines_additions() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B083", Zone::Board(A, Color::Blue));
+    let source = f.card("B083", Zone::Board(A, Color::Blue));
     f.figure(Figure::CatherineTheGreat, Zone::Board(A, Color::Purple));
-    base(&mut f, "B001", Zone::Board(A, Color::Red));
+    f.card("B001", Zone::Board(A, Color::Red));
     for code in ["B002", "B004", "B008", "B010"] {
-        base(&mut f, code, Zone::Score(B));
+        f.card(code, Zone::Score(B));
     }
     let mut g = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut g, source, 0);
@@ -256,15 +252,15 @@ fn rocketry_counts_no_color_from_catherines_additions() {
 #[test]
 fn each_additions_give_rocketry_no_colors() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B083", Zone::Junk);
+    let source = f.card("B083", Zone::Junk);
     f.figure(Figure::CatherineTheGreat, Zone::Board(A, Color::Purple));
     f.figure(Figure::TranHuangDao, Zone::Board(A, Color::Red));
     f.figure(Figure::JamesClerkMaxwell, Zone::Board(A, Color::Blue));
-    base(&mut f, "B008", Zone::Hand(A));
-    base(&mut f, "B080", Zone::Deck(Deck::base(8)));
-    base(&mut f, "B081", Zone::Deck(Deck::base(8)));
+    f.card("B008", Zone::Hand(A));
+    f.card("B080", Zone::Deck(Deck::base(8)));
+    f.card("B081", Zone::Deck(Deck::base(8)));
     for code in ["B001", "B002", "B004"] {
-        base(&mut f, code, Zone::Score(B));
+        f.card(code, Zone::Score(B));
     }
     let mut g = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut g, source, 0);
@@ -275,15 +271,15 @@ fn each_additions_give_rocketry_no_colors() {
 #[test]
 fn perspective_replaced_scores_consume_attempts_without_recounting_or_child_credit() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B039", Zone::Board(A, Color::Yellow));
-    base(&mut f, "B012", Zone::Board(A, Color::Blue));
-    base(&mut f, "B002", Zone::Board(A, Color::Red));
-    base(&mut f, "B016", Zone::Board(A, Color::Red));
-    base(&mut f, "B021", Zone::Board(A, Color::Green));
+    let source = f.card("B039", Zone::Board(A, Color::Yellow));
+    f.card("B012", Zone::Board(A, Color::Blue));
+    f.card("B002", Zone::Board(A, Color::Red));
+    f.card("B016", Zone::Board(A, Color::Red));
+    f.card("B021", Zone::Board(A, Color::Green));
     f.figure(Figure::ShenKuo, Zone::Board(A, Color::Green));
-    let payment = base(&mut f, "B004", Zone::Hand(A));
-    let red = base(&mut f, "B001", Zone::Hand(A));
-    let green = base(&mut f, "B008", Zone::Hand(A));
+    let payment = f.card("B004", Zone::Hand(A));
+    let red = f.card("B001", Zone::Hand(A));
+    let green = f.card("B008", Zone::Hand(A));
     let mut g = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut g, source, 0);
     choose_card(&mut g, &mut Vec::new(), payment);
@@ -298,8 +294,7 @@ fn perspective_replaced_scores_consume_attempts_without_recounting_or_child_cred
 fn rocketry_respects_opposing_logical_score_membership_and_zero_own_colors() {
     for on_board in [false, true] {
         let mut f = Fixture::default();
-        let source = base(
-            &mut f,
+        let source = f.card(
             "B083",
             if on_board {
                 Zone::Board(A, Color::Blue)
@@ -308,8 +303,8 @@ fn rocketry_respects_opposing_logical_score_membership_and_zero_own_colors() {
             },
         );
         f.figure(Figure::Michelangelo, Zone::Board(B, Color::Yellow));
-        base(&mut f, "B075", Zone::Board(B, Color::Purple));
-        let hand_score = base(&mut f, "B001", Zone::Hand(B));
+        f.card("B075", Zone::Board(B, Color::Purple));
+        let hand_score = f.card("B001", Zone::Hand(B));
         let mut g = Game::new(f.position(), Expansions::FIGURES).unwrap();
         invoke(&mut g, source, 0);
         finish(&mut g, &mut Vec::new());
@@ -328,9 +323,9 @@ fn rocketry_respects_opposing_logical_score_membership_and_zero_own_colors() {
 
 fn rocketry_zero(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B083", Zone::Junk);
-    base(&mut f, "B075", Zone::Board(B, Color::Purple));
-    let stays = base(&mut f, "B001", Zone::Score(B));
+    let source = f.card("B083", Zone::Junk);
+    f.card("B075", Zone::Board(B, Color::Purple));
+    let stays = f.card("B001", Zone::Score(B));
     let mut g = Game::new(f.position(), expansions).unwrap();
     invoke(&mut g, source, 0);
     finish(&mut g, &mut Vec::new());

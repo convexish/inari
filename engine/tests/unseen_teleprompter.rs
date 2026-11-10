@@ -3,10 +3,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 fn unseen_on_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
     let card = Card::from_code(code).unwrap();
     let zone = Zone::Board(player, card.color);
@@ -105,23 +101,9 @@ fn play(
     panic!("did not terminate");
 }
 
-fn complete(status: Status) {
-    assert!(matches!(status, Status::Complete(_)), "{status:?}");
-}
-
 fn elevens(f: &mut Fixture, count: usize) -> Vec<CardId> {
     (0..count)
         .map(|i| f.tech(Color::ALL[i % 5], 11, Zone::Deck(Deck::base(11)), vec![]))
-        .collect()
-}
-
-fn revealed(events: &[Event]) -> Vec<CardId> {
-    events
-        .iter()
-        .filter_map(|event| match event {
-            Event::Revealed { card, .. } => Some(*card),
-            _ => None,
-        })
         .collect()
 }
 
@@ -180,7 +162,7 @@ fn a_no_op_or_reveal_only_copy_neither_returns_nor_repeats() {
 
     let mut f = Fixture::default();
     let tele = teleprompter(&mut f);
-    let illuminati = unseen(&mut f, "U064", unseen_deck(6));
+    let illuminati = f.card("U064", unseen_deck(6));
     let writing = f.writing(Zone::Hand(A));
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     effect(&mut game, tele, 0, A);
@@ -297,7 +279,7 @@ fn the_remembered_card_returns_from_beneath_the_card_cosmology_placed_above_it()
         },
         unseen_deck(10),
     );
-    let cosmology = unseen(&mut f, "U103", unseen_deck(10));
+    let cosmology = f.card("U103", unseen_deck(10));
     let mut game = Game::new(f.position(), Expansions::UNSEEN)
         .unwrap()
         .with_tracking()
@@ -340,8 +322,8 @@ fn a_one_effect_copy_sees_no_prior_demand_moves() {
     // beneath Exile, and Exile's second non-demand effect is absent.
     let mut f = Fixture::default();
     let tele = teleprompter(&mut f);
-    let exile = unseen(&mut f, "U018", unseen_deck(2));
-    let padlock = unseen(&mut f, "U016", unseen_deck(2));
+    let exile = f.card("U018", unseen_deck(2));
+    let padlock = f.card("U016", unseen_deck(2));
     let card = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let secret = f.tech(Color::Blue, 4, Zone::Safe(B), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -364,8 +346,8 @@ fn a_one_effect_copy_sees_no_prior_demand_moves() {
     // Exile on top: no demand returned anything, so nothing happens.
     let mut f = Fixture::default();
     let tele = teleprompter(&mut f);
-    let padlock = unseen(&mut f, "U016", unseen_deck(2));
-    let exile = unseen(&mut f, "U018", unseen_deck(2));
+    let padlock = f.card("U016", unseen_deck(2));
+    let exile = f.card("U018", unseen_deck(2));
     let top = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let three = f.tech(Color::Blue, 3, Zone::Deck(Deck::base(3)), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -453,7 +435,7 @@ fn a_terminal_result_inside_the_copy_ends_the_game_before_the_return() {
 fn a_controller_decides_the_deck_and_the_copied_effects_choices_for_the_executor() {
     let mut f = Fixture::default();
     let hitchhiking = unseen_on_board(&mut f, "U081", A);
-    let tele = unseen(&mut f, "U091", Zone::Hand(B));
+    let tele = f.card("U091", Zone::Hand(B));
     let other = f.tech(Color::Blue, 2, Zone::Hand(B), vec![]);
     let x = f.tech(
         Color::Red,
@@ -546,7 +528,7 @@ fn inside_a_self_execution_only_a_nested_keyword_earns_chain() {
     for nested_keyword in [false, true] {
         let mut f = Fixture::default();
         let hitchhiking = unseen_on_board(&mut f, "U081", A);
-        let tele = unseen(&mut f, "U091", Zone::Hand(B));
+        let tele = f.card("U091", Zone::Hand(B));
         f.tech(
             Color::Red,
             1,

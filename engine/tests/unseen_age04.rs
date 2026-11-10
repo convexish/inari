@@ -6,62 +6,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
-    for (slot, &icon) in icons.iter().enumerate() {
-        f.cards[usize::from(card.0)].symbols[slot] = Symbol::Icon(icon);
-    }
-}
-
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
-}
-
-fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
-    for _ in 0..300 {
-        match settle(game, events) {
-            Status::Decision(menu) => {
-                let index = preferred
-                    .iter()
-                    .find_map(|&card| pick_known(&menu, card))
-                    .unwrap_or(0);
-                game.choose(index).unwrap();
-            }
-            status => return status,
-        }
-    }
-    panic!("did not terminate");
-}
-
-fn complete(status: Status) {
-    assert!(matches!(status, Status::Complete(_)), "{status:?}");
-}
-
 fn color_option(menu: &Decision, color: Color) -> usize {
     menu.options
         .iter()
@@ -73,7 +17,7 @@ fn color_option(menu: &Decision, color: Color) -> usize {
 fn ninja_returns_the_chosen_color_and_takes_that_top_or_proves_absence() {
     for present in [true, false] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U036", Zone::Board(A, Color::Red));
+        let card = f.card("U036", Zone::Board(A, Color::Red));
         let top = f.tech(Color::Blue, 2, Zone::Board(B, Color::Blue), vec![]);
         let hand = f.tech(
             if present { Color::Blue } else { Color::Green },
@@ -111,7 +55,7 @@ fn ninja_returns_the_chosen_color_and_takes_that_top_or_proves_absence() {
 #[test]
 fn spanish_inquisition_keeps_only_the_highest_and_returns_its_red_stack() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U037", Zone::Board(A, Color::Red));
+    let card = f.card("U037", Zone::Board(A, Color::Red));
     let high_a = f.tech(Color::Blue, 5, Zone::Hand(B), vec![]);
     let high_b = f.tech(Color::Green, 5, Zone::Hand(B), vec![]);
     let low = f.tech(Color::Yellow, 2, Zone::Hand(B), vec![]);
@@ -137,7 +81,7 @@ fn spanish_inquisition_keeps_only_the_highest_and_returns_its_red_stack() {
     for on_top in [true, false] {
         let mut f = Fixture::default();
         f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
-        let card = unseen(&mut f, "U037", Zone::Board(A, Color::Red));
+        let card = f.card("U037", Zone::Board(A, Color::Red));
         if !on_top {
             f.tech(Color::Red, 5, Zone::Board(A, Color::Red), vec![]);
         }
@@ -155,7 +99,7 @@ fn spanish_inquisition_keeps_only_the_highest_and_returns_its_red_stack() {
 fn april_fools_day_gives_a_card_or_claims_folklore_and_swaps_splays() {
     for has_card in [true, false] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U038", Zone::Board(A, Color::Yellow));
+        let card = f.card("U038", Zone::Board(A, Color::Yellow));
         let given = has_card.then(|| f.tech(Color::Blue, 3, Zone::Score(A), vec![]));
         let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
         effect(&mut game, card, 0, A, A);
@@ -176,7 +120,7 @@ fn april_fools_day_gives_a_card_or_claims_folklore_and_swaps_splays() {
         }
     }
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U038", Zone::Board(A, Color::Yellow));
+    let card = f.card("U038", Zone::Board(A, Color::Yellow));
     f.tech(Color::Yellow, 1, Zone::Board(A, Color::Yellow), vec![]);
     f.tech(Color::Purple, 1, Zone::Board(A, Color::Purple), vec![]);
     f.tech(Color::Purple, 2, Zone::Board(A, Color::Purple), vec![]);
@@ -199,7 +143,7 @@ fn april_fools_day_gives_a_card_or_claims_folklore_and_swaps_splays() {
 fn el_dorado_scores_the_five_deck_for_three_prosperity_and_splays_for_two() {
     for prosperous in [3, 2, 1] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U041", Zone::Board(A, Color::Green));
+        let card = f.card("U041", Zone::Board(A, Color::Green));
         f.tech(Color::Green, 2, Zone::Board(A, Color::Green), vec![]);
         f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
         f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);
@@ -234,7 +178,7 @@ fn el_dorado_scores_the_five_deck_for_three_prosperity_and_splays_for_two() {
 #[test]
 fn quackery_offers_score_or_draw_and_draws_by_returned_icons() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U042", Zone::Board(A, Color::Blue));
+    let card = f.card("U042", Zone::Board(A, Color::Blue));
     let hand = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let four = f.tech(Color::Green, 4, Zone::Deck(Deck::base(4)), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -247,7 +191,7 @@ fn quackery_offers_score_or_draw_and_draws_by_returned_icons() {
     assert_eq!(game.position().cards(Zone::Hand(A)), &[hand, four]);
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U042", Zone::Board(A, Color::Blue));
+    let card = f.card("U042", Zone::Board(A, Color::Blue));
     let first = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     icons(&mut f, first, &[Icon::Health, Icon::Health]);
     let second = f.tech(Color::Green, 1, Zone::Hand(A), vec![]);
@@ -263,7 +207,7 @@ fn quackery_offers_score_or_draw_and_draws_by_returned_icons() {
 #[test]
 fn prophecies_reveals_a_reference_secret_and_melds_another_before_safeguarding() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U043", Zone::Board(A, Color::Blue));
+    let card = f.card("U043", Zone::Board(A, Color::Blue));
     let reference = f.tech(Color::Yellow, 3, Zone::Safe(A), vec![]);
     let other = f.tech(Color::Green, 2, Zone::Safe(A), vec![]);
     let four = f.tech(Color::Red, 4, Zone::Deck(Deck::base(4)), vec![]);
@@ -313,7 +257,7 @@ fn prophecies_reveals_a_reference_secret_and_melds_another_before_safeguarding()
 #[test]
 fn prophecies_without_a_secret_draws_and_reveals_a_zero() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U043", Zone::Board(A, Color::Blue));
+    let card = f.card("U043", Zone::Board(A, Color::Blue));
     // A drawn 0 skips the empty [1] deck.
     let two = f.tech(Color::Red, 2, Zone::Deck(Deck::base(2)), vec![]);
     f.tech(Color::Green, 4, Zone::Deck(Deck::base(4)), vec![]);
@@ -336,7 +280,7 @@ fn prophecies_without_a_secret_draws_and_reveals_a_zero() {
 fn confession_returns_one_authority_top_per_color_or_melds_and_scores() {
     for authority in [true, false] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U044", Zone::Board(A, Color::Purple));
+        let card = f.card("U044", Zone::Board(A, Color::Purple));
         let under = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
         icons(&mut f, under, &[Icon::Authority]);
         let top = f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);
@@ -360,7 +304,7 @@ fn confession_returns_one_authority_top_per_color_or_melds_and_scores() {
         }
     }
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U044", Zone::Board(A, Color::Purple));
+    let card = f.card("U044", Zone::Board(A, Color::Purple));
     f.tech(Color::Blue, 4, Zone::Score(A), vec![]);
     f.tech(Color::Red, 4, Zone::Score(A), vec![]);
     f.tech(Color::Green, 3, Zone::Score(A), vec![]);

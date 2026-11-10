@@ -3,10 +3,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 fn invoke(game: &mut Game, card: CardId, effect: u16) {
     game.start(
         Operation::ExecuteEffect {
@@ -51,9 +47,9 @@ fn rewards(expansions: Expansions) {
     ] {
         for selected in 0..=3 {
             let mut f = Fixture::default();
-            let source = base(&mut f, code, Zone::Junk);
+            let source = f.card(code, Zone::Junk);
             // Two distinct printed values, but three successful originals.
-            let payments = ["B001", "B002", "B026"].map(|code| base(&mut f, code, Zone::Hand(A)));
+            let payments = ["B001", "B002", "B026"].map(|code| f.card(code, Zone::Hand(A)));
             let supply: &[&str] = match age {
                 2 => &["B016", "B018"],
                 7 => &["B070", "B071"],
@@ -61,7 +57,7 @@ fn rewards(expansions: Expansions) {
             };
             let draws: Vec<_> = supply
                 .iter()
-                .map(|code| base(&mut f, code, Zone::Deck(Deck::base(age))))
+                .map(|code| f.card(code, Zone::Deck(Deck::base(age))))
                 .collect();
             let mut game = Game::seeded(f.position(), expansions, 91).unwrap();
             invoke(&mut game, source, 0);
@@ -113,7 +109,7 @@ fn distinct_original_values_drive_optional_reward_count_and_score_with_and_witho
 fn replaced_return_and_karma_tuck_supply_no_distinct_value_reward() {
     for code in ["B020", "B078", "B064"] {
         let mut f = Fixture::default();
-        let source = base(&mut f, code, Zone::Junk);
+        let source = f.card(code, Zone::Junk);
         f.figure(Figure::Homer, Zone::Board(A, Color::Purple));
         let replacement = f.figure(Figure::Archimedes, Zone::Hand(A));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
@@ -137,15 +133,11 @@ fn replaced_return_and_karma_tuck_supply_no_distinct_value_reward() {
 fn alchemy(expansions: Expansions) {
     for red in [false, true] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B032", Zone::Board(A, Color::Blue));
-        base(&mut f, "B001", Zone::Board(A, Color::Red));
-        let existing = base(&mut f, "B004", Zone::Hand(A));
-        let first = base(&mut f, "B038", Zone::Deck(Deck::base(4)));
-        let second = base(
-            &mut f,
-            if red { "B037" } else { "B042" },
-            Zone::Deck(Deck::base(4)),
-        );
+        let source = f.card("B032", Zone::Board(A, Color::Blue));
+        f.card("B001", Zone::Board(A, Color::Red));
+        let existing = f.card("B004", Zone::Hand(A));
+        let first = f.card("B038", Zone::Deck(Deck::base(4)));
+        let second = f.card(if red { "B037" } else { "B042" }, Zone::Deck(Deck::base(4)));
         let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 0);
         let mut events = Vec::new();
@@ -192,9 +184,9 @@ fn alchemy_snapshots_authority_colors_and_returns_the_entire_hand_after_red() {
 
 fn alchemy_second(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B032", Zone::Junk);
-    let melded = base(&mut f, "B001", Zone::Hand(A));
-    let scored = base(&mut f, "B004", Zone::Hand(A));
+    let source = f.card("B032", Zone::Junk);
+    let melded = f.card("B001", Zone::Hand(A));
+    let scored = f.card("B004", Zone::Hand(A));
     let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 1);
     let mut events = Vec::new();
@@ -225,10 +217,10 @@ fn alchemy_second_effect_is_separate_mandatory_meld_then_score() {
 fn physics(expansions: Expansions) {
     for duplicate in [false, true] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B053", Zone::Junk);
-        let existing = base(&mut f, "B004", Zone::Hand(A));
+        let source = f.card("B053", Zone::Junk);
+        let existing = f.card("B004", Zone::Hand(A));
         let codes = ["B056", if duplicate { "B057" } else { "B058" }, "B062"];
-        let originals = codes.map(|code| base(&mut f, code, Zone::Deck(Deck::base(6))));
+        let originals = codes.map(|code| f.card(code, Zone::Deck(Deck::base(6))));
         let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 0);
         let mut events = Vec::new();
@@ -260,8 +252,8 @@ fn physics_compares_the_three_original_colors_not_the_prior_hand() {
 
 fn exhaustion(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B053", Zone::Junk);
-    let first = base(&mut f, "B056", Zone::Deck(Deck::base(6)));
+    let source = f.card("B053", Zone::Junk);
+    let first = f.card("B056", Zone::Deck(Deck::base(6)));
     let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0);
     let mut events = Vec::new();
@@ -283,15 +275,12 @@ fn compound_reveals_happen_before_later_draw_exhaustion() {
 fn democracy_shared(expansions: Expansions) {
     for own in [0, 1, 2] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B064", Zone::Board(A, Color::Purple));
-        base(&mut f, "B012", Zone::Board(B, Color::Blue));
-        let opponent = base(&mut f, "B004", Zone::Hand(B));
-        let payments = [
-            base(&mut f, "B001", Zone::Hand(A)),
-            base(&mut f, "B002", Zone::Hand(A)),
-        ];
-        let reward_one = base(&mut f, "B077", Zone::Deck(Deck::base(8)));
-        let reward_two = base(&mut f, "B079", Zone::Deck(Deck::base(8)));
+        let source = f.card("B064", Zone::Board(A, Color::Purple));
+        f.card("B012", Zone::Board(B, Color::Blue));
+        let opponent = f.card("B004", Zone::Hand(B));
+        let payments = [f.card("B001", Zone::Hand(A)), f.card("B002", Zone::Hand(A))];
+        let reward_one = f.card("B077", Zone::Deck(Deck::base(8)));
+        let reward_two = f.card("B079", Zone::Deck(Deck::base(8)));
         let mut game = Game::new(f.position(), expansions).unwrap();
         game.start(
             Operation::Dogma {
@@ -345,22 +334,22 @@ fn democracy_compares_prior_shared_executor_returns_strictly_and_resets() {
 fn reaction_draws_are_neither_revealed_nor_members_of_original_color_cohorts() {
     for code in ["B032", "B053"] {
         let mut f = Fixture::default();
-        let source = base(&mut f, code, Zone::Board(A, Color::Blue));
-        base(&mut f, "B001", Zone::Board(A, Color::Red));
+        let source = f.card(code, Zone::Board(A, Color::Blue));
+        f.card("B001", Zone::Board(A, Color::Red));
         f.figure(Figure::AntonieVanLeeuwenhoek, Zone::Board(A, Color::Yellow));
-        let payment = base(&mut f, "B046", Zone::Hand(A));
+        let payment = f.card("B046", Zone::Hand(A));
         let originals: Vec<_> = if code == "B032" {
             ["B038", "B042"]
                 .into_iter()
-                .map(|code| base(&mut f, code, Zone::Deck(Deck::base(4))))
+                .map(|code| f.card(code, Zone::Deck(Deck::base(4))))
                 .collect()
         } else {
             ["B056", "B058", "B062"]
                 .into_iter()
-                .map(|code| base(&mut f, code, Zone::Deck(Deck::base(6))))
+                .map(|code| f.card(code, Zone::Deck(Deck::base(6))))
                 .collect()
         };
-        let child = base(&mut f, "B057", Zone::Deck(Deck::base(6)));
+        let child = f.card("B057", Zone::Deck(Deck::base(6)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         invoke(&mut game, source, 0);
         let mut events = Vec::new();
@@ -388,12 +377,12 @@ fn reaction_draws_are_neither_revealed_nor_members_of_original_color_cohorts() {
 #[test]
 fn alchemy_keeps_a_returned_original_and_its_draw_keeps_the_resolved_age() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B032", Zone::Board(A, Color::Blue));
-    base(&mut f, "B001", Zone::Board(A, Color::Red));
+    let source = f.card("B032", Zone::Board(A, Color::Blue));
+    f.card("B001", Zone::Board(A, Color::Red));
     f.figure(Figure::AntonieVanLeeuwenhoek, Zone::Board(A, Color::Yellow));
-    let original = base(&mut f, "B046", Zone::Deck(Deck::base(5)));
-    let child = base(&mut f, "B062", Zone::Deck(Deck::base(6)));
-    let seven = base(&mut f, "B068", Zone::Deck(Deck::base(7)));
+    let original = f.card("B046", Zone::Deck(Deck::base(5)));
+    let child = f.card("B062", Zone::Deck(Deck::base(6)));
+    let seven = f.card("B068", Zone::Deck(Deck::base(7)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut game, source, 0);
     let mut events = Vec::new();
@@ -422,8 +411,8 @@ fn alchemy_keeps_a_returned_original_and_its_draw_keeps_the_resolved_age() {
 
 fn alchemy_zero(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B032", Zone::Junk);
-    let untouched = base(&mut f, "B001", Zone::Hand(A));
+    let source = f.card("B032", Zone::Junk);
+    let untouched = f.card("B001", Zone::Hand(A));
     let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0);
     let mut events = Vec::new();
@@ -448,10 +437,10 @@ fn reward_exhaustion(expansions: Expansions) {
         ("B078", "B077", 8, false),
     ] {
         let mut f = Fixture::default();
-        let source = base(&mut f, code, Zone::Junk);
-        let first = base(&mut f, "B001", Zone::Hand(A));
+        let source = f.card(code, Zone::Junk);
+        let first = f.card("B001", Zone::Hand(A));
         let second = if score {
-            Some(base(&mut f, "B026", Zone::Hand(A)))
+            Some(f.card("B026", Zone::Hand(A)))
         } else {
             None
         };
@@ -460,7 +449,7 @@ fn reward_exhaustion(expansions: Expansions) {
         let drawn = if code == "B020" {
             second.unwrap()
         } else {
-            base(&mut f, supply, Zone::Deck(Deck::base(age)))
+            f.card(supply, Zone::Deck(Deck::base(age)))
         };
         let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 0);
@@ -509,10 +498,10 @@ fn each_distinct_value_reward_finishes_its_score_before_later_exhaustion() {
 #[test]
 fn equal_printed_values_from_different_origin_sets_earn_only_one_currency_reward() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B020", Zone::Junk);
-    let base_payment = base(&mut f, "B016", Zone::Hand(A));
+    let source = f.card("B020", Zone::Junk);
+    let base_payment = f.card("B016", Zone::Hand(A));
     let figure_payment = f.figure(Figure::Archimedes, Zone::Hand(A));
-    let reward = base(&mut f, "B018", Zone::Deck(Deck::base(2)));
+    let reward = f.card("B018", Zone::Deck(Deck::base(2)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut game, source, 0);
     let mut events = Vec::new();

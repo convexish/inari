@@ -5,66 +5,10 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
-    for (slot, &icon) in icons.iter().enumerate() {
-        f.cards[usize::from(card.0)].symbols[slot] = Symbol::Icon(icon);
-    }
-}
-
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
-}
-
-fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
-    for _ in 0..300 {
-        match settle(game, events) {
-            Status::Decision(menu) => {
-                let index = preferred
-                    .iter()
-                    .find_map(|&card| pick_known(&menu, card))
-                    .unwrap_or(0);
-                game.choose(index).unwrap();
-            }
-            status => return status,
-        }
-    }
-    panic!("did not terminate");
-}
-
-fn complete(status: Status) {
-    assert!(matches!(status, Status::Complete(_)), "{status:?}");
-}
-
 #[test]
 fn knights_templar_unsplays_a_color_and_takes_its_top() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U026", Zone::Board(A, Color::Red));
+    let card = f.card("U026", Zone::Board(A, Color::Red));
     f.tech(Color::Blue, 1, Zone::Board(B, Color::Blue), vec![]);
     let top = f.tech(Color::Blue, 2, Zone::Board(B, Color::Blue), vec![]);
     f.tech(Color::Green, 1, Zone::Board(B, Color::Green), vec![]);
@@ -84,7 +28,7 @@ fn knights_templar_unsplays_a_color_and_takes_its_top() {
 #[test]
 fn red_envelope_moves_a_value_held_two_or_three_times_and_scores_two_or_three() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U027", Zone::Board(A, Color::Red));
+    let card = f.card("U027", Zone::Board(A, Color::Red));
     let two_a = f.tech(Color::Blue, 2, Zone::Hand(A), vec![]);
     let two_b = f.tech(Color::Green, 2, Zone::Score(A), vec![]);
     let one = f.tech(Color::Yellow, 1, Zone::Hand(A), vec![]);
@@ -107,7 +51,7 @@ fn red_envelope_moves_a_value_held_two_or_three_times_and_scores_two_or_three() 
     complete(run(&mut game, &mut events, &[]));
     assert_eq!(game.position().cards(Zone::Hand(A)), &[one]);
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U027", Zone::Board(A, Color::Red));
+    let card = f.card("U027", Zone::Board(A, Color::Red));
     for color in Color::ALL.iter().take(3) {
         f.tech(*color, 1, Zone::Hand(A), vec![]);
     }
@@ -121,7 +65,7 @@ fn red_envelope_moves_a_value_held_two_or_three_times_and_scores_two_or_three() 
 
     // With exactly two hand cards, three is not offered: score two or decline.
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U027", Zone::Board(A, Color::Red));
+    let card = f.card("U027", Zone::Board(A, Color::Red));
     for color in Color::ALL.iter().take(2) {
         f.tech(*color, 1, Zone::Hand(A), vec![]);
     }
@@ -141,7 +85,7 @@ fn red_envelope_moves_a_value_held_two_or_three_times_and_scores_two_or_three() 
 fn freemasons_tucks_per_color_and_draws_for_yellow_or_expansion_tucks() {
     for yellow in [false, true] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U028", Zone::Board(A, Color::Yellow));
+        let card = f.card("U028", Zone::Board(A, Color::Yellow));
         let red = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
         let other = f.tech(
             if yellow { Color::Yellow } else { Color::Blue },
@@ -173,7 +117,7 @@ fn freemasons_tucks_per_color_and_draws_for_yellow_or_expansion_tucks() {
 #[test]
 fn freemasons_tucks_at_most_one_card_of_each_color_and_may_stop() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U028", Zone::Board(A, Color::Yellow));
+    let card = f.card("U028", Zone::Board(A, Color::Yellow));
     let reds = [
         f.tech(Color::Red, 1, Zone::Hand(A), vec![]),
         f.tech(Color::Red, 2, Zone::Hand(A), vec![]),
@@ -204,7 +148,7 @@ fn freemasons_tucks_at_most_one_card_of_each_color_and_may_stop() {
 #[test]
 fn secret_police_tucks_and_returns_until_it_cannot_then_draws() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U029", Zone::Board(A, Color::Yellow));
+    let card = f.card("U029", Zone::Board(A, Color::Yellow));
     let red_top = f.tech(Color::Red, 2, Zone::Board(B, Color::Red), vec![]);
     let red = f.tech(Color::Red, 1, Zone::Hand(B), vec![]);
     let blue = f.tech(Color::Blue, 1, Zone::Hand(B), vec![]);
@@ -227,7 +171,7 @@ fn secret_police_tucks_and_returns_until_it_cannot_then_draws() {
 fn cliffhanger_dispatches_on_the_revealed_secret_or_safeguards_the_deck_top() {
     for color in [Color::Green, Color::Red, Color::Blue, Color::Purple] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U030", Zone::Board(A, Color::Green));
+        let card = f.card("U030", Zone::Board(A, Color::Green));
         let secret = f.tech(color, 4, Zone::Safe(A), vec![]);
         let other = f.tech(Color::Yellow, 3, Zone::Safe(A), vec![]);
         let five = f.tech(Color::Yellow, 5, Zone::Deck(Deck::base(5)), vec![]);
@@ -253,7 +197,7 @@ fn cliffhanger_dispatches_on_the_revealed_secret_or_safeguards_the_deck_top() {
         }
     }
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U030", Zone::Board(A, Color::Green));
+    let card = f.card("U030", Zone::Board(A, Color::Green));
     f.tech(Color::Yellow, 3, Zone::Safe(A), vec![]);
     let four = f.tech(Color::Yellow, 4, Zone::Deck(Deck::base(4)), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -269,7 +213,7 @@ fn cliffhanger_dispatches_on_the_revealed_secret_or_safeguards_the_deck_top() {
 #[test]
 fn smuggling_takes_two_score_cards_by_both_top_yellows() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U031", Zone::Board(A, Color::Green));
+    let card = f.card("U031", Zone::Board(A, Color::Green));
     f.tech(Color::Yellow, 3, Zone::Board(A, Color::Yellow), vec![]);
     f.tech(Color::Yellow, 2, Zone::Board(B, Color::Yellow), vec![]);
     let two = f.tech(Color::Red, 2, Zone::Score(B), vec![]);
@@ -288,7 +232,7 @@ fn smuggling_takes_two_score_cards_by_both_top_yellows() {
 #[test]
 fn brethren_melds_one_higher_than_its_last_meld_and_repeats_over_concept() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U032", Zone::Board(A, Color::Blue));
+    let card = f.card("U032", Zone::Board(A, Color::Blue));
     let red = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     icons(&mut f, red, &[Icon::Concept]);
     let three = f.tech(Color::Red, 3, Zone::Deck(Deck::base(3)), vec![]);
@@ -317,7 +261,7 @@ fn brethren_melds_one_higher_than_its_last_meld_and_repeats_over_concept() {
 fn brethrens_first_meld_chooses_a_three_or_a_one() {
     for one in [false, true] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U032", Zone::Board(A, Color::Blue));
+        let card = f.card("U032", Zone::Board(A, Color::Blue));
         let low = f.tech(Color::Red, 1, Zone::Deck(Deck::base(1)), vec![]);
         let three = f.tech(Color::Green, 3, Zone::Deck(Deck::base(3)), vec![]);
         let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -346,7 +290,7 @@ fn brethrens_first_meld_chooses_a_three_or_a_one() {
 #[test]
 fn secretum_returns_five_draws_by_color_count_then_melds_one_and_scores_one() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U033", Zone::Board(A, Color::Blue));
+    let card = f.card("U033", Zone::Board(A, Color::Blue));
     let hand: Vec<_> = [Color::Red, Color::Red, Color::Green]
         .into_iter()
         .map(|color| f.tech(color, 1, Zone::Hand(A), vec![]))
@@ -381,7 +325,7 @@ fn secretum_returns_five_draws_by_color_count_then_melds_one_and_scores_one() {
 #[test]
 fn masquerade_safeguards_by_hand_size_returns_that_value_and_may_claim_anonymity() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U034", Zone::Board(A, Color::Purple));
+    let card = f.card("U034", Zone::Board(A, Color::Purple));
     let four_a = f.tech(Color::Red, 4, Zone::Hand(A), vec![]);
     let four_b = f.tech(Color::Blue, 4, Zone::Hand(A), vec![]);
     f.tech(Color::Green, 1, Zone::Hand(A), vec![]);
@@ -405,7 +349,7 @@ fn masquerade_safeguards_by_hand_size_returns_that_value_and_may_claim_anonymity
 #[test]
 fn taqiyya_takes_a_color_into_hand_and_scores_a_bottom_meld_with_its_color() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U035", Zone::Board(A, Color::Purple));
+    let card = f.card("U035", Zone::Board(A, Color::Purple));
     let red_a = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let red_b = f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -425,7 +369,7 @@ fn taqiyya_takes_a_color_into_hand_and_scores_a_bottom_meld_with_its_color() {
     assert!(game.position().cards(Zone::Board(A, Color::Red)).is_empty());
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U035", Zone::Board(A, Color::Purple));
+    let card = f.card("U035", Zone::Board(A, Color::Purple));
     let green_hand = f.tech(Color::Green, 1, Zone::Hand(A), vec![]);
     f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
     let three = f.tech(Color::Green, 3, Zone::Deck(Deck::base(3)), vec![]);

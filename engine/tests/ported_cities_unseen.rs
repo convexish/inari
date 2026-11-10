@@ -3,51 +3,12 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn city(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn blank(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
-    f.tech(color, value, zone, vec![])
-}
-
 fn echoes_cities() -> Expansions {
     Expansions::ECHOES.union(Expansions::CITIES)
 }
 
 fn unseen_cities() -> Expansions {
     Expansions::UNSEEN.union(Expansions::CITIES)
-}
-
-/// Start `card`'s effect `index` for `executor`, as `demander`'s Dogma.
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
 }
 
 fn decline(menu: &Decision) -> Option<usize> {
@@ -80,21 +41,6 @@ fn complete(status: &Status) {
     assert!(matches!(status, Status::Complete(_)), "{status:?}");
 }
 
-fn revealed(events: &[Event]) -> Vec<CardId> {
-    events
-        .iter()
-        .filter_map(|event| match event {
-            Event::Revealed { card, .. } => Some(*card),
-            _ => None,
-        })
-        .collect()
-}
-
-fn meld_action(game: &mut Game, card: CardId) {
-    game.take_action(Action::Meld { card }, ActionKind::Regular)
-        .unwrap();
-}
-
 // ------------------------------------------------------------ Blackmail
 
 /// Blackmail's `must` makes Padlock's "you may score up to three cards from your hand
@@ -102,8 +48,8 @@ fn meld_action(game: &mut Game, card: CardId) {
 #[test]
 fn blackmailed_padlock_scores_at_least_one_card_then_may_stop() {
     let mut f = Fixture::default();
-    let blackmail = unseen(&mut f, "U040", Zone::Board(A, Color::Green));
-    let padlock = unseen(&mut f, "U016", Zone::Hand(B));
+    let blackmail = f.card("U040", Zone::Board(A, Color::Green));
+    let padlock = f.card("U016", Zone::Hand(B));
     let melded = blank(&mut f, Color::Blue, 1, Zone::Hand(B));
     let three = blank(&mut f, Color::Yellow, 3, Zone::Hand(B));
     let four = blank(&mut f, Color::Purple, 4, Zone::Hand(B));
@@ -142,7 +88,7 @@ fn robocar_repeats_after_melding_a_city() {
         Card::from_code("E111").unwrap(),
         Zone::Board(A, Color::Green),
     );
-    let athens = city(&mut f, "C001", Zone::Hand(A));
+    let athens = f.card("C001", Zone::Hand(A));
     let other = blank(&mut f, Color::Blue, 1, Zone::Hand(A));
     let mut game = Game::new(f.position(), echoes_cities()).unwrap();
     effect(&mut game, robocar, 0, A, A);
@@ -180,9 +126,9 @@ fn robocar_repeats_after_melding_a_city() {
 #[test]
 fn legend_scores_a_top_city_after_its_empty_self_execution() {
     let mut f = Fixture::default();
-    let legend = unseen(&mut f, "U045", Zone::Board(A, Color::Purple));
+    let legend = f.card("U045", Zone::Board(A, Color::Purple));
     let nine = blank(&mut f, Color::Red, 9, Zone::Board(A, Color::Red));
-    let athens = city(&mut f, "C001", Zone::Board(A, Color::Red));
+    let athens = f.card("C001", Zone::Board(A, Color::Red));
     let mut game = Game::new(f.position(), unseen_cities()).unwrap();
     effect(&mut game, legend, 0, A, A);
     let red = Alternative::Colors(1 << Color::Red as u8);
@@ -211,7 +157,7 @@ fn a_promoted_city_takes_no_dogma_and_no_second_achievement_check() {
         // Vancouver's two Plus icons would draw from the empty decks if a
         // promotion meld ran City icons.
         let promoted = if promote_city {
-            city(&mut f, "C085", Zone::Forecast(A))
+            f.card("C085", Zone::Forecast(A))
         } else {
             blank(&mut f, Color::Purple, 8, Zone::Forecast(A))
         };
@@ -246,7 +192,7 @@ fn a_promoted_city_takes_no_dogma_and_no_second_achievement_check() {
 fn a_citys_search_returns_precede_the_promotion_choice() {
     let mut f = Fixture::default();
     blank(&mut f, Color::Purple, 1, Zone::Board(A, Color::Purple));
-    let mecca = city(&mut f, "C035", Zone::Hand(A));
+    let mecca = f.card("C035", Zone::Hand(A));
     let deck = Zone::Deck(Deck::base(3));
     let rest = blank(&mut f, Color::Red, 3, deck);
     let p1 = blank(&mut f, Color::Red, 3, deck);
@@ -299,7 +245,7 @@ fn a_citys_search_returns_precede_the_promotion_choice() {
 fn a_terminal_city_plus_draw_prevents_promotion() {
     let mut f = Fixture::default();
     blank(&mut f, Color::Blue, 9, Zone::Board(A, Color::Blue));
-    let atlanta = city(&mut f, "C102", Zone::Hand(A));
+    let atlanta = f.card("C102", Zone::Hand(A));
     let waiting = blank(&mut f, Color::Blue, 1, Zone::Forecast(A));
     let mut game = Game::new(f.position(), echoes_cities()).unwrap();
     meld_action(&mut game, atlanta);
@@ -318,7 +264,7 @@ fn a_terminal_city_plus_draw_prevents_promotion() {
 #[test]
 fn a_promoted_free_dogma_can_be_endorsed() {
     let mut f = Fixture::default();
-    city(&mut f, "C001", Zone::Board(A, Color::Red));
+    f.card("C001", Zone::Board(A, Color::Red));
     blank(&mut f, Color::Blue, 1, Zone::Board(A, Color::Blue));
     let melded = blank(&mut f, Color::Blue, 1, Zone::Hand(A));
     let payment = blank(&mut f, Color::Green, 1, Zone::Hand(A));
@@ -359,7 +305,7 @@ fn a_promoted_free_dogma_can_be_endorsed() {
 #[test]
 fn sniping_offers_only_colors_on_the_victims_board() {
     let mut f = Fixture::default();
-    let sniping = unseen(&mut f, "U057", Zone::Board(A, Color::Red));
+    let sniping = f.card("U057", Zone::Board(A, Color::Red));
     blank(&mut f, Color::Red, 1, Zone::Board(B, Color::Red));
     blank(&mut f, Color::Red, 2, Zone::Board(B, Color::Red));
     let one = blank(&mut f, Color::Blue, 1, Zone::Board(B, Color::Blue));
@@ -388,7 +334,7 @@ fn sniping_offers_only_colors_on_the_victims_board() {
 #[test]
 fn spanish_inquisition_returns_the_hand_card_before_the_score_card() {
     let mut f = Fixture::default();
-    let inquisition = unseen(&mut f, "U037", Zone::Board(A, Color::Red));
+    let inquisition = f.card("U037", Zone::Board(A, Color::Red));
     let deck = Zone::Deck(Deck::base(2));
     let existing = blank(&mut f, Color::Green, 2, deck);
     blank(&mut f, Color::Blue, 5, Zone::Hand(B));
@@ -415,7 +361,7 @@ fn pressure_cooker_keeps_its_order_and_back_choices_with_several_backs() {
     let five = blank(&mut f, Color::Blue, 1, Zone::Board(A, Color::Blue));
     f.cards[usize::from(five.0)].symbols[0] = Symbol::Bonus(5);
     let base_two = blank(&mut f, Color::Green, 2, Zone::AvailableAchievements);
-    let city_two = city(&mut f, "C017", Zone::AvailableAchievements);
+    let city_two = f.card("C017", Zone::AvailableAchievements);
     let base_five = blank(&mut f, Color::Green, 5, Zone::AvailableAchievements);
     blank(&mut f, Color::Yellow, 2, Zone::Deck(Deck::base(2)));
     blank(&mut f, Color::Yellow, 5, Zone::Deck(Deck::base(5)));
@@ -458,7 +404,7 @@ fn pressure_cooker_keeps_its_order_and_back_choices_with_several_backs() {
 #[test]
 fn maze_scores_a_partial_match_then_exchanges_the_remaining_hand() {
     let mut f = Fixture::default();
-    let maze = unseen(&mut f, "U002", Zone::Board(A, Color::Red));
+    let maze = f.card("U002", Zone::Board(A, Color::Red));
     let demanding: Vec<_> = (0..2)
         .map(|_| blank(&mut f, Color::Yellow, 1, Zone::Hand(A)))
         .collect();
@@ -490,7 +436,7 @@ fn maze_scores_a_partial_match_then_exchanges_the_remaining_hand() {
 #[test]
 fn maze_with_an_empty_demanding_hand_does_nothing() {
     let mut f = Fixture::default();
-    let maze = unseen(&mut f, "U002", Zone::Board(A, Color::Red));
+    let maze = f.card("U002", Zone::Board(A, Color::Red));
     let held = blank(&mut f, Color::Red, 1, Zone::Hand(B));
     let scored = blank(&mut f, Color::Green, 2, Zone::Score(A));
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -509,7 +455,7 @@ fn maze_with_an_empty_demanding_hand_does_nothing() {
 #[test]
 fn password_with_a_full_safe_returns_the_rest_of_the_hand_unrevealed() {
     let mut f = Fixture::default();
-    let password = unseen(&mut f, "U017", Zone::Board(A, Color::Red));
+    let password = f.card("U017", Zone::Board(A, Color::Red));
     let safe: Vec<_> = (1..=5)
         .map(|value| blank(&mut f, Color::Purple, value, Zone::Safe(A)))
         .collect();

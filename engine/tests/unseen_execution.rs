@@ -8,10 +8,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 fn effect(game: &mut Game, card: CardId, index: u16, executor: Player) {
     game.start(
         Operation::ExecuteEffect {
@@ -95,10 +91,6 @@ fn play(
     panic!("did not terminate");
 }
 
-fn complete(status: Status) {
-    assert!(matches!(status, Status::Complete(_)), "{status:?}");
-}
-
 fn elevens(f: &mut Fixture, count: usize) -> Vec<CardId> {
     (0..count)
         .map(|i| f.tech(Color::ALL[i % 5], 11, Zone::Deck(Deck::base(11)), vec![]))
@@ -146,10 +138,10 @@ fn hitchhiking_plot_voucher_propaganda_keep_executor_demander_and_controller_apa
     for executor in [A, B] {
         let donor = executor.opponent();
         let mut f = Fixture::default();
-        let hitchhiking = unseen(&mut f, "U081", Zone::Board(executor, Color::Green));
-        let voucher = unseen(&mut f, "U071", Zone::Hand(donor));
+        let hitchhiking = f.card("U081", Zone::Board(executor, Color::Green));
+        let voucher = f.card("U071", Zone::Hand(donor));
         let kept = f.tech(Color::Blue, 3, Zone::Hand(donor), vec![]);
-        let propaganda = unseen(&mut f, "U024", Zone::Score(executor));
+        let propaganda = f.card("U024", Zone::Score(executor));
         let other_score = f.tech(Color::Green, 1, Zone::Score(executor), vec![]);
         let one = f.tech(Color::Yellow, 1, Zone::AvailableAchievements, vec![]);
         f.tech(Color::Yellow, 3, Zone::AvailableAchievements, vec![]);
@@ -281,7 +273,7 @@ fn consulting_pick_grants_no_control_but_an_outer_override_persists() {
 
     // Plain: B picks, then A decides inside the self-executed card.
     let mut f = Fixture::default();
-    let consulting = unseen(&mut f, "U092", Zone::Board(A, Color::Blue));
+    let consulting = f.card("U092", Zone::Board(A, Color::Blue));
     let (red, low, high) = setup(&mut f, vec![build::meld(build::HAND)]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     effect(&mut game, consulting, 0, A);
@@ -300,8 +292,8 @@ fn consulting_pick_grants_no_control_but_an_outer_override_persists() {
     // Under Hitchhiking: B donates Consulting, picks the top and still
     // decides inside it, seeing A's hand; A performs every move.
     let mut f = Fixture::default();
-    let hitchhiking = unseen(&mut f, "U081", Zone::Board(A, Color::Green));
-    let consulting = unseen(&mut f, "U092", Zone::Hand(B));
+    let hitchhiking = f.card("U081", Zone::Board(A, Color::Green));
+    let consulting = f.card("U092", Zone::Hand(B));
     let other = f.tech(Color::Blue, 2, Zone::Hand(B), vec![]);
     let (red, low, high) = setup(&mut f, vec![build::meld(build::HAND)]);
     let eleven = elevens(&mut f, 1)[0];
@@ -339,7 +331,7 @@ fn consulting_pick_grants_no_control_but_an_outer_override_persists() {
 
     // A winning top ends the game at the win; nothing follows.
     let mut f = Fixture::default();
-    let consulting = unseen(&mut f, "U092", Zone::Board(A, Color::Blue));
+    let consulting = f.card("U092", Zone::Board(A, Color::Blue));
     let (red, low, high) = setup(
         &mut f,
         vec![
@@ -366,8 +358,8 @@ fn consulting_pick_grants_no_control_but_an_outer_override_persists() {
 fn area_51_runs_the_chosen_secret_from_the_safe_under_an_outer_controller() {
     for terminal in [false, true] {
         let mut f = Fixture::default();
-        let hitchhiking = unseen(&mut f, "U081", Zone::Board(A, Color::Green));
-        let area = unseen(&mut f, "U090", Zone::Hand(B));
+        let hitchhiking = f.card("U081", Zone::Board(A, Color::Green));
+        let area = f.card("U090", Zone::Hand(B));
         let other = f.tech(Color::Blue, 2, Zone::Hand(B), vec![]);
         let program = if terminal {
             vec![Instruction::Win(WinRule::Executor)]
@@ -440,8 +432,8 @@ fn area_51_runs_the_chosen_secret_from_the_safe_under_an_outer_controller() {
 fn mystery_box_executes_the_prize_in_place_under_an_outer_controller() {
     for losing in [false, true] {
         let mut f = Fixture::default();
-        let hitchhiking = unseen(&mut f, "U081", Zone::Board(A, Color::Green));
-        let mystery = unseen(&mut f, "U111", Zone::Hand(B));
+        let hitchhiking = f.card("U081", Zone::Board(A, Color::Green));
+        let mystery = f.card("U111", Zone::Hand(B));
         let other = f.tech(Color::Blue, 2, Zone::Hand(B), vec![]);
         let program = if losing {
             vec![Instruction::Win(WinRule::Loses(Who::Executor))]

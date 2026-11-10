@@ -1,10 +1,6 @@
 use super::common::*;
 use super::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 fn invoke(game: &mut Game, source: CardId, effect: usize, context: Context) {
     game.start(
         Operation::ExecuteEffect {
@@ -19,19 +15,19 @@ fn invoke(game: &mut Game, source: CardId, effect: usize, context: Context) {
 
 fn fixture(code: &str) -> (Position, CardId, [CardId; 3]) {
     let mut f = Fixture::default();
-    let source = base(&mut f, code, Zone::Junk);
+    let source = f.card(code, Zone::Junk);
     let origin = if code == "B033" {
         Zone::Score(A)
     } else {
         Zone::Hand(A)
     };
-    let cards = ["B001", "B002", "B009"].map(|code| base(&mut f, code, origin));
+    let cards = ["B001", "B002", "B009"].map(|code| f.card(code, origin));
     if code == "B085" {
-        base(&mut f, "B003", Zone::Board(A, Color::Red));
+        f.card("B003", Zone::Board(A, Color::Red));
     }
     if code == "B089" {
         for draw in ["B004", "B006", "B009"] {
-            base(&mut f, draw, Zone::Deck(Deck::base(1)));
+            f.card(draw, Zone::Deck(Deck::base(1)));
         }
     }
     (f.position(), source, cards)
@@ -210,7 +206,7 @@ fn membership_guards_are_live_even_when_would_is_suppressed() {
     ] {
         for suppressed in [false, true] {
             let mut f = Fixture::default();
-            let source = base(&mut f, code, Zone::Junk);
+            let source = f.card(code, Zone::Junk);
             let native = Card::from_code(figure.code()).unwrap();
             let color = native.color;
             f.add(native, Zone::Board(A, color));
@@ -219,9 +215,8 @@ fn membership_guards_are_live_even_when_would_is_suppressed() {
             } else {
                 Zone::Hand(A)
             };
-            let cards = [base(&mut f, "B001", own), base(&mut f, "B008", own)];
-            let borrowed = base(
-                &mut f,
+            let cards = [f.card("B001", own), f.card("B008", own)];
+            let borrowed = f.card(
                 "B002",
                 if code == "B033" {
                     Zone::Hand(A)
@@ -260,9 +255,9 @@ fn membership_guards_are_live_even_when_would_is_suppressed() {
 fn movement_hooks_and_candidate_figures_disable_the_entire_remaining_phase() {
     for candidate in [false, true] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B033", Zone::Junk);
-        let first = base(&mut f, "B001", Zone::Score(A));
-        let second = base(&mut f, "B008", Zone::Score(A));
+        let source = f.card("B033", Zone::Junk);
+        let first = f.card("B001", Zone::Score(A));
+        let second = f.card("B008", Zone::Score(A));
         let zone = if candidate {
             Zone::Score(A)
         } else {
@@ -286,11 +281,11 @@ fn movement_hooks_and_candidate_figures_disable_the_entire_remaining_phase() {
 #[test]
 fn suppressed_movement_hooks_do_not_block_proven_translation_grouping() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B033", Zone::Junk);
+    let source = f.card("B033", Zone::Junk);
     f.figure(Figure::Kalashnikov, Zone::Board(A, Color::Red));
     let cards = [
-        base(&mut f, "B001", Zone::Score(A)),
-        base(&mut f, "B008", Zone::Score(A)),
+        f.card("B001", Zone::Score(A)),
+        f.card("B008", Zone::Score(A)),
     ];
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     let mut context = Context::new(A);
@@ -353,8 +348,8 @@ fn foreign_control_wrong_destinations_and_quotas_fail_closed() {
 
 fn deck_oracle(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B089", Zone::Junk);
-    let cards = ["B088", "B089", "B091"].map(|code| base(&mut f, code, Zone::Deck(Deck::base(9))));
+    let source = f.card("B089", Zone::Junk);
+    let cards = ["B088", "B089", "B091"].map(|code| f.card(code, Zone::Deck(Deck::base(9))));
     let mut reduced = Game::seeded(f.position(), expansions, 89).unwrap();
     let mut unrestricted = reduced.clone();
     unrestricted.shortcuts_disabled = true;
@@ -416,11 +411,11 @@ fn foreign_controller_gets_unrestricted_hidden_score_backs_not_color_information
 #[test]
 fn a_newly_proved_subset_suffix_does_not_inherit_an_unrestricted_color_floor() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B089", Zone::Junk);
+    let source = f.card("B089", Zone::Junk);
     let figure = f.figure(Figure::WilliamShakespeare, Zone::Hand(A));
-    let cards = ["B001", "B002"].map(|code| base(&mut f, code, Zone::Hand(A)));
+    let cards = ["B001", "B002"].map(|code| f.card(code, Zone::Hand(A)));
     for code in ["B004", "B008", "B009"] {
-        base(&mut f, code, Zone::Deck(Deck::base(1)));
+        f.card(code, Zone::Deck(Deck::base(1)));
     }
     let mut reduced = Game::seeded(f.position(), Expansions::FIGURES, 42).unwrap();
     assert!(reduced.position.card(figure).color as u8 > Color::Red as u8);

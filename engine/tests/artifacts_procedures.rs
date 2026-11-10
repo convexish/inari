@@ -44,35 +44,10 @@ fn deck(value: u8) -> Zone {
     })
 }
 
-fn blank(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
-    f.tech(color, value, zone, vec![])
-}
-
 fn non_demand(instructions: Vec<Instruction>) -> Effect {
     Effect {
         kind: EffectKind::NonDemand,
         instructions,
-    }
-}
-
-/// Settle, answering each decision with `decide`; a lone option is taken.
-fn play(
-    game: &mut Game,
-    mut decide: impl FnMut(&Decision) -> Option<usize>,
-) -> (Status, Vec<Event>) {
-    let mut events = Vec::new();
-    loop {
-        let status = settle(game, &mut events);
-        assert!(game.position().check_conservation());
-        match status {
-            Status::Decision(decision) => {
-                let option = decide(&decision)
-                    .or((decision.options.len() == 1).then_some(0))
-                    .unwrap_or_else(|| panic!("unexpected decision {decision:?}"));
-                game.choose(option).unwrap();
-            }
-            status => return (status, events),
-        }
     }
 }
 
@@ -94,11 +69,6 @@ fn moves(events: &[Event]) -> Vec<(Option<Verb>, CardId, Zone, Zone)> {
             _ => None,
         })
         .collect()
-}
-
-fn meld_action(game: &mut Game, card: CardId) {
-    game.take_action(Action::Meld { card }, ActionKind::Regular)
-        .unwrap();
 }
 
 fn option_index(decision: &Decision, pick: impl Fn(&Alternative) -> bool) -> Option<usize> {

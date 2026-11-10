@@ -14,14 +14,10 @@ fn card(f: &mut Fixture, color: Color, value: u8, zone: Zone, icons: &[Icon]) ->
     id
 }
 
-fn zero(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 /// The printed card on top of its own color on that player's board.
 fn top(f: &mut Fixture, code: &str, player: Player) -> CardId {
     let color = Card::from_code(code).unwrap().color;
-    zero(f, code, Zone::Board(player, color))
+    f.card(code, Zone::Board(player, color))
 }
 
 /// Execute one effect as `executor`, demanded by the other player.
@@ -65,16 +61,6 @@ fn first(game: &mut Game) -> (Status, Vec<Event>) {
 
 fn cards(game: &Game, zone: Zone) -> Vec<CardId> {
     game.position().cards(zone).to_vec()
-}
-
-fn revealed(events: &[Event]) -> Vec<CardId> {
-    events
-        .iter()
-        .filter_map(|event| match event {
-            Event::Revealed { card, .. } => Some(*card),
-            _ => None,
-        })
-        .collect()
 }
 
 #[test]
@@ -157,7 +143,7 @@ fn fishing_takes_the_drawn_color_from_all_hands_and_rewards_fresh_water_and_trip
     let source = top(&mut f, "Z004", A);
     card(&mut f, Color::Blue, 2, Zone::Deck(Deck::base(2)), &[]);
     card(&mut f, Color::Blue, 1, Zone::Deck(Deck::base(1)), &[]);
-    let water = zero(&mut f, "Z001", Zone::Deck(Deck::base(0)));
+    let water = f.card("Z001", Zone::Deck(Deck::base(0)));
     let own = card(&mut f, Color::Yellow, 1, Zone::Hand(A), &[]);
     let taken = [1, 2].map(|_| card(&mut f, Color::Yellow, 1, Zone::Hand(B), &[]));
     let kept = card(&mut f, Color::Red, 1, Zone::Hand(B), &[]);
@@ -253,10 +239,10 @@ fn hunting_transfers_the_demanders_choice_of_two_drawn_cards() {
     for tracked in [false, true] {
         let mut f = Fixture::default();
         let source = top(&mut f, "Z006", B);
-        let hidden = zero(&mut f, "Z002", Zone::Hand(A));
-        zero(&mut f, "Z003", Zone::Deck(Deck::base(0)));
-        let later = zero(&mut f, "Z001", Zone::Deck(Deck::base(0)));
-        let earlier = zero(&mut f, "Z005", Zone::Deck(Deck::base(0)));
+        let hidden = f.card("Z002", Zone::Hand(A));
+        f.card("Z003", Zone::Deck(Deck::base(0)));
+        let later = f.card("Z001", Zone::Deck(Deck::base(0)));
+        let earlier = f.card("Z005", Zone::Deck(Deck::base(0)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         if tracked {
             game = game.with_tracking().unwrap();

@@ -2,9 +2,6 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
 fn invoke(game: &mut Game, card: CardId, effect: usize, context: Context) {
     game.start(
         Operation::ExecuteEffect {
@@ -69,10 +66,10 @@ fn demand() -> Context {
 
 fn statistics(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B048", Zone::Board(A, Color::Yellow));
-    let first = base(&mut f, "B001", Zone::Score(B));
-    let second = base(&mut f, "B008", Zone::Score(B));
-    let other = base(&mut f, "B016", Zone::Score(B));
+    let source = f.card("B048", Zone::Board(A, Color::Yellow));
+    let first = f.card("B001", Zone::Score(B));
+    let second = f.card("B008", Zone::Score(B));
+    let other = f.card("B016", Zone::Score(B));
     let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0, demand());
     let mut events = Vec::new();
@@ -106,8 +103,8 @@ fn statistics_demander_chooses_and_same_value_ties_need_no_order() {
 #[test]
 fn statistics_yellow_splay_is_independent_of_an_empty_demand() {
     let mut f = Fixture::default();
-    base(&mut f, "B004", Zone::Board(A, Color::Yellow));
-    let source = base(&mut f, "B048", Zone::Board(A, Color::Yellow));
+    f.card("B004", Zone::Board(A, Color::Yellow));
+    let source = f.card("B048", Zone::Board(A, Color::Yellow));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 0, demand());
     // An empty score pile makes every value the same choice: no menu.
@@ -119,12 +116,12 @@ fn statistics_yellow_splay_is_independent_of_an_empty_demand() {
 
 fn encyclopedia(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B063", Zone::Junk);
-    let first = base(&mut f, "B001", Zone::Score(A));
-    let second = base(&mut f, "B002", Zone::Score(A));
-    let green = base(&mut f, "B008", Zone::Score(A));
-    let other = base(&mut f, "B016", Zone::Score(A));
-    let achievement = base(&mut f, "B048", Zone::AvailableAchievements);
+    let source = f.card("B063", Zone::Junk);
+    let first = f.card("B001", Zone::Score(A));
+    let second = f.card("B002", Zone::Score(A));
+    let green = f.card("B008", Zone::Score(A));
+    let other = f.card("B016", Zone::Score(A));
+    let achievement = f.card("B048", Zone::AvailableAchievements);
     let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0, Context::new(A));
     let mut events = Vec::new();
@@ -166,11 +163,11 @@ fn encyclopedia_commits_to_every_match_and_preserves_within_color_orders() {
 #[test]
 fn encyclopedia_requeries_chosen_value_after_logical_score_membership_changes() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B063", Zone::Junk);
+    let source = f.card("B063", Zone::Junk);
     f.figure(Figure::Michelangelo, Zone::Board(A, Color::Yellow));
-    let cover = base(&mut f, "B004", Zone::Hand(A));
-    let stays = base(&mut f, "B001", Zone::Hand(A));
-    let physical = base(&mut f, "B008", Zone::Score(A));
+    let cover = f.card("B004", Zone::Hand(A));
+    let stays = f.card("B001", Zone::Hand(A));
+    let physical = f.card("B008", Zone::Score(A));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut game, source, 0, Context::new(A));
     let mut events = Vec::new();
@@ -184,11 +181,11 @@ fn encyclopedia_requeries_chosen_value_after_logical_score_membership_changes() 
 #[test]
 fn sanitation_boxes_are_adjusted_once_then_junk_only_the_exact_physical_deck() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B069", Zone::Junk);
+    let source = f.card("B069", Zone::Junk);
     f.figure(Figure::Archimedes, Zone::Board(A, Color::Blue));
-    let seven = base(&mut f, "B068", Zone::Deck(Deck::base(7)));
-    let eight = base(&mut f, "B081", Zone::Deck(Deck::base(8)));
-    let nine = base(&mut f, "B091", Zone::Deck(Deck::base(9)));
+    let seven = f.card("B068", Zone::Deck(Deck::base(7)));
+    let eight = f.card("B081", Zone::Deck(Deck::base(8)));
+    let nine = f.card("B091", Zone::Deck(Deck::base(9)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut game, source, 1, Context::new(A));
     let mut events = Vec::new();
@@ -213,10 +210,10 @@ fn sanitation_boxes_are_adjusted_once_then_junk_only_the_exact_physical_deck() {
 fn mass_media_original_payment_failure_and_decline_never_choose_a_value() {
     for pay in [false, true] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B081", Zone::Junk);
+        let source = f.card("B081", Zone::Junk);
         f.figure(Figure::Homer, Zone::Board(A, Color::Purple));
         let payment = f.figure(Figure::ShenKuo, Zone::Hand(A));
-        let scored = base(&mut f, "B001", Zone::Score(B));
+        let scored = f.card("B001", Zone::Score(B));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         invoke(&mut game, source, 0, Context::new(A));
         let mut events = Vec::new();
@@ -243,7 +240,7 @@ fn mass_media_original_payment_failure_and_decline_never_choose_a_value() {
         }
     }
     let mut f = Fixture::default();
-    let source = base(&mut f, "B081", Zone::Junk);
+    let source = f.card("B081", Zone::Junk);
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 0, Context::new(A));
     finish(&mut game, &mut Vec::new());
@@ -251,12 +248,12 @@ fn mass_media_original_payment_failure_and_decline_never_choose_a_value() {
 
 fn mass_media(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B081", Zone::Junk);
-    let payment = base(&mut f, "B016", Zone::Hand(A));
-    let own = base(&mut f, "B001", Zone::Score(A));
-    let foreign = base(&mut f, "B002", Zone::Score(B));
-    let foreign_two = base(&mut f, "B008", Zone::Score(B));
-    let other = base(&mut f, "B042", Zone::Score(B));
+    let source = f.card("B081", Zone::Junk);
+    let payment = f.card("B016", Zone::Hand(A));
+    let own = f.card("B001", Zone::Score(A));
+    let foreign = f.card("B002", Zone::Score(B));
+    let foreign_two = f.card("B008", Zone::Score(B));
+    let other = f.card("B042", Zone::Score(B));
     let mut game = Game::seeded(f.position(), expansions, 73).unwrap();
     invoke(&mut game, source, 0, Context::new(A));
     let mut events = Vec::new();
@@ -306,9 +303,9 @@ fn services(expansions: Expansions) {
     // values, so all of them are one option).
     for selected in [1, 2] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B094", Zone::Board(A, Color::Purple));
-        let gift = base(&mut f, "B001", Zone::Board(A, Color::Red));
-        let scored = base(&mut f, "B008", Zone::Score(B));
+        let source = f.card("B094", Zone::Board(A, Color::Purple));
+        let gift = f.card("B001", Zone::Board(A, Color::Red));
+        let scored = f.card("B008", Zone::Score(B));
         let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 0, demand());
         let mut events = Vec::new();
@@ -330,10 +327,10 @@ fn services_absent_value_is_legal_but_only_original_fulfillment_pays_top_without
     services(Expansions::BASE);
     services(Expansions::FIGURES);
     let mut f = Fixture::default();
-    let source = base(&mut f, "B094", Zone::Board(A, Color::Purple));
-    let gift = base(&mut f, "B001", Zone::Board(A, Color::Red));
+    let source = f.card("B094", Zone::Board(A, Color::Purple));
+    let gift = f.card("B001", Zone::Board(A, Color::Red));
     f.figure(Figure::Nightingale, Zone::Board(B, Color::Yellow));
-    let protected = base(&mut f, "B008", Zone::Score(B));
+    let protected = f.card("B008", Zone::Score(B));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut game, source, 0, demand());
     value(&mut game, &mut Vec::new(), A, 1);
@@ -344,11 +341,11 @@ fn services_absent_value_is_legal_but_only_original_fulfillment_pays_top_without
 
 fn near_field(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B108", Zone::Junk);
-    let selected = base(&mut f, "B042", Zone::Score(B));
-    let tied = base(&mut f, "B045", Zone::Score(B));
-    let lower = base(&mut f, "B001", Zone::Score(A));
-    let drawn = base(&mut f, "B047", Zone::Deck(Deck::base(5)));
+    let source = f.card("B108", Zone::Junk);
+    let selected = f.card("B042", Zone::Score(B));
+    let tied = f.card("B045", Zone::Score(B));
+    let lower = f.card("B001", Zone::Score(A));
+    let drawn = f.card("B047", Zone::Deck(Deck::base(5)));
     let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0, demand());
     let mut events = Vec::new();
@@ -380,10 +377,10 @@ fn near_field_transfers_then_reveals_and_self_executes_any_highest_tie() {
 #[test]
 fn ordinary_value_and_achievement_choices_do_not_inherit_archimedes_boxes() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B063", Zone::Junk);
+    let source = f.card("B063", Zone::Junk);
     f.figure(Figure::Archimedes, Zone::Board(A, Color::Blue));
-    let scored = base(&mut f, "B001", Zone::Score(A));
-    let achievement = base(&mut f, "B048", Zone::AvailableAchievements);
+    let scored = f.card("B001", Zone::Score(A));
+    let achievement = f.card("B048", Zone::AvailableAchievements);
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut game, source, 0, Context::new(A));
     value(&mut game, &mut Vec::new(), A, 1);
@@ -397,9 +394,9 @@ fn ordinary_value_and_achievement_choices_do_not_inherit_archimedes_boxes() {
 #[test]
 fn mass_media_purple_splay_survives_an_absent_payment() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B081", Zone::Junk);
-    base(&mut f, "B013", Zone::Board(A, Color::Purple));
-    base(&mut f, "B015", Zone::Board(A, Color::Purple));
+    let source = f.card("B081", Zone::Junk);
+    f.card("B013", Zone::Board(A, Color::Purple));
+    f.card("B015", Zone::Board(A, Color::Purple));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source, 0, Context::new(A));
     finish(&mut game, &mut Vec::new());
@@ -411,11 +408,11 @@ fn mass_media_purple_splay_survives_an_absent_payment() {
 #[test]
 fn near_field_reveals_a_highest_logical_score_member_without_moving_it() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B108", Zone::Junk);
+    let source = f.card("B108", Zone::Junk);
     f.figure(Figure::Michelangelo, Zone::Board(A, Color::Yellow));
-    let selected = base(&mut f, "B042", Zone::Hand(A));
-    let lower = base(&mut f, "B001", Zone::Score(A));
-    let drawn = base(&mut f, "B047", Zone::Deck(Deck::base(5)));
+    let selected = f.card("B042", Zone::Hand(A));
+    let lower = f.card("B001", Zone::Score(A));
+    let drawn = f.card("B047", Zone::Deck(Deck::base(5)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut game, source, 1, Context::new(A));
     let mut events = Vec::new();

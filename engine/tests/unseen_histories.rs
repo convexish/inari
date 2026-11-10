@@ -14,29 +14,12 @@ fn unseen_on_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
     f.add(card, zone)
 }
 
-fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
-    for (slot, &icon) in icons.iter().enumerate() {
-        f.cards[usize::from(card.0)].symbols[slot] = Symbol::Icon(icon);
-    }
-}
-
 /// A blank card of value 1 on `player`'s board carrying three of one icon,
 /// enough to share any Unseen card featuring it.
 fn sharer(f: &mut Fixture, player: Player, color: Color, icon: Icon) -> CardId {
     let card = f.tech(color, 1, Zone::Board(player, color), vec![]);
     icons(f, card, &[icon, icon, icon]);
     card
-}
-
-fn dogma(game: &mut Game, card: CardId) {
-    game.take_action(
-        Action::Dogma {
-            card,
-            auspice: false,
-        },
-        ActionKind::Regular,
-    )
-    .unwrap();
 }
 
 fn effect(game: &mut Game, card: CardId, index: u16, executor: Player) {
@@ -96,10 +79,6 @@ fn play(
         }
     }
     panic!("did not terminate");
-}
-
-fn complete(status: Status) {
-    assert!(matches!(status, Status::Complete(_)), "{status:?}");
 }
 
 /// Polytheism (Concept): a sharer's melds do not restrict the owner's, and

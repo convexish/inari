@@ -29,16 +29,6 @@ fn moves(events: &[Event]) -> Vec<&Movement> {
         .collect()
 }
 
-fn revealed(events: &[Event]) -> Vec<CardId> {
-    events
-        .iter()
-        .filter_map(|event| match event {
-            Event::Revealed { card, .. } => Some(*card),
-            _ => None,
-        })
-        .collect()
-}
-
 fn finish(game: &mut Game, events: &mut Vec<Event>) -> Status {
     for _ in 0..100 {
         let status = settle(game, events);

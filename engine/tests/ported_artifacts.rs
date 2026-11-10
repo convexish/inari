@@ -82,43 +82,6 @@ fn new_game(f: Fixture, expansions: Expansions) -> Game {
     Game::new(f.position(), expansions).unwrap()
 }
 
-fn dogma(game: &mut Game, card: CardId) {
-    game.take_action(
-        Action::Dogma {
-            card,
-            auspice: false,
-        },
-        ActionKind::Regular,
-    )
-    .unwrap();
-}
-
-fn meld_action(game: &mut Game, card: CardId) {
-    game.take_action(Action::Meld { card }, ActionKind::Regular)
-        .unwrap();
-}
-
-/// Settle, answering each decision with `decide`; a lone option is taken.
-fn play(
-    game: &mut Game,
-    mut decide: impl FnMut(&Decision) -> Option<usize>,
-) -> (Status, Vec<Event>) {
-    let mut events = Vec::new();
-    loop {
-        let status = settle(game, &mut events);
-        assert!(game.position().check_conservation());
-        match status {
-            Status::Decision(decision) => {
-                let option = decide(&decision)
-                    .or((decision.options.len() == 1).then_some(0))
-                    .unwrap_or_else(|| panic!("unexpected decision {decision:?}"));
-                game.choose(option).unwrap();
-            }
-            status => return (status, events),
-        }
-    }
-}
-
 fn no_decisions(game: &mut Game) -> (Status, Vec<Event>) {
     play(game, |_| None)
 }

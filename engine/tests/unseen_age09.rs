@@ -6,67 +6,11 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
-    for (slot, &icon) in icons.iter().enumerate() {
-        f.cards[usize::from(card.0)].symbols[slot] = Symbol::Icon(icon);
-    }
-}
-
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
-}
-
-fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
-    for _ in 0..300 {
-        match settle(game, events) {
-            Status::Decision(menu) => {
-                let index = preferred
-                    .iter()
-                    .find_map(|&card| pick_known(&menu, card))
-                    .unwrap_or(0);
-                game.choose(index).unwrap();
-            }
-            status => return status,
-        }
-    }
-    panic!("did not terminate");
-}
-
-fn complete(status: Status) {
-    assert!(matches!(status, Status::Complete(_)), "{status:?}");
-}
-
 #[test]
 fn mccarthyism_melds_an_eight_and_eliminates_a_socialism_top() {
     for socialism in [false, true] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U087", Zone::Board(A, Color::Red));
+        let card = f.card("U087", Zone::Board(A, Color::Red));
         let eight = if socialism {
             f.add(Card::from_code("B085").unwrap(), Zone::Deck(Deck::base(8)))
         } else {
@@ -85,7 +29,7 @@ fn mccarthyism_melds_an_eight_and_eliminates_a_socialism_top() {
     }
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U087", Zone::Board(A, Color::Red));
+    let card = f.card("U087", Zone::Board(A, Color::Red));
     let purple = f.tech(Color::Purple, 3, Zone::Board(A, Color::Purple), vec![]);
     f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
     f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);
@@ -103,7 +47,7 @@ fn mccarthyism_melds_an_eight_and_eliminates_a_socialism_top() {
 fn magic_8_ball_grants_the_wish_on_a_concept_tuck_and_repeats_on_red_or_purple() {
     for wish in 0..3 {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U088", Zone::Board(A, Color::Yellow));
+        let card = f.card("U088", Zone::Board(A, Color::Yellow));
         let achievements = [
             f.tech(Color::Green, 1, Zone::AvailableAchievements, vec![]),
             f.tech(Color::Green, 2, Zone::AvailableAchievements, vec![]),
@@ -176,7 +120,7 @@ fn surveillance_wins_for_the_demander_when_both_hands_show_the_same_colors() {
         (vec![], vec![Color::Red], false, 0),
     ] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U089", Zone::Board(A, Color::Yellow));
+        let card = f.card("U089", Zone::Board(A, Color::Yellow));
         for color in victim {
             f.tech(color, 3, Zone::Hand(B), vec![]);
         }
@@ -203,7 +147,7 @@ fn surveillance_wins_for_the_demander_when_both_hands_show_the_same_colors() {
     }
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U089", Zone::Board(A, Color::Yellow));
+    let card = f.card("U089", Zone::Board(A, Color::Yellow));
     let ten = f.tech(Color::Green, 10, Zone::Deck(Deck::base(10)), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     effect(&mut game, card, 1, A, A);
@@ -216,7 +160,7 @@ fn surveillance_wins_for_the_demander_when_both_hands_show_the_same_colors() {
 fn area_51_reveals_a_secret_in_place_and_super_executes_it_only_on_the_executors_turn() {
     for executor in [A, B] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U090", Zone::Board(executor, Color::Green));
+        let card = f.card("U090", Zone::Board(executor, Color::Green));
         let secret = f.tech(Color::Red, 2, Zone::Safe(executor), vec![build::draw(3)]);
         let three = f.tech(Color::Blue, 3, Zone::Deck(Deck::base(3)), vec![]);
         let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -237,7 +181,7 @@ fn area_51_reveals_a_secret_in_place_and_super_executes_it_only_on_the_executors
     }
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U090", Zone::Board(A, Color::Green));
+    let card = f.card("U090", Zone::Board(A, Color::Green));
     f.tech(Color::Green, 1, Zone::Board(A, Color::Green), vec![]);
     let one = f.tech(Color::Red, 1, Zone::AvailableAchievements, vec![]);
     let eleven = f.tech(Color::Red, 11, Zone::Deck(Deck::base(11)), vec![]);
@@ -261,7 +205,7 @@ fn area_51_reveals_a_secret_in_place_and_super_executes_it_only_on_the_executors
 #[test]
 fn teleprompter_runs_the_revealed_tops_non_demand_effects_in_turn_while_they_act() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U091", Zone::Board(A, Color::Green));
+    let card = f.card("U091", Zone::Board(A, Color::Green));
     let two = f.tech(Color::Blue, 2, Zone::Deck(Deck::base(2)), vec![]);
     // Deck 1 holds one card: draw a [2], then (demand, skipped) then score
     // a hand card, then reveal only, which does not count as activity.
@@ -304,7 +248,7 @@ fn teleprompter_runs_the_revealed_tops_non_demand_effects_in_turn_while_they_act
 #[test]
 fn consulting_melds_two_tens_and_self_executes_the_opponents_pick_of_a_top() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U092", Zone::Board(A, Color::Blue));
+    let card = f.card("U092", Zone::Board(A, Color::Blue));
     let red = f.tech(
         Color::Red,
         1,
@@ -331,7 +275,7 @@ fn consulting_melds_two_tens_and_self_executes_the_opponents_pick_of_a_top() {
 #[test]
 fn fermi_paradox_reveals_both_deck_tops_returns_one_and_wins_on_an_empty_board() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U093", Zone::Board(A, Color::Blue));
+    let card = f.card("U093", Zone::Board(A, Color::Blue));
     let nine_under = f.tech(Color::Red, 9, Zone::Deck(Deck::base(9)), vec![]);
     let nine = f.tech(Color::Green, 9, Zone::Deck(Deck::base(9)), vec![]);
     let ten = f.tech(Color::Purple, 10, Zone::Deck(Deck::base(10)), vec![]);
@@ -354,13 +298,13 @@ fn fermi_paradox_reveals_both_deck_tops_returns_one_and_wins_on_an_empty_board()
     assert_eq!(position.cards(Zone::Deck(Deck::base(10))), &[ten]);
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U093", Zone::Hand(B));
+    let card = f.card("U093", Zone::Hand(B));
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     effect(&mut game, card, 1, A, A);
     assert_eq!(run(&mut game, &mut events, &[]), Status::Winner(A));
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U093", Zone::Board(A, Color::Blue));
+    let card = f.card("U093", Zone::Board(A, Color::Blue));
     let junked = f.tech(Color::Red, 3, Zone::Junk, vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     effect(&mut game, card, 1, A, A);
@@ -371,7 +315,7 @@ fn fermi_paradox_reveals_both_deck_tops_returns_one_and_wins_on_an_empty_board()
 #[test]
 fn clown_car_keeps_melding_from_the_demanders_score_pile_until_prosperity() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U094", Zone::Board(A, Color::Purple));
+    let card = f.card("U094", Zone::Board(A, Color::Purple));
     let plain = f.tech(Color::Red, 2, Zone::Score(A), vec![]);
     let prosperous = f.tech(Color::Blue, 4, Zone::Score(A), vec![]);
     icons(&mut f, prosperous, &[Icon::Prosperity]);
@@ -391,7 +335,7 @@ fn clown_car_keeps_melding_from_the_demanders_score_pile_until_prosperity() {
 fn urban_legend_draws_per_industry_color_and_wins_on_five() {
     for colors in [2, 5] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U095", Zone::Board(A, Color::Purple));
+        let card = f.card("U095", Zone::Board(A, Color::Purple));
         icons(&mut f, card, &[Icon::Industry]);
         for color in Color::ALL
             .into_iter()
@@ -418,7 +362,7 @@ fn urban_legend_draws_per_industry_color_and_wins_on_five() {
     }
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U095", Zone::Board(A, Color::Purple));
+    let card = f.card("U095", Zone::Board(A, Color::Purple));
     f.tech(Color::Yellow, 1, Zone::Board(A, Color::Yellow), vec![]);
     f.tech(Color::Yellow, 2, Zone::Board(A, Color::Yellow), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();

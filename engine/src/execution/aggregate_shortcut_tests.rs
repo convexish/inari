@@ -1,18 +1,14 @@
 use super::common::*;
 use super::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 fn fixture(code: &str, extra: bool) -> (Position, CardId) {
     let mut f = Fixture::default();
-    let source = base(&mut f, code, Zone::Junk);
+    let source = f.card(code, Zone::Junk);
     for payment in ["B001", "B004", "B026"] {
-        base(&mut f, payment, Zone::Hand(A));
+        f.card(payment, Zone::Hand(A));
     }
     if extra {
-        base(&mut f, "B008", Zone::Hand(A));
+        f.card("B008", Zone::Hand(A));
     }
     let supply: &[&str] = match code {
         "B020" => &["B016", "B018"],
@@ -21,7 +17,7 @@ fn fixture(code: &str, extra: bool) -> (Position, CardId) {
         "B064" => &["B077"],
         "B032" => {
             // Two colors with Authority; source is not on board.
-            base(&mut f, "B002", Zone::Board(A, Color::Red));
+            f.card("B002", Zone::Board(A, Color::Red));
             &["B037"]
         }
         "B053" => &["B056", "B057", "B062"],
@@ -274,9 +270,9 @@ fn active_return_hazards_and_future_tuck_figures_fail_closed() {
         }
     }
     let mut f = Fixture::default();
-    let source = base(&mut f, "B074", Zone::Junk);
-    base(&mut f, "B001", Zone::Hand(A));
-    base(&mut f, "B004", Zone::Hand(A));
+    let source = f.card("B074", Zone::Junk);
+    f.card("B001", Zone::Hand(A));
+    f.card("B004", Zone::Hand(A));
     f.figure(Figure::EmperorMeiji, Zone::Hand(A));
     let mut reduced = Game::new(f.position(), Expansions::FIGURES).unwrap();
     let mut manual = reduced.clone();
@@ -292,11 +288,11 @@ fn active_return_hazards_and_future_tuck_figures_fail_closed() {
 #[test]
 fn democracy_copied_invocations_share_action_tally_but_not_the_next_action() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B064", Zone::Junk);
-    let a_return = base(&mut f, "B001", Zone::Hand(A));
-    let b_return = base(&mut f, "B004", Zone::Hand(B));
-    let first = base(&mut f, "B077", Zone::Deck(Deck::base(8)));
-    let second = base(&mut f, "B079", Zone::Deck(Deck::base(8)));
+    let source = f.card("B064", Zone::Junk);
+    let a_return = f.card("B001", Zone::Hand(A));
+    let b_return = f.card("B004", Zone::Hand(B));
+    let first = f.card("B077", Zone::Deck(Deck::base(8)));
+    let second = f.card("B079", Zone::Deck(Deck::base(8)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     // An isolated scheduler witness for two copied printed invocations inside
     // one outer action: no synthetic card programs or alternate semantics.
@@ -325,8 +321,8 @@ fn democracy_copied_invocations_share_action_tally_but_not_the_next_action() {
 #[test]
 fn democracy_terminal_unwind_discards_action_tallies_and_clone_resumes_exactly() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B064", Zone::Junk);
-    let payment = base(&mut f, "B001", Zone::Hand(A));
+    let source = f.card("B064", Zone::Junk);
+    let payment = f.card("B001", Zone::Hand(A));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     invoke(&mut game, source);
     choose_card(&mut game, &mut Vec::new(), payment);
@@ -343,14 +339,10 @@ fn democracy_terminal_unwind_discards_action_tallies_and_clone_resumes_exactly()
 #[test]
 fn democracy_later_copy_rewards_existing_action_lead_even_with_no_new_return() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B064", Zone::Junk);
-    let a_returns = [
-        base(&mut f, "B001", Zone::Hand(A)),
-        base(&mut f, "B002", Zone::Hand(A)),
-    ];
-    let b_return = base(&mut f, "B004", Zone::Hand(B));
-    let rewards =
-        ["B077", "B079", "B080"].map(|code| base(&mut f, code, Zone::Deck(Deck::base(8))));
+    let source = f.card("B064", Zone::Junk);
+    let a_returns = [f.card("B001", Zone::Hand(A)), f.card("B002", Zone::Hand(A))];
+    let b_return = f.card("B004", Zone::Hand(B));
+    let rewards = ["B077", "B079", "B080"].map(|code| f.card(code, Zone::Deck(Deck::base(8))));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     game.push_action_returns();
     game.push_copied(source, ExecutionMode::SelfExecute, Context::new(A));
@@ -383,13 +375,13 @@ fn democracy_later_copy_rewards_existing_action_lead_even_with_no_new_return() {
 #[test]
 fn lighting_starts_a_new_ordered_suffix_after_an_unrestricted_figure_tuck() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B074", Zone::Junk);
+    let source = f.card("B074", Zone::Junk);
     // Tucked into an empty pile, the Figure becomes a live top.
     let figure = f.figure(Figure::Archimedes, Zone::Hand(A));
-    let red = base(&mut f, "B001", Zone::Hand(A));
-    let yellow = base(&mut f, "B004", Zone::Hand(A));
+    let red = f.card("B001", Zone::Hand(A));
+    let yellow = f.card("B004", Zone::Hand(A));
     for code in ["B070", "B071"] {
-        base(&mut f, code, Zone::Deck(Deck::base(7)));
+        f.card(code, Zone::Deck(Deck::base(7)));
     }
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     invoke(&mut game, source);
@@ -415,12 +407,12 @@ fn lighting_starts_a_new_ordered_suffix_after_an_unrestricted_figure_tuck() {
 #[test]
 fn reward_draw_reactions_keep_native_shuffle_rng_and_canonical_event_oracle() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B020", Zone::Junk);
+    let source = f.card("B020", Zone::Junk);
     for code in ["B001", "B004", "B026"] {
-        base(&mut f, code, Zone::Hand(A));
+        f.card(code, Zone::Hand(A));
     }
     for code in ["B016", "B018"] {
-        base(&mut f, code, Zone::Deck(Deck::base(2)));
+        f.card(code, Zone::Deck(Deck::base(2)));
     }
     f.figure(Figure::AlexTrebek, Zone::Board(A, Color::Yellow));
     f.figure(Figure::Archimedes, Zone::Deck(Deck::figures(2)));

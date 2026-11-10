@@ -1,9 +1,6 @@
 use super::common::*;
 use super::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
 fn top(f: &mut Fixture, code: &str, player: Player) -> CardId {
     let card = Card::from_code(code).unwrap();
     let color = card.color;
@@ -78,14 +75,14 @@ fn choose_colors(game: &mut Game, colors: &[Color], events: &mut Vec<Event>) {
 
 fn mobility(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B077", Zone::Junk);
+    let source = f.card("B077", Zone::Junk);
     let buried = top(&mut f, "B010", A);
     let blue = top(&mut f, "B082", A);
     let green = top(&mut f, "B081", A);
     let purple = top(&mut f, "B025", A);
     let excluded = top(&mut f, "B079", A);
     let red = top(&mut f, "B076", A);
-    let reward = base(&mut f, "B078", Zone::Deck(Deck::base(8)));
+    let reward = f.card("B078", Zone::Deck(Deck::base(8)));
     let mut game = Game::new(f.position(), expansions).unwrap();
     start(&mut game, source, 0);
     let mut events = Vec::new();
@@ -134,12 +131,12 @@ fn mobility_keeps_live_highest_ties_and_consumes_colors_with_and_without_figures
 fn pair_boundaries(expansions: Expansions) {
     for matching in [false, true] {
         let mut f = Fixture::default();
-        let source = base(&mut f, "B110", Zone::Junk);
+        let source = f.card("B110", Zone::Junk);
         let red = top(&mut f, "B016", A);
         let green = top(&mut f, if matching { "B020" } else { "B008" }, A);
-        let low = base(&mut f, "B001", Zone::Hand(A));
-        let equal = base(&mut f, "B025", Zone::Score(A));
-        let high = base(&mut f, "B081", Zone::Score(A));
+        let low = f.card("B001", Zone::Hand(A));
+        let equal = f.card("B025", Zone::Score(A));
+        let high = f.card("B081", Zone::Score(A));
         let mut game = Game::new(f.position(), expansions).unwrap();
         start(&mut game, source, 0);
         let mut events = Vec::new();
@@ -161,7 +158,7 @@ fn pair_boundaries(expansions: Expansions) {
         assert!(game.position.cards(Zone::Score(A)).contains(&high));
     }
     let mut f = Fixture::default();
-    let source = base(&mut f, "B110", Zone::Junk);
+    let source = f.card("B110", Zone::Junk);
     top(&mut f, "B001", A);
     let upper = top(&mut f, "B002", A);
     let mut game = Game::new(f.position(), expansions).unwrap();
@@ -183,11 +180,11 @@ fn hypersonics_requires_a_complete_distinct_color_pair_before_any_return() {
 #[test]
 fn hypersonics_revalidates_committed_second_identity_after_future_reaction_state_changes() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B110", Zone::Junk);
+    let source = f.card("B110", Zone::Junk);
     let first = top(&mut f, "B001", A);
     let second = top(&mut f, "B008", A);
-    let cover = base(&mut f, "B020", Zone::Hand(A));
-    let low = base(&mut f, "B004", Zone::Score(A));
+    let cover = f.card("B020", Zone::Hand(A));
+    let low = f.card("B004", Zone::Score(A));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     start(&mut game, source, 0);
     let mut events = Vec::new();
@@ -216,11 +213,11 @@ fn empiricism(expansions: Expansions) {
     for matching in [false, true] {
         for stack_size in 0..=2 {
             let mut f = Fixture::default();
-            let source = base(&mut f, "B084", Zone::Junk);
+            let source = f.card("B084", Zone::Junk);
             for code in ["B011", "B012"].into_iter().take(stack_size) {
                 top(&mut f, code, A);
             }
-            let drawn = base(&mut f, "B093", Zone::Deck(Deck::base(9)));
+            let drawn = f.card("B093", Zone::Deck(Deck::base(9)));
             let mut position = f.position();
             if stack_size == 2 {
                 position.players[A.index()].splays[Color::Blue as usize] = Splay::Right;
@@ -269,11 +266,11 @@ fn empiricism_matches_exact_draw_and_splays_or_unsplays_empty_singleton_and_stac
 #[test]
 fn empiricism_uses_original_draw_color_not_curie_child_color() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B084", Zone::Junk);
+    let source = f.card("B084", Zone::Junk);
     f.figure(Figure::MarieCurie, Zone::Board(A, Color::Blue));
     top(&mut f, "B008", A);
-    let original = base(&mut f, "B091", Zone::Deck(Deck::base(9)));
-    let child = base(&mut f, "B088", Zone::Deck(Deck::base(9)));
+    let original = f.card("B091", Zone::Deck(Deck::base(9)));
+    let child = f.card("B088", Zone::Deck(Deck::base(9)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     start(&mut game, source, 0);
     let mut events = Vec::new();
@@ -290,7 +287,7 @@ fn empiricism_uses_original_draw_color_not_curie_child_color() {
 #[test]
 fn empiricism_win_reads_effective_concepts_at_its_separate_instruction() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B084", Zone::Junk);
+    let source = f.card("B084", Zone::Junk);
     for code in ["B011", "B012", "B023", "B025", "B093"] {
         top(&mut f, code, A);
     }
@@ -308,7 +305,7 @@ fn empiricism_win_reads_effective_concepts_at_its_separate_instruction() {
 
 fn climatology(expansions: Expansions) {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B112", Zone::Junk);
+    let source = f.card("B112", Zone::Junk);
     let buried = top(&mut f, "B001", A);
     let upper = top(&mut f, "B002", A);
     let green = top(&mut f, "B009", A);
@@ -359,11 +356,11 @@ fn climatology(expansions: Expansions) {
     assert_eq!(game.position.top(A, Color::Green), Some(green));
 
     let mut f = Fixture::default();
-    let source = base(&mut f, "B112", Zone::Junk);
+    let source = f.card("B112", Zone::Junk);
     let returned = top(&mut f, "B016", A);
-    let low = base(&mut f, "B001", Zone::Score(A));
-    let equal = base(&mut f, "B025", Zone::Score(A));
-    let high = base(&mut f, "B081", Zone::Score(A));
+    let low = f.card("B001", Zone::Score(A));
+    let equal = f.card("B025", Zone::Score(A));
+    let high = f.card("B081", Zone::Score(A));
     let mut game = Game::new(f.position(), expansions).unwrap();
     start(&mut game, source, 1);
     let mut events = Vec::new();
@@ -384,14 +381,14 @@ fn climatology_chooser_does_not_take_control_and_newly_exposed_same_color_is_eli
 #[test]
 fn hypersonics_union_deduplicates_aliases_and_uses_native_rng_for_foreign_hidden_cards() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B110", Zone::Junk);
+    let source = f.card("B110", Zone::Junk);
     f.figure(Figure::EmperorMeiji, Zone::Board(A, Color::Purple));
     f.figure(Figure::Michelangelo, Zone::Board(A, Color::Yellow));
     let first = top(&mut f, "B011", A);
     let second = top(&mut f, "B008", A);
-    let owned = base(&mut f, "B004", Zone::Hand(B));
-    let hidden_one = base(&mut f, "B001", Zone::Hand(A));
-    let hidden_two = base(&mut f, "B002", Zone::Hand(A));
+    let owned = f.card("B004", Zone::Hand(B));
+    let hidden_one = f.card("B001", Zone::Hand(A));
+    let hidden_two = f.card("B002", Zone::Hand(A));
     let mut game = Game::seeded(f.position(), Expansions::FIGURES, 91).unwrap();
     let mut context = Context::new(A);
     context.controller = B;
@@ -460,24 +457,24 @@ fn hypersonics_union_deduplicates_aliases_and_uses_native_rng_for_foreign_hidden
 
 fn oracle_fixture(code: &str) -> (Position, CardId) {
     let mut f = Fixture::default();
-    let source = base(&mut f, code, Zone::Junk);
+    let source = f.card(code, Zone::Junk);
     match code {
         "B077" => {
             for code in ["B078", "B081", "B082"] {
                 top(&mut f, code, A);
             }
-            base(&mut f, "B085", Zone::Deck(Deck::base(8)));
+            f.card("B085", Zone::Deck(Deck::base(8)));
         }
         "B084" => {
             top(&mut f, "B011", A);
-            base(&mut f, "B093", Zone::Deck(Deck::base(9)));
+            f.card("B093", Zone::Deck(Deck::base(9)));
         }
         "B110" => {
             for code in ["B001", "B004", "B008"] {
                 top(&mut f, code, A);
             }
-            base(&mut f, "B011", Zone::Hand(A));
-            base(&mut f, "B013", Zone::Score(A));
+            f.card("B011", Zone::Hand(A));
+            f.card("B013", Zone::Score(A));
         }
         "B112" => {
             for code in ["B001", "B006", "B009"] {

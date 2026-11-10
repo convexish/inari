@@ -3,66 +3,10 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
-fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
-    for (slot, &icon) in icons.iter().enumerate() {
-        f.cards[usize::from(card.0)].symbols[slot] = Symbol::Icon(icon);
-    }
-}
-
-fn effect(game: &mut Game, card: CardId, index: u16, executor: Player, demander: Player) {
-    let mut context = Context::new(executor);
-    context.demander = demander;
-    context.source_owner = demander;
-    game.start(
-        Operation::ExecuteEffect {
-            card,
-            effect: index,
-            boxed: BoxedValues::default(),
-        },
-        context,
-    )
-    .unwrap();
-}
-
-fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
-    menu.options.iter().position(|option| {
-        matches!(
-            option,
-            Alternative::Select { target: TargetDescriptor::Known { card: c, .. } }
-            | Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. }
-            if *c == card
-        )
-    })
-}
-
-fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> Status {
-    for _ in 0..300 {
-        match settle(game, events) {
-            Status::Decision(menu) => {
-                let index = preferred
-                    .iter()
-                    .find_map(|&card| pick_known(&menu, card))
-                    .unwrap_or(0);
-                game.choose(index).unwrap();
-            }
-            status => return status,
-        }
-    }
-    panic!("did not terminate");
-}
-
-fn complete(status: Status) {
-    assert!(matches!(status, Status::Complete(_)), "{status:?}");
-}
-
 #[test]
 fn cloaking_moves_a_claimed_standard_achievement_into_the_demanders_safe() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U106", Zone::Board(A, Color::Red));
+    let card = f.card("U106", Zone::Board(A, Color::Red));
     let claimed = f.tech(Color::Blue, 3, Zone::Achievements(B), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     effect(&mut game, card, 0, B, A);
@@ -76,7 +20,7 @@ fn cloaking_moves_a_claimed_standard_achievement_into_the_demanders_safe() {
 #[test]
 fn dark_web_unsplays_any_board_and_bulk_safeguards_or_achieves() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U107", Zone::Board(A, Color::Red));
+    let card = f.card("U107", Zone::Board(A, Color::Red));
     f.tech(Color::Blue, 1, Zone::Board(B, Color::Blue), vec![]);
     f.tech(Color::Blue, 2, Zone::Board(B, Color::Blue), vec![]);
     let position = f
@@ -110,7 +54,7 @@ fn dark_web_unsplays_any_board_and_bulk_safeguards_or_achieves() {
 
     for branch in 0..2 {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U107", Zone::Board(A, Color::Red));
+        let card = f.card("U107", Zone::Board(A, Color::Red));
         let supply = [
             f.tech(Color::Green, 1, Zone::AvailableAchievements, vec![]),
             f.tech(Color::Green, 2, Zone::AvailableAchievements, vec![]),
@@ -141,7 +85,7 @@ fn dark_web_unsplays_any_board_and_bulk_safeguards_or_achieves() {
 fn escape_room_scores_a_revealed_eleven_and_a_matching_hand_card_or_eliminates() {
     for matching in [true, false] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U108", Zone::Board(A, Color::Yellow));
+        let card = f.card("U108", Zone::Board(A, Color::Yellow));
         let hand = f.tech(
             if matching { Color::Blue } else { Color::Red },
             2,
@@ -166,7 +110,7 @@ fn escape_room_scores_a_revealed_eleven_and_a_matching_hand_card_or_eliminates()
     }
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U108", Zone::Board(A, Color::Yellow));
+    let card = f.card("U108", Zone::Board(A, Color::Yellow));
     let mut efficient = Vec::new();
     for color in [Color::Red, Color::Blue, Color::Green, Color::Purple] {
         let top = f.tech(color, 1, Zone::Board(A, color), vec![]);
@@ -187,7 +131,7 @@ fn escape_room_scores_a_revealed_eleven_and_a_matching_hand_card_or_eliminates()
 #[test]
 fn fashion_mask_tucks_one_marked_top_per_color_then_scores_and_splays_aslant() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U109", Zone::Board(A, Color::Yellow));
+    let card = f.card("U109", Zone::Board(A, Color::Yellow));
     let red_under = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let red = f.tech(Color::Red, 3, Zone::Board(A, Color::Red), vec![]);
     icons(&mut f, red, &[Icon::Prosperity]);
@@ -206,7 +150,7 @@ fn fashion_mask_tucks_one_marked_top_per_color_then_scores_and_splays_aslant() {
     assert_eq!(position.top(A, Color::Green), Some(green));
 
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U109", Zone::Board(A, Color::Yellow));
+    let card = f.card("U109", Zone::Board(A, Color::Yellow));
     let yellows: Vec<_> = (0..6)
         .map(|_| f.tech(Color::Yellow, 2, Zone::Board(A, Color::Yellow), vec![]))
         .collect();
@@ -228,7 +172,7 @@ fn fashion_mask_tucks_one_marked_top_per_color_then_scores_and_splays_aslant() {
 #[test]
 fn green_hydrogen_scores_covered_greens_and_tucks_an_eleven_each() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U110", Zone::Board(A, Color::Green));
+    let card = f.card("U110", Zone::Board(A, Color::Green));
     let covered = [
         f.tech(Color::Green, 1, Zone::Board(A, Color::Green), vec![]),
         f.tech(Color::Green, 2, Zone::Board(A, Color::Green), vec![]),
@@ -259,7 +203,7 @@ fn green_hydrogen_scores_covered_greens_and_tucks_an_eleven_each() {
 #[test]
 fn green_hydrogen_tucks_each_eleven_before_an_exhausted_draw_ends_the_game() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U110", Zone::Board(A, Color::Green));
+    let card = f.card("U110", Zone::Board(A, Color::Green));
     f.tech(Color::Green, 1, Zone::Board(A, Color::Green), vec![]);
     f.tech(Color::Green, 2, Zone::Board(A, Color::Green), vec![]);
     f.tech(Color::Green, 5, Zone::Board(A, Color::Green), vec![]);
@@ -279,7 +223,7 @@ fn green_hydrogen_tucks_each_eleven_before_an_exhausted_draw_ends_the_game() {
 #[test]
 fn mystery_box_claims_without_eligibility_reveals_only_that_card_and_executes_it() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U111", Zone::Board(A, Color::Green));
+    let card = f.card("U111", Zone::Board(A, Color::Green));
     let prize = f.tech(
         Color::Red,
         9,
@@ -313,7 +257,7 @@ fn mystery_box_claims_without_eligibility_reveals_only_that_card_and_executes_it
 #[test]
 fn astrobiology_returns_a_bottom_splays_aslant_and_scores_the_healthless_rest() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U112", Zone::Board(A, Color::Blue));
+    let card = f.card("U112", Zone::Board(A, Color::Blue));
     let bottom = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let healthy = f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);
     icons(&mut f, healthy, &[Icon::Health]);
@@ -334,7 +278,7 @@ fn astrobiology_returns_a_bottom_splays_aslant_and_scores_the_healthless_rest() 
 #[test]
 fn holography_scores_below_five_splays_aslant_and_swaps_low_scores_for_lower_achievements() {
     let mut f = Fixture::default();
-    let card = unseen(&mut f, "U114", Zone::Board(A, Color::Purple));
+    let card = f.card("U114", Zone::Board(A, Color::Purple));
     let reds: Vec<_> = (0..6)
         .map(|_| f.tech(Color::Red, 4, Zone::Board(A, Color::Red), vec![]))
         .collect();
@@ -361,7 +305,7 @@ fn holography_scores_below_five_splays_aslant_and_swaps_low_scores_for_lower_ach
 fn metaverse_scores_each_splayed_top_and_eliminates_under_three() {
     for splayed in [3, 2] {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U115", Zone::Board(A, Color::Purple));
+        let card = f.card("U115", Zone::Board(A, Color::Purple));
         let mut tops = Vec::new();
         let mut position = {
             for color in [Color::Red, Color::Blue, Color::Green]
@@ -402,7 +346,7 @@ fn quantum_computers_eliminates_on_a_lost_flip_and_pays_secrets_for_lost_flips()
     let mut outcomes = [false, false];
     for seed in 0..32 {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U113", Zone::Board(A, Color::Blue));
+        let card = f.card("U113", Zone::Board(A, Color::Blue));
         let mut game = Game::seeded(f.position(), Expansions::UNSEEN, seed).unwrap();
         effect(&mut game, card, 0, B, A);
         let mut events = Vec::new();
@@ -430,7 +374,7 @@ fn quantum_computers_eliminates_on_a_lost_flip_and_pays_secrets_for_lost_flips()
     let mut outcomes = [false, false];
     for seed in 0..32 {
         let mut f = Fixture::default();
-        let card = unseen(&mut f, "U113", Zone::Board(A, Color::Blue));
+        let card = f.card("U113", Zone::Board(A, Color::Blue));
         let secrets = [
             f.tech(Color::Red, 1, Zone::Safe(A), vec![]),
             f.tech(Color::Green, 2, Zone::Safe(A), vec![]),

@@ -9,10 +9,6 @@ fn native(f: &mut Fixture, figure: Figure, owner: Player) -> CardId {
     f.add(card, Zone::Board(owner, color))
 }
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
-
 fn draw(value: u8) -> Instruction {
     build::draw(value)
 }
@@ -91,11 +87,11 @@ fn ptahhotep_scores_original_then_super_executes_native_demand_without_sharing_o
     native(&mut f, Figure::Ptahhotep, A);
     native(&mut f, Figure::AlfredNobel, B);
     let source = original(&mut f, A);
-    let gunpowder = base(&mut f, "B037", Zone::Hand(A));
-    let payment = base(&mut f, "B024", Zone::Board(B, Color::Purple));
-    let reward = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
-    let untouched = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
-    let seven = base(&mut f, "B075", Zone::Deck(Deck::base(7)));
+    let gunpowder = f.card("B037", Zone::Hand(A));
+    let payment = f.card("B024", Zone::Board(B, Color::Purple));
+    let reward = f.card("B021", Zone::Deck(Deck::base(2)));
+    let untouched = f.card("B004", Zone::Deck(Deck::base(1)));
+    let seven = f.card("B075", Zone::Deck(Deck::base(7)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     game.begin_action(ActionKind::Regular).unwrap();
     dogma(&mut game, source, ActionKind::Regular);
@@ -153,9 +149,9 @@ fn regular_ordinal_owner_and_free_scope_do_not_borrow_replacements() {
             let mut f = Fixture::default();
             native(&mut f, figure, A);
             let source = original(&mut f, owner);
-            let untouched = base(&mut f, "B012", Zone::Hand(A));
-            let achievement = base(&mut f, "B021", Zone::AvailableAchievements);
-            let reward = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+            let untouched = f.card("B012", Zone::Hand(A));
+            let achievement = f.card("B021", Zone::AvailableAchievements);
+            let reward = f.card("B004", Zone::Deck(Deck::base(1)));
             let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
             game.begin_turn(owner).unwrap();
             for _ in 0..previous {
@@ -190,7 +186,7 @@ fn idle_operation_is_not_a_regular_action_even_when_clock_matches() {
         let mut f = Fixture::default();
         native(&mut f, figure, A);
         let source = original(&mut f, A);
-        let reward = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+        let reward = f.card("B004", Zone::Deck(Deck::base(1)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         for _ in 0..ordinal {
             game.begin_action(ActionKind::Regular).unwrap();
@@ -220,7 +216,7 @@ fn empty_ptahhotep_and_avicenna_still_replace_the_original_without_optional_decl
         let mut f = Fixture::default();
         native(&mut f, figure, A);
         let source = original(&mut f, A);
-        let untouched = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+        let untouched = f.card("B004", Zone::Deck(Deck::base(1)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         if figure == Figure::Ptahhotep {
             game.begin_action(ActionKind::Regular).unwrap();
@@ -241,10 +237,10 @@ fn ptahhotep_mandatory_logical_hand_menu_excludes_opponents_cards() {
     let mut f = Fixture::default();
     native(&mut f, Figure::Ptahhotep, A);
     let source = original(&mut f, A);
-    let writing = base(&mut f, "B012", Zone::Hand(A));
-    let other = base(&mut f, "B031", Zone::Hand(A));
-    let borrowed = base(&mut f, "B008", Zone::Hand(B));
-    let reward = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
+    let writing = f.card("B012", Zone::Hand(A));
+    let other = f.card("B031", Zone::Hand(A));
+    let borrowed = f.card("B008", Zone::Hand(B));
+    let reward = f.card("B021", Zone::Deck(Deck::base(2)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     assert!(
         !game
@@ -284,10 +280,10 @@ fn plato_splays_selected_color_or_junks_only_hidden_age_two_then_runs_original()
             f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
         }
         let source = original(&mut f, A);
-        let first = base(&mut f, "B021", Zone::AvailableAchievements);
-        let second = base(&mut f, "B024", Zone::AvailableAchievements);
-        let other = base(&mut f, "B004", Zone::AvailableAchievements);
-        let reward = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+        let first = f.card("B021", Zone::AvailableAchievements);
+        let second = f.card("B024", Zone::AvailableAchievements);
+        let other = f.card("B004", Zone::AvailableAchievements);
+        let reward = f.card("B004", Zone::Deck(Deck::base(1)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         if already_left {
             game.start(
@@ -351,7 +347,7 @@ fn plato_can_junk_the_selected_live_board_alias_without_aborting_original_dogma(
     // red top leaves play; participant icons are correctly queried afterward.
     let support = f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
     f.cards[usize::from(support.0)].symbols[0] = Symbol::Icon(Icon::Authority);
-    let reward = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+    let reward = f.card("B004", Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     dogma(&mut game, source, ActionKind::Regular);
     let mut events = Vec::new();
@@ -391,8 +387,8 @@ fn avicenna_samples_one_lowest_hidden_tie_and_executes_that_identity() {
                 vec![draw(value)],
             )
         });
-        let higher = base(&mut f, "B037", Zone::AvailableAchievements);
-        let untouched = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+        let higher = f.card("B037", Zone::AvailableAchievements);
+        let untouched = f.card("B004", Zone::Deck(Deck::base(1)));
         let rewards = [4, 5, 6]
             .map(|value| f.tech(Color::Yellow, value, Zone::Deck(Deck::base(value)), vec![]));
         let mut game = Game::seeded(f.position(), Expansions::FIGURES, seed).unwrap();
@@ -431,8 +427,8 @@ fn avicenna_junks_and_super_executes_hidden_native_writing_without_a_share() {
     let mut f = Fixture::default();
     native(&mut f, Figure::Avicenna, A);
     let source = original(&mut f, A);
-    let writing = base(&mut f, "B012", Zone::AvailableAchievements);
-    let reward = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
+    let writing = f.card("B012", Zone::AvailableAchievements);
+    let reward = f.card("B021", Zone::Deck(Deck::base(2)));
     // Opponent's abundant Concepts do not turn a super-execution into a share.
     native(&mut f, Figure::JamesClerkMaxwell, B);
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
@@ -487,10 +483,10 @@ fn wells_uses_actual_featured_icon_not_visible_icons_and_not_auspice() {
             f.cards[usize::from(source.0)].symbols = four_slots([Symbol::Icon(Icon::Concept); 4]);
         }
         let copied = f.tech(Color::Green, 10, Zone::Deck(Deck::base(10)), vec![draw(2)]);
-        let original_reward = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
-        let copy_reward = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
+        let original_reward = f.card("B004", Zone::Deck(Deck::base(1)));
+        let copy_reward = f.card("B021", Zone::Deck(Deck::base(2)));
         // On the Authority non-trigger, A has zero featured icons and B shares.
-        let spare = base(&mut f, "B008", Zone::Deck(Deck::base(1)));
+        let spare = f.card("B008", Zone::Deck(Deck::base(1)));
         let figure_reward = f.figure(Figure::JackieChan, Zone::Deck(Deck::figures(10)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         game.begin_turn(owner).unwrap();
@@ -554,9 +550,9 @@ fn wells_uses_actual_featured_icon_not_visible_icons_and_not_auspice() {
 fn wells_native_robotics_internet_keeps_chain_and_continues_after_covering_wells() {
     let mut f = Fixture::default();
     let wells = native(&mut f, Figure::HGWells, A);
-    let writing = base(&mut f, "B012", Zone::Board(A, Color::Blue));
-    let internet = base(&mut f, "B105", Zone::Deck(Deck::base(10)));
-    let robotics = base(&mut f, "B097", Zone::Deck(Deck::base(10)));
+    let writing = f.card("B012", Zone::Board(A, Color::Blue));
+    let internet = f.card("B105", Zone::Deck(Deck::base(10)));
+    let robotics = f.card("B097", Zone::Deck(Deck::base(10)));
     // Clearly synthetic age-11 supply: Chain plus Internet's three routed draws.
     let second = f.tech(Color::Red, 11, Zone::Deck(Deck::base(11)), vec![]);
     let first = f.tech(Color::Blue, 11, Zone::Deck(Deck::base(11)), vec![]);
@@ -611,8 +607,8 @@ fn exhausted_wells_child_abandons_copy_original_and_action_tail() {
     let mut f = Fixture::default();
     native(&mut f, Figure::HGWells, A);
     native(&mut f, Figure::Gilgamesh, A);
-    let writing = base(&mut f, "B012", Zone::Board(A, Color::Blue));
-    let untouched = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
+    let writing = f.card("B012", Zone::Board(A, Color::Blue));
+    let untouched = f.card("B021", Zone::Deck(Deck::base(2)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     dogma(&mut game, writing, ActionKind::Regular);
     let (game, events, status) = clone_boundaries(game, None);
@@ -632,10 +628,10 @@ fn instead_retains_unsuppressed_action_end_fading_and_first_competition_is_singl
         let avicenna = native(&mut f, Figure::Avicenna, A);
         let plato = native(&mut f, Figure::Plato, A);
         let source = original(&mut f, A);
-        let writing = base(&mut f, "B012", Zone::AvailableAchievements);
-        let achievement = base(&mut f, "B021", Zone::AvailableAchievements);
-        let original_reward = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
-        let copy_reward = base(&mut f, "B024", Zone::Deck(Deck::base(2)));
+        let writing = f.card("B012", Zone::AvailableAchievements);
+        let achievement = f.card("B021", Zone::AvailableAchievements);
+        let original_reward = f.card("B004", Zone::Deck(Deck::base(1)));
+        let copy_reward = f.card("B024", Zone::Deck(Deck::base(2)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         dogma(&mut game, source, ActionKind::Regular);
         let mut prefix = Vec::new();
@@ -695,7 +691,7 @@ fn native_any_two_decrees_require_live_owner_and_complete_payment_and_effect() {
                 }
                 let first = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
                 let second = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
-                let rival_score = base(&mut f, "B004", Zone::Score(B));
+                let rival_score = f.card("B004", Zone::Score(B));
                 let rival_figure = f.figure(Figure::Tigernmas, Zone::Board(B, Color::Red));
                 let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
                 if covered || count == 1 {
@@ -743,12 +739,12 @@ fn ptahhotep_foreign_dogma_keeps_the_scored_cards_owner_and_demand_controller() 
     let mut f = Fixture::default();
     native(&mut f, Figure::Ptahhotep, A);
     native(&mut f, Figure::SergeyBrin, A);
-    let foreign = base(&mut f, "B012", Zone::Board(B, Color::Blue));
-    let gunpowder = base(&mut f, "B037", Zone::Hand(A));
-    base(&mut f, "B005", Zone::Hand(A));
-    let payment = base(&mut f, "B024", Zone::Board(B, Color::Purple));
-    let unselected = base(&mut f, "B021", Zone::Board(B, Color::Green));
-    let reward = base(&mut f, "B022", Zone::Deck(Deck::base(2)));
+    let foreign = f.card("B012", Zone::Board(B, Color::Blue));
+    let gunpowder = f.card("B037", Zone::Hand(A));
+    f.card("B005", Zone::Hand(A));
+    let payment = f.card("B024", Zone::Board(B, Color::Purple));
+    let unselected = f.card("B021", Zone::Board(B, Color::Green));
+    let reward = f.card("B022", Zone::Deck(Deck::base(2)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     game.begin_action(ActionKind::Regular).unwrap();
     dogma(&mut game, foreign, ActionKind::Regular);
@@ -794,9 +790,9 @@ fn avicenna_copies_ignore_archimedes_but_keep_dukes_unsuppressed_action_end() {
     native(&mut f, Figure::Archimedes, A);
     native(&mut f, Figure::DukeEllington, A);
     let source = original(&mut f, A);
-    let writing = base(&mut f, "B012", Zone::AvailableAchievements);
-    let reward = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
-    let untouched = base(&mut f, "B031", Zone::Deck(Deck::base(3)));
+    let writing = f.card("B012", Zone::AvailableAchievements);
+    let reward = f.card("B021", Zone::Deck(Deck::base(2)));
+    let untouched = f.card("B031", Zone::Deck(Deck::base(3)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     dogma(&mut game, source, ActionKind::Regular);
     let (game, events, status) = clone_boundaries(game, None);
@@ -832,7 +828,7 @@ fn wells_competes_with_kepler_without_inheriting_its_box_or_action_end_scope() {
     let source = original(&mut f, A);
     f.cards[usize::from(source.0)].featured = Some(Icon::Concept);
     let copied = f.tech(Color::Green, 10, Zone::Deck(Deck::base(10)), vec![draw(1)]);
-    let reward = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+    let reward = f.card("B004", Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     dogma(&mut game, source, ActionKind::Regular);
     let (game, events, status) = clone_boundaries(game, Some(Figure::HGWells));
@@ -866,8 +862,8 @@ fn platos_first_splay_suppresses_shen_kuo_instead_of_treating_a_child_as_success
     native(&mut f, Figure::ShenKuo, A);
     f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let source = original(&mut f, A);
-    let achievement = base(&mut f, "B021", Zone::AvailableAchievements);
-    let reward = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+    let achievement = f.card("B021", Zone::AvailableAchievements);
+    let reward = f.card("B004", Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     dogma(&mut game, source, ActionKind::Regular);
     let (game, _, status) = clone_boundaries(game, None);
@@ -895,9 +891,9 @@ fn native_same_color_covering_disables_reactions_rather_than_inventing_alias_com
             f.cards[usize::from(top.0)].color
         );
         let source = original(&mut f, A);
-        let writing = base(&mut f, "B012", Zone::Hand(B));
-        let achievement = base(&mut f, "B021", Zone::AvailableAchievements);
-        let reward = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+        let writing = f.card("B012", Zone::Hand(B));
+        let achievement = f.card("B021", Zone::AvailableAchievements);
+        let reward = f.card("B004", Zone::Deck(Deck::base(1)));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         for _ in 1..ordinal {
             game.begin_action(ActionKind::Regular).unwrap();
@@ -921,9 +917,9 @@ fn declining_a_copied_optional_effect_does_not_restore_ptahhoteps_original_dogma
     let mut f = Fixture::default();
     native(&mut f, Figure::Ptahhotep, A);
     let source = original(&mut f, A);
-    let agriculture = base(&mut f, "B004", Zone::Hand(A));
-    let writing = base(&mut f, "B012", Zone::Hand(A));
-    let untouched = base(&mut f, "B021", Zone::Deck(Deck::base(2)));
+    let agriculture = f.card("B004", Zone::Hand(A));
+    let writing = f.card("B012", Zone::Hand(A));
+    let untouched = f.card("B021", Zone::Deck(Deck::base(2)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     game.begin_action(ActionKind::Regular).unwrap();
     dogma(&mut game, source, ActionKind::Regular);
@@ -964,8 +960,8 @@ fn platos_failed_splay_without_an_age_two_still_runs_the_original() {
     let mut f = Fixture::default();
     native(&mut f, Figure::Plato, A);
     let source = original(&mut f, A);
-    let achievement = base(&mut f, "B012", Zone::AvailableAchievements);
-    let reward = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+    let achievement = f.card("B012", Zone::AvailableAchievements);
+    let reward = f.card("B004", Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     dogma(&mut game, source, ActionKind::Regular);
     let (game, events, status) = clone_boundaries(game, None);
@@ -987,8 +983,8 @@ fn terminal_copied_draw_abandons_remaining_effects_and_unsuppressed_fading() {
     // Red is occupied by Gilgamesh; use a distinct explicit synthetic source.
     let source = f.tech(Color::Green, 3, Zone::Board(A, Color::Green), vec![draw(1)]);
     f.cards[usize::from(source.0)].symbols = four_slots([Symbol::Icon(Icon::Authority); 4]);
-    let writing = base(&mut f, "B012", Zone::Hand(A));
-    let untouched = base(&mut f, "B004", Zone::Deck(Deck::base(1)));
+    let writing = f.card("B012", Zone::Hand(A));
+    let untouched = f.card("B004", Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     game.begin_action(ActionKind::Regular).unwrap();
     dogma(&mut game, source, ActionKind::Regular);

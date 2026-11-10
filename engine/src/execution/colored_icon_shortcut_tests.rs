@@ -1,9 +1,6 @@
 use super::common::*;
 use super::*;
 
-fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(Card::from_code(code).unwrap(), zone)
-}
 fn start(g: &mut Game, source: CardId, effect: u16) {
     g.start(
         Operation::ExecuteEffect {
@@ -41,33 +38,33 @@ fn fixture(code: &str, mixed: bool) -> (Position, CardId, u16) {
     let mut f = Fixture::default();
     match code {
         "B019" => {
-            let source = base(&mut f, code, Zone::Board(A, Color::Yellow));
+            let source = f.card(code, Zone::Board(A, Color::Yellow));
             for code in ["B016", "B018", "B021"] {
-                base(&mut f, code, Zone::Deck(Deck::base(2)));
+                f.card(code, Zone::Deck(Deck::base(2)));
             }
             (f.position(), source, 1)
         }
         "B039" => {
-            let source = base(&mut f, code, Zone::Board(A, Color::Yellow));
-            base(&mut f, "B012", Zone::Board(A, Color::Blue));
+            let source = f.card(code, Zone::Board(A, Color::Yellow));
+            f.card("B012", Zone::Board(A, Color::Blue));
             for code in if mixed {
                 ["B001", "B002", "B021", "B026"]
             } else {
                 ["B001", "B002", "B004", "B008"]
             } {
-                base(&mut f, code, Zone::Hand(A));
+                f.card(code, Zone::Hand(A));
             }
             (f.position(), source, 0)
         }
         "B083" => {
-            let source = base(&mut f, code, Zone::Board(A, Color::Blue));
-            base(&mut f, "B075", Zone::Board(A, Color::Purple));
+            let source = f.card(code, Zone::Board(A, Color::Blue));
+            f.card("B075", Zone::Board(A, Color::Purple));
             for code in if mixed {
                 ["B001", "B021", "B026"]
             } else {
                 ["B001", "B002", "B021"]
             } {
-                base(&mut f, code, Zone::Score(B));
+                f.card(code, Zone::Score(B));
             }
             (f.position(), source, 0)
         }
@@ -245,8 +242,8 @@ fn private_score_menus_do_not_expose_identity_or_slot_and_non_singleton_groups_s
 fn colors_count_board_symbols_only_and_either_sums_boards() {
     let mut f = Fixture::default();
     f.figure(Figure::Gilgamesh, Zone::Board(A, Color::Red));
-    base(&mut f, "B011", Zone::Board(A, Color::Blue));
-    base(&mut f, "B002", Zone::Board(B, Color::Red));
+    f.card("B011", Zone::Board(A, Color::Blue));
+    f.card("B002", Zone::Board(B, Color::Red));
     let g = Game::new(f.position(), Expansions::FIGURES).unwrap();
     let mut context = Context::new(A);
     context.demander = B;
@@ -296,8 +293,7 @@ fn colors_count_board_symbols_only_and_either_sums_boards() {
 fn live_return_hooks_restore_all_order_choices_but_unrelated_each_does_not() {
     for hazard in [false, true] {
         let mut f = Fixture::default();
-        let source = base(
-            &mut f,
+        let source = f.card(
             "B083",
             if hazard {
                 Zone::Junk
@@ -305,15 +301,15 @@ fn live_return_hooks_restore_all_order_choices_but_unrelated_each_does_not() {
                 Zone::Board(A, Color::Blue)
             },
         );
-        base(&mut f, "B075", Zone::Board(A, Color::Purple));
+        f.card("B075", Zone::Board(A, Color::Purple));
         if hazard {
             f.figure(Figure::JamesClerkMaxwell, Zone::Board(A, Color::Blue));
-            base(&mut f, "B080", Zone::Deck(Deck::base(8)));
+            f.card("B080", Zone::Deck(Deck::base(8)));
         } else {
             f.figure(Figure::Gilgamesh, Zone::Board(A, Color::Red));
         }
         for code in ["B001", "B021", "B026"] {
-            base(&mut f, code, Zone::Score(B));
+            f.card(code, Zone::Score(B));
         }
         let mut g = Game::new(f.position(), Expansions::FIGURES).unwrap();
         start(&mut g, source, 0);
@@ -353,10 +349,10 @@ fn live_return_hooks_restore_all_order_choices_but_unrelated_each_does_not() {
 #[test]
 fn exact_base_deck_junk_ignores_homers_irrelevant_figure_hand_hook() {
     let mut f = Fixture::default();
-    let source = base(&mut f, "B019", Zone::Board(B, Color::Yellow));
+    let source = f.card("B019", Zone::Board(B, Color::Yellow));
     f.figure(Figure::Homer, Zone::Board(A, Color::Purple));
     for code in ["B016", "B018", "B021"] {
-        base(&mut f, code, Zone::Deck(Deck::base(2)));
+        f.card(code, Zone::Deck(Deck::base(2)));
     }
     let mut reduced = Game::new(f.position(), Expansions::FIGURES).unwrap();
     let mut manual = reduced.clone();

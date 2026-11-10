@@ -11,15 +11,6 @@ fn native(f: &mut Fixture, figure: Figure, owner: Player) -> CardId {
     f.add(card, Zone::Board(owner, color))
 }
 
-fn performed(card: CardId, value: u8) -> Status {
-    Status::Complete(ReturnValue::Operation(OperationOutcome {
-        disposition: Disposition::Performed,
-        card: Some(card),
-        value: Some(value),
-        short: false,
-    }))
-}
-
 fn empty(disposition: Disposition) -> Status {
     Status::Complete(ReturnValue::Operation(OperationOutcome {
         disposition,
