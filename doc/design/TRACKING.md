@@ -9,7 +9,7 @@ over the retained constraints, not a posterior over histories. Losing a
 correlation is acceptable; gaining a private fact is not.
 
 ```rust
-let mut game = Game::new_figures(seed)?.with_tracking()?;
+let mut game = Game::new_game(seed, expansions)?.with_tracking()?;
 let beliefs = game.tracker(viewer).unwrap().belief(Zone::Hand(viewer.opponent()));
 let world = game.determinize(viewer, sampling_seed)?;
 ```

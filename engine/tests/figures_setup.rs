@@ -8,8 +8,8 @@ use common::*;
 #[test]
 fn figures_deal_keeps_the_base_deal_and_adds_figures_decrees_and_dormant_age_zero() {
     for seed in [0, 7, 42] {
-        let figures = Game::new_figures(seed).unwrap();
-        let base = Game::new_base(seed).unwrap();
+        let figures = Game::new_game(seed, Expansions::FIGURES).unwrap();
+        let base = Game::new_game(seed, Expansions::BASE).unwrap();
         let (with, without) = (figures.position(), base.position());
         for player in Player::ALL {
             assert_eq!(
@@ -45,7 +45,7 @@ fn figures_deal_keeps_the_base_deal_and_adds_figures_decrees_and_dormant_age_zer
     }
     // The Figures decks are shuffled.
     let order = |seed| {
-        Game::new_figures(seed)
+        Game::new_game(seed, Expansions::FIGURES)
             .unwrap()
             .position()
             .cards(Zone::Deck(Deck::figures(1)))
@@ -57,7 +57,7 @@ fn figures_deal_keeps_the_base_deal_and_adds_figures_decrees_and_dormant_age_zer
 #[test]
 fn seeded_random_figures_games_finish_and_conserve_every_card() {
     for seed in 0..40 {
-        let mut game = Game::new_figures(seed).unwrap();
+        let mut game = Game::new_game(seed, Expansions::FIGURES).unwrap();
         let mut policy = Rng::new(seed);
         let mut events = Vec::new();
         let mut steps = 0;

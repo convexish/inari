@@ -56,7 +56,7 @@ fn moved_cards(events: &[Event], verb: Verb) -> Vec<CardId> {
 
 #[test]
 fn construction_commits_two_transfers_as_possible_and_draws_even_with_no_payment() {
-    fn exercise<const F: bool>() {
+    fn exercise(expansions: Expansions) {
         for count in 0..=3 {
             let mut f = Fixture::default();
             let source = native(&mut f, "B016", A);
@@ -64,7 +64,7 @@ fn construction_commits_two_transfers_as_possible_and_draws_even_with_no_payment
                 .map(|i| f.tech(Color::Blue, i + 1, Zone::Hand(B), vec![]))
                 .collect();
             let drawn = f.tech(Color::Green, 2, Zone::Deck(Deck::base(2)), vec![]);
-            let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+            let mut game = Game::new(f.position(), expansions).unwrap();
             run(&mut game, source, 0, B, A);
             let mut events = Vec::new();
             assert_eq!(
@@ -87,8 +87,8 @@ fn construction_commits_two_transfers_as_possible_and_draws_even_with_no_payment
             assert_eq!(moved(events.last().unwrap()).card, drawn);
         }
     }
-    exercise::<false>();
-    exercise::<true>();
+    exercise(Expansions::BASE);
+    exercise(Expansions::FIGURES);
 }
 
 #[test]
@@ -237,7 +237,7 @@ fn compass_uses_explicit_demander_even_when_it_is_not_the_executors_opponent() {
 
 #[test]
 fn anatomy_requires_both_original_returns_and_junks_newly_returned_fours_too() {
-    fn exercise<const F: bool>() {
+    fn exercise(expansions: Expansions) {
         for (payment, matching) in [(false, false), (true, false), (true, true)] {
             let mut f = Fixture::default();
             let source = native(&mut f, "B038", A);
@@ -250,7 +250,7 @@ fn anatomy_requires_both_original_returns_and_junks_newly_returned_fours_too() {
             );
             let deck = f.tech(Color::Green, 4, Zone::Deck(Deck::base(4)), vec![]);
             let untouched = f.tech(Color::Blue, 5, Zone::Deck(Deck::base(5)), vec![]);
-            let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+            let mut game = Game::new(f.position(), expansions).unwrap();
             run(&mut game, source, 0, B, A);
             let mut events = Vec::new();
             assert_eq!(
@@ -279,8 +279,8 @@ fn anatomy_requires_both_original_returns_and_junks_newly_returned_fours_too() {
             );
         }
     }
-    exercise::<false>();
-    exercise::<true>();
+    exercise(Expansions::BASE);
+    exercise(Expansions::FIGURES);
 }
 
 #[test]

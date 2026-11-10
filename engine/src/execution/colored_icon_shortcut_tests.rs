@@ -74,11 +74,11 @@ fn fixture(code: &str, mixed: bool) -> (Position, CardId, u16) {
         _ => unreachable!(),
     }
 }
-fn all_paths<const F: bool>() {
+fn all_paths(expansions: Expansions) {
     for code in ["B019", "B039", "B083"] {
         for mixed in [false, true] {
             let (p, source, effect) = fixture(code, mixed);
-            let mut reduced = Game::seeded(p, Expansions::with_figures(F), 37).unwrap();
+            let mut reduced = Game::seeded(p, expansions, 37).unwrap();
             let mut manual = reduced.clone();
             manual.shortcuts_disabled = true;
             start(&mut reduced, source, effect);
@@ -101,8 +101,8 @@ fn all_paths<const F: bool>() {
 }
 #[test]
 fn all_quota_subsets_origin_orders_and_native_rng_outcomes_survive() {
-    all_paths::<false>();
-    all_paths::<true>();
+    all_paths(Expansions::BASE);
+    all_paths(Expansions::FIGURES);
 }
 
 fn canonical(g: &Game, menu: &Decision) -> usize {
@@ -153,10 +153,10 @@ fn finish(g: &mut Game, events: &mut Vec<Event>) {
         }
     }
 }
-fn canonical_paths<const F: bool>() {
+fn canonical_paths(expansions: Expansions) {
     for code in ["B019", "B039", "B083"] {
         let (p, source, effect) = fixture(code, true);
-        let mut reduced = Game::seeded(p, Expansions::with_figures(F), 37).unwrap();
+        let mut reduced = Game::seeded(p, expansions, 37).unwrap();
         let mut manual = reduced.clone();
         manual.shortcuts_disabled = true;
         start(&mut reduced, source, effect);
@@ -192,8 +192,8 @@ fn canonical_paths<const F: bool>() {
 }
 #[test]
 fn canonical_events_rng_and_every_work_boundary_clones_match() {
-    canonical_paths::<false>();
-    canonical_paths::<true>();
+    canonical_paths(Expansions::BASE);
+    canonical_paths(Expansions::FIGURES);
 }
 
 #[test]

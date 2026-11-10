@@ -90,8 +90,13 @@ fn finish(game: &mut Game, events: &mut Vec<Event>, splay: bool) -> Status {
     panic!("Satellites effect did not finish");
 }
 
-fn oracle<const F: bool>(position: Position, card: CardId, splay: bool) -> (Game, Vec<Event>) {
-    let mut reduced = Game::seeded(position, Expansions::with_figures(F), 42).unwrap();
+fn oracle(
+    expansions: Expansions,
+    position: Position,
+    card: CardId,
+    splay: bool,
+) -> (Game, Vec<Event>) {
+    let mut reduced = Game::seeded(position, expansions, 42).unwrap();
     let mut manual = reduced.clone();
     manual.shortcuts_disabled = true;
     start(&mut reduced, card, Context::new(A));
@@ -146,13 +151,14 @@ fn outcomes(mut game: Game, depth: usize) -> Vec<Game> {
     }
 }
 
-fn compare_paths<const F: bool>(
+fn compare_paths(
+    expansions: Expansions,
     position: Position,
     card: CardId,
     manual_paths: usize,
     reduced_paths: usize,
 ) {
-    let mut reduced = Game::seeded(position.clone(), Expansions::with_figures(F), 42).unwrap();
+    let mut reduced = Game::seeded(position.clone(), expansions, 42).unwrap();
     let mut manual = reduced.clone();
     manual.shortcuts_disabled = true;
     start(&mut reduced, card, Context::new(A));
@@ -164,7 +170,7 @@ fn compare_paths<const F: bool>(
     assert!(manual.iter().all(|outcome| reduced.contains(outcome)));
     assert!(reduced.iter().all(|outcome| manual.contains(outcome)));
     for splay in [false, true] {
-        let (game, events) = oracle::<F>(position.clone(), card, splay);
+        let (game, events) = oracle(expansions, position.clone(), card, splay);
         assert_eq!(
             game.position.splay(A, Color::Purple),
             if splay { Splay::Up } else { Splay::None }
@@ -190,18 +196,18 @@ fn only_cross_origin_interleavings_disappear_and_both_later_splay_outcomes_survi
         (vec![1, 2, 1, 2], 48, 8),
     ] {
         let (f, card, _) = fixture(&ages);
-        compare_paths::<false>(f.position(), card, manual, reduced);
+        compare_paths(Expansions::BASE, f.position(), card, manual, reduced);
     }
     let (mut f, card, _) = fixture(&[1, 1, 2]);
     f.figure(Figure::Gilgamesh, Zone::Hand(A));
-    compare_paths::<true>(f.position(), card, 48, 4);
+    compare_paths(Expansions::FIGURES, f.position(), card, 48, 4);
 }
 
 #[test]
 fn whole_hand_has_no_quota_and_canonical_events_are_exact() {
     let (mut f, card, hand) = fixture(&[1, 1, 2, 3, 4]);
     let figure = f.figure(Figure::Gilgamesh, Zone::Hand(A));
-    let (game, events) = oracle::<true>(f.position(), card, true);
+    let (game, events) = oracle(Expansions::FIGURES, f.position(), card, true);
     let order = [hand[0], hand[1], figure, hand[2], hand[3], hand[4]];
     let mut expected: Vec<_> = order
         .into_iter()
@@ -349,7 +355,7 @@ fn relevant_return_and_hand_membership_hooks_fall_back_but_independent_hooks_do_
             );
             assert_eq!(game.position.splay(A, Color::Purple), Splay::Up);
             assert!(game.position.check_conservation());
-            oracle::<true>(position, card, true);
+            oracle(Expansions::FIGURES, position, card, true);
         }
     }
 }
@@ -448,7 +454,7 @@ fn meiji_timing_and_newly_exposed_hazards_are_rechecked_at_resumption() {
                 hand
             );
         }
-        let (finished, _) = oracle::<true>(position, card, true);
+        let (finished, _) = oracle(Expansions::FIGURES, position, card, true);
         assert_eq!(
             finished.position.cards(Zone::Hand(B)),
             if regular_actions == 0 {
@@ -532,7 +538,7 @@ fn homer_replaces_a_return_without_skipping_remaining_returns_or_later_splay() {
     let color = homer.color;
     f.add(homer, Zone::Board(A, color));
     let returned = f.figure(Figure::Archimedes, Zone::Hand(A));
-    let (game, events) = oracle::<true>(f.position(), card, true);
+    let (game, events) = oracle(Expansions::FIGURES, f.position(), card, true);
     assert_eq!(
         events
             .iter()

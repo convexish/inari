@@ -53,7 +53,7 @@ fn draw(game: &mut Game, events: &mut Vec<Event>) {
 #[test]
 fn frozen_seed_seven_deal_reserves_and_physical_ids_match_retained_fixture() {
     // Independent frozen source: engine/tests/rng_parity.rs, seed 7.
-    let game = Game::new_base(7).unwrap();
+    let game = Game::new_game(7, Expansions::BASE).unwrap();
     let position = game.position();
     let ids = |raw: &[u16]| raw.iter().copied().map(CardId).collect::<Vec<_>>();
     assert_eq!(
@@ -82,7 +82,7 @@ fn frozen_seed_seven_deal_reserves_and_physical_ids_match_retained_fixture() {
 #[test]
 fn all_real_cards_are_conserved_and_only_ages_one_through_ten_are_reserved() {
     for seed in [0, 1, 7, 42, u64::MAX] {
-        let game = Game::new_base(seed).unwrap();
+        let game = Game::new_game(seed, Expansions::BASE).unwrap();
         let position = game.position();
         let mut all = Vec::new();
         let supply = position.cards(Zone::AvailableAchievements);
@@ -136,7 +136,7 @@ fn all_real_cards_are_conserved_and_only_ages_one_through_ten_are_reserved() {
 
 #[test]
 fn opening_commitments_are_private_until_both_players_choose() {
-    let mut left = Game::new_base(7).unwrap();
+    let mut left = Game::new_game(7, Expansions::BASE).unwrap();
     let mut right = left.clone();
     let mut left_events = Vec::new();
     let mut right_events = Vec::new();
@@ -207,7 +207,7 @@ fn starting_melds_are_not_actions_and_title_order_not_id_order_selects_the_start
         ([CardId(9), CardId(3)], B),
         ([CardId(9), CardId(7)], A),
     ] {
-        let mut game = Game::new_base(7).unwrap();
+        let mut game = Game::new_game(7, Expansions::BASE).unwrap();
         let mut events = Vec::new();
         open(&mut game, picks, &mut events);
         assert_eq!(game.position().turn_owner(), first);
@@ -259,7 +259,7 @@ fn starting_melds_are_not_actions_and_title_order_not_id_order_selects_the_start
 
 #[test]
 fn invalid_opening_choices_and_premature_actions_are_atomic() {
-    let mut game = Game::new_base(7).unwrap();
+    let mut game = Game::new_game(7, Expansions::BASE).unwrap();
     let before = game.clone();
     assert_eq!(game.choose(0), Err(Error::NoDecision));
     assert_eq!(game, before);
@@ -298,8 +298,8 @@ fn invalid_opening_choices_and_premature_actions_are_atomic() {
 #[test]
 fn deterministic_setup_clones_resume_at_every_opening_work_boundary() {
     for seed in [0, 7, 42, u64::MAX] {
-        let mut game = Game::new_base(seed).unwrap();
-        assert_eq!(game, Game::new_base(seed).unwrap());
+        let mut game = Game::new_game(seed, Expansions::BASE).unwrap();
+        assert_eq!(game, Game::new_game(seed, Expansions::BASE).unwrap());
         let mut events = Vec::new();
         let mut commitments = 0;
         loop {

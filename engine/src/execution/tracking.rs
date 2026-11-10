@@ -40,8 +40,8 @@ pub(crate) struct SamplingPlan {
 }
 
 impl Game {
-    /// Attach snapshot knowledge before play. Call immediately after new_base /
-    /// new_figures (before the opening), or on an idle acceptance position.
+    /// Attach snapshot knowledge before play. Call immediately after
+    /// `new_game` (before the opening), or on an idle acceptance position.
     /// This cannot reconstruct past revelations; it never claims to do so.
     pub fn with_tracking(mut self) -> Result<Self, Error> {
         if self.tracked() {

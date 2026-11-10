@@ -3,15 +3,19 @@ use super::shortcuts::common::*;
 use super::*;
 use crate::program::build;
 
-fn start(position: Position, figures: bool, robocar: CardId, seed: u64, own_turn: bool) -> Game {
-    let mut game = Game::seeded(
-        position,
-        Expansions::ECHOES.union(Expansions::with_figures(figures)),
-        seed,
-    )
-    .unwrap()
-    .with_tracking()
-    .unwrap();
+const ECHOES_FIGURES: Expansions = Expansions::ECHOES.union(Expansions::FIGURES);
+
+fn start(
+    position: Position,
+    expansions: Expansions,
+    robocar: CardId,
+    seed: u64,
+    own_turn: bool,
+) -> Game {
+    let mut game = Game::seeded(position, expansions, seed)
+        .unwrap()
+        .with_tracking()
+        .unwrap();
     if !own_turn {
         game.begin_turn(B).unwrap();
     }
@@ -39,7 +43,7 @@ fn robocar_back_menu_samples_identical_backs_with_native_rng() {
         let echo = f.tech(Color::Green, 1, Zone::Hand(A), vec![]);
         f.cards[usize::from(echo.0)].set = CardSet::Echoes;
         f.tech(Color::Purple, 2, Zone::Hand(A), vec![]);
-        let mut game = start(f.position(), false, source, seed, false);
+        let mut game = start(f.position(), Expansions::ECHOES, source, seed, false);
         let mut events = Vec::new();
         let menu = decision(&mut game, &mut events);
         assert_eq!(menu.player, B);
@@ -101,7 +105,7 @@ fn robocar_meld_stays_private_through_a_first_karma_choice() {
     f.add(figure.clone(), Zone::Board(B, figure.color));
     let victim = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     f.cards[usize::from(victim.0)].symbols[0] = Symbol::Icon(Icon::Industry);
-    let mut game = start(f.position(), true, source, 4, false);
+    let mut game = start(f.position(), ECHOES_FIGURES, source, 4, false);
     let mut events = Vec::new();
     let menu = decision(&mut game, &mut events); // one back: automatic sample, then Kalashnikov
     assert_eq!(menu.player, B);
@@ -152,7 +156,7 @@ fn robocar_self_executes_and_repeats_only_after_a_performed_meld_on_its_turn() {
         let source = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
         let picked = f.tech(Color::Blue, 1, Zone::Hand(A), vec![build::draw(2)]);
         let drawn = f.tech(Color::Yellow, 2, Zone::Deck(Deck::base(2)), vec![]);
-        let mut game = start(f.position(), false, source, 4, own_turn);
+        let mut game = start(f.position(), Expansions::ECHOES, source, 4, own_turn);
         assert!(matches!(
             settle(&mut game, &mut Vec::new()),
             Status::Complete(_)
@@ -179,7 +183,7 @@ fn robocar_self_executes_and_repeats_only_after_a_performed_meld_on_its_turn() {
     let picked = f.tech(Color::Blue, 1, Zone::Hand(A), vec![build::draw(3)]);
     f.tech(Color::Green, 2, Zone::Deck(Deck::base(2)), vec![]);
     let undrawn = f.tech(Color::Yellow, 3, Zone::Deck(Deck::base(3)), vec![]);
-    let mut game = start(f.position(), true, source, 4, true);
+    let mut game = start(f.position(), ECHOES_FIGURES, source, 4, true);
     assert!(matches!(
         settle(&mut game, &mut Vec::new()),
         Status::Complete(_)
@@ -216,7 +220,7 @@ fn robocar_ark_loop_draws_at_persistent_work_cap_with_clone_resume() {
             ),
         ],
     );
-    let mut game = start(f.position(), false, source, 1, true);
+    let mut game = start(f.position(), Expansions::ECHOES, source, 1, true);
     game.automatic_work = AUTOMATIC_WORK_LIMIT - 200;
     let mut clone = game.clone();
     let mut events = Vec::new();
@@ -257,7 +261,7 @@ fn robocar_catherine_sanitation_loop_draws_once_both_decks_are_empty() {
         let greta = f.figure(Figure::GretaThunberg, Zone::Hand(A));
         let seven =
             nonempty_seven.then(|| f.add(base_card("B068").unwrap(), Zone::Deck(Deck::base(7))));
-        let mut game = start(f.position(), true, source, 0, true);
+        let mut game = start(f.position(), ECHOES_FIGURES, source, 0, true);
         if nonempty_seven {
             // A nonempty deck is a real choice; junking it ends the choices.
             let menu = decision(&mut game, &mut Vec::new());
@@ -292,7 +296,7 @@ fn a_real_robocar_choice_resets_automatic_work() {
     let source = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
     f.tech(Color::Yellow, 1, Zone::Hand(A), vec![]);
     f.tech(Color::Blue, 2, Zone::Hand(A), vec![]);
-    let mut game = start(f.position(), false, source, 0, true);
+    let mut game = start(f.position(), Expansions::ECHOES, source, 0, true);
     let _ = decision(&mut game, &mut Vec::new());
     game.automatic_work = AUTOMATIC_WORK_LIMIT;
     assert!(matches!(
@@ -320,7 +324,7 @@ fn robocar_singleton_sampling_keeps_the_stream_for_the_following_blind_pick() {
         );
         let bottom = f.tech(Color::Yellow, 2, Zone::Deck(Deck::base(2)), vec![]);
         let top = f.tech(Color::Purple, 2, Zone::Deck(Deck::base(2)), vec![]);
-        let mut game = start(f.position(), false, source, seed, true);
+        let mut game = start(f.position(), Expansions::ECHOES, source, seed, true);
         let mut rng = game.rng.clone();
         rng.next_u64(); // initial singleton hand pick
         let chosen = [top, bottom][(rng.next_u64() % 2) as usize];

@@ -58,10 +58,10 @@ fn outcomes(mut game: Game, depth: usize) -> Vec<(Position, Status)> {
     }
 }
 
-fn subset_oracle<const F: bool>() {
+fn subset_oracle(expansions: Expansions) {
     for code in ["B006", "B089"] {
         let (position, source, cards) = fixture(code);
-        let mut reduced = Game::seeded(position, Expansions::with_figures(F), 42).unwrap();
+        let mut reduced = Game::seeded(position, expansions, 42).unwrap();
         let mut unrestricted = reduced.clone();
         unrestricted.shortcuts_disabled = true;
         invoke(&mut reduced, source, 0, Context::new(A));
@@ -95,14 +95,14 @@ fn subset_oracle<const F: bool>() {
 
 #[test]
 fn optional_grouping_preserves_all_subsets_stops_and_same_color_orders_with_and_without_figures() {
-    subset_oracle::<false>();
-    subset_oracle::<true>();
+    subset_oracle(Expansions::BASE);
+    subset_oracle(Expansions::FIGURES);
 }
 
-fn committed_oracle<const F: bool>() {
+fn committed_oracle(expansions: Expansions) {
     for code in ["B033", "B085"] {
         let (position, source, _) = fixture(code);
-        let mut reduced = Game::seeded(position, Expansions::with_figures(F), 42).unwrap();
+        let mut reduced = Game::seeded(position, expansions, 42).unwrap();
         let mut unrestricted = reduced.clone();
         unrestricted.shortcuts_disabled = true;
         invoke(&mut reduced, source, 0, Context::new(A));
@@ -118,8 +118,8 @@ fn committed_oracle<const F: bool>() {
 
 #[test]
 fn whole_translation_and_socialism_commitments_preserve_every_outcome() {
-    committed_oracle::<false>();
-    committed_oracle::<true>();
+    committed_oracle(Expansions::BASE);
+    committed_oracle(Expansions::FIGURES);
 }
 
 fn canonical(game: &Game, menu: &Decision) -> usize {
@@ -155,10 +155,10 @@ fn finish(game: &mut Game, events: &mut Vec<Event>) {
     panic!("canonical phase did not complete");
 }
 
-fn canonical_oracle<const F: bool>() {
+fn canonical_oracle(expansions: Expansions) {
     for code in ["B006", "B033", "B085", "B089"] {
         let (position, source, _) = fixture(code);
-        let mut reduced = Game::seeded(position, Expansions::with_figures(F), 73).unwrap();
+        let mut reduced = Game::seeded(position, expansions, 73).unwrap();
         let mut unrestricted = reduced.clone();
         unrestricted.shortcuts_disabled = true;
         invoke(&mut reduced, source, 0, Context::new(A));
@@ -180,8 +180,8 @@ fn canonical_oracle<const F: bool>() {
 
 #[test]
 fn canonical_paths_have_exact_events_rng_and_clone_parity() {
-    canonical_oracle::<false>();
-    canonical_oracle::<true>();
+    canonical_oracle(Expansions::BASE);
+    canonical_oracle(Expansions::FIGURES);
 }
 
 #[test]
@@ -351,11 +351,11 @@ fn foreign_control_wrong_destinations_and_quotas_fail_closed() {
     }
 }
 
-fn deck_oracle<const F: bool>() {
+fn deck_oracle(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B089", Zone::Junk);
     let cards = ["B088", "B089", "B091"].map(|code| base(&mut f, code, Zone::Deck(Deck::base(9))));
-    let mut reduced = Game::seeded(f.position(), Expansions::with_figures(F), 89).unwrap();
+    let mut reduced = Game::seeded(f.position(), expansions, 89).unwrap();
     let mut unrestricted = reduced.clone();
     unrestricted.shortcuts_disabled = true;
     invoke(&mut reduced, source, 1, Context::new(A));
@@ -386,8 +386,8 @@ fn deck_oracle<const F: bool>() {
 
 #[test]
 fn suburbia_deck_proof_preserves_all_outcomes_and_exact_canonical_trace() {
-    deck_oracle::<false>();
-    deck_oracle::<true>();
+    deck_oracle(Expansions::BASE);
+    deck_oracle(Expansions::FIGURES);
 }
 
 #[test]

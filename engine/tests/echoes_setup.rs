@@ -124,7 +124,7 @@ fn all_eight_catalogs_preserve_existing_ids_and_deal_only_base_cards() {
                     .collect::<Vec<_>>()
             );
         }
-        let base = Game::new_base(seed).unwrap();
+        let base = Game::new_game(seed, Expansions::BASE).unwrap();
         for expansions in MODES {
             let game = Game::new_game(seed, expansions).unwrap();
             let p = game.position();

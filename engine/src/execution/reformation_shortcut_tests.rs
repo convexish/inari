@@ -94,8 +94,8 @@ fn outcomes(mut game: Game, depth: usize) -> Vec<(Game, Status)> {
 
 /// Every reduced outcome is reachable unreduced and vice versa, comparing
 /// exact pile order, hands, results and RNG. Returns both path counts.
-fn all_paths<const F: bool>(position: Position, source: CardId) -> (usize, usize) {
-    let mut reduced = Game::seeded(position, Expansions::with_figures(F), 42).unwrap();
+fn all_paths(expansions: Expansions, position: Position, source: CardId) -> (usize, usize) {
+    let mut reduced = Game::seeded(position, expansions, 42).unwrap();
     let mut manual = reduced.clone();
     manual.shortcuts_disabled = true;
     start(&mut reduced, source, Context::new(A));
@@ -122,8 +122,8 @@ fn every_outcome_survives_cross_color_grouping_and_within_color_orders_are_not_c
     ] {
         let (f, source, _) = fixture(&colors, quota);
         let position = position(f, quota);
-        assert_eq!(all_paths::<false>(position.clone(), source), paths);
-        assert_eq!(all_paths::<true>(position, source), paths);
+        assert_eq!(all_paths(Expansions::BASE, position.clone(), source), paths);
+        assert_eq!(all_paths(Expansions::FIGURES, position, source), paths);
     }
 }
 
@@ -132,7 +132,10 @@ fn base_and_figure_cards_share_a_color_group_but_never_lose_their_internal_order
     let (mut f, source, _) = fixture(&[Color::Blue, Color::Red], 3);
     f.figure(Figure::Archimedes, Zone::Hand(A));
     // The Figure stays buried, so its effect-values modifier never appears.
-    assert_eq!(all_paths::<true>(position(f, 3), source), (16, 10));
+    assert_eq!(
+        all_paths(Expansions::FIGURES, position(f, 3), source),
+        (16, 10)
+    );
 }
 
 #[test]

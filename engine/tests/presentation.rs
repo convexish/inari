@@ -255,7 +255,7 @@ fn effect_victory_names_its_executed_source_after_it_returns() {
 
 #[test]
 fn opening_and_action_end_fading_do_not_inherit_a_card_source() {
-    let mut opening = Game::new_figures(4).unwrap();
+    let mut opening = Game::new_game(4, Expansions::FIGURES).unwrap();
     let menu = decision(&mut opening, &mut Vec::new());
     assert_eq!(menu.source_card(A), None);
     assert_eq!(menu.source_card(B), None);

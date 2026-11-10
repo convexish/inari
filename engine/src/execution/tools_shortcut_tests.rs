@@ -59,8 +59,8 @@ fn finish(game: &mut Game, events: &mut Vec<Event>) -> (Status, usize) {
     panic!("Tools did not finish");
 }
 
-fn oracle<const F: bool>(position: Position, tools: CardId) -> (Game, Vec<Event>, usize) {
-    let mut reduced = Game::seeded(position, Expansions::with_figures(F), 42).unwrap();
+fn oracle(expansions: Expansions, position: Position, tools: CardId) -> (Game, Vec<Event>, usize) {
+    let mut reduced = Game::seeded(position, expansions, 42).unwrap();
     let mut manual = reduced.clone();
     manual.shortcuts_disabled = true;
     start(&mut reduced, tools);
@@ -96,7 +96,7 @@ fn outcomes(mut game: Game, depth: usize) -> Vec<(Position, Status)> {
 #[test]
 fn tools_preserves_decline_but_needs_no_further_decision_for_three_independent_decks() {
     let (f, tools, hand, reward) = fixture(&[4, 1, 2]);
-    let (game, events, decisions) = oracle::<false>(f.position(), tools);
+    let (game, events, decisions) = oracle(Expansions::BASE, f.position(), tools);
     assert_eq!(decisions, 1); // Commit versus decline, not three return decisions.
     assert_eq!(
         events.iter().map(|e| moved(e).card).collect::<Vec<_>>(),
@@ -195,7 +195,7 @@ fn optional_commitment_can_be_declined_but_not_abandoned_after_a_partial_return(
 fn fewer_than_three_returns_do_as_much_as_possible_without_the_reward() {
     for ages in [vec![], vec![1], vec![1, 2]] {
         let (f, tools, hand, reward) = fixture(&ages);
-        let (game, events, decisions) = oracle::<false>(f.position(), tools);
+        let (game, events, decisions) = oracle(Expansions::BASE, f.position(), tools);
         assert_eq!(events.len(), hand.len());
         assert_eq!(decisions, usize::from(!hand.is_empty()));
         assert!(game.position.cards(Zone::Hand(A)).is_empty());
@@ -281,7 +281,7 @@ fn archimedes_modifies_the_boxed_reward_not_the_ordinary_three_card_payment() {
     let (mut f, tools, hand, original_reward) = fixture(&[1, 2, 5]);
     f.figure(Figure::Archimedes, Zone::Board(A, Color::Blue));
     let boosted = f.tech(Color::Yellow, 4, Zone::Deck(Deck::base(4)), vec![]);
-    let (game, events, decisions) = oracle::<true>(f.position(), tools);
+    let (game, events, decisions) = oracle(Expansions::FIGURES, f.position(), tools);
     assert_eq!(decisions, 1);
     assert_eq!(
         events.iter().map(|e| moved(e).card).collect::<Vec<_>>(),
@@ -298,7 +298,7 @@ fn archimedes_modifies_the_boxed_reward_not_the_ordinary_three_card_payment() {
 fn hedys_claim_reaction_does_not_block_the_independent_return_phase() {
     let (mut f, tools, hand, reward) = fixture(&[1, 2, 5]);
     f.figure(Figure::HedyLamarr, Zone::Board(A, Color::Green));
-    let (game, events, decisions) = oracle::<true>(f.position(), tools);
+    let (game, events, decisions) = oracle(Expansions::FIGURES, f.position(), tools);
     assert_eq!(decisions, 1);
     assert_eq!(
         events.iter().map(|e| moved(e).card).collect::<Vec<_>>(),
@@ -312,7 +312,7 @@ fn homer_replacement_consumes_a_payment_slot_but_does_not_complete_the_three_ret
     let (mut f, tools, _, reward) = fixture(&[2, 4]);
     f.figure(Figure::Homer, Zone::Board(A, Color::Purple));
     let figure = f.figure(Figure::Archimedes, Zone::Hand(A));
-    let (game, events, _) = oracle::<true>(f.position(), tools);
+    let (game, events, _) = oracle(Expansions::FIGURES, f.position(), tools);
     assert_eq!(events.len(), 3);
     assert_eq!(
         events
@@ -335,7 +335,7 @@ fn maxwells_new_hand_cards_are_live_candidates_but_only_three_original_returns_a
     let eights: Vec<_> = (0..3)
         .map(|_| f.tech(Color::Yellow, 8, Zone::Deck(Deck::base(8)), vec![]))
         .collect();
-    let (game, events, decisions) = oracle::<true>(f.position(), tools);
+    let (game, events, decisions) = oracle(Expansions::FIGURES, f.position(), tools);
     assert_eq!(decisions, 3);
     assert_eq!(
         events.iter().map(|e| moved(e).card).collect::<Vec<_>>(),
@@ -354,7 +354,7 @@ fn maxwells_new_hand_cards_are_live_candidates_but_only_three_original_returns_a
 fn terminal_reward_draw_happens_after_all_returns_in_the_canonical_manual_order() {
     let (mut f, tools, hand, reward) = fixture(&[1, 1, 2]);
     f.placements[usize::from(reward.0)].1 = Zone::Junk;
-    let (mut game, events, _) = oracle::<false>(f.position(), tools);
+    let (mut game, events, _) = oracle(Expansions::BASE, f.position(), tools);
     assert_eq!(events.len(), 3);
     assert_eq!(
         events.iter().map(|e| moved(e).card).collect::<Vec<_>>(),
@@ -375,7 +375,7 @@ fn borrowed_hand_origins_keep_ordinary_choices_and_count_real_returns_once() {
     let mut probe = Game::new(position.clone(), Expansions::FIGURES).unwrap();
     start(&mut probe, tools);
     assert_eq!(decision(&mut probe, &mut Vec::new()).options.len(), 4);
-    let (game, events, _) = oracle::<true>(position, tools);
+    let (game, events, _) = oracle(Expansions::FIGURES, position, tools);
     assert_eq!(
         events.iter().map(|e| moved(e).card).collect::<Vec<_>>(),
         [borrowed, hand[0], hand[1], reward, reward]
@@ -498,7 +498,7 @@ fn continuous_figures_preserve_tools_return_reduction_and_real_catherine_meld_fi
                 .iter()
                 .all(|outcome| manual_paths.contains(outcome))
         );
-        let (game, events, decisions) = oracle::<true>(position, tools);
+        let (game, events, decisions) = oracle(Expansions::FIGURES, position, tools);
         assert_eq!(decisions, 1);
         assert_eq!(game.position.top(A, Color::Green), Some(reward));
         if figure == Figure::CatherineTheGreat {

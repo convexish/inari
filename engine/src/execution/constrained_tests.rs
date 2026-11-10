@@ -76,7 +76,7 @@ fn choose_colors(game: &mut Game, colors: &[Color], events: &mut Vec<Event>) {
     .unwrap();
 }
 
-fn mobility<const F: bool>() {
+fn mobility(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B077", Zone::Junk);
     let buried = top(&mut f, "B010", A);
@@ -86,7 +86,7 @@ fn mobility<const F: bool>() {
     let excluded = top(&mut f, "B079", A);
     let red = top(&mut f, "B076", A);
     let reward = base(&mut f, "B078", Zone::Deck(Deck::base(8)));
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     start(&mut game, source, 0);
     let mut events = Vec::new();
     let menu = decision(&mut game, &mut events);
@@ -127,11 +127,11 @@ fn mobility<const F: bool>() {
 }
 #[test]
 fn mobility_keeps_live_highest_ties_and_consumes_colors_with_and_without_figures() {
-    mobility::<false>();
-    mobility::<true>();
+    mobility(Expansions::BASE);
+    mobility(Expansions::FIGURES);
 }
 
-fn pair_boundaries<const F: bool>() {
+fn pair_boundaries(expansions: Expansions) {
     for matching in [false, true] {
         let mut f = Fixture::default();
         let source = base(&mut f, "B110", Zone::Junk);
@@ -140,7 +140,7 @@ fn pair_boundaries<const F: bool>() {
         let low = base(&mut f, "B001", Zone::Hand(A));
         let equal = base(&mut f, "B025", Zone::Score(A));
         let high = base(&mut f, "B081", Zone::Score(A));
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         start(&mut game, source, 0);
         let mut events = Vec::new();
         if matching {
@@ -164,7 +164,7 @@ fn pair_boundaries<const F: bool>() {
     let source = base(&mut f, "B110", Zone::Junk);
     top(&mut f, "B001", A);
     let upper = top(&mut f, "B002", A);
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     start(&mut game, source, 0);
     let mut events = Vec::new();
     assert_eq!(
@@ -176,8 +176,8 @@ fn pair_boundaries<const F: bool>() {
 }
 #[test]
 fn hypersonics_requires_a_complete_distinct_color_pair_before_any_return() {
-    pair_boundaries::<false>();
-    pair_boundaries::<true>();
+    pair_boundaries(Expansions::BASE);
+    pair_boundaries(Expansions::FIGURES);
 }
 
 #[test]
@@ -212,7 +212,7 @@ fn hypersonics_revalidates_committed_second_identity_after_future_reaction_state
     assert!(game.position.check_conservation());
 }
 
-fn empiricism<const F: bool>() {
+fn empiricism(expansions: Expansions) {
     for matching in [false, true] {
         for stack_size in 0..=2 {
             let mut f = Fixture::default();
@@ -225,7 +225,7 @@ fn empiricism<const F: bool>() {
             if stack_size == 2 {
                 position.players[A.index()].splays[Color::Blue as usize] = Splay::Right;
             }
-            let mut game = Game::new(position, Expansions::with_figures(F)).unwrap();
+            let mut game = Game::new(position, expansions).unwrap();
             start(&mut game, source, 0);
             let mut events = Vec::new();
             choose_colors(
@@ -262,8 +262,8 @@ fn empiricism<const F: bool>() {
 }
 #[test]
 fn empiricism_matches_exact_draw_and_splays_or_unsplays_empty_singleton_and_stacks() {
-    empiricism::<false>();
-    empiricism::<true>();
+    empiricism(Expansions::BASE);
+    empiricism(Expansions::FIGURES);
 }
 
 #[test]
@@ -306,13 +306,13 @@ fn empiricism_win_reads_effective_concepts_at_its_separate_instruction() {
     assert_eq!(finish(&mut game, &mut Vec::new()), Status::Winner(A));
 }
 
-fn climatology<const F: bool>() {
+fn climatology(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B112", Zone::Junk);
     let buried = top(&mut f, "B001", A);
     let upper = top(&mut f, "B002", A);
     let green = top(&mut f, "B009", A);
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     start(&mut game, source, 0);
     let mut events = Vec::new();
     let menu = decision(&mut game, &mut events);
@@ -364,7 +364,7 @@ fn climatology<const F: bool>() {
     let low = base(&mut f, "B001", Zone::Score(A));
     let equal = base(&mut f, "B025", Zone::Score(A));
     let high = base(&mut f, "B081", Zone::Score(A));
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     start(&mut game, source, 1);
     let mut events = Vec::new();
     assert_eq!(
@@ -377,8 +377,8 @@ fn climatology<const F: bool>() {
 }
 #[test]
 fn climatology_chooser_does_not_take_control_and_newly_exposed_same_color_is_eligible() {
-    climatology::<false>();
-    climatology::<true>();
+    climatology(Expansions::BASE);
+    climatology(Expansions::FIGURES);
 }
 
 #[test]
@@ -508,10 +508,10 @@ fn outcomes(mut game: Game, depth: usize) -> Vec<(Position, Rng, Status)> {
         }
     }
 }
-fn oracles<const F: bool>() {
+fn oracles(expansions: Expansions) {
     for code in ["B077", "B084", "B110", "B112"] {
         let (position, source) = oracle_fixture(code);
-        let mut reduced = Game::seeded(position, Expansions::with_figures(F), 713).unwrap();
+        let mut reduced = Game::seeded(position, expansions, 713).unwrap();
         start(&mut reduced, source, 0);
         let mut unrestricted = reduced.clone();
         unrestricted.shortcuts_disabled = true;
@@ -555,6 +555,6 @@ fn oracles<const F: bool>() {
 }
 #[test]
 fn all_tied_subsets_pair_orders_canonical_events_rng_and_clones_match_unrestricted() {
-    oracles::<false>();
-    oracles::<true>();
+    oracles(Expansions::BASE);
+    oracles(Expansions::FIGURES);
 }

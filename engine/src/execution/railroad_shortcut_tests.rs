@@ -58,8 +58,8 @@ fn finish(game: &mut Game, events: &mut Vec<Event>) -> (Status, usize) {
     panic!("Railroad return phase did not finish");
 }
 
-fn oracle<const F: bool>(position: Position, card: CardId) -> (Game, Vec<Event>, usize) {
-    let mut reduced = Game::seeded(position, Expansions::with_figures(F), 42).unwrap();
+fn oracle(expansions: Expansions, position: Position, card: CardId) -> (Game, Vec<Event>, usize) {
+    let mut reduced = Game::seeded(position, expansions, 42).unwrap();
     let mut manual = reduced.clone();
     manual.shortcuts_disabled = true;
     start(&mut reduced, card, Context::new(A));
@@ -124,7 +124,7 @@ fn all_distinguishable_outcomes_survive_but_only_cross_deck_interleavings_disapp
             reduced.iter().all(|outcome| manual.contains(outcome)),
             "{ages:?}"
         );
-        oracle::<false>(position, card);
+        oracle(Expansions::BASE, position, card);
     }
 }
 
@@ -132,7 +132,7 @@ fn all_distinguishable_outcomes_survive_but_only_cross_deck_interleavings_disapp
 fn whole_hand_has_no_quota_and_base_and_figure_origin_decks_are_separate() {
     let (mut f, card, hand) = fixture(&[1, 1, 2, 3, 4]);
     let figure = f.figure(Figure::Gilgamesh, Zone::Hand(A));
-    let (game, events, decisions) = oracle::<true>(f.position(), card);
+    let (game, events, decisions) = oracle(Expansions::FIGURES, f.position(), card);
     assert_eq!(decisions, 1); // Only the two same-deck Base cards need ordering.
     assert_eq!(
         events.iter().map(|e| moved(e).card).collect::<Vec<_>>(),
@@ -182,7 +182,7 @@ fn meiji_logical_hand_is_mandatory_and_timing_guard_is_live() {
     f.figure(Figure::EmperorMeiji, Zone::Board(A, Color::Purple));
     let borrowed = f.tech(Color::Yellow, 1, Zone::Hand(B), vec![]);
     let position = f.position();
-    let (game, events, _) = oracle::<true>(position.clone(), card);
+    let (game, events, _) = oracle(Expansions::FIGURES, position.clone(), card);
     assert_eq!(
         events.iter().map(|e| moved(e).card).collect::<Vec<_>>(),
         [borrowed, hand[0], hand[1]]
@@ -336,7 +336,7 @@ fn homer_replacement_does_not_stop_the_mandatory_return_phase() {
     let (mut f, card, hand) = fixture(&[2, 4]);
     f.figure(Figure::Homer, Zone::Board(A, Color::Purple));
     let returned_figure = f.figure(Figure::Archimedes, Zone::Hand(A));
-    let (game, events, _) = oracle::<true>(f.position(), card);
+    let (game, events, _) = oracle(Expansions::FIGURES, f.position(), card);
     assert_eq!(events.len(), 3);
     assert_eq!(
         events

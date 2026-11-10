@@ -595,7 +595,7 @@ fn a_splay_batch_keeps_its_order_choice_only_when_a_city_draw_could_end_the_game
 #[test]
 fn a_cities_deal_keeps_the_base_deal_and_shuffles_cities_like_production() {
     for seed in [0, 7, 1234] {
-        let base = Game::new_base(seed).unwrap();
+        let base = Game::new_game(seed, Expansions::BASE).unwrap();
         let game = Game::new_game(seed, Expansions::CITIES).unwrap();
         let (b, c) = (base.position(), game.position());
         // Base identities come first in every catalog, so the deal compares

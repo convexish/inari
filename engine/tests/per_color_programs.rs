@@ -38,7 +38,7 @@ fn moved_cards(events: &[Event], verb: Verb) -> Vec<CardId> {
 
 #[test]
 fn engineering_transfers_one_matching_top_per_color_without_sweeping_exposed_cards() {
-    for figures in [false, true] {
+    for expansions in [Expansions::BASE, Expansions::FIGURES] {
         let mut f = Fixture::default();
         let source = native(&mut f, "B026", A);
         let mut tops = Vec::new();
@@ -48,38 +48,25 @@ fn engineering_transfers_one_matching_top_per_color_without_sweeping_exposed_car
             tops.push(card(&mut f, B, color, age, Some(Icon::Authority)));
         }
         let excluded = card(&mut f, B, Color::Yellow, 2, Some(Icon::Industry));
-        fn exercise<const F: bool>(
-            f: Fixture,
-            source: CardId,
-            mut tops: Vec<CardId>,
-            buried: Vec<CardId>,
-            excluded: CardId,
-        ) {
-            let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
-            game.super_execute(source, Context::new(A)).unwrap();
-            let mut events = Vec::new();
+        let mut game = Game::new(f.position(), expansions).unwrap();
+        game.super_execute(source, Context::new(A)).unwrap();
+        let mut events = Vec::new();
+        assert_eq!(
+            finish(&mut game, &mut events),
+            Status::Complete(ReturnValue::Unit)
+        );
+        let mut transfers = moved_cards(&events, Verb::Transfer);
+        transfers.sort();
+        tops.sort();
+        assert_eq!(transfers, tops);
+        for id in buried {
             assert_eq!(
-                finish(&mut game, &mut events),
-                Status::Complete(ReturnValue::Unit)
+                game.position().top(B, game.position().card(id).color),
+                Some(id)
             );
-            let mut transfers = moved_cards(&events, Verb::Transfer);
-            transfers.sort();
-            tops.sort();
-            assert_eq!(transfers, tops);
-            for id in buried {
-                assert_eq!(
-                    game.position().top(B, game.position().card(id).color),
-                    Some(id)
-                );
-            }
-            assert_eq!(game.position().top(B, Color::Yellow), Some(excluded));
-            assert_eq!(game.position().cards(Zone::Score(A)).len(), 3);
         }
-        if figures {
-            exercise::<true>(f, source, tops, buried, excluded);
-        } else {
-            exercise::<false>(f, source, tops, buried, excluded);
-        }
+        assert_eq!(game.position().top(B, Color::Yellow), Some(excluded));
+        assert_eq!(game.position().cards(Zone::Score(A)).len(), 3);
     }
 }
 

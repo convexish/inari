@@ -62,13 +62,14 @@ fn leaves(mut game: Game, depth: usize) -> Vec<Game> {
     }
 }
 
-fn compare_classes<const F: bool>(
+fn compare_classes(
+    expansions: Expansions,
     f: Fixture,
     source: CardId,
     reduced_count: usize,
     manual_count: usize,
 ) {
-    let mut reduced = Game::seeded(f.position(), Expansions::with_figures(F), 271).unwrap();
+    let mut reduced = Game::seeded(f.position(), expansions, 271).unwrap();
     let mut manual = reduced.clone();
     manual.shortcuts_disabled = true;
     start(&mut reduced, source, B);
@@ -89,7 +90,7 @@ fn compare_classes<const F: bool>(
 
 #[test]
 fn every_quota_subset_survives_refrigeration_databases_and_piracy() {
-    fn exercise<const F: bool>() {
+    fn exercise(expansions: Expansions) {
         for code in ["B068", "B100", "B047"] {
             // Same-deck return orders stay real; a score pile is unordered.
             let same_back = if code == "B047" { 3 } else { 4 };
@@ -97,27 +98,27 @@ fn every_quota_subset_survives_refrigeration_databases_and_piracy() {
                 [(&[1, 2, 3][..], 3, 6), (&[1, 1, 2][..], same_back, 6)]
             {
                 let (f, source) = fixture(code, values);
-                compare_classes::<F>(f, source, reduced, manual);
+                compare_classes(expansions, f, source, reduced, manual);
             }
         }
     }
-    exercise::<false>();
-    exercise::<true>();
+    exercise(Expansions::BASE);
+    exercise(Expansions::FIGURES);
 }
 
 #[test]
 fn explosives_keeps_one_order_into_the_demanders_hand() {
-    fn exercise<const F: bool>() {
+    fn exercise(expansions: Expansions) {
         let (f, source) = fixture("B067", &[1, 2, 3, 4]);
-        compare_classes::<F>(f, source, 1, 1);
+        compare_classes(expansions, f, source, 1, 1);
         let (f, source) = fixture("B067", &[1, 1, 1]);
-        compare_classes::<F>(f, source, 1, 6);
+        compare_classes(expansions, f, source, 1, 6);
     }
-    exercise::<false>();
-    exercise::<true>();
+    exercise(Expansions::BASE);
+    exercise(Expansions::FIGURES);
     let (mut f, source) = fixture("B067", &[1, 1]);
     f.add(figure_card("F005").unwrap(), Zone::Hand(B));
-    compare_classes::<true>(f, source, 1, 6);
+    compare_classes(Expansions::FIGURES, f, source, 1, 6);
 }
 
 fn canonical(game: &Game, menu: &Decision) -> usize {

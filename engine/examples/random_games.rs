@@ -1,13 +1,12 @@
-//! Seeded uniformly random Base games: a fault/invariant smoke test and a
+//! Seeded uniformly random games: a fault/invariant smoke test and a
 //! fixed-work throughput probe. `cargo run --release --example random_games
 //! -- <games> [first_seed] [flags...]`. Flags: `check` verifies card
 //! conservation after every step (untimed runs only); `clone` also times
 //! clones of every eighth sampled state; `coverage` lists rarely used cards;
-//! `figures` plays the same Base deal under Figures rules (no Figures cards),
-//! to measure their overhead;
-//! `full` plays complete Base + Figures deals (`Game::new_figures`);
-//! `cities` adds Cities, `echoes` adds Echoes and `artifacts` adds Artifacts
-//! (`Game::new_game`), with or without each other and `full`;
+//! `full` adds Figures, `cities` Cities, `echoes` Echoes, `artifacts`
+//! Artifacts and `unseen` Unseen, in any combination (Base alone without
+//! them); `figures` plays the same Base deal under Figures rules (no Figures
+//! cards), to measure their overhead;
 //! `no-achieve` never takes Achieve actions, so `figures` then plays the very
 //! same games as Base and isolates the cost of the Figures code.
 use std::collections::BTreeMap;
@@ -222,13 +221,13 @@ fn main() {
             let game = Game::new_game(seed, expansions).unwrap();
             play(game, seed, &options, &mut figures_samples, &mut totals);
         } else if flag("full") {
-            let game = Game::new_figures(seed).unwrap();
+            let game = Game::new_game(seed, Expansions::FIGURES).unwrap();
             play(game, seed, &options, &mut figures_samples, &mut totals);
         } else if flag("figures") {
             let game = Game::base_deal_with_figures_rules(seed).unwrap();
             play(game, seed, &options, &mut figures_samples, &mut totals);
         } else {
-            let game = Game::new_base(seed).unwrap();
+            let game = Game::new_game(seed, Expansions::BASE).unwrap();
             play(game, seed, &options, &mut base_samples, &mut totals);
         }
     }

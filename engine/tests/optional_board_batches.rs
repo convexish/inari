@@ -60,14 +60,14 @@ fn known(menu: &Decision) -> Vec<CardId> {
         .collect()
 }
 
-fn masonry<const F: bool>() {
+fn masonry(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B006", Zone::Board(A, Color::Yellow));
     let first = base(&mut f, "B001", Zone::Hand(A));
     let second = base(&mut f, "B002", Zone::Hand(A));
     let green = base(&mut f, "B009", Zone::Hand(A));
     let excluded = base(&mut f, "B004", Zone::Hand(A));
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0);
     let mut events = Vec::new();
     let menu = decision(&mut game, &mut events);
@@ -90,11 +90,11 @@ fn masonry<const F: bool>() {
 
 #[test]
 fn masonry_keeps_genuine_printed_authority_subsets_with_and_without_figures() {
-    masonry::<false>();
-    masonry::<true>();
+    masonry(Expansions::BASE);
+    masonry(Expansions::FIGURES);
 }
 
-fn monument<const F: bool>() {
+fn monument(expansions: Expansions) {
     for count in [0, 2, 3, 4] {
         let mut f = Fixture::default();
         let source = base(&mut f, "B006", Zone::Junk);
@@ -102,7 +102,7 @@ fn monument<const F: bool>() {
             base(&mut f, "B001", Zone::Board(A, Color::Red));
         }
         base(&mut f, "B002", Zone::Board(B, Color::Red));
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 1);
         finish(&mut game, &mut Vec::new());
         assert_eq!(
@@ -118,18 +118,18 @@ fn monument<const F: bool>() {
 
 #[test]
 fn masonry_counts_covered_physical_red_cards_exactly() {
-    monument::<false>();
-    monument::<true>();
+    monument(Expansions::BASE);
+    monument(Expansions::FIGURES);
 }
 
-fn translation<const F: bool>() {
+fn translation(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B033", Zone::Board(A, Color::Blue));
     let first = base(&mut f, "B001", Zone::Score(A));
     let second = base(&mut f, "B002", Zone::Score(A));
     let green = base(&mut f, "B008", Zone::Score(A));
     let initial = f.position();
-    let mut game = Game::new(initial.clone(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(initial.clone(), expansions).unwrap();
     invoke(&mut game, source, 0);
     let mut events = Vec::new();
     let mut declined = game.clone();
@@ -148,11 +148,11 @@ fn translation<const F: bool>() {
 
 #[test]
 fn translation_commits_to_all_and_preserves_same_color_order() {
-    translation::<false>();
-    translation::<true>();
+    translation(Expansions::BASE);
+    translation(Expansions::FIGURES);
 }
 
-fn world<const F: bool>() {
+fn world(expansions: Expansions) {
     for (tops, claim) in [
         (vec![], true),
         (vec!["B033", "B008"], true),
@@ -165,7 +165,7 @@ fn world<const F: bool>() {
             let color = card.color;
             f.add(card, Zone::Board(A, color));
         }
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 1);
         finish(&mut game, &mut Vec::new());
         assert_eq!(
@@ -181,8 +181,8 @@ fn world<const F: bool>() {
 
 #[test]
 fn translation_universal_is_printed_live_and_vacuously_true() {
-    world::<false>();
-    world::<true>();
+    world(Expansions::BASE);
+    world(Expansions::FIGURES);
 }
 
 #[test]
@@ -224,14 +224,14 @@ fn translation_prevented_original_melds_are_not_retried() {
     assert!(events.is_empty());
 }
 
-fn socialism<const F: bool>() {
+fn socialism(expansions: Expansions) {
     for commit in [false, true] {
         let mut f = Fixture::default();
         let source = base(&mut f, "B085", Zone::Board(A, Color::Purple));
         let bottom = base(&mut f, "B001", Zone::Board(A, Color::Red));
         let top = base(&mut f, "B002", Zone::Board(A, Color::Red));
         let hand = base(&mut f, "B003", Zone::Hand(A));
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 0);
         let mut events = Vec::new();
         if commit {
@@ -255,7 +255,7 @@ fn socialism<const F: bool>() {
     let mut f = Fixture::default();
     let source = base(&mut f, "B085", Zone::Junk);
     let hand = base(&mut f, "B001", Zone::Hand(A));
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0);
     finish(&mut game, &mut Vec::new());
     assert_eq!(game.position().cards(Zone::Hand(A)), [hand]);
@@ -263,17 +263,17 @@ fn socialism<const F: bool>() {
 
 #[test]
 fn socialism_tucks_top_then_all_hand_only_after_original_success() {
-    socialism::<false>();
-    socialism::<true>();
+    socialism(Expansions::BASE);
+    socialism(Expansions::FIGURES);
 }
 
-fn socialism_achievements<const F: bool>() {
+fn socialism_achievements(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B085", Zone::Junk);
     let eligible =
         ["B080", "B088", "B099"].map(|code| base(&mut f, code, Zone::AvailableAchievements));
     let other = base(&mut f, "B075", Zone::AvailableAchievements);
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 1);
     let mut events = Vec::new();
     let menu = decision(&mut game, &mut events);
@@ -319,17 +319,17 @@ fn socialism_achievements<const F: bool>() {
 
 #[test]
 fn socialism_second_effect_is_independent_optional_achievement_junk() {
-    socialism_achievements::<false>();
-    socialism_achievements::<true>();
+    socialism_achievements(Expansions::BASE);
+    socialism_achievements(Expansions::FIGURES);
 }
 
-fn suburbia<const F: bool>() {
+fn suburbia(expansions: Expansions) {
     for count in 0..=2 {
         let mut f = Fixture::default();
         let source = base(&mut f, "B089", Zone::Board(A, Color::Yellow));
         let hand = ["B001", "B002", "B003"].map(|code| base(&mut f, code, Zone::Hand(A)));
         let draws = ["B004", "B008"].map(|code| base(&mut f, code, Zone::Deck(Deck::base(1))));
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 0);
         let mut events = Vec::new();
         for &card in &hand[..count] {
@@ -359,17 +359,17 @@ fn suburbia<const F: bool>() {
 
 #[test]
 fn suburbia_stopping_preserves_success_count_and_draw_score_order() {
-    suburbia::<false>();
-    suburbia::<true>();
+    suburbia(Expansions::BASE);
+    suburbia(Expansions::FIGURES);
 }
 
-fn suburbia_deck<const F: bool>() {
+fn suburbia_deck(expansions: Expansions) {
     for commit in [false, true] {
         let mut f = Fixture::default();
         let source = base(&mut f, "B089", Zone::Junk);
         let deck = ["B088", "B091"].map(|code| base(&mut f, code, Zone::Deck(Deck::base(9))));
         let higher = base(&mut f, "B099", Zone::Deck(Deck::base(10)));
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 1);
         let mut events = Vec::new();
         if commit {
@@ -400,8 +400,8 @@ fn suburbia_deck<const F: bool>() {
 
 #[test]
 fn suburbia_second_effect_sweeps_only_physical_nine_after_commitment() {
-    suburbia_deck::<false>();
-    suburbia_deck::<true>();
+    suburbia_deck(Expansions::BASE);
+    suburbia_deck(Expansions::FIGURES);
 }
 
 #[test]

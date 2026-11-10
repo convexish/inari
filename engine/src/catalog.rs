@@ -256,7 +256,7 @@ fn programmed(
 
 #[cfg(test)]
 mod identity_tests {
-    use crate::{CardSet, Game, STABLE_IDS, StableId};
+    use crate::{CardSet, Expansions, Game, STABLE_IDS, StableId};
 
     #[test]
     fn stable_ids_reserve_each_set_and_age_zero_from_publisher_codes() {
@@ -290,7 +290,7 @@ mod identity_tests {
 
     #[test]
     fn every_dealt_card_names_its_set_and_a_distinct_stable_id_in_its_range() {
-        let game = Game::new_figures(0).unwrap();
+        let game = Game::new_game(0, Expansions::FIGURES).unwrap();
         let mut seen = std::collections::BTreeSet::new();
         for card in game.position().catalog.iter() {
             let id = card.stable_id().expect("printed card").0;

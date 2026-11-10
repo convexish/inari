@@ -12,10 +12,9 @@ struct Catalog {
 }
 
 /// Base first, so Base identities match the Base catalog in every mode;
-/// then Figures and Age 0 (matching `new_figures`), then Cities, Echoes,
-/// Artifacts and Unseen. Appending a set preserves every physical ID of the
-/// corresponding mode without it. Shuffle order is independent of this
-/// storage order.
+/// then Figures and Age 0, then Cities, Echoes, Artifacts and Unseen.
+/// Appending a set preserves every physical ID of the corresponding mode
+/// without it. Shuffle order is independent of this storage order.
 fn catalog_cards(expansions: Expansions) -> Result<Vec<Card>, Error> {
     let base = BASE_METADATA
         .iter()
@@ -109,40 +108,23 @@ pub(super) struct Opening {
 }
 
 impl Game {
-    /// Deal the complete two-player Base game, then await simultaneous opening
-    /// commitments through `advance` / `choose`. `CardId(i)` is BASE_METADATA[i].
-    /// After both starting melds, use `take_action` for the first one-action turn
-    /// and subsequent two-action turns. No Figures or Age 0 cards are included.
+    /// Deal a complete two-player game with these expansions, then await
+    /// simultaneous opening commitments through `advance` / `choose`. After
+    /// both starting melds, use `take_action` for the first one-action turn
+    /// and subsequent two-action turns.
     ///
-    /// The immutable authored catalog is initialized once and shared by games.
-    /// Missing authored programs fail explicitly; setup never substitutes stubs.
-    pub fn new_base(seed: u64) -> Result<Self, Error> {
-        Self::new_game(seed, Expansions::BASE)
-    }
-
-    /// Benchmark only: the Base deal under Figures rules, with no Figures or
-    /// Age 0 cards. This is not a Figures setup (the Figures rules still
-    /// apply, e.g. seven achievements to win); it measures what the Figures
-    /// machinery costs when no Figure is in play.
-    #[doc(hidden)]
-    pub fn base_deal_with_figures_rules(seed: u64) -> Result<Self, Error> {
-        Self::deal_base(Catalog::get(Expansions::BASE)?, Expansions::FIGURES, seed)
-    }
-
-    /// Deal a complete two-player Base + Figures game. The Base deal is
-    /// identical to `new_base(seed)`; the eleven Figures decks shuffle
-    /// afterwards. All five Decrees start in the supply and Age 0 waits
-    /// outside the game until Bear Grylls introduces it.
-    pub fn new_figures(seed: u64) -> Result<Self, Error> {
-        Self::new_game(seed, Expansions::FIGURES)
-    }
-
-    /// Deal a complete two-player game with Echoes, Figures and Cities in any
-    /// combination. Base is always included; its deal is identical to
-    /// `new_base(seed)`; then each enabled set's decks shuffle in set order
-    /// (Echoes, Cities, Unseen, Artifacts, Figures), ascending ages. Disabled sets use no
-    /// RNG. Echoes and Cities each add five special achievements; all ten
-    /// starting standard achievements and all four starting hand cards are Base.
+    /// Base is always included and its deal depends only on the seed:
+    /// `CardId(i)` is `BASE_METADATA[i]`, and all ten starting standard
+    /// achievements and all four starting hand cards are Base. Then each
+    /// enabled set's decks shuffle in set order (Echoes, Cities, Unseen,
+    /// Artifacts, Figures), ascending ages; disabled sets use no RNG. Echoes
+    /// and Cities each add five special achievements. With Figures, all five
+    /// Decrees start in the supply and Age 0 waits outside the game until
+    /// Bear Grylls introduces it.
+    ///
+    /// The immutable authored catalog is initialized once per combination
+    /// and shared by its games. Missing authored programs fail explicitly;
+    /// setup never substitutes stubs.
     pub fn new_game(seed: u64, expansions: Expansions) -> Result<Self, Error> {
         let mut game = Self::deal_base(Catalog::get(expansions)?, expansions, seed)?;
         for set in CardSet::ALL {
@@ -158,6 +140,15 @@ impl Game {
             }
         }
         Ok(game)
+    }
+
+    /// Benchmark only: the Base deal under Figures rules, with no Figures or
+    /// Age 0 cards. This is not a Figures setup (the Figures rules still
+    /// apply, e.g. seven achievements to win); it measures what the Figures
+    /// machinery costs when no Figure is in play.
+    #[doc(hidden)]
+    pub fn base_deal_with_figures_rules(seed: u64) -> Result<Self, Error> {
+        Self::deal_base(Catalog::get(Expansions::BASE)?, Expansions::FIGURES, seed)
     }
 
     fn deal_base(catalog: &Catalog, expansions: Expansions, seed: u64) -> Result<Self, Error> {
@@ -277,8 +268,8 @@ mod tests {
 
     #[test]
     fn complete_games_share_authored_catalog_and_keep_the_post_shuffle_stream() {
-        let mut game = Game::new_base(7).unwrap();
-        let other = Game::new_base(42).unwrap();
+        let mut game = Game::new_game(7, Expansions::BASE).unwrap();
+        let other = Game::new_game(42, Expansions::BASE).unwrap();
         assert!(Arc::ptr_eq(&game.position.catalog, &other.position.catalog));
         let mut expected = Rng::new(7);
         // Fifteen Age 1 cards, ten in each of the other ten ages.

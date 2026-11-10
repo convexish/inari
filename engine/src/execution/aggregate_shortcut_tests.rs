@@ -66,7 +66,7 @@ fn outcomes(mut game: Game, depth: usize) -> Vec<Game> {
     }
 }
 
-fn all_paths<const F: bool>() {
+fn all_paths(expansions: Expansions) {
     for code in ["B020", "B074", "B078", "B064", "B032", "B053"] {
         for extra in [false, true] {
             // Keep mandatory all-hand enumeration bounded, but include larger
@@ -75,7 +75,7 @@ fn all_paths<const F: bool>() {
                 continue;
             }
             let (position, source) = fixture(code, extra);
-            let mut reduced = Game::seeded(position, Expansions::with_figures(F), 183).unwrap();
+            let mut reduced = Game::seeded(position, expansions, 183).unwrap();
             let mut manual = reduced.clone();
             manual.shortcuts_disabled = true;
             invoke(&mut reduced, source);
@@ -97,8 +97,8 @@ fn all_paths<const F: bool>() {
 
 #[test]
 fn all_six_phases_preserve_unrestricted_outcome_classes_and_every_ordered_zone() {
-    all_paths::<false>();
-    all_paths::<true>();
+    all_paths(Expansions::BASE);
+    all_paths(Expansions::FIGURES);
 }
 
 fn canonical(game: &Game, menu: &Decision) -> usize {
@@ -158,10 +158,10 @@ fn run(game: &mut Game) -> Vec<Event> {
     panic!("canonical aggregate did not settle");
 }
 
-fn canonical_oracles<const F: bool>() {
+fn canonical_oracles(expansions: Expansions) {
     for code in ["B020", "B074", "B078", "B064", "B032", "B053"] {
         let (position, source) = fixture(code, false);
-        let mut reduced = Game::seeded(position, Expansions::with_figures(F), 911).unwrap();
+        let mut reduced = Game::seeded(position, expansions, 911).unwrap();
         let mut manual = reduced.clone();
         manual.shortcuts_disabled = true;
         invoke(&mut reduced, source);
@@ -174,8 +174,8 @@ fn canonical_oracles<const F: bool>() {
 
 #[test]
 fn canonical_events_rng_terminal_state_and_every_boundary_clones_match() {
-    canonical_oracles::<false>();
-    canonical_oracles::<true>();
+    canonical_oracles(Expansions::BASE);
+    canonical_oracles(Expansions::FIGURES);
 }
 
 #[test]

@@ -74,7 +74,16 @@ fn fixture(case: Case, tracked: bool) -> (Game, [CardId; 2], [CardId; 2], Option
     } else {
         None
     };
-    let mut game = Game::seeded(f.position(), Expansions::with_figures(mixed), 73).unwrap();
+    let mut game = Game::seeded(
+        f.position(),
+        if mixed {
+            Expansions::FIGURES
+        } else {
+            Expansions::BASE
+        },
+        73,
+    )
+    .unwrap();
     if tracked {
         game = game.with_tracking().unwrap();
     }

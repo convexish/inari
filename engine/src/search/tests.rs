@@ -1,4 +1,5 @@
 use super::*;
+use crate::Expansions;
 use crate::net::{Dimensions, synthetic_bytes};
 
 fn play(game: &mut Game, step: Step) {
@@ -22,7 +23,7 @@ fn net() -> Net {
 #[test]
 fn prepared_sampling_preserves_worlds_and_beliefs_across_all_modes() {
     for mode in 0..32 {
-        let mut game = Game::new_game(17, crate::Expansions::from_bits(mode).unwrap())
+        let mut game = Game::new_game(17, Expansions::from_bits(mode).unwrap())
             .unwrap()
             .with_tracking()
             .unwrap();
@@ -95,13 +96,11 @@ fn decide(game: &mut Game) -> Option<Step> {
 
 #[test]
 fn search_picks_a_legal_step_and_leaves_the_game_unchanged() {
-    for figures in [false, true] {
-        let game = if figures {
-            Game::new_figures(3)
-        } else {
-            Game::new_base(3)
-        };
-        let mut game = game.unwrap().with_tracking().unwrap();
+    for expansions in [Expansions::BASE, Expansions::FIGURES] {
+        let mut game = Game::new_game(3, expansions)
+            .unwrap()
+            .with_tracking()
+            .unwrap();
         for _ in 0..12 {
             if !live(&mut game) {
                 break;
@@ -116,7 +115,10 @@ fn search_picks_a_legal_step_and_leaves_the_game_unchanged() {
 
 #[test]
 fn parallel_trees_merge_their_root_statistics() {
-    let mut game = Game::new_figures(4).unwrap().with_tracking().unwrap();
+    let mut game = Game::new_game(4, Expansions::FIGURES)
+        .unwrap()
+        .with_tracking()
+        .unwrap();
     assert!(live(&mut game));
     let config = SearchConfig {
         iterations: 48,
@@ -137,7 +139,7 @@ fn parallel_trees_merge_their_root_statistics() {
 
 #[test]
 fn evaluation_is_antisymmetric_and_bounded() {
-    let game = Game::new_base(5).unwrap();
+    let game = Game::new_game(5, Expansions::BASE).unwrap();
     let value = evaluate(&game);
     assert!((-1.0..=1.0).contains(&value));
     assert!(value.abs() < 1e-12, "a symmetric opening deal scores level");
@@ -147,7 +149,7 @@ fn evaluation_is_antisymmetric_and_bounded() {
 fn learned_search_reports_root_options_and_leaves_the_game_unchanged() {
     let net = net();
     for expansions in [0u8, 0b11111] {
-        let expansions = crate::Expansions::from_bits(expansions).unwrap();
+        let expansions = Expansions::from_bits(expansions).unwrap();
         let mut game = Game::new_game(9, expansions)
             .unwrap()
             .with_tracking()
@@ -190,7 +192,7 @@ fn learned_search_reports_root_options_and_leaves_the_game_unchanged() {
 
 #[test]
 fn learned_trees_batch_leaves_and_follow_the_q_values() {
-    let mut game = Game::new_game(21, crate::Expansions::from_bits(0b101).unwrap())
+    let mut game = Game::new_game(21, Expansions::from_bits(0b101).unwrap())
         .unwrap()
         .with_tracking()
         .unwrap();
@@ -245,7 +247,7 @@ fn learned_trees_batch_leaves_and_follow_the_q_values() {
 
 #[test]
 fn a_waiting_node_is_queued_once_and_ends_the_batch() {
-    let mut game = Game::new_game(21, crate::Expansions::from_bits(0b101).unwrap())
+    let mut game = Game::new_game(21, Expansions::from_bits(0b101).unwrap())
         .unwrap()
         .with_tracking()
         .unwrap();
@@ -309,7 +311,7 @@ fn search_net_searches_the_same_with_and_without_a_policy_output() {
     let policy_net =
         Net::from_bytes(&synthetic_bytes(Dimensions { policy: true, ..hl }, 4, 0.5)).unwrap();
     assert!(policy_net.has_policy() && !hl_net.has_policy());
-    let mut game = Game::new_game(21, crate::Expansions::from_bits(0b101).unwrap())
+    let mut game = Game::new_game(21, Expansions::from_bits(0b101).unwrap())
         .unwrap()
         .with_tracking()
         .unwrap();
@@ -337,7 +339,7 @@ fn search_net_searches_the_same_with_and_without_a_policy_output() {
 
 #[test]
 fn policy_logits_set_the_priors_in_place_of_q() {
-    let mut game = Game::new_game(21, crate::Expansions::from_bits(0b101).unwrap())
+    let mut game = Game::new_game(21, Expansions::from_bits(0b101).unwrap())
         .unwrap()
         .with_tracking()
         .unwrap();
@@ -406,7 +408,10 @@ fn policy_logits_set_the_priors_in_place_of_q() {
 #[test]
 fn root_noise_keeps_priors_a_distribution() {
     let net = net();
-    let mut game = Game::new_base(2).unwrap().with_tracking().unwrap();
+    let mut game = Game::new_game(2, Expansions::BASE)
+        .unwrap()
+        .with_tracking()
+        .unwrap();
     assert!(live(&mut game));
     let plain = game.search_net(&net, SearchConfig::learned(16), 1).unwrap();
     let noisy = game
@@ -447,7 +452,7 @@ fn gamma_samples_have_the_right_mean() {
 #[test]
 fn a_root_only_search_follows_the_network() {
     let net = net();
-    let mut game = Game::new_game(13, crate::Expansions::from_bits(0b100).unwrap())
+    let mut game = Game::new_game(13, Expansions::from_bits(0b100).unwrap())
         .unwrap()
         .with_tracking()
         .unwrap();

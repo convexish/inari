@@ -108,7 +108,7 @@ fn normalized(mut position: Position) -> Position {
     position.sort_unordered_piles();
     position
 }
-fn outcome_classes<const F: bool>() {
+fn outcome_classes(expansions: Expansions) {
     for (code, manual_count, reduced_count) in [
         ("B026", 6, 1),
         ("B058", 7, 2),
@@ -116,7 +116,7 @@ fn outcome_classes<const F: bool>() {
         ("B115", 6, 1),
     ] {
         let (f, source, context, _) = fixture(code);
-        let mut reduced = Game::seeded(f.position(), Expansions::with_figures(F), 129).unwrap();
+        let mut reduced = Game::seeded(f.position(), expansions, 129).unwrap();
         let mut manual = reduced.clone();
         manual.shortcuts_disabled = true;
         start(&mut reduced, source, context);
@@ -150,8 +150,8 @@ fn outcome_classes<const F: bool>() {
 
 #[test]
 fn all_per_color_outcomes_survive_and_deck_back_orders_remain_real() {
-    outcome_classes::<false>();
-    outcome_classes::<true>();
+    outcome_classes(Expansions::BASE);
+    outcome_classes(Expansions::FIGURES);
 }
 
 #[test]

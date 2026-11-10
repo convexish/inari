@@ -44,7 +44,7 @@ fn grouped(events: &[Event]) -> Vec<&[ExchangeMovement]> {
         })
         .collect()
 }
-fn ordinary_cases<const F: bool>() {
+fn ordinary_cases(expansions: Expansions) {
     for code in ["B028", "B029", "B069"] {
         for (left_count, right_count) in [(0, 0), (0, 1), (1, 0), (1, 1), (3, 2)] {
             let mut f = Fixture::default();
@@ -60,7 +60,7 @@ fn ordinary_cases<const F: bool>() {
             for code in ["B001", "B004"].into_iter().take(right_count) {
                 base(&mut f, code, zones[1]);
             }
-            let mut game = Game::seeded(f.position(), Expansions::with_figures(F), 37).unwrap();
+            let mut game = Game::seeded(f.position(), expansions, 37).unwrap();
             start(&mut game, source, 0, BoxedValues::default(), false);
             let mut events = Vec::new();
             assert_eq!(
@@ -95,8 +95,8 @@ fn ordinary_cases<const F: bool>() {
 }
 #[test]
 fn empty_sides_and_partial_quotas_are_one_grouped_exchange_with_and_without_figures() {
-    ordinary_cases::<false>();
-    ordinary_cases::<true>();
+    ordinary_cases(Expansions::BASE);
+    ordinary_cases(Expansions::FIGURES);
 }
 
 #[test]
@@ -202,13 +202,13 @@ fn private_singleton_is_automatic_and_consumes_no_rng() {
     assert_eq!(game.rng, rng);
 }
 
-fn branches<const F: bool>() {
+fn branches(expansions: Expansions) {
     for code in ["B018", "B072"] {
         let mut f = Fixture::default();
         let source = base(&mut f, code, Zone::Junk);
         base(&mut f, "B001", Zone::Hand(A));
         base(&mut f, "B032", Zone::Deck(Deck::base(3)));
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         let before = game.position.clone();
         let rng = game.rng.clone();
         start(&mut game, source, 0, BoxedValues::default(), false);
@@ -224,7 +224,7 @@ fn branches<const F: bool>() {
         let source = base(&mut f, "B018", Zone::Junk);
         let three = base(&mut f, "B032", Zone::Deck(Deck::base(3)));
         let four = base(&mut f, "B036", Zone::Deck(Deck::base(4)));
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         let mut boxed = BoxedValues::default();
         boxed.increase(increase).unwrap();
         start(&mut game, source, 0, boxed, false);
@@ -250,8 +250,8 @@ fn branches<const F: bool>() {
 }
 #[test]
 fn whole_branch_decline_and_exact_boxed_deck_boundaries() {
-    branches::<false>();
-    branches::<true>();
+    branches(Expansions::BASE);
+    branches(Expansions::FIGURES);
 }
 
 #[test]
@@ -387,7 +387,7 @@ fn outcomes(mut game: Game, depth: usize) -> Vec<(Position, Rng, Status)> {
         }
     }
 }
-fn oracle<const F: bool>() {
+fn oracle(expansions: Expansions) {
     for code in ["B018", "B069"] {
         let mut f = Fixture::default();
         let source = base(&mut f, code, Zone::Junk);
@@ -402,7 +402,7 @@ fn oracle<const F: bool>() {
                 },
             );
         }
-        let mut reduced = Game::seeded(f.position(), Expansions::with_figures(F), 71).unwrap();
+        let mut reduced = Game::seeded(f.position(), expansions, 71).unwrap();
         let mut manual = reduced.clone();
         manual.shortcuts_disabled = true;
         start(&mut reduced, source, 0, BoxedValues::default(), false);
@@ -456,6 +456,6 @@ fn oracle<const F: bool>() {
 }
 #[test]
 fn all_real_subsets_and_canonical_events_rng_clone_boundaries_match_unrestricted() {
-    oracle::<false>();
-    oracle::<true>();
+    oracle(Expansions::BASE);
+    oracle(Expansions::FIGURES);
 }

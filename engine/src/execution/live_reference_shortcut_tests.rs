@@ -93,8 +93,14 @@ fn leaves(mut game: Game, depth: usize) -> Vec<Game> {
         other => panic!("unexpected shortcut leaf {other:?}"),
     }
 }
-fn classes<const F: bool>(f: Fixture, source: CardId, reduced_count: usize, manual_count: usize) {
-    let mut reduced = Game::seeded(f.position(), Expansions::with_figures(F), 412).unwrap();
+fn classes(
+    expansions: Expansions,
+    f: Fixture,
+    source: CardId,
+    reduced_count: usize,
+    manual_count: usize,
+) {
+    let mut reduced = Game::seeded(f.position(), expansions, 412).unwrap();
     let mut manual = reduced.clone();
     manual.shortcuts_disabled = true;
     start(&mut reduced, source, B);
@@ -122,28 +128,28 @@ fn classes<const F: bool>(f: Fixture, source: CardId, reduced_count: usize, manu
 
 #[test]
 fn construction_preserves_subsets_but_not_orders_into_the_demanders_hand() {
-    fn exercise<const F: bool>() {
+    fn exercise(expansions: Expansions) {
         for (ages, reduced, manual) in [
             (&[2, 1][..], 1, 2),
             (&[1, 1][..], 1, 2),
             (&[1, 2, 3][..], 6, 6),
         ] {
             let (f, source) = construction(ages, false);
-            classes::<F>(f, source, reduced, manual);
+            classes(expansions, f, source, reduced, manual);
         }
     }
-    exercise::<false>();
-    exercise::<true>();
+    exercise(Expansions::BASE);
+    exercise(Expansions::FIGURES);
     let (f, source) = construction(&[1], true);
-    classes::<true>(f, source, 1, 2);
+    classes(Expansions::FIGURES, f, source, 1, 2);
 }
 
 #[test]
 fn anatomy_mandatory_deck_sweep_has_one_reduced_path_and_all_six_unrestricted_orders() {
     let (f, source) = anatomy();
-    classes::<false>(f, source, 1, 6);
+    classes(Expansions::BASE, f, source, 1, 6);
     let (f, source) = anatomy();
-    classes::<true>(f, source, 1, 6);
+    classes(Expansions::FIGURES, f, source, 1, 6);
 }
 
 #[test]
@@ -187,7 +193,7 @@ fn native_transfer_hazards_fall_back_but_unrelated_draw_and_dogma_hooks_do_not()
         let figure = figure_card(code).unwrap();
         let color = figure.color;
         f.add(figure, Zone::Board(A, color));
-        classes::<true>(f, source, reduced, 2);
+        classes(Expansions::FIGURES, f, source, reduced, 2);
     }
 }
 
@@ -260,6 +266,6 @@ fn anatomy_deck_junk_ignores_hand_and_score_only_hazards() {
         let figure = figure_card(code).unwrap();
         let color = figure.color;
         f.add(figure, Zone::Board(A, color));
-        classes::<true>(f, source, 1, 6);
+        classes(Expansions::FIGURES, f, source, 1, 6);
     }
 }

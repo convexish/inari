@@ -146,7 +146,7 @@ rules corrections can change option ordering.
 ## Play and benchmarks
 
 `examples/random_games.rs` plays seeded uniformly random games through the
-public API (`Game::new_base`, `legal_actions`, `take_action`,
+public API (`Game::new_game`, `legal_actions`, `take_action`,
 `advance`, `choose`) and reports faults, outcomes and throughput:
 
 ```sh

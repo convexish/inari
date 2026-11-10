@@ -79,8 +79,12 @@ fn basic_fixture() -> (Fixture, CardId, Vec<CardId>, Vec<CardId>) {
     (f, oars, hand, draws)
 }
 
-fn assert_oracle<const F: bool>(position: Position, oars: CardId) -> (Game, Vec<Event>, usize) {
-    let mut reduced = Game::seeded(position, Expansions::with_figures(F), 42).unwrap();
+fn assert_oracle(
+    expansions: Expansions,
+    position: Position,
+    oars: CardId,
+) -> (Game, Vec<Event>, usize) {
+    let mut reduced = Game::seeded(position, expansions, 42).unwrap();
     let mut manual = reduced.clone();
     manual.shortcuts_disabled = true;
     action(&mut reduced, oars);
@@ -102,7 +106,7 @@ fn assert_oracle<const F: bool>(position: Position, oars: CardId) -> (Game, Vec<
 #[test]
 fn ordinary_oars_is_one_activation_with_no_internal_decisions_and_all_events_retained() {
     let (f, oars, hand, draws) = basic_fixture();
-    let (game, events, decisions) = assert_oracle::<false>(f.position(), oars);
+    let (game, events, decisions) = assert_oracle(Expansions::BASE, f.position(), oars);
     assert_eq!(decisions, 0);
     assert_eq!(
         events
@@ -162,7 +166,7 @@ fn the_manual_oracle_really_exposes_transfer_choices() {
 fn dormant_figure_decks_do_not_disable_shortcutting() {
     let (mut f, oars, ..) = basic_fixture();
     f.figure(Figure::AlexTrebek, Zone::Deck(Deck::figures(10)));
-    let (_, events, decisions) = assert_oracle::<true>(f.position(), oars);
+    let (_, events, decisions) = assert_oracle(Expansions::FIGURES, f.position(), oars);
     assert_eq!(decisions, 0);
     assert_eq!(events.len(), 13);
 }
@@ -190,7 +194,7 @@ fn unrelated_figures_do_not_disable_the_loop_and_scoped_boxes_still_apply() {
         for _ in 0..2 {
             f.tech(Color::Yellow, age, Zone::Deck(Deck::base(age)), vec![]);
         }
-        let (_, events, decisions) = assert_oracle::<true>(f.position(), oars);
+        let (_, events, decisions) = assert_oracle(Expansions::FIGURES, f.position(), oars);
         assert_eq!(decisions, 0, "{figure:?}");
         assert_eq!(events.len(), 6);
         assert!(
@@ -256,7 +260,7 @@ fn buried_and_hand_figures_are_not_active_shortcut_hazards() {
     f.figure(Figure::AlfredNobel, Zone::Board(B, Color::Green));
     f.tech(Color::Green, 1, Zone::Board(B, Color::Green), vec![]);
     f.figure(Figure::JackieChan, Zone::Hand(B));
-    let (_, _, decisions) = assert_oracle::<true>(f.position(), oars);
+    let (_, _, decisions) = assert_oracle(Expansions::FIGURES, f.position(), oars);
     assert_eq!(decisions, 0);
 }
 
@@ -319,7 +323,7 @@ fn the_oars_exception_preserves_lowest_first_even_when_other_orders_change_the_w
     let low = prosperity(&mut f, 2, Zone::Hand(B));
     f.tech(Color::Yellow, 4, Zone::Score(B), vec![]);
     let position = f.position();
-    let (mut game, events, decisions) = assert_oracle::<false>(position.clone(), oars);
+    let (mut game, events, decisions) = assert_oracle(Expansions::BASE, position.clone(), oars);
     assert_eq!(decisions, 0);
     assert_eq!(events.len(), 1);
     assert_eq!(moved(&events[0]).card, low);
@@ -338,7 +342,7 @@ fn no_original_transfer_means_the_followup_draw_and_no_extra_choice() {
     let oars = f.oars(Zone::Board(A, Color::Red));
     let hidden = f.tech(Color::Yellow, 7, Zone::Hand(B), vec![]);
     let drawn = f.tech(Color::Green, 1, Zone::Deck(Deck::base(1)), vec![]);
-    let (game, events, decisions) = assert_oracle::<false>(f.position(), oars);
+    let (game, events, decisions) = assert_oracle(Expansions::BASE, f.position(), oars);
     assert_eq!(decisions, 0);
     assert_eq!(events.len(), 2);
     assert!(
@@ -358,7 +362,7 @@ fn replaced_transfer_stops_the_repeat_and_cannot_satisfy_the_cross_demand_condit
     let high = prosperity(&mut f, 5, Zone::Hand(B));
     let reaction = f.tech(Color::Green, 4, Zone::Deck(Deck::base(4)), vec![]);
     let followup = f.tech(Color::Yellow, 1, Zone::Deck(Deck::base(1)), vec![]);
-    let (game, events, decisions) = assert_oracle::<true>(f.position(), oars);
+    let (game, events, decisions) = assert_oracle(Expansions::FIGURES, f.position(), oars);
     assert_eq!(decisions, 1);
     assert_eq!(
         events.iter().map(|e| moved(e).card).collect::<Vec<_>>(),
@@ -436,7 +440,7 @@ fn keplers_replacement_counts_its_own_suppressed_demand_and_keeps_the_shortcut()
     for _ in 0..2 {
         f.tech(Color::Yellow, 2, Zone::Deck(Deck::base(2)), vec![]);
     }
-    let (game, events, decisions) = assert_oracle::<true>(f.position(), oars);
+    let (game, events, decisions) = assert_oracle(Expansions::FIGURES, f.position(), oars);
     assert_eq!(decisions, 0);
     assert_eq!(events.len(), 6);
     assert!(events.iter().all(|e| match e {
@@ -456,7 +460,7 @@ fn lowest_first_remains_the_policy_with_michelangelos_physical_hand_score_alias(
     f.figure(Figure::Michelangelo, Zone::Board(B, Color::Yellow));
     let high = prosperity(&mut f, 7, Zone::Hand(B));
     let low = prosperity(&mut f, 2, Zone::Hand(B));
-    let (mut game, events, decisions) = assert_oracle::<true>(f.position(), oars);
+    let (mut game, events, decisions) = assert_oracle(Expansions::FIGURES, f.position(), oars);
     assert_eq!(decisions, 0);
     assert_eq!(events.len(), 1);
     assert_eq!(moved(&events[0]).card, low);

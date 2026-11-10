@@ -67,13 +67,13 @@ fn demand() -> Context {
     context
 }
 
-fn statistics<const F: bool>() {
+fn statistics(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B048", Zone::Board(A, Color::Yellow));
     let first = base(&mut f, "B001", Zone::Score(B));
     let second = base(&mut f, "B008", Zone::Score(B));
     let other = base(&mut f, "B016", Zone::Score(B));
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0, demand());
     let mut events = Vec::new();
     let menu = decision(&mut game, &mut events);
@@ -99,8 +99,8 @@ fn statistics<const F: bool>() {
 }
 #[test]
 fn statistics_demander_chooses_and_same_value_ties_need_no_order() {
-    statistics::<false>();
-    statistics::<true>();
+    statistics(Expansions::BASE);
+    statistics(Expansions::FIGURES);
 }
 
 #[test]
@@ -117,7 +117,7 @@ fn statistics_yellow_splay_is_independent_of_an_empty_demand() {
     assert_eq!(game.position().splay(A, Color::Yellow), Splay::Right);
 }
 
-fn encyclopedia<const F: bool>() {
+fn encyclopedia(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B063", Zone::Junk);
     let first = base(&mut f, "B001", Zone::Score(A));
@@ -125,7 +125,7 @@ fn encyclopedia<const F: bool>() {
     let green = base(&mut f, "B008", Zone::Score(A));
     let other = base(&mut f, "B016", Zone::Score(A));
     let achievement = base(&mut f, "B048", Zone::AvailableAchievements);
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0, Context::new(A));
     let mut events = Vec::new();
     value(&mut game, &mut events, A, 1);
@@ -159,8 +159,8 @@ fn encyclopedia<const F: bool>() {
 }
 #[test]
 fn encyclopedia_commits_to_every_match_and_preserves_within_color_orders() {
-    encyclopedia::<false>();
-    encyclopedia::<true>();
+    encyclopedia(Expansions::BASE);
+    encyclopedia(Expansions::FIGURES);
 }
 
 #[test]
@@ -249,7 +249,7 @@ fn mass_media_original_payment_failure_and_decline_never_choose_a_value() {
     finish(&mut game, &mut Vec::new());
 }
 
-fn mass_media<const F: bool>() {
+fn mass_media(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B081", Zone::Junk);
     let payment = base(&mut f, "B016", Zone::Hand(A));
@@ -257,7 +257,7 @@ fn mass_media<const F: bool>() {
     let foreign = base(&mut f, "B002", Zone::Score(B));
     let foreign_two = base(&mut f, "B008", Zone::Score(B));
     let other = base(&mut f, "B042", Zone::Score(B));
-    let mut game = Game::seeded(f.position(), Expansions::with_figures(F), 73).unwrap();
+    let mut game = Game::seeded(f.position(), expansions, 73).unwrap();
     invoke(&mut game, source, 0, Context::new(A));
     let mut events = Vec::new();
     choose_card(&mut game, &mut events, payment);
@@ -297,11 +297,11 @@ fn mass_media<const F: bool>() {
 }
 #[test]
 fn mass_media_returns_all_matching_piles_with_blind_foreign_selection() {
-    mass_media::<false>();
-    mass_media::<true>();
+    mass_media(Expansions::BASE);
+    mass_media(Expansions::FIGURES);
 }
 
-fn services<const F: bool>() {
+fn services(expansions: Expansions) {
     // [1] is in the score pile; [2] stands for every absent value (backs show
     // values, so all of them are one option).
     for selected in [1, 2] {
@@ -309,7 +309,7 @@ fn services<const F: bool>() {
         let source = base(&mut f, "B094", Zone::Board(A, Color::Purple));
         let gift = base(&mut f, "B001", Zone::Board(A, Color::Red));
         let scored = base(&mut f, "B008", Zone::Score(B));
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 0, demand());
         let mut events = Vec::new();
         value(&mut game, &mut events, A, selected);
@@ -327,8 +327,8 @@ fn services<const F: bool>() {
 }
 #[test]
 fn services_absent_value_is_legal_but_only_original_fulfillment_pays_top_without_health() {
-    services::<false>();
-    services::<true>();
+    services(Expansions::BASE);
+    services(Expansions::FIGURES);
     let mut f = Fixture::default();
     let source = base(&mut f, "B094", Zone::Board(A, Color::Purple));
     let gift = base(&mut f, "B001", Zone::Board(A, Color::Red));
@@ -342,14 +342,14 @@ fn services_absent_value_is_legal_but_only_original_fulfillment_pays_top_without
     assert_eq!(game.position().top(A, Color::Red), Some(gift));
 }
 
-fn near_field<const F: bool>() {
+fn near_field(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B108", Zone::Junk);
     let selected = base(&mut f, "B042", Zone::Score(B));
     let tied = base(&mut f, "B045", Zone::Score(B));
     let lower = base(&mut f, "B001", Zone::Score(A));
     let drawn = base(&mut f, "B047", Zone::Deck(Deck::base(5)));
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0, demand());
     let mut events = Vec::new();
     value(&mut game, &mut events, A, 4);
@@ -373,8 +373,8 @@ fn near_field<const F: bool>() {
 }
 #[test]
 fn near_field_transfers_then_reveals_and_self_executes_any_highest_tie() {
-    near_field::<false>();
-    near_field::<true>();
+    near_field(Expansions::BASE);
+    near_field(Expansions::FIGURES);
 }
 
 #[test]

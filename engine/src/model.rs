@@ -990,11 +990,6 @@ impl Expansions {
         self.0.count_ones() as usize
     }
 
-    /// Base, plus Figures if `figures`.
-    pub const fn with_figures(figures: bool) -> Self {
-        if figures { Self::FIGURES } else { Self::BASE }
-    }
-
     pub const fn figures(self) -> bool {
         self.0 & Self::FIGURES.0 != 0
     }
@@ -1069,7 +1064,7 @@ pub(crate) struct AgeZero {
 }
 
 /// Physical state and shared immutable programs. Use `new` for explicit
-/// acceptance positions, or `Game::new_base` for a complete Base deal.
+/// acceptance positions, or `Game::new_game` for a complete deal.
 #[derive(Clone, Debug, Eq)]
 pub struct Position {
     pub(crate) catalog: Arc<[Card]>,

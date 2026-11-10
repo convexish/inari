@@ -68,14 +68,14 @@ fn movements(events: &[Event], verb: Verb) -> Vec<CardId> {
 
 #[test]
 fn colonialism_checks_the_original_draw_then_repeats_only_its_own_effect() {
-    fn exercise<const F: bool>() {
+    fn exercise(expansions: Expansions) {
         let mut f = Fixture::default();
         let source = native(&mut f, "B036", A);
         let last = f.add(base_card("B026").unwrap(), Zone::Deck(Deck::base(3)));
         let first = f.add(base_card("B030").unwrap(), Zone::Deck(Deck::base(3)));
         let bottom = f.tech(Color::Yellow, 5, Zone::Deck(Deck::base(5)), vec![]);
         let top = f.tech(Color::Blue, 5, Zone::Deck(Deck::base(5)), vec![]);
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         start(&mut game, source, 0, A, A);
         let mut events = Vec::new();
         assert_eq!(
@@ -90,8 +90,8 @@ fn colonialism_checks_the_original_draw_then_repeats_only_its_own_effect() {
             [last, source]
         );
     }
-    exercise::<false>();
-    exercise::<true>();
+    exercise(Expansions::BASE);
+    exercise(Expansions::FIGURES);
 }
 
 #[test]
@@ -162,7 +162,7 @@ fn pirate_code_counts_original_demand_transfers_and_keeps_lowest_prosperity_ties
 
 #[test]
 fn explosives_attempts_three_highest_and_draws_only_after_a_real_transfer_empties_hand() {
-    fn exercise<const F: bool>() {
+    fn exercise(expansions: Expansions) {
         for count in 0..=4 {
             let mut f = Fixture::default();
             let source = native(&mut f, "B067", A);
@@ -170,7 +170,7 @@ fn explosives_attempts_three_highest_and_draws_only_after_a_real_transfer_emptie
                 .map(|age| f.tech(Color::Blue, age, Zone::Hand(B), vec![]))
                 .collect();
             let reward = f.tech(Color::Yellow, 7, Zone::Deck(Deck::base(7)), vec![]);
-            let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+            let mut game = Game::new(f.position(), expansions).unwrap();
             start(&mut game, source, 0, B, A);
             let mut events = Vec::new();
             assert_eq!(
@@ -191,8 +191,8 @@ fn explosives_attempts_three_highest_and_draws_only_after_a_real_transfer_emptie
             }
         }
     }
-    exercise::<false>();
-    exercise::<true>();
+    exercise(Expansions::BASE);
+    exercise(Expansions::FIGURES);
 }
 
 #[test]
@@ -218,14 +218,14 @@ fn explosives_does_not_let_an_attempted_borrowed_highest_hide_the_next_eligible_
 
 #[test]
 fn refrigeration_preserves_the_choice_of_survivor_and_can_score_it_in_the_next_effect() {
-    fn exercise<const F: bool>() {
+    fn exercise(expansions: Expansions) {
         for count in 0..=4 {
             let mut f = Fixture::default();
             let source = native(&mut f, "B068", A);
             let hand: Vec<_> = (1..=count)
                 .map(|age| f.tech(Color::Blue, age, Zone::Hand(B), vec![]))
                 .collect();
-            let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+            let mut game = Game::new(f.position(), expansions).unwrap();
             start(&mut game, source, 0, B, A);
             let mut events = Vec::new();
             if count >= 3 {
@@ -256,20 +256,20 @@ fn refrigeration_preserves_the_choice_of_survivor_and_can_score_it_in_the_next_e
             }
         }
     }
-    exercise::<false>();
-    exercise::<true>();
+    exercise(Expansions::BASE);
+    exercise(Expansions::FIGURES);
 }
 
 #[test]
 fn specialization_transfers_only_one_current_top_and_retains_the_revealed_card() {
-    fn exercise<const F: bool>() {
+    fn exercise(expansions: Expansions) {
         let mut f = Fixture::default();
         let source = native(&mut f, "B095", A);
         let revealed = f.add(base_card("B012").unwrap(), Zone::Hand(A));
         let covered = f.tech(Color::Blue, 3, Zone::Board(B, Color::Blue), vec![]);
         let top = f.tech(Color::Blue, 4, Zone::Board(B, Color::Blue), vec![]);
         let other = f.tech(Color::Green, 5, Zone::Board(B, Color::Green), vec![]);
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         game.self_execute(source, Context::new(A)).unwrap();
         let mut events = Vec::new();
         assert_eq!(
@@ -281,13 +281,13 @@ fn specialization_transfers_only_one_current_top_and_retains_the_revealed_card()
         assert_eq!(game.position().top(B, Color::Blue), Some(covered));
         assert_eq!(game.position().top(B, Color::Green), Some(other));
     }
-    exercise::<false>();
-    exercise::<true>();
+    exercise(Expansions::BASE);
+    exercise(Expansions::FIGURES);
 }
 
 #[test]
 fn databases_uses_highest_physical_achievement_value_not_achievement_count() {
-    fn exercise<const F: bool>() {
+    fn exercise(expansions: Expansions) {
         for value in [0, 2, 4] {
             let mut f = Fixture::default();
             let source = native(&mut f, "B100", A);
@@ -297,7 +297,7 @@ fn databases_uses_highest_physical_achievement_value_not_achievement_count() {
             let score: Vec<_> = (1..=3)
                 .map(|age| f.tech(Color::Blue, age, Zone::Score(B), vec![]))
                 .collect();
-            let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+            let mut game = Game::new(f.position(), expansions).unwrap();
             start(&mut game, source, 0, B, A);
             let mut events = Vec::new();
             assert_eq!(
@@ -314,13 +314,13 @@ fn databases_uses_highest_physical_achievement_value_not_achievement_count() {
             );
         }
     }
-    exercise::<false>();
-    exercise::<true>();
+    exercise(Expansions::BASE);
+    exercise(Expansions::FIGURES);
 }
 
 #[test]
 fn escapism_returns_the_retained_value_draws_three_and_executes_the_junked_native_card() {
-    fn exercise<const F: bool>() {
+    fn exercise(expansions: Expansions) {
         let mut f = Fixture::default();
         let source = native(&mut f, "B114", A);
         let writing = f.add(base_card("B012").unwrap(), Zone::Hand(A));
@@ -331,7 +331,7 @@ fn escapism_returns_the_retained_value_draws_three_and_executes_the_junked_nativ
             .collect();
         let reward = f.add(base_card("B022").unwrap(), Zone::Deck(Deck::base(2)));
         let chain = f.add(base_card("B115").unwrap(), Zone::Deck(Deck::base(11)));
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         game.self_execute(source, Context::new(A)).unwrap();
         let mut events = Vec::new();
         select_reveal(&mut game, &mut events, writing);
@@ -347,8 +347,8 @@ fn escapism_returns_the_retained_value_draws_three_and_executes_the_junked_nativ
         expected.push(reward);
         assert_eq!(game.position().cards(Zone::Hand(A)), expected);
     }
-    exercise::<false>();
-    exercise::<true>();
+    exercise(Expansions::BASE);
+    exercise(Expansions::FIGURES);
 }
 
 #[test]

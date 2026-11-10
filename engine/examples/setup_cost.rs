@@ -11,19 +11,16 @@ fn main() {
         std::mem::size_of::<Game>(),
         std::mem::size_of::<Card>()
     );
-    for figures in [false, true] {
-        let new = if figures {
-            Game::new_figures
-        } else {
-            Game::new_base
-        };
+    for expansions in [Expansions::BASE, Expansions::FIGURES] {
+        let new = |seed| Game::new_game(seed, expansions);
         black_box(new(0).unwrap());
         let start = Instant::now();
         for seed in 0..50_000 {
             black_box(new(black_box(seed)).unwrap());
         }
         println!(
-            "figures={figures} setup {:.0} ns/game",
+            "{} setup {:.0} ns/game",
+            expansions.name(),
             start.elapsed().as_nanos() as f64 / 50_000.0
         );
     }

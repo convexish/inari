@@ -274,20 +274,18 @@ fn rows_hold_the_header_scalars_tokens_and_one_option_per_legal_step() {
 
 #[test]
 fn reserved_expansion_layout_stays_empty_in_base_and_figures_games() {
-    for figures in [false, true] {
-        let game = if figures {
-            Game::new_figures(9)
-        } else {
-            Game::new_base(9)
-        };
-        let mut game = game.unwrap().with_tracking().unwrap();
+    for expansions in [Expansions::BASE, Expansions::FIGURES] {
+        let mut game = Game::new_game(9, expansions)
+            .unwrap()
+            .with_tracking()
+            .unwrap();
         settle(&mut game, &mut Vec::new());
         let observation = game.observe(Player::One).unwrap();
         let s = &observation.scalars;
         assert_eq!(s[scalar::SETS + CardSet::Base.index()], 1.0);
         assert_eq!(
             s[scalar::SETS + CardSet::Figures.index()],
-            f32::from(u8::from(figures))
+            f32::from(u8::from(expansions.figures()))
         );
         for set in [
             CardSet::Echoes,
@@ -308,7 +306,7 @@ fn reserved_expansion_layout_stays_empty_in_base_and_figures_games() {
                     .all(|&x| x == 0.0)
             );
         }
-        if !figures {
+        if !expansions.figures() {
             assert!(s[scalar::DECREES..scalar::CITIES].iter().all(|&x| x == 0.0));
         }
         assert!(s[scalar::CITIES..scalar::PLAYERS].iter().all(|&x| x == 0.0));
@@ -393,7 +391,10 @@ fn the_documented_layout_sizes_hold() {
     assert_eq!(observation::REVISION, 7, "revision 7 is frozen");
     assert_eq!((field::SECOND, field::SECOND_ZONE), (11, 12));
     assert_eq!(field::DECREE_TOKENS, 21);
-    let mut game = Game::new_base(1).unwrap().with_tracking().unwrap();
+    let mut game = Game::new_game(1, Expansions::BASE)
+        .unwrap()
+        .with_tracking()
+        .unwrap();
     settle(&mut game, &mut Vec::new());
     assert_eq!(game.observe(Player::One).unwrap().row()[1], 7.0);
 }

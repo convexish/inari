@@ -2,8 +2,8 @@ use inno_engine::*;
 mod common;
 use common::*;
 
-fn tracked(f: Fixture, figures: bool) -> Game {
-    Game::new(f.position(), Expansions::with_figures(figures))
+fn tracked(f: Fixture, expansions: Expansions) -> Game {
+    Game::new(f.position(), expansions)
         .unwrap()
         .with_tracking()
         .unwrap()
@@ -49,7 +49,7 @@ fn private_draw_public_reveal_known_return_and_shuffle() {
         .into_iter()
         .map(|c| f.tech(c, 1, deck, vec![]))
         .collect();
-    let mut game = tracked(f, false);
+    let mut game = tracked(f, Expansions::BASE);
     run(
         &mut game,
         Operation::Draw {
@@ -93,7 +93,7 @@ fn ambiguous_departure_forgets_which_known_same_back_member_left() {
         .iter()
         .map(|&c| f.tech(c, 1, Zone::Hand(A), vec![]))
         .collect();
-    let mut game = tracked(f, false);
+    let mut game = tracked(f, Expansions::BASE);
     run(
         &mut game,
         Operation::Reveal {
@@ -133,7 +133,7 @@ fn revelation_then_private_return_does_not_reveal_the_return() {
         .iter()
         .map(|&c| f.tech(c, 1, Zone::Hand(A), vec![]))
         .collect();
-    let mut game = tracked(f, false);
+    let mut game = tracked(f, Expansions::BASE);
     for &id in &ids {
         run(
             &mut game,
@@ -164,7 +164,7 @@ fn meiji_inspection_is_timed_and_remembered_but_aliases_do_not_grant_it() {
     let one = f.tech(Color::Red, 1, Zone::Hand(B), vec![]);
     let two = f.tech(Color::Blue, 1, Zone::Deck(Deck::base(1)), vec![]);
     let three = f.tech(Color::Green, 1, Zone::Deck(Deck::base(1)), vec![]);
-    let mut game = tracked(f, true);
+    let mut game = tracked(f, Expansions::FIGURES);
     assert!(game.position().meiji_active(A));
     assert_eq!(beliefs(&game, A, Zone::Hand(B))[0].known(), Some(one));
     game.begin_action(ActionKind::Regular).unwrap();
@@ -222,7 +222,7 @@ fn age_zero_is_outside_hidden_sampling_until_introduced_and_has_its_own_back() {
         .map(|&c| f.tech(c, 0, Zone::AgeZeroReserve, vec![]))
         .collect();
     f.tech(Color::Red, 1, Zone::Deck(Deck::base(1)), vec![]);
-    let mut game = tracked(f, true);
+    let mut game = tracked(f, Expansions::FIGURES);
     let world = game.determinize(A, 17).unwrap();
     assert_eq!(world.position().cards(Zone::AgeZeroReserve), reserve);
     run(&mut game, Operation::IntroduceAgeZero, A);
@@ -246,7 +246,7 @@ fn base_and_figure_backs_and_available_claimed_junk_zones_are_separate() {
     let base = f.tech(Color::Red, 1, Zone::AvailableAchievements, vec![]);
     let other = f.tech(Color::Blue, 1, Zone::Deck(Deck::base(1)), vec![]);
     let figure = f.figure(Figure::Homer, Zone::Deck(Deck::figures(1)));
-    let mut game = tracked(f, true);
+    let mut game = tracked(f, Expansions::FIGURES);
     run(
         &mut game,
         Operation::Claim {
@@ -278,7 +278,7 @@ fn simultaneous_exchange_and_alias_overlap_never_duplicate_physical_beliefs() {
     let hand = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let score = f.tech(Color::Green, 1, Zone::Score(A), vec![]);
     f.tech(Color::Purple, 1, Zone::Deck(Deck::base(1)), vec![]);
-    let mut game = tracked(f, true);
+    let mut game = tracked(f, Expansions::FIGURES);
     run(
         &mut game,
         Operation::ExchangeAll {
@@ -303,7 +303,7 @@ fn hidden_world(swapped: bool) -> Game {
         f.placements[usize::from(one.0)].1 = Zone::Deck(Deck::base(1));
         f.placements[usize::from(two.0)].1 = Zone::Hand(B);
     }
-    tracked(f, false)
+    tracked(f, Expansions::BASE)
 }
 
 #[test]
@@ -334,15 +334,11 @@ fn indistinguishable_worlds_give_identical_samples_and_do_not_import_opponent_kn
 
 #[test]
 fn opening_commitments_remap_without_revealing_opponents_selected_card() {
-    for figures in [false, true] {
-        let mut game = if figures {
-            Game::new_figures(37)
-        } else {
-            Game::new_base(37)
-        }
-        .unwrap()
-        .with_tracking()
-        .unwrap();
+    for expansions in [Expansions::BASE, Expansions::FIGURES] {
+        let mut game = Game::new_game(37, expansions)
+            .unwrap()
+            .with_tracking()
+            .unwrap();
         let first = decision(&mut game, &mut Vec::new());
         assert_eq!(first.player, A);
         let mut other = game.clone();
@@ -392,15 +388,11 @@ fn opening_commitments_remap_without_revealing_opponents_selected_card() {
 
 #[test]
 fn opening_search_does_not_depend_on_the_opponents_secret_commitment() {
-    for figures in [false, true] {
-        let mut left = if figures {
-            Game::new_figures(37)
-        } else {
-            Game::new_base(37)
-        }
-        .unwrap()
-        .with_tracking()
-        .unwrap();
+    for expansions in [Expansions::BASE, Expansions::FIGURES] {
+        let mut left = Game::new_game(37, expansions)
+            .unwrap()
+            .with_tracking()
+            .unwrap();
         assert_eq!(decision(&mut left, &mut Vec::new()).player, A);
         let mut right = left.clone();
         left.choose(0).unwrap();
@@ -443,7 +435,7 @@ fn hidden_pending_meld_is_resampled_and_follows_its_sampled_identity_after_first
             blue
         };
         let color = f.cards[usize::from(incoming.0)].color;
-        let mut game = tracked(f, true);
+        let mut game = tracked(f, Expansions::FIGURES);
         game.start(meld(incoming, Zone::Hand(B), B, color), Context::new(B))
             .unwrap();
         decision(&mut game, &mut Vec::new());
@@ -491,7 +483,7 @@ fn remembered_hand_members_do_not_pin_an_unknown_pending_selection() {
     f.tech(Color::Red, 9, Zone::Board(B, Color::Red), vec![]);
     let blue = f.tech(Color::Blue, 2, Zone::Hand(B), vec![]);
     let green = f.tech(Color::Green, 2, Zone::Hand(B), vec![]);
-    let mut game = tracked(f, true);
+    let mut game = tracked(f, Expansions::FIGURES);
     for card in [blue, green] {
         run(
             &mut game,
@@ -544,7 +536,7 @@ fn trebek_names_are_public_evidence_but_do_not_disclose_deck_order() {
         f.figure(Figure::EmperorMeiji, Zone::Deck(Deck::figures(7)));
         f.figure(Figure::JohnEricsson, Zone::Deck(Deck::figures(7)));
         f.tech(Color::Blue, 1, Zone::Deck(Deck::base(1)), vec![]);
-        let mut game = tracked(f, true);
+        let mut game = tracked(f, Expansions::FIGURES);
         game.start(
             Operation::Draw {
                 value: 1,
@@ -608,7 +600,7 @@ fn unentered_front_dependent_reactions_do_not_disclose_the_operand() {
     f.tech(Color::Red, 9, Zone::Board(B, Color::Red), vec![]);
     let incoming = f.tech(Color::Blue, 2, Zone::Hand(B), vec![]);
     f.tech(Color::Green, 2, Zone::Deck(Deck::base(2)), vec![]);
-    let mut game = tracked(f, true);
+    let mut game = tracked(f, Expansions::FIGURES);
     game.start(
         meld(incoming, Zone::Hand(B), B, Color::Blue),
         Context::new(B),
@@ -659,7 +651,7 @@ fn an_unoffered_conditional_hook_reveals_its_operand_first() {
     }
     let incoming = f.tech(Color::Green, 2, Zone::Hand(B), vec![]);
     f.tech(Color::Blue, 2, Zone::Deck(Deck::base(2)), vec![]);
-    let mut game = tracked(f, true);
+    let mut game = tracked(f, Expansions::FIGURES);
     game.start(
         Operation::Splay {
             player: B,
@@ -704,7 +696,7 @@ fn elimination_moves_all_cards_through_tracking_without_stale_slots() {
     f.tech(Color::Yellow, 1, Zone::Score(A), vec![]);
     f.tech(Color::Red, 1, Zone::Achievements(A), vec![]);
     f.tech(Color::Purple, 1, Zone::Deck(Deck::base(1)), vec![]);
-    let mut game = tracked(f, false);
+    let mut game = tracked(f, Expansions::BASE);
     game.start(Operation::Lose { player: A }, Context::new(A))
         .unwrap();
     assert_eq!(settle(&mut game, &mut Vec::new()), Status::Winner(B));
@@ -723,11 +715,14 @@ fn elimination_moves_all_cards_through_tracking_without_stale_slots() {
 
 #[test]
 fn requires_tracking_and_rejects_internal_scheduler_states() {
-    let mut game = Game::new_base(0).unwrap();
+    let mut game = Game::new_game(0, Expansions::BASE).unwrap();
     decision(&mut game, &mut Vec::new());
     assert!(game.determinize(A, 0).is_err());
     assert!(game.with_tracking().is_err());
-    let mut game = Game::new_base(0).unwrap().with_tracking().unwrap();
+    let mut game = Game::new_game(0, Expansions::BASE)
+        .unwrap()
+        .with_tracking()
+        .unwrap();
     assert_eq!(game.determinize(A, 0), Err(Error::Busy));
     decision(&mut game, &mut Vec::new());
     game.choose(0).unwrap();
@@ -738,14 +733,9 @@ fn requires_tracking_and_rejects_internal_scheduler_states() {
 fn bounded_seeded_games_preserve_untracked_replays_and_sampled_truth_after_choices() {
     let mut sampled = 0;
     let mut guarded = 0;
-    for figures in [false, true] {
+    for expansions in [Expansions::BASE, Expansions::FIGURES] {
         for seed in 0..8 {
-            let make = if figures {
-                Game::new_figures
-            } else {
-                Game::new_base
-            };
-            let mut reference = make(seed).unwrap();
+            let mut reference = Game::new_game(seed, expansions).unwrap();
             let mut game = reference.clone().with_tracking().unwrap();
             let mut rng = Rng::new(seed + 1024);
             let mut ended = false;
@@ -756,7 +746,8 @@ fn bounded_seeded_games_preserve_untracked_replays_and_sampled_truth_after_choic
                 assert_eq!(
                     status,
                     reference.advance(10000, &mut reference_events).unwrap(),
-                    "figures={figures} seed={seed} step={step}"
+                    "{} seed={seed} step={step}",
+                    expansions.name()
                 );
                 assert_eq!(events, reference_events);
                 assert_eq!(game.position(), reference.position());

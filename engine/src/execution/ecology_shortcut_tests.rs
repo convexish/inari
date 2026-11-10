@@ -65,14 +65,14 @@ fn finish(game: &mut Game, events: &mut Vec<Event>) -> (Status, usize) {
     panic!("Ecology did not finish");
 }
 
-fn oracle<const F: bool>(position: Position, ecology: CardId) -> (Game, Vec<Event>) {
+fn oracle(expansions: Expansions, position: Position, ecology: CardId) -> (Game, Vec<Event>) {
     let expected_order: Vec<_> = position
         .cards(Zone::Deck(Deck::base(10)))
         .iter()
         .rev()
         .copied()
         .collect();
-    let mut reduced = Game::seeded(position, Expansions::with_figures(F), 42).unwrap();
+    let mut reduced = Game::seeded(position, expansions, 42).unwrap();
     let mut manual = reduced.clone();
     manual.shortcuts_disabled = true;
     start(&mut reduced, ecology);
@@ -135,7 +135,7 @@ fn outcomes(mut game: Game, depth: usize) -> Vec<(Position, Status)> {
 #[test]
 fn canonical_junk_is_physical_top_first_with_exact_events_rng_and_game_parity() {
     let (f, ecology, cards) = fixture();
-    let (game, events) = oracle::<false>(f.position(), ecology);
+    let (game, events) = oracle(Expansions::BASE, f.position(), ecology);
     assert_eq!(
         events.iter().map(|e| moved(e).card).collect::<Vec<_>>(),
         [cards[2], cards[0], cards[1]]
@@ -262,7 +262,7 @@ fn active_unrelated_and_hand_score_junk_figures_do_not_disable_physical_deck_red
     ] {
         let (mut f, ecology, _) = fixture();
         f.figure(figure, Zone::Board(A, color));
-        oracle::<true>(f.position(), ecology);
+        oracle(Expansions::FIGURES, f.position(), ecology);
     }
 }
 

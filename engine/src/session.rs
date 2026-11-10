@@ -435,7 +435,7 @@ mod tests {
 
     #[test]
     fn exhausted_work_cap_is_an_error_not_an_outcome() {
-        let mut game = Game::new_base(0).unwrap();
+        let mut game = Game::new_game(0, Expansions::BASE).unwrap();
         assert_eq!(
             advance_with_budget(&mut game, &mut Vec::new(), 1, 1),
             Err(Error::WorkLimit)

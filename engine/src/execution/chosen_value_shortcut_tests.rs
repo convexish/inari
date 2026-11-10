@@ -4,7 +4,7 @@ use super::*;
 fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
     f.add(base_card(code).unwrap(), zone)
 }
-fn fixture<const F: bool>(code: &str) -> (Position, CardId) {
+fn fixture(expansions: Expansions, code: &str) -> (Position, CardId) {
     let mut f = Fixture::default();
     let source = base(&mut f, code, Zone::Junk);
     if code == "B069" {
@@ -17,12 +17,12 @@ fn fixture<const F: bool>(code: &str) -> (Position, CardId) {
         }
         if code == "B081" {
             base(&mut f, "B016", Zone::Hand(A));
-            if F {
+            if expansions.figures() {
                 f.figure(Figure::Gilgamesh, Zone::Score(B));
             } else {
                 base(&mut f, "B004", Zone::Score(B));
             }
-        } else if F && code != "B063" {
+        } else if expansions.figures() && code != "B063" {
             f.figure(Figure::Gilgamesh, Zone::Score(A));
         }
     }
@@ -116,10 +116,10 @@ fn outcomes(mut game: Game, depth: usize) -> Vec<(Position, Rng, Status)> {
         }
     }
 }
-fn all_paths<const F: bool>() {
+fn all_paths(expansions: Expansions) {
     for code in ["B048", "B063", "B069", "B081", "B094", "B108"] {
-        let (position, source) = fixture::<F>(code);
-        let mut reduced = Game::seeded(position, Expansions::with_figures(F), 97).unwrap();
+        let (position, source) = fixture(expansions, code);
+        let mut reduced = Game::seeded(position, expansions, 97).unwrap();
         let mut unrestricted = reduced.clone();
         unrestricted.shortcuts_disabled = true;
         start(&mut reduced, source, code);
@@ -134,7 +134,7 @@ fn all_paths<const F: bool>() {
             unrestricted.iter().all(|outcome| reduced.contains(outcome)),
             "{code}: lost an outcome"
         );
-        if matches!(code, "B063" | "B069") || F {
+        if matches!(code, "B063" | "B069") || expansions.figures() {
             assert!(
                 reduced.len() < unrestricted.len(),
                 "{code}: proof never reduced"
@@ -144,13 +144,13 @@ fn all_paths<const F: bool>() {
 }
 #[test]
 fn all_value_choices_and_commuting_orders_preserve_every_outcome() {
-    all_paths::<false>();
-    all_paths::<true>();
+    all_paths(Expansions::BASE);
+    all_paths(Expansions::FIGURES);
 }
-fn canonical_oracle<const F: bool>() {
+fn canonical_oracle(expansions: Expansions) {
     for code in ["B048", "B063", "B069", "B081", "B094", "B108"] {
-        let (position, source) = fixture::<F>(code);
-        let mut reduced = Game::seeded(position, Expansions::with_figures(F), 113).unwrap();
+        let (position, source) = fixture(expansions, code);
+        let mut reduced = Game::seeded(position, expansions, 113).unwrap();
         let mut unrestricted = reduced.clone();
         unrestricted.shortcuts_disabled = true;
         start(&mut reduced, source, code);
@@ -182,13 +182,13 @@ fn canonical_oracle<const F: bool>() {
 }
 #[test]
 fn canonical_events_rng_and_every_work_boundary_clone_match() {
-    canonical_oracle::<false>();
-    canonical_oracle::<true>();
+    canonical_oracle(Expansions::BASE);
+    canonical_oracle(Expansions::FIGURES);
 }
 
 #[test]
 fn foreign_control_and_open_stops_keep_every_order() {
-    let (position, _) = fixture::<false>("B063");
+    let (position, _) = fixture(Expansions::BASE, "B063");
     let game = Game::new(position, Expansions::BASE).unwrap();
     let context = Context::new(A);
     let targets = game
@@ -356,7 +356,7 @@ fn introduced_age_zero_extends_ordinary_domain_but_not_printed_boxes() {
 #[test]
 fn live_membership_and_movement_dependencies_restore_ordinary_menus() {
     for figure in [Figure::Nightingale, Figure::Michelangelo] {
-        let (position, source) = fixture::<true>("B063");
+        let (position, source) = fixture(Expansions::FIGURES, "B063");
         let mut f = Fixture {
             cards: position.catalog.to_vec(),
             placements: Vec::new(),

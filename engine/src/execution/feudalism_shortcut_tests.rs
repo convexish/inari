@@ -64,12 +64,12 @@ fn leaves(mut game: Game, depth: usize) -> Vec<(Game, Status)> {
     }
 }
 
-fn all_orders<const F: bool>(available: usize) {
+fn all_orders(expansions: Expansions, available: usize) {
     let (mut position, source) = fixture();
     for &special in &Special::ALL[available..] {
         position.specials[special as usize] = SpecialLocation::Owned(A);
     }
-    let mut reduced = Game::seeded(position, Expansions::with_figures(F), 47).unwrap();
+    let mut reduced = Game::seeded(position, expansions, 47).unwrap();
     let mut manual = reduced.clone();
     manual.shortcuts_disabled = true;
     start(&mut reduced, source);
@@ -86,8 +86,8 @@ fn all_orders<const F: bool>(available: usize) {
 #[test]
 fn every_special_order_has_one_exact_outcome_with_base_and_figures() {
     for available in 0..=5 {
-        all_orders::<false>(available);
-        all_orders::<true>(available);
+        all_orders(Expansions::BASE, available);
+        all_orders(Expansions::FIGURES, available);
     }
 }
 

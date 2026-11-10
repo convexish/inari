@@ -43,7 +43,7 @@ fn finish(game: &mut Game, events: &mut Vec<Event>) -> Status {
     panic!("aggregate program failed to settle");
 }
 
-fn rewards<const F: bool>() {
+fn rewards(expansions: Expansions) {
     for (code, age, score, factor) in [
         ("B020", 2, true, 1),
         ("B074", 7, true, 1),
@@ -63,7 +63,7 @@ fn rewards<const F: bool>() {
                 .iter()
                 .map(|code| base(&mut f, code, Zone::Deck(Deck::base(age))))
                 .collect();
-            let mut game = Game::seeded(f.position(), Expansions::with_figures(F), 91).unwrap();
+            let mut game = Game::seeded(f.position(), expansions, 91).unwrap();
             invoke(&mut game, source, 0);
             let mut events = Vec::new();
             for card in payments.into_iter().take(selected) {
@@ -105,8 +105,8 @@ fn rewards<const F: bool>() {
 
 #[test]
 fn distinct_original_values_drive_optional_reward_count_and_score_with_and_without_figures() {
-    rewards::<false>();
-    rewards::<true>();
+    rewards(Expansions::BASE);
+    rewards(Expansions::FIGURES);
 }
 
 #[test]
@@ -134,7 +134,7 @@ fn replaced_return_and_karma_tuck_supply_no_distinct_value_reward() {
     }
 }
 
-fn alchemy<const F: bool>() {
+fn alchemy(expansions: Expansions) {
     for red in [false, true] {
         let mut f = Fixture::default();
         let source = base(&mut f, "B032", Zone::Board(A, Color::Blue));
@@ -146,7 +146,7 @@ fn alchemy<const F: bool>() {
             if red { "B037" } else { "B042" },
             Zone::Deck(Deck::base(4)),
         );
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 0);
         let mut events = Vec::new();
         assert_eq!(
@@ -186,16 +186,16 @@ fn alchemy<const F: bool>() {
 
 #[test]
 fn alchemy_snapshots_authority_colors_and_returns_the_entire_hand_after_red() {
-    alchemy::<false>();
-    alchemy::<true>();
+    alchemy(Expansions::BASE);
+    alchemy(Expansions::FIGURES);
 }
 
-fn alchemy_second<const F: bool>() {
+fn alchemy_second(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B032", Zone::Junk);
     let melded = base(&mut f, "B001", Zone::Hand(A));
     let scored = base(&mut f, "B004", Zone::Hand(A));
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 1);
     let mut events = Vec::new();
     let menu = decision(&mut game, &mut events);
@@ -218,18 +218,18 @@ fn alchemy_second<const F: bool>() {
 
 #[test]
 fn alchemy_second_effect_is_separate_mandatory_meld_then_score() {
-    alchemy_second::<false>();
-    alchemy_second::<true>();
+    alchemy_second(Expansions::BASE);
+    alchemy_second(Expansions::FIGURES);
 }
 
-fn physics<const F: bool>() {
+fn physics(expansions: Expansions) {
     for duplicate in [false, true] {
         let mut f = Fixture::default();
         let source = base(&mut f, "B053", Zone::Junk);
         let existing = base(&mut f, "B004", Zone::Hand(A));
         let codes = ["B056", if duplicate { "B057" } else { "B058" }, "B062"];
         let originals = codes.map(|code| base(&mut f, code, Zone::Deck(Deck::base(6))));
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 0);
         let mut events = Vec::new();
         assert_eq!(
@@ -254,15 +254,15 @@ fn physics<const F: bool>() {
 
 #[test]
 fn physics_compares_the_three_original_colors_not_the_prior_hand() {
-    physics::<false>();
-    physics::<true>();
+    physics(Expansions::BASE);
+    physics(Expansions::FIGURES);
 }
 
-fn exhaustion<const F: bool>() {
+fn exhaustion(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B053", Zone::Junk);
     let first = base(&mut f, "B056", Zone::Deck(Deck::base(6)));
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0);
     let mut events = Vec::new();
     assert_eq!(
@@ -276,11 +276,11 @@ fn exhaustion<const F: bool>() {
 
 #[test]
 fn compound_reveals_happen_before_later_draw_exhaustion() {
-    exhaustion::<false>();
-    exhaustion::<true>();
+    exhaustion(Expansions::BASE);
+    exhaustion(Expansions::FIGURES);
 }
 
-fn democracy_shared<const F: bool>() {
+fn democracy_shared(expansions: Expansions) {
     for own in [0, 1, 2] {
         let mut f = Fixture::default();
         let source = base(&mut f, "B064", Zone::Board(A, Color::Purple));
@@ -292,7 +292,7 @@ fn democracy_shared<const F: bool>() {
         ];
         let reward_one = base(&mut f, "B077", Zone::Deck(Deck::base(8)));
         let reward_two = base(&mut f, "B079", Zone::Deck(Deck::base(8)));
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         game.start(
             Operation::Dogma {
                 card: source,
@@ -337,8 +337,8 @@ fn democracy_shared<const F: bool>() {
 
 #[test]
 fn democracy_compares_prior_shared_executor_returns_strictly_and_resets() {
-    democracy_shared::<false>();
-    democracy_shared::<true>();
+    democracy_shared(Expansions::BASE);
+    democracy_shared(Expansions::FIGURES);
 }
 
 #[test]
@@ -420,11 +420,11 @@ fn alchemy_keeps_a_returned_original_and_its_draw_keeps_the_resolved_age() {
     assert_eq!(game.position().cards(Zone::Deck(Deck::base(7))), [seven]);
 }
 
-fn alchemy_zero<const F: bool>() {
+fn alchemy_zero(expansions: Expansions) {
     let mut f = Fixture::default();
     let source = base(&mut f, "B032", Zone::Junk);
     let untouched = base(&mut f, "B001", Zone::Hand(A));
-    let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+    let mut game = Game::new(f.position(), expansions).unwrap();
     invoke(&mut game, source, 0);
     let mut events = Vec::new();
     assert_eq!(
@@ -437,11 +437,11 @@ fn alchemy_zero<const F: bool>() {
 
 #[test]
 fn zero_authority_colors_do_not_draw_or_treat_existing_red_cards_as_drawn() {
-    alchemy_zero::<false>();
-    alchemy_zero::<true>();
+    alchemy_zero(Expansions::BASE);
+    alchemy_zero(Expansions::FIGURES);
 }
 
-fn reward_exhaustion<const F: bool>() {
+fn reward_exhaustion(expansions: Expansions) {
     for (code, supply, age, score) in [
         ("B020", "B016", 2, true),
         ("B074", "B070", 7, true),
@@ -462,7 +462,7 @@ fn reward_exhaustion<const F: bool>() {
         } else {
             base(&mut f, supply, Zone::Deck(Deck::base(age)))
         };
-        let mut game = Game::new(f.position(), Expansions::with_figures(F)).unwrap();
+        let mut game = Game::new(f.position(), expansions).unwrap();
         invoke(&mut game, source, 0);
         let mut events = Vec::new();
         choose_card(&mut game, &mut events, first);
@@ -502,8 +502,8 @@ fn reward_exhaustion<const F: bool>() {
 
 #[test]
 fn each_distinct_value_reward_finishes_its_score_before_later_exhaustion() {
-    reward_exhaustion::<false>();
-    reward_exhaustion::<true>();
+    reward_exhaustion(Expansions::BASE);
+    reward_exhaustion(Expansions::FIGURES);
 }
 
 #[test]

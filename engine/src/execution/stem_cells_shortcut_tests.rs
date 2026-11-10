@@ -73,7 +73,7 @@ fn normalized(mut position: Position) -> Position {
     position
 }
 
-fn assert_outcome_classes<const F: bool>() {
+fn assert_outcome_classes(expansions: Expansions) {
     for (ages, manual_count, reduced_count) in [
         (vec![], 1, 1),
         (vec![1], 2, 2),
@@ -82,11 +82,11 @@ fn assert_outcome_classes<const F: bool>() {
         (vec![1, 1, 1], 7, 2),
         (vec![0, 0, 1], 7, 2),
     ] {
-        if !F && ages.contains(&0) {
+        if !expansions.figures() && ages.contains(&0) {
             continue;
         }
         let (f, source, _) = fixture(&ages);
-        let mut reduced = Game::seeded(f.position(), Expansions::with_figures(F), 83).unwrap();
+        let mut reduced = Game::seeded(f.position(), expansions, 83).unwrap();
         let mut manual = reduced.clone();
         manual.shortcuts_disabled = true;
         start(&mut reduced, source, Context::new(A));
@@ -108,8 +108,8 @@ fn assert_outcome_classes<const F: bool>() {
 
 #[test]
 fn every_back_group_order_and_initial_decline_survive_the_reduction() {
-    assert_outcome_classes::<false>();
-    assert_outcome_classes::<true>();
+    assert_outcome_classes(Expansions::BASE);
+    assert_outcome_classes(Expansions::FIGURES);
 }
 
 #[test]

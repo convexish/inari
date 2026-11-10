@@ -3545,7 +3545,7 @@ mod tests {
 
     #[test]
     fn terminal_reasons_are_only_those_the_native_prompt_actually_reports() {
-        let mut game = Game::new_base(1).unwrap();
+        let mut game = Game::new_game(1, n::Expansions::BASE).unwrap();
         let mut events = Vec::new();
         while let n::Status::Decision(_) = game.advance(4096, &mut events).unwrap() {
             game.choose(0).unwrap();
