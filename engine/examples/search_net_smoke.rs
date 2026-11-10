@@ -251,7 +251,7 @@ fn play_deal(
     subgames: bool,
     totals: &Mutex<Totals>,
 ) {
-    let expansions = Expansions::from_bits((deal % 32) as u8).unwrap();
+    let expansions = Expansions::ALL[deal as usize % Expansions::COMBINATIONS];
     let mut local = Totals::default();
     let mut diag = Diag::default();
     let mut pair = 0.0;
@@ -344,7 +344,7 @@ fn play_deal(
     };
     println!(
         "deal {deal} ({}): searcher scored {pair}{played}",
-        TRAINING_MODES[(deal % 32) as usize]
+        expansions.name()
     );
     local.roots += diag.shares.len() as u64;
     local.batches += diag.batches;

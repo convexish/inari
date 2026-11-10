@@ -2,7 +2,7 @@
 //! decision whose options all get the same Q (best minus worst below 1e-4),
 //! with its source card and options, card ids shown as publisher codes.
 //! Games cycle the 32 training modes. Usage: tied_choices WEIGHTS GAMES SEED THREADS
-use inno_engine::{Game, Match, Net, Prompt, Step, TRAINING_MODES, mode_expansions};
+use inno_engine::{Expansions, Game, Match, Net, Prompt, Step};
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
@@ -40,9 +40,9 @@ fn main() {
                     if g >= games {
                         break;
                     }
-                    let mode = (g % TRAINING_MODES.len()) as u8;
+                    let expansions = Expansions::ALL[g % Expansions::COMBINATIONS];
                     let seed = seed + g as u64;
-                    let mut m = Match::new(mode_expansions(mode).unwrap(), seed).unwrap();
+                    let mut m = Match::new(expansions, seed).unwrap();
                     let (mut choices, mut tied, mut lines) = (0, 0, String::new());
                     for decision in 0.. {
                         let Some(player) = m.to_move() else { break };
@@ -82,7 +82,7 @@ fn main() {
                                 };
                                 lines.push_str(&format!(
                                     "TIE mode {} seed {seed} decision {decision} {kind} source {source} spread {:.1e} q {best:+.3}\n",
-                                    TRAINING_MODES[mode as usize],
+                                    expansions.name(),
                                     best - worst
                                 ));
                                 for (i, option) in options.iter().enumerate() {

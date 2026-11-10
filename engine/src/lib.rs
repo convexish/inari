@@ -41,7 +41,7 @@ pub use model::*;
 pub use net::Net;
 pub use observation::Observation;
 pub use program::*;
-pub use reflex::{Batch, Finished, ReflexPool, Row, TRAINING_MODES, mode_expansions};
+pub use reflex::{Batch, Finished, ReflexPool, Row};
 pub use rng::Rng;
 pub use search::{RootMove, RootNoise, SearchConfig, SearchResult, Tree as SearchTree};
 pub use search_pool::{LeafRow, PoolSearch, RootRow, SearchBatch, SearchPool};

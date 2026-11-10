@@ -1,5 +1,4 @@
-//! Synchronous parallel game stepping for training on the replacement
-//! engine.
+//! Synchronous parallel game stepping for training.
 //!
 //! Workers own matches; the caller owns policy sampling and learning. Every
 //! response is ordered by game index, independent of thread completion
@@ -11,48 +10,6 @@ use std::thread::{self, JoinHandle};
 
 use crate::Expansions;
 use crate::session::{Error, Match, Prompt, Step};
-
-/// One name per [`Expansions::index`]: the enabled sets joined with `+` in
-/// bit order (figures, cities, echoes, artifacts, unseen), or `base`.
-pub const TRAINING_MODES: [&str; Expansions::COMBINATIONS] = [
-    "base",
-    "figures",
-    "cities",
-    "figures+cities",
-    "echoes",
-    "figures+echoes",
-    "cities+echoes",
-    "figures+cities+echoes",
-    "artifacts",
-    "figures+artifacts",
-    "cities+artifacts",
-    "figures+cities+artifacts",
-    "echoes+artifacts",
-    "figures+echoes+artifacts",
-    "cities+echoes+artifacts",
-    "figures+cities+echoes+artifacts",
-    "unseen",
-    "figures+unseen",
-    "cities+unseen",
-    "figures+cities+unseen",
-    "echoes+unseen",
-    "figures+echoes+unseen",
-    "cities+echoes+unseen",
-    "figures+cities+echoes+unseen",
-    "artifacts+unseen",
-    "figures+artifacts+unseen",
-    "cities+artifacts+unseen",
-    "figures+cities+artifacts+unseen",
-    "echoes+artifacts+unseen",
-    "figures+echoes+artifacts+unseen",
-    "cities+echoes+artifacts+unseen",
-    "figures+cities+echoes+artifacts+unseen",
-];
-
-/// The expansions of training mode `index`, `None` past the 32 combinations.
-pub fn mode_expansions(index: u8) -> Option<Expansions> {
-    Expansions::from_bits(index)
-}
 
 /// A live game's prompt for the player to move.
 pub struct Row {
@@ -89,7 +46,7 @@ pub(crate) struct Game {
 
 impl Game {
     pub(crate) fn new(index: usize, seed: u64, mode: u8, cap: usize, subgames: bool) -> Self {
-        let state = match mode_expansions(mode) {
+        let state = match Expansions::from_bits(mode) {
             Some(expansions) => Match::with_subgames(expansions, seed, subgames),
             None => Err(Error::Engine(crate::Error::Unsupported("training mode"))),
         };
@@ -217,7 +174,7 @@ fn fault_report(
     attempted_option: Option<usize>,
 ) -> String {
     let record = session.record();
-    let mode = TRAINING_MODES[record.expansions.index()];
+    let mode = record.expansions.name();
     let events = session.events();
     let recent = &events[events.len().saturating_sub(16)..];
     let replay = record.to_text().unwrap_or_else(|error| error.to_string());
@@ -595,33 +552,30 @@ mod tests {
         );
     }
 
-    fn expected_mode_name(index: usize) -> String {
-        let names = ["figures", "cities", "echoes", "artifacts", "unseen"];
-        let enabled: Vec<&str> = names
-            .iter()
-            .enumerate()
-            .filter(|(bit, _)| index & (1 << bit) != 0)
-            .map(|(_, name)| *name)
-            .collect();
-        if enabled.is_empty() {
-            "base".into()
-        } else {
-            enabled.join("+")
-        }
-    }
-
     #[test]
-    fn training_modes_name_every_combination_in_bit_order() {
-        for (index, name) in TRAINING_MODES.iter().enumerate() {
-            assert_eq!(*name, expected_mode_name(index), "mode {index}");
-            let expansions = mode_expansions(index as u8).unwrap();
+    fn modes_are_named_by_their_enabled_sets_in_bit_order() {
+        let sets = ["figures", "cities", "echoes", "artifacts", "unseen"];
+        for (index, expansions) in Expansions::ALL.into_iter().enumerate() {
+            let enabled: Vec<&str> = (0..sets.len())
+                .filter(|bit| index & (1 << bit) != 0)
+                .map(|bit| sets[bit])
+                .collect();
+            let expected = if enabled.is_empty() {
+                "base".to_owned()
+            } else {
+                enabled.join("+")
+            };
+            assert_eq!(expansions.name(), expected, "mode {index}");
+            assert_eq!(Expansions::from_name(&expected), Some(expansions));
+            assert_eq!(Expansions::from_bits(index as u8), Some(expansions));
             assert_eq!(expansions.index(), index);
             assert_eq!(expansions.figures(), index & 1 != 0);
             assert_eq!(expansions.unseen(), index & 16 != 0);
         }
-        assert_eq!(TRAINING_MODES[3], "figures+cities");
-        assert_eq!(mode_expansions(32), None);
-        assert_eq!(mode_expansions(255), None);
+        assert_eq!(Expansions::ALL[3].name(), "figures+cities");
+        assert_eq!(Expansions::from_name("cities+figures"), None);
+        assert_eq!(Expansions::from_bits(32), None);
+        assert_eq!(Expansions::from_bits(255), None);
     }
 
     /// Game, player, option count and observation of every row.

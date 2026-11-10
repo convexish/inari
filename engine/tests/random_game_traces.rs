@@ -162,18 +162,15 @@ fn seeded_random_base_games_match_recorded_traces() {
 #[test]
 fn seeded_random_cities_games_match_recorded_traces() {
     let modes = [
-        ("cities", Expansions::CITIES),
-        (
-            "figures+cities",
-            Expansions::FIGURES.union(Expansions::CITIES),
-        ),
+        Expansions::CITIES,
+        Expansions::FIGURES.union(Expansions::CITIES),
     ];
     let actual: String = modes
         .into_iter()
-        .flat_map(|(name, expansions)| {
+        .flat_map(|expansions| {
             (0..CITIES_SEEDS).map(move |seed| {
                 let (digest, steps) = trace(seed, expansions, false);
-                format!("{name} {seed} {digest:016x} {steps}\n")
+                format!("{} {seed} {digest:016x} {steps}\n", expansions.name())
             })
         })
         .collect();

@@ -1265,10 +1265,10 @@ pub fn synthetic_bytes(dims: Dimensions, seed: u64, scale: f32) -> Vec<u8> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{Match, Prompt, Rng, mode_expansions};
+    use crate::{Expansions, Match, Prompt, Rng};
 
     fn observe_random_root(mode: u8, seed: u64, steps: usize) -> Option<crate::Observation> {
-        let mut session = Match::new(mode_expansions(mode).unwrap(), seed).unwrap();
+        let mut session = Match::new(Expansions::from_bits(mode).unwrap(), seed).unwrap();
         let mut policy = Rng::new(seed);
         for _ in 0..steps {
             let step = session.random_step(policy.next_u64())?;

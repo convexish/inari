@@ -3,15 +3,12 @@ use inno_engine::{
     SessionError, Step, Verb, Zone,
 };
 
-/// Every supported deal, as the record names it.
-const MODES: [(&str, Expansions); 4] = [
-    ("base", Expansions::BASE),
-    ("figures", Expansions::FIGURES),
-    ("cities", Expansions::CITIES),
-    (
-        "figures+cities",
-        Expansions::FIGURES.union(Expansions::CITIES),
-    ),
+/// Base with and without Figures and Cities.
+const MODES: [Expansions; 4] = [
+    Expansions::BASE,
+    Expansions::FIGURES,
+    Expansions::CITIES,
+    Expansions::FIGURES.union(Expansions::CITIES),
 ];
 
 fn assert_same(actual: &Match, expected: &Match) {
@@ -33,7 +30,8 @@ fn prefix(record: &Record, steps: usize) -> Record {
 
 #[test]
 fn text_round_trip_all_step_kinds_and_catalogs() {
-    for (mode, expansions) in MODES {
+    for expansions in MODES {
+        let mode = expansions.name();
         let mut extra = String::new();
         if expansions.figures() {
             extra += "meld F052\ndogma Z001\n";
@@ -153,7 +151,7 @@ fn malformed_text_and_unknown_or_wrong_mode_codes_are_errors() {
 
 #[test]
 fn random_replays_preserve_game_prompt_and_tagged_events() {
-    for (_, expansions) in MODES {
+    for expansions in MODES {
         for seed in 0..6 {
             let mut session = Match::new(expansions, seed).unwrap();
             let mut policy = Rng::new(seed ^ 0x5EED);
@@ -190,7 +188,7 @@ fn random_replays_preserve_game_prompt_and_tagged_events() {
 
 #[test]
 fn undo_replays_opening_and_later_decisions_and_allows_branching() {
-    for (_, expansions) in MODES {
+    for expansions in MODES {
         let mut session = Match::new(expansions, 7).unwrap();
         assert_eq!(session.to_move(), Some(Player::One));
         session.apply(Step::Choice(0)).unwrap();
@@ -249,7 +247,7 @@ fn reject_unchanged(session: &mut Match, step: Step) {
 
 #[test]
 fn invalid_inputs_and_undo_are_atomic_and_replay_validates_every_step() {
-    for (_, expansions) in MODES {
+    for expansions in MODES {
         let mut session = Match::new(expansions, 0).unwrap();
         reject_unchanged(&mut session, Step::Action(Action::Draw));
         let Prompt::Decision(decision) = session.prompt() else {
@@ -305,7 +303,7 @@ fn random_step_is_legal_repeatable_and_read_only() {
 fn one_hundred_complete_random_games() {
     // Each game runs on its own thread.
     std::thread::scope(|scope| {
-        for (_, expansions) in MODES {
+        for expansions in MODES {
             for seed in 0..50 {
                 scope.spawn(move || complete_random_game(expansions, seed));
             }

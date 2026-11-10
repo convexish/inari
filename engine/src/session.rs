@@ -8,7 +8,7 @@
 
 use crate::{
     Action, ActionKind, CardId, Decision, DrawReason, Event, Expansions, Game, Net, Player, Rng,
-    SearchConfig, Status, TRAINING_MODES,
+    SearchConfig, Status,
 };
 use std::fmt;
 use std::fmt::Write;
@@ -300,8 +300,7 @@ impl Record {
     /// `Match::from_record`, not by the text codec.
     pub fn to_text(&self) -> Result<String, Error> {
         let game = deal(self.expansions, self.seed)?;
-        // Records name deals as training modes do.
-        let mode = TRAINING_MODES[self.expansions.index()];
+        let mode = self.expansions.name();
         let mut text = format!("inari-next-record 1\nmode {mode}\nseed {}\n", self.seed);
         if self.subgames {
             text.push_str("martian-internet printed\n");
@@ -347,13 +346,9 @@ impl Record {
         let expansions = lines
             .next()
             .and_then(|line| line.strip_prefix("mode "))
-            .and_then(|name| TRAINING_MODES.iter().position(|mode| *mode == name))
-            .and_then(|index| crate::mode_expansions(index as u8))
+            .and_then(Expansions::from_name)
             .ok_or_else(|| {
-                record_error(
-                    2,
-                    "expected a training mode name such as base or figures+echoes",
-                )
+                record_error(2, "expected a mode name such as base or figures+echoes")
             })?;
         let seed = lines
             .next()

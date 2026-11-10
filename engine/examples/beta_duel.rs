@@ -92,7 +92,7 @@ fn main() {
             let n = s.positions as f64;
             eprintln!(
                 "spread {mode} {} {} {:.4} {:.4}",
-                TRAINING_MODES[mode],
+                Expansions::ALL[mode].name(),
                 s.positions,
                 s.std_sum / n,
                 s.gap_sum / n

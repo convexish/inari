@@ -906,6 +906,64 @@ impl Expansions {
     pub const UNSEEN: Self = Self(16);
     /// Every combination of the five runtime expansions.
     pub const COMBINATIONS: usize = 32;
+    /// Every combination, in [`Expansions::index`] order.
+    pub const ALL: [Self; Self::COMBINATIONS] = {
+        let mut all = [Self::BASE; Self::COMBINATIONS];
+        let mut index = 0;
+        while index < all.len() {
+            all[index] = Self(index as u8);
+            index += 1;
+        }
+        all
+    };
+    /// One name per [`Expansions::index`]: see [`Expansions::name`].
+    const NAMES: [&'static str; Self::COMBINATIONS] = [
+        "base",
+        "figures",
+        "cities",
+        "figures+cities",
+        "echoes",
+        "figures+echoes",
+        "cities+echoes",
+        "figures+cities+echoes",
+        "artifacts",
+        "figures+artifacts",
+        "cities+artifacts",
+        "figures+cities+artifacts",
+        "echoes+artifacts",
+        "figures+echoes+artifacts",
+        "cities+echoes+artifacts",
+        "figures+cities+echoes+artifacts",
+        "unseen",
+        "figures+unseen",
+        "cities+unseen",
+        "figures+cities+unseen",
+        "echoes+unseen",
+        "figures+echoes+unseen",
+        "cities+echoes+unseen",
+        "figures+cities+echoes+unseen",
+        "artifacts+unseen",
+        "figures+artifacts+unseen",
+        "cities+artifacts+unseen",
+        "figures+cities+artifacts+unseen",
+        "echoes+artifacts+unseen",
+        "figures+echoes+artifacts+unseen",
+        "cities+echoes+artifacts+unseen",
+        "figures+cities+echoes+artifacts+unseen",
+    ];
+
+    /// The name saved games, training modes and logs use: the enabled sets
+    /// joined with `+` in bit order (figures, cities, echoes, artifacts,
+    /// unseen), or `base`.
+    pub const fn name(self) -> &'static str {
+        Self::NAMES[self.index()]
+    }
+
+    /// The combination with this [`Expansions::name`].
+    pub fn from_name(name: &str) -> Option<Self> {
+        let index = Self::NAMES.iter().position(|known| *known == name)?;
+        Some(Self::ALL[index])
+    }
 
     /// A dense index over the combinations.
     pub const fn index(self) -> usize {

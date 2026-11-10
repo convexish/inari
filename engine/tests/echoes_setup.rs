@@ -180,12 +180,12 @@ fn expansion_shuffles_follow_base_then_echoes_cities_figures_in_ascending_ages()
     // Echoes and Cities deck because its shuffles occur after these sets.
     for expansions in MODES {
         let game = Game::new_game(7, expansions).unwrap();
-        let mode = match (expansions.echoes(), expansions.cities()) {
-            (false, false) => "base",
-            (false, true) => "cities",
-            (true, false) => "echoes",
-            (true, true) => "echoes+cities",
-        };
+        // The fixture names each deal without Figures.
+        let mode = [Expansions::BASE, C, E, E.union(C)]
+            .into_iter()
+            .find(|plain| plain.union(F) == expansions.union(F))
+            .unwrap()
+            .name();
         let mut checked = 0;
         for line in include_str!("fixtures/echoes_setup_seed7.txt").lines() {
             if line.starts_with('#') {

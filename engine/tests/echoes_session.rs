@@ -1,26 +1,19 @@
 use inno_engine::{Action, CardSet, Expansions, Match, Prompt, Record, SessionError, Step};
 
-const MODES: [(&str, Expansions); 4] = [
-    ("echoes", Expansions::ECHOES),
-    (
-        "figures+echoes",
-        Expansions::ECHOES.union(Expansions::FIGURES),
-    ),
-    (
-        "cities+echoes",
-        Expansions::ECHOES.union(Expansions::CITIES),
-    ),
-    (
-        "figures+cities+echoes",
-        Expansions::ECHOES
-            .union(Expansions::FIGURES)
-            .union(Expansions::CITIES),
-    ),
+/// Echoes with and without Figures and Cities.
+const MODES: [Expansions; 4] = [
+    Expansions::ECHOES,
+    Expansions::ECHOES.union(Expansions::FIGURES),
+    Expansions::ECHOES.union(Expansions::CITIES),
+    Expansions::ECHOES
+        .union(Expansions::FIGURES)
+        .union(Expansions::CITIES),
 ];
 
 #[test]
 fn echoes_records_round_trip_publisher_codes_in_every_enabled_catalog() {
-    for (name, expansions) in MODES {
+    for expansions in MODES {
+        let name = expansions.name();
         let mut text = format!(
             "inari-next-record 1\nmode {name}\nseed 18446744073709551615\n\
              choice 0\nchoice 1\ndraw\nmeld E001\ndogma E070\nachieve E096\n"
@@ -65,7 +58,7 @@ fn echoes_records_round_trip_publisher_codes_in_every_enabled_catalog() {
 
 #[test]
 fn echoes_native_histories_replay_undo_and_reject_invalid_inputs_atomically() {
-    for (_, expansions) in MODES {
+    for expansions in MODES {
         let mut session = Match::new(expansions, 7).unwrap();
         let mut actions_started = 0;
         let mut echoes_actions = 0;

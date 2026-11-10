@@ -491,10 +491,10 @@ impl<O: Sink> Walker<O> {
 mod tests {
     use super::*;
     use crate::observation::{Observation, Token};
-    use crate::{Match, Player, Prompt, Rng, mode_expansions};
+    use crate::{Expansions, Match, Player, Prompt, Rng};
 
     fn observe_random_root(mode: u8, seed: u64, steps: usize) -> Option<Observation> {
-        let mut session = Match::new(mode_expansions(mode).unwrap(), seed).unwrap();
+        let mut session = Match::new(Expansions::from_bits(mode).unwrap(), seed).unwrap();
         let mut policy = Rng::new(seed);
         for _ in 0..steps {
             let step = session.random_step(policy.next_u64())?;

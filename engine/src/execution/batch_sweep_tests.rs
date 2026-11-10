@@ -266,7 +266,7 @@ fn asking_alias(game: &Game) -> Option<String> {
 fn batch_menus_without_shortcuts_in_random_play() {
     let mut asked: BTreeMap<String, (usize, usize)> = BTreeMap::new();
     for mode in 0..Expansions::COMBINATIONS as u8 {
-        let expansions = crate::mode_expansions(mode).unwrap();
+        let expansions = Expansions::from_bits(mode).unwrap();
         for seed in 0..games_per_mode() {
             play_random(expansions, seed, |game, menu, _| {
                 if let Some((batch, program)) = asking_batch(game)
@@ -317,7 +317,7 @@ fn reduced_batches_match_the_unrestricted_oracle_in_random_play() {
     let mut witnesses: BTreeMap<String, (usize, usize)> = BTreeMap::new();
     let only = only_game();
     for mode in 0..Expansions::COMBINATIONS as u8 {
-        let expansions = crate::mode_expansions(mode).unwrap();
+        let expansions = Expansions::from_bits(mode).unwrap();
         for seed in 0..games_per_mode() {
             if only.is_some_and(|(m, s)| (m, s) != (mode, seed)) {
                 continue;

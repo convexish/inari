@@ -10,8 +10,8 @@ use inno_engine::observation::{
     FAMILY, GENERATION, GROUPS, HEADER, OPTION_FIELDS, REVISION, SCALARS, TOKEN_FIELDS,
 };
 use inno_engine::{
-    Batch, Match, Net, PoolSearch, Prompt, ReflexPool, Rng, RootNoise, SearchBatch, SearchConfig,
-    SearchPool, TRAINING_MODES, mode_expansions,
+    Batch, Expansions, Match, Net, PoolSearch, Prompt, ReflexPool, Rng, RootNoise, SearchBatch,
+    SearchConfig, SearchPool,
 };
 use pyo3::buffer::{PyBuffer, ReadOnlyCell};
 use pyo3::exceptions::{PyRuntimeError, PyValueError};
@@ -427,7 +427,7 @@ fn search_transport(py: Python<'_>, batch: SearchBatch) -> PyResult<Bound<'_, Py
 /// `steps` random steps of a fresh match in training mode `mode`.
 #[pyfunction]
 fn observe_random_root(mode: u8, seed: u64, steps: usize) -> PyResult<(Vec<f32>, usize)> {
-    let expansions = mode_expansions(mode)
+    let expansions = Expansions::from_bits(mode)
         .ok_or_else(|| PyValueError::new_err(format!("training mode {mode} is not in 0..32")))?;
     let mut session =
         Match::new(expansions, seed).map_err(|e| PyRuntimeError::new_err(e.to_string()))?;
@@ -681,7 +681,10 @@ fn extension(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("RECORD_FIELD_BASE", pack::RECORD_FIELD_BASE)?;
     m.add("OPTION_WIDTH", pack::OPTION_WIDTH)?;
     m.add("TOKEN_PLANES", pack::TOKEN_PLANES)?;
-    m.add("TRAINING_MODES", TRAINING_MODES.to_vec())?;
+    m.add(
+        "TRAINING_MODES",
+        Expansions::ALL.map(Expansions::name).to_vec(),
+    )?;
     m.add("OBSERVATION_HEADER", FAMILY + GENERATION)?;
     m.add("OBSERVATION_REVISION", REVISION)?;
     m.add("HEADER", HEADER)?;

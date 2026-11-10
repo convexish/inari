@@ -18,8 +18,9 @@ fn main() {
     let first: u64 = args.next().map_or(0, |a| a.parse().expect("first seed"));
     let threads: usize = args.next().map_or(8, |a| a.parse().expect("threads"));
     let subgames = args.next().is_some_and(|a| a == "subgames");
-    let jobs: Vec<(u8, u64)> = (0..TRAINING_MODES.len() as u8)
-        .flat_map(|mode| (first..first + games).map(move |seed| (mode, seed)))
+    let jobs: Vec<(Expansions, u64)> = Expansions::ALL
+        .into_iter()
+        .flat_map(|expansions| (first..first + games).map(move |seed| (expansions, seed)))
         .collect();
     let next = AtomicUsize::new(0);
     let faults = Mutex::new(Vec::new());
@@ -33,21 +34,20 @@ fn main() {
             scope.spawn(|| {
                 loop {
                     let index = next.fetch_add(1, Ordering::Relaxed);
-                    let Some(&(mode, seed)) = jobs.get(index) else {
+                    let Some(&(expansions, seed)) = jobs.get(index) else {
                         break;
                     };
-                    let expansions = mode_expansions(mode).expect("training mode");
                     let mut m = match Match::with_subgames(expansions, seed, subgames) {
                         Ok(m) => m,
                         Err(error) => {
                             faults.lock().unwrap().push(format!(
                                 "mode {} seed {seed} setup: {error:?}",
-                                TRAINING_MODES[mode as usize]
+                                expansions.name()
                             ));
                             continue;
                         }
                     };
-                    let mut policy = Rng::new(seed ^ 0xFA17_0000 ^ u64::from(mode) << 40);
+                    let mut policy = Rng::new(seed ^ 0xFA17_0000 ^ (expansions.index() as u64) << 40);
                     let mut done = false;
                     for step_index in 0..MAX_STEPS {
                         steps.fetch_add(1, Ordering::Relaxed);
@@ -59,7 +59,7 @@ fn main() {
                             let record = m.record().to_text().unwrap_or_default();
                             faults.lock().unwrap().push(format!(
                                 "mode {} seed {seed} step {step_index}: {error:?} applying {step:?}\nprompt {:?}\nrecord {record:?}",
-                                TRAINING_MODES[mode as usize],
+                                expansions.name(),
                                 m.prompt()
                             ));
                             done = true;
