@@ -959,15 +959,3 @@ mod board_depth_tests;
 #[cfg(test)]
 #[path = "cities_shortcut_tests.rs"]
 mod cities_tests;
-
-#[cfg(test)]
-#[path = "../echoes_tests/queries.rs"]
-mod echoes_query_tests;
-
-#[cfg(test)]
-#[path = "../echoes_tests/age4.rs"]
-mod echoes_age4_tests;
-
-#[cfg(test)]
-#[path = "../echoes_tests/age8.rs"]
-mod echoes_age8_tests;

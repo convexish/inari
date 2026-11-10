@@ -1,6 +1,6 @@
 //! Telescope, its atomic Figure replacement, and private exchange admission.
 use super::*;
-use common::*;
+use shortcuts::common::*;
 
 fn echo_deck(age: u8) -> Deck {
     Deck {

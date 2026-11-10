@@ -1,6 +1,6 @@
 //! Age-eight clauses, hidden opponent score choices and complete shortcut paths.
-use super::common::*;
 use super::*;
+use shortcuts::common::*;
 
 const E: Expansions = Expansions::ECHOES;
 const EF: Expansions = E.union(Expansions::FIGURES);

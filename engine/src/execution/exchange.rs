@@ -609,10 +609,6 @@ use super::shortcuts::common;
 #[path = "exchange_tests.rs"]
 mod tests;
 
-#[cfg(test)]
-#[path = "../echoes_tests/exchanges.rs"]
-mod echoes_tests;
-
 impl ExchangeSelection {
     pub(super) fn project(&self, p: &mut observe::Projection<'_>, parent: usize) {
         use crate::observation::context::{Field as F, RecordKind as K};

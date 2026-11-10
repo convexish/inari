@@ -1,6 +1,6 @@
 //! Query hard cases and their complete bounded shortcut oracles.
-use super::common::*;
 use super::*;
+use shortcuts::common::*;
 
 const E: Expansions = Expansions::ECHOES;
 const EF: Expansions = E.union(Expansions::FIGURES);

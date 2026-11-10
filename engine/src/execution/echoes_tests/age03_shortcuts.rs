@@ -1,6 +1,6 @@
 //! Every-path proofs for the age-three card batches not covered by mechanics.
 use super::*;
-use age03_mechanics_tests::oracle;
+use age03_mechanics::oracle;
 use shortcuts::common::*;
 
 const BOTH: Expansions = Expansions::ECHOES.union(Expansions::FIGURES);

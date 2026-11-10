@@ -1,7 +1,7 @@
 //! Age-four clauses, conditional proof privacy and complete shortcut paths.
-use super::common::*;
 use super::*;
 use program::build;
+use shortcuts::common::*;
 
 const E: Expansions = Expansions::ECHOES;
 const EF: Expansions = E.union(Expansions::FIGURES);

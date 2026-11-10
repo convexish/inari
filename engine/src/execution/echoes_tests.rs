@@ -3,15 +3,33 @@
 //! special achievements. These representation scenarios use explicit
 //! positions and splay their piles directly, independently of full setup.
 
-use crate::*;
+use super::*;
+use shortcuts::common::{A, B};
 
+mod age01;
+mod age02;
+mod age03_cards;
+mod age03_mechanics;
+mod age03_shortcuts;
+mod age04;
+mod age05;
+mod age06;
+mod age07_cards;
+mod age07_privacy;
+mod age07_shortcuts;
+mod age08;
+mod age09;
+mod age10;
+mod age11;
+mod artificial_heart;
 mod bonuses;
 mod cards;
+mod exchanges;
 mod gaps;
 mod groups;
-
-const A: Player = Player::One;
-const B: Player = Player::Two;
+mod queries;
+mod single_blind;
+mod verification;
 
 /// A metadata-only Echoes card for isolated representation scenarios.
 fn echoes(code: &str) -> Card {
@@ -1424,5 +1442,3 @@ fn promotion_needs_the_melded_card_on_top_after_the_checks() {
     assert_eq!(forecast_after(colors[0]), 5);
     assert_eq!(forecast_after(colors[2]), 4);
 }
-
-mod verification;

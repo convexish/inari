@@ -1,6 +1,6 @@
 //! Every-path age-seven order proofs retain RNG, information, and live reactions.
 use super::*;
-use age03_mechanics_tests::oracle;
+use age03_mechanics::oracle;
 use shortcuts::common::*;
 const BOTH: Expansions = Expansions::ECHOES.union(Expansions::FIGURES);
 fn card(f: &mut Fixture, code: &str) -> CardId {
@@ -256,7 +256,7 @@ fn jeans_deck_sweep_oracle_uses_archimedes_shifted_age_and_preserves_other_sets(
     }
 }
 
-fn paths(mut game: Game, mut events: Vec<Event>, depth: usize) -> Vec<age03_mechanics_tests::End> {
+fn paths(mut game: Game, mut events: Vec<Event>, depth: usize) -> Vec<age03_mechanics::End> {
     assert!(depth < 12);
     let status = game.advance(10000, &mut events).unwrap();
     if let Status::Decision(menu) = status {
@@ -269,7 +269,7 @@ fn paths(mut game: Game, mut events: Vec<Event>, depth: usize) -> Vec<age03_mech
             .collect()
     } else {
         assert!(game.position.check_conservation());
-        vec![age03_mechanics_tests::End {
+        vec![age03_mechanics::End {
             game,
             status,
             events,
@@ -278,7 +278,7 @@ fn paths(mut game: Game, mut events: Vec<Event>, depth: usize) -> Vec<age03_mech
     }
 }
 fn law_key(
-    end: &age03_mechanics_tests::End,
+    end: &age03_mechanics::End,
 ) -> (Position, Status, [Vec<Vec<crate::tracking::BeliefSlot>>; 3]) {
     let mut position = end.game.position.clone();
     position.sort_unordered_piles();
@@ -362,7 +362,7 @@ fn ice_cream_sweep_takes_the_deck_top_for_any_cohort_and_reacting_boxed_values()
                     }
                 }
             }
-            let order = |end: &age03_mechanics_tests::End| {
+            let order = |end: &age03_mechanics::End| {
                 end.events
                     .iter()
                     .filter_map(|e| {

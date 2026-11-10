@@ -14,8 +14,6 @@ mod catalog;
 #[cfg(test)]
 mod cities_tests;
 mod decrees;
-#[cfg(test)]
-mod echoes_tests;
 mod execution;
 mod model;
 pub mod net;
