@@ -12,8 +12,8 @@ struct Catalog {
 }
 
 /// Base first, so Base identities match the Base catalog in every mode;
-/// then Figures and Age 0 (matching `new_figures`), then Cities, Echoes and
-/// Artifacts. Appending a set preserves every physical ID of the
+/// then Figures and Age 0 (matching `new_figures`), then Cities, Echoes,
+/// Artifacts and Unseen. Appending a set preserves every physical ID of the
 /// corresponding mode without it. Shuffle order is independent of this
 /// storage order.
 fn catalog_cards(expansions: Expansions) -> Result<Vec<Card>, Error> {

@@ -37,7 +37,7 @@ fn every_boundary(mut game: Game) {
 }
 
 #[test]
-fn metalworking_draw_reveal_score_repeat_matches_in_both_kernels() {
+fn metalworking_draw_reveal_score_repeat_matches_with_and_without_figures() {
     let mut f = Fixture::default();
     let code = f.metalworking(Zone::Board(A, Color::Red));
     let whiff = f.tech(Color::Blue, 1, Zone::Deck(Deck::base(1)), vec![]);

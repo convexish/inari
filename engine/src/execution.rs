@@ -754,7 +754,7 @@ pub enum Status {
 
 /// Internal factual event. This is for native tracker consumers, never a
 /// player observation. Optional tracking consumes facts at the commit layer;
-/// a full observation encoding remains a separate milestone.
+/// [`crate::observation`] encodes what a player may see.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Movement {
     pub verb: Option<Verb>,

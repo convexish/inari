@@ -95,7 +95,7 @@ impl Game {
         };
         if let Err(error) = &state {
             log_fault(&format!(
-                "WARNING engine_next_fault | game {index} | seed {seed} | mode {mode} | setup | {error}"
+                "WARNING engine_fault | game {index} | seed {seed} | mode {mode} | setup | {error}"
             ));
         }
         let mut game = Self {
@@ -224,7 +224,7 @@ fn fault_report(
     // One line per fault prevents different pool workers from interleaving
     // a replay. The quoted replay preserves actual newlines as escapes.
     format!(
-        "WARNING engine_next_fault | game {index} | seed {} | mode {mode} | decisions {} \
+        "WARNING engine_fault | game {index} | seed {} | mode {mode} | decisions {} \
          | error {error} | attempted_option {attempted_option:?} | prompt {:?} \
          | recent_events {recent:?} | replay {replay:?}",
         record.seed,
@@ -569,8 +569,7 @@ mod tests {
         let session = game.state.as_ref().unwrap();
         let report = fault_report(42, session, &Error::InvalidStep, Some(usize::MAX));
         assert!(
-            report
-                .contains("WARNING engine_next_fault | game 42 | seed 7 | mode base | decisions 1")
+            report.contains("WARNING engine_fault | game 42 | seed 7 | mode base | decisions 1")
         );
         assert!(report.contains(&format!("attempted_option Some({})", usize::MAX)));
         assert!(report.contains("prompt Decision("));

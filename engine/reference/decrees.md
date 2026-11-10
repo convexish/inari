@@ -1,6 +1,6 @@
 # Decree effect source review
 
-Primary sources reviewed for the replacement kernel:
+Primary sources reviewed:
 
 - Ultimate rulebook v4.1,
   pp29–30: Decree action admission/payment, ownership cases, the Homer example,
@@ -30,11 +30,12 @@ its effect without another claim. A terminal effect prevents the later claim.
 Decrees count as achievements, but are not Special Achievements or standard
 card achievements. Their claims do not grant an Achieve-action Figure draw.
 
-The kernel's `IssueDecree` operation starts **after authorization/payment**.
+The engine's `IssueDecree` operation starts **after authorization/payment**.
 `Action::Decree` performs admission and whole-hand payment before selecting a
 Decree and issuing it. Ordinary admission requires three distinct Figure ages;
-Nightingale grants Expansion and Archimedes grants Advancement with any two
-Figures. Other roster permissions remain unimplemented.
+a Figure's printed Decree karma lowers that count for its Decree (Nightingale
+grants Expansion and Archimedes grants Advancement with any two Figures), as
+declared per Figure in `src/catalog/figures.rs`.
 
 **The subsequent project ruling:** use the initial hand's Figure colors,
 even when Homer tucks every Figure instead of junking it. The p29 example says

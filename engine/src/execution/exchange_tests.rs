@@ -94,7 +94,7 @@ fn ordinary_cases<const F: bool>() {
     }
 }
 #[test]
-fn both_kernels_empty_sides_and_partial_quotas_are_one_grouped_exchange() {
+fn empty_sides_and_partial_quotas_are_one_grouped_exchange_with_and_without_figures() {
     ordinary_cases::<false>();
     ordinary_cases::<true>();
 }

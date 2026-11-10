@@ -181,7 +181,7 @@ fn railroad_current_direction_filter_is_right_only_and_optional() {
 }
 
 #[test]
-fn atomic_theory_draw_and_meld_remain_separate_and_match_in_both_kernels() {
+fn atomic_theory_draw_and_meld_remain_separate_and_match_with_and_without_figures() {
     let mut f = Fixture::default();
     pile(&mut f, A, Color::Blue, 1);
     let card = f.add(base_card("B062").unwrap(), Zone::Board(A, Color::Blue));

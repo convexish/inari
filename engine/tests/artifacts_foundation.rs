@@ -1,6 +1,5 @@
 //! Artifacts: the printed catalog, Yamato's two values, the
-//! public display and Museum zones, and compel dispatch. Artifacts games
-//! are not constructible until every program is authored.
+//! public display and Museum zones, and compel dispatch.
 
 use std::collections::BTreeMap;
 
@@ -50,32 +49,16 @@ fn printed_catalog_matches_the_publisher_decks_and_reserved_identities() {
 }
 
 #[test]
-fn unauthored_programs_and_games_fail_explicitly() {
+fn every_card_is_authored_and_a_full_game_deals() {
     assert_eq!(
         artifacts_card("A999").unwrap_err(),
         Error::InvalidSetup("unknown Artifacts card")
     );
-    // While the catalog is incomplete, every unauthored card and any full
-    // game is rejected rather than stubbed.
-    let unauthored: Vec<_> = ARTIFACTS_METADATA
-        .iter()
-        .filter(|m| artifacts_card(m.code).is_err())
-        .collect();
-    for metadata in &unauthored {
-        assert_eq!(
-            artifacts_card(metadata.code).unwrap_err(),
-            Error::Unsupported("Artifacts program not authored")
-        );
+    for metadata in &ARTIFACTS_METADATA {
+        assert!(artifacts_card(metadata.code).is_ok(), "{}", metadata.code);
     }
-    if !unauthored.is_empty() {
-        assert_eq!(
-            Game::new_game(1, Expansions::ARTIFACTS).unwrap_err(),
-            Error::Unsupported("Artifacts program not authored")
-        );
-    } else {
-        let game = Game::new_game(1, Expansions::ARTIFACTS).unwrap();
-        assert!(game.position().check_conservation());
-    }
+    let game = Game::new_game(1, Expansions::ARTIFACTS).unwrap();
+    assert!(game.position().check_conservation());
 }
 
 #[test]

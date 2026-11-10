@@ -1,5 +1,5 @@
-//! The replacement engine's side of the table (Base with optional Echoes,
-//! Figures and Cities): the view snapshot, decision options as match steps, and its log.
+//! The engine's side of the table, for every expansion combination: the view
+//! snapshot, decision options as match steps, and its log.
 use std::collections::BTreeSet;
 
 use inno_engine::Icon;
@@ -15,7 +15,7 @@ use super::table::{
     StackView, SupplyView, TableView, name, title_case,
 };
 
-/// The face of an engine-next card, by publisher code.
+/// The face of an engine card, by publisher code.
 pub fn face_of(game: &Game, card: CardId) -> FaceId {
     face_in(game.position(), card)
 }
@@ -307,7 +307,7 @@ fn player_view_in(
             .filter(|&s| pos.special_location(s) == SpecialLocation::Owned(p))
             .map(Held::Special),
     );
-    // Museums are unnumbered in engine-next: stored ones count from one,
+    // Museums are unnumbered in the engine: stored ones count from one,
     // claimed ones follow.
     let stored = pos.cards(Zone::Museum(p)).len();
     achievements.extend((0..pos.claimed_museums(p)).map(|i| Held::Museum((stored + i + 1) as u8)));
@@ -1582,7 +1582,7 @@ mod tests {
     use super::super::table::plain;
     use super::*;
 
-    /// Every engine-next deal the app offers: each of the sixteen Artifacts,
+    /// Every deal the app offers: each of the sixteen Artifacts,
     /// Echoes, Figures and Cities subsets, with and without Unseen.
     const BASE_MODES: [n::Expansions; 16] = [
         n::Expansions::BASE,

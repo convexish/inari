@@ -126,7 +126,7 @@ fn mobility<const F: bool>() {
     assert!(game.position.check_conservation());
 }
 #[test]
-fn mobility_keeps_live_highest_ties_and_consumes_colors_in_both_kernels() {
+fn mobility_keeps_live_highest_ties_and_consumes_colors_with_and_without_figures() {
     mobility::<false>();
     mobility::<true>();
 }

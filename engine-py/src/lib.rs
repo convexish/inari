@@ -550,7 +550,7 @@ fn pack_width(b_cap: usize, n_cap: usize, r_cap: usize, k_cap: usize) -> usize {
     .width()
 }
 
-/// Validate `row_sizes` consecutive next-1 rows of `flat` and return
+/// Validate `row_sizes` consecutive observation rows of `flat` and return
 /// `(n_rows, n_pooled_tokens, n_records, n_options)`, the capacities packing
 /// them needs.
 #[pyfunction]
@@ -562,7 +562,7 @@ fn measure_rows(
     with_rows(py, flat, MeasureJob { sizes: &row_sizes })
 }
 
-/// Pack `row_sizes` consecutive next-1 rows of `flat` into `out`, a writable
+/// Pack `row_sizes` consecutive observation rows of `flat` into `out`, a writable
 /// C-contiguous float32 buffer of exactly `pack_width(b_cap, n_cap, r_cap,
 /// k_cap)` floats, and return the used `(n_rows, n_tokens, n_records,
 /// n_options)`. Layout: `b_cap × SCALARS` scalars, `b_cap` seats, six
@@ -602,7 +602,7 @@ fn pack_rows(
     )
 }
 
-/// One next-1 row as floats: a float32 buffer (NumPy array, memoryview) or
+/// One observation row as floats: a float32 buffer (NumPy array, memoryview) or
 /// byte buffer is read as `with_rows` does; any other sequence of numbers is
 /// converted element by element.
 fn row_floats(py: Python<'_>, row: &Bound<'_, PyAny>) -> PyResult<Vec<f32>> {
@@ -620,7 +620,7 @@ fn row_floats(py: Python<'_>, row: &Bound<'_, PyAny>) -> PyResult<Vec<f32>> {
         .map_err(|_| PyValueError::new_err("row must be a float32 buffer or a sequence of floats"))
 }
 
-/// A next-1 network loaded from INNONET1/2 bytes (`train/export_td_weights.py`).
+/// A network loaded from INNONET1/2 bytes (`train/export_td_weights.py`).
 #[pyclass(name = "Net")]
 struct PyNet {
     net: Net,
@@ -645,14 +645,14 @@ impl PyNet {
         self.net.iteration()
     }
 
-    /// One Q per option of a next-1 row, in the row's option order.
+    /// One Q per option of an observation row, in the row's option order.
     fn q(&self, py: Python<'_>, row: &Bound<'_, PyAny>) -> PyResult<Vec<f32>> {
         let row = row_floats(py, row)?;
         py.detach(|| self.net.q_row(&row))
             .map_err(PyValueError::new_err)
     }
 
-    /// One policy logit per option of a next-1 row, or None for a network
+    /// One policy logit per option of an observation row, or None for a network
     /// without a policy output.
     fn policy(&self, py: Python<'_>, row: &Bound<'_, PyAny>) -> PyResult<Option<Vec<f32>>> {
         let row = row_floats(py, row)?;

@@ -1,6 +1,5 @@
-//! Authored Echoes cards and the slots they need (port step 3): the first
-//! declarations prove the scheduler on real cards, and slots on packets of
-//! drawn cards.
+//! Authored Echoes cards and the slots they need: the scheduler on real
+//! cards, and slots on packets of drawn cards.
 use super::*;
 use program::build::{self, HAND, filtered};
 

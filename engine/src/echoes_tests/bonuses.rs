@@ -1,4 +1,4 @@
-//! Bonus queries (port step 3): a board's visible bonuses as a multiset,
+//! Bonus queries: a board's visible bonuses as a multiset,
 //! a card's printed bonus and bonus points, proven on the bonus hard cases
 //! (Wristwatch, Pressure Cooker, Toilet, Barcode, Crossword, Linguistics)
 //! and on Dice, Liquid Fire, Palampore and Sudoku.

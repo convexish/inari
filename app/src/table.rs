@@ -1,6 +1,6 @@
-//! What the table draws: an engine-independent snapshot from one viewer's
-//! seat. A backend rebuilds it after every state change; the UI reads only
-//! this and the face table, so layout work serves every engine.
+//! What the table draws: a snapshot from one viewer's seat. `engine::view`
+//! rebuilds it after every state change; the UI reads only this and the
+//! face table, never the engine's own state.
 use inno_engine::{Color as CardColor, Icon, Special, Splay};
 
 use super::faces::{FaceId, Set, face};
@@ -105,7 +105,7 @@ pub struct PlayerView {
     pub achievements: Vec<Held>,
     /// Achievements counted toward victory, including flags and fountains.
     pub achievement_count: usize,
-    /// Signed: Figures modifiers can make an engine-next score negative.
+    /// Signed: Figures modifiers can make a score negative.
     pub score_total: i64,
     pub bonus_score: i64,
     /// Visible bonus icons on the board, highest first: the first scores

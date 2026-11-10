@@ -60,7 +60,7 @@ fn assert_every_boundary(mut game: Game) {
 }
 
 #[test]
-fn agriculture_returns_then_draws_then_scores_the_exact_card_in_both_kernels() {
+fn agriculture_returns_then_draws_then_scores_the_exact_card_with_and_without_figures() {
     // The computed value starts at 3; skipping an empty age must not turn the
     // consequent into a failed return or score a different card already held.
     for draw_age in [3, 5] {

@@ -94,7 +94,7 @@ fn subset_oracle<const F: bool>() {
 }
 
 #[test]
-fn optional_grouping_preserves_all_subsets_stops_and_same_color_orders_in_both_kernels() {
+fn optional_grouping_preserves_all_subsets_stops_and_same_color_orders_with_and_without_figures() {
     subset_oracle::<false>();
     subset_oracle::<true>();
 }

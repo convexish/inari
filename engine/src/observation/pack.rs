@@ -1,4 +1,4 @@
-//! Fixed-capacity batch packing of next-1 rows for Torch (train/next_inference.py
+//! Fixed-capacity batch packing of observation rows for Torch (train/next_inference.py
 //! `collate_next1`). One flat `f32` buffer, uploaded with a single host-to-device
 //! copy, holds in order:
 //!

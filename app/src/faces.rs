@@ -457,7 +457,7 @@ pub fn by_code(code: &str) -> Option<FaceId> {
 }
 
 /// Martian Internet's printed effect. The card data records the draw variant
-/// both engines play by default; a match playing the printed subgame shows
+/// the engine plays by default; a match playing the printed subgame shows
 /// this text instead.
 const MARTIAN_INTERNET_PRINTED: &str = "Start a new game, ignoring all players' current cards and \
     without shuffling, each player drawing and melding a [9] to begin, the winner then \

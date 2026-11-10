@@ -1,8 +1,7 @@
 //! Cities representation and queries: the printed catalog,
 //! six-position visibility, Search icons, bonuses, flag and fountain
-//! achievements and the event-earned special tokens. Cities games are not
-//! constructible yet, so these build explicit positions and splay their
-//! piles directly.
+//! achievements and the event-earned special tokens. These build explicit
+//! positions and splay their piles directly, independently of full setup.
 
 use crate::*;
 

@@ -1,4 +1,4 @@
-//! Remaining age-two clauses, blind junk claims and exhaustive shortcut proofs.
+//! Age-two clauses, blind junk claims and exhaustive shortcut proofs.
 use super::*;
 use shortcuts::common::*;
 

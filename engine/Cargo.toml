@@ -4,6 +4,6 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.96"
 publish = false
-description = "Two-player Innovation 4E rules kernel: rules, tracking, observations and search"
+description = "Two-player Innovation 4E engine: rules, tracking, observations and search"
 
 [dependencies]

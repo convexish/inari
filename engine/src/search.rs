@@ -12,7 +12,7 @@
 //! - **Heuristic** (no network): untracked worlds, availability-corrected
 //!   UCB1, a few random actions after expansion, then the fitted
 //!   `logistic4` potential.
-//! - **Learned** (a next-1 Q network): tracked worlds
+//! - **Learned** (a Q network): tracked worlds
 //!   ([`Game::determinize`]), so every leaf can be observed by its own mover.
 //!   One network call per leaf gives a Q per legal option. The leaf's value is
 //!   its best Q; each option's prior is a softmax of the network's policy
@@ -89,7 +89,7 @@ impl Default for SearchConfig {
 
 impl SearchConfig {
     /// Defaults for a learned search of `iterations` simulations: the PUCT
-    /// constant and prior temperature next-1's MCTS training uses.
+    /// constant and prior temperature the MCTS training uses.
     pub fn learned(iterations: u32) -> Self {
         Self {
             iterations,
@@ -886,7 +886,7 @@ impl Game {
         })
     }
 
-    /// Learned search with a next-1 network evaluated on this thread (one
+    /// Learned search with a network evaluated on this thread (one
     /// call per leaf), its priors from the network's Q as training's search
     /// does. A policy output is not read: as a PUCT prior it was at best even
     /// with `softmax(Q)`; it is for move choice

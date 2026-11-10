@@ -686,7 +686,7 @@ fn meiji_hand_exchange_freezes_cards_in_both_hands_only_during_his_window() {
 }
 
 #[test]
-fn base_exchange_swaps_physical_piles_in_both_kernels() {
+fn base_exchange_swaps_physical_piles_with_and_without_figures() {
     let mut f = Fixture::default();
     let hand = f.tech(Color::Blue, 2, Zone::Hand(A), vec![]);
     let score = f.tech(Color::Green, 3, Zone::Score(A), vec![]);
@@ -1321,7 +1321,7 @@ fn every_automatic_boundary_can_yield_and_resume_without_changing_results() {
 }
 
 #[test]
-fn no_figures_and_figures_kernels_agree_on_base_programs() {
+fn base_programs_agree_with_and_without_figures() {
     let mut f = Fixture::default();
     let program = f.tech(
         Color::Red,
@@ -1352,7 +1352,7 @@ fn no_figures_and_figures_kernels_agree_on_base_programs() {
 }
 
 #[test]
-fn no_figures_kernel_rejects_figures_positions() {
+fn base_rules_reject_figures_positions() {
     let mut f = Fixture::default();
     f.figure(Figure::Kalashnikov, Zone::Board(A, Color::Red));
     assert!(matches!(

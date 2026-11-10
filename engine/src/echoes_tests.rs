@@ -1,4 +1,4 @@
-//! Echoes representation and queries (port step 1): the printed catalog and
+//! Echoes representation and queries: the printed catalog and
 //! its echo positions, the Forecast zone and its limit, and the five Echoes
 //! special achievements. These representation scenarios use explicit
 //! positions and splay their piles directly, independently of full setup.

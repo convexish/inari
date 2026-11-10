@@ -1,5 +1,4 @@
-//! Immutable public names from reference/figures-text.json. These are naming
-//! choices, not a claim that all Figure effects are implemented.
+//! Immutable public names of the Figures, for choices that name one.
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct FigureName {

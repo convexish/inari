@@ -36,13 +36,19 @@ pixi run check   # fmt, Clippy (warnings denied), all tests
 | Echoes promotion, echo schedules and foreseen scope | `src/execution/echoes.rs` |
 | Cities catalog (generated from `data/cities.json`) | `src/catalog/city_metadata.rs` |
 | Cities rules: City draws, event claims, Meld-action icons, Search, endorsement | `src/execution/cities.rs` |
+| Artifacts programs and printed metadata | `src/catalog/artifacts.rs`, `src/catalog/artifacts_metadata.rs` |
+| Artifacts rules: dig, seizure, showcase, rotation, Museum Check | `src/execution/artifacts.rs` |
+| Martian Internet's printed subgame | `src/execution/subgame.rs` |
+| Unseen programs and printed metadata (no Unseen-specific rules module) | `src/catalog/unseen.rs`, `src/catalog/unseen_metadata.rs` |
 
 ## The card language
 
 A printed effect is a short list of instructions. Fifteen kinds cover Base
 and Age 0:
 `Move`, `Draw`, `Reveal`, `Splay`, `Exchange`, `Choose`, `Bind`, `Execute`,
-`If`, `Jump`, `Repeat`, `Special`, `Win`, `EndAction` and `Native`. Shared
+`If`, `Jump`, `Repeat`, `Special`, `Win`, `EndAction` and `Native`. The
+expansions add three: `Block` (a structured body run per item of a domain),
+`Flip` and `Subgame`. Shared
 operands do the rest: a `Selector` names candidate cards and `Filter`s narrow
 them with single-card `Test`s, an `Expr` computes a number, a `Cond` guards a
 skip. Each effect has three registers: the previous instruction's result, a
@@ -123,7 +129,7 @@ has explicit scenario and app snapshot tests.
 
 ### Training fault diagnostics
 
-The reflex and search pools log `WARNING engine_next_fault` before discarding
+The reflex and search pools log `WARNING engine_fault` before discarding
 a faulted match, including an empty decision or turn prompt. The single log
 line contains the seed, mode, completed-step count, error, current prompt,
 last 16 events and the complete semantic replay as a quoted, escaped string.
@@ -158,8 +164,8 @@ Dogma action (these three combine freely), and `no-achieve` never
 takes Achieve actions (so `figures` plays the same games as Base, isolating
 the Figures code's cost). `Game::new_game(seed, expansions)` deals any
 supported combination.
-The retired engine's semantic traces (`tests/fixtures/`) replay through the
-trace tests (`random_game_traces.rs`, `echoes_traces.rs`, `artifacts_traces.rs`,
+Recorded traces of the other expansion combinations (`tests/fixtures/`) replay
+through the trace tests (`random_game_traces.rs`, `echoes_traces.rs`, `artifacts_traces.rs`,
 `unseen_traces.rs`).
 
 `tests/random_game_traces.rs` replays 300 seeded random games and compares a
@@ -236,8 +242,7 @@ remembered. `pixi run play-app --help` lists every option.
 
 ## Card identity
 
-Each `Card` names its `CardSet` (all six printed sets exist as names; Base,
-Figures, Cities and Echoes have catalogs) and its back is its origin `Deck`. Hidden
+Each `Card` names its `CardSet` (all six printed sets have catalogs) and its back is its origin `Deck`. Hidden
 descriptors and blind alternatives carry that back. A card has six printed
 positions (`SLOTS`): Cities use all six, other sets the first four, and
 `Splay::reveals` is the one covered-slot predicate. `StableId` maps
@@ -247,7 +252,7 @@ enabled tokens over 20 reserved slots.
 
 ## Observation
 
-`Game::observe(viewer)` encodes the frozen contract
-[`next-1`](../doc/design/OBSERVATION.md) (header 101, revision 7): scalars, belief-weighted
+`Game::observe(viewer)` encodes the frozen
+[observation contract](../doc/design/OBSERVATION.md) (header 101, revision 7): scalars, belief-weighted
 card tokens and one option row per legal step, laid out for all six sets.
-Revision 5 fills Echoes Forecast ownership, foreign beliefs and structured retained context. It reads only the viewer's information; tests require a determinized world to encode identically for its sampling viewer across all eight Echoes/Figures/Cities combinations. Private historical scalar/control state is hidden and refuses sampling when it cannot be proved public; that conservative boundary is tested explicitly.
+Revision 5 fills Echoes Forecast ownership, foreign beliefs and structured retained context. It reads only the viewer's information; tests require a determinized world to encode identically for its sampling viewer across all 32 expansion combinations. Private historical scalar/control state is hidden and refuses sampling when it cannot be proved public; that conservative boundary is tested explicitly.

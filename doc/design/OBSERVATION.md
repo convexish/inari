@@ -1,4 +1,4 @@
-# Observation and action contract `next-1`
+# Observation and action contract
 
 Header 101, revision 7, implemented in `engine/src/observation.rs` for all 32
 subsets. Any change bumps the
@@ -171,7 +171,7 @@ expansion's groups.
 
 ## Notes
 
-- `next-1` encodes current beliefs, not an event log.
+- A row encodes current beliefs, not an event log.
 - Inherited normalizations are part of the checkpoint contract.
 - `determinize()` rebuilds the opponent's beliefs from common history plus its
   sampled inspection rights; earlier private observations are conservatively

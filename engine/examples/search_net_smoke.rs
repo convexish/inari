@@ -86,7 +86,7 @@ struct Diag {
 fn main() {
     let mut args = std::env::args().skip(1);
     let path = args.next().expect("weights path");
-    let net = Net::load(std::path::Path::new(&path)).expect("next-1 weights");
+    let net = Net::load(std::path::Path::new(&path)).expect("network weights");
     let deals: u64 = args.next().map_or(4, |a| a.parse().expect("deals"));
     let iterations: u32 = args.next().map_or(128, |a| a.parse().expect("iterations"));
     let rest: Vec<String> = args.collect();

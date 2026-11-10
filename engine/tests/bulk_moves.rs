@@ -29,7 +29,7 @@ fn transfer_all(from: Selector) -> Instruction {
 }
 
 #[test]
-fn base_bulk_transfers_match_in_both_kernels_and_report_a_performed_instruction() {
+fn base_bulk_transfers_match_with_and_without_figures_and_report_a_performed_instruction() {
     let mut f = Fixture::default();
     let first = f.tech(Color::Blue, 2, Zone::Hand(B), vec![]);
     let second = f.tech(Color::Green, 3, Zone::Hand(B), vec![]);

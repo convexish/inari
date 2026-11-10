@@ -1,4 +1,5 @@
-//! Native Innovation execution with a complete two-player Base setup API.
+//! Two-player Innovation Ultimate: rules, hidden-information tracking,
+//! observations and search, for Base with any combination of expansions.
 //!
 //! Card effects are programs in a small instruction language ([`program`]),
 //! interpreted resumably by [`Game`]. Optional [`Tracker`] beliefs support

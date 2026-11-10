@@ -89,7 +89,7 @@ fn masonry<const F: bool>() {
 }
 
 #[test]
-fn masonry_keeps_genuine_printed_authority_subsets_in_both_kernels() {
+fn masonry_keeps_genuine_printed_authority_subsets_with_and_without_figures() {
     masonry::<false>();
     masonry::<true>();
 }

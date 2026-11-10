@@ -54,26 +54,15 @@ fn printed_catalog_matches_the_publisher_decks_and_reserved_identities() {
 }
 
 #[test]
-fn unauthored_programs_and_rules_fail_explicitly() {
+fn every_card_is_authored_and_only_unseen_rules_include_the_set() {
     assert_eq!(
         unseen_card("U999").unwrap_err(),
         Error::InvalidSetup("unknown Unseen card")
     );
-    // The language hard cases are authored; every other card is not yet.
-    let authored: Vec<String> = (1..=115).map(|i| format!("U{i:03}")).collect();
     for metadata in &UNSEEN_METADATA {
-        if authored.iter().any(|code| code == metadata.code) {
-            assert!(unseen_card(metadata.code).is_ok(), "{}", metadata.code);
-            continue;
-        }
-        assert_eq!(
-            unseen_card(metadata.code).unwrap_err(),
-            Error::Unsupported("Unseen program not authored"),
-            "{}",
-            metadata.code
-        );
+        assert!(unseen_card(metadata.code).is_ok(), "{}", metadata.code);
     }
-    // No rules profile includes Unseen cards yet.
+    // A rules profile without Unseen never includes its cards.
     assert!(!Expansions::BASE.includes(CardSet::Unseen));
     assert!(
         !Expansions::ARTIFACTS

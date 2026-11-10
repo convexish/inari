@@ -8,8 +8,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use inno_engine::{Expansions, Match, Net, Record, SearchConfig, Step};
 use serde::{Deserialize, Serialize};
 
+use super::engine;
 use super::faces::Set;
-use super::next;
 use super::strength;
 use super::table::TableView;
 use super::theme::Theme;
@@ -370,7 +370,7 @@ impl Play {
     }
 
     fn apply(&mut self, step: Step) -> Result<(), String> {
-        let mover = self.m.to_move().map(next::index);
+        let mover = self.m.to_move().map(engine::index);
         self.m.apply(step).map_err(|e| e.to_string())?;
         self.movers.push(mover.unwrap_or(0));
         Ok(())
@@ -449,7 +449,7 @@ impl Game {
 
     /// Rebuilds the table view after any change of state or seat.
     pub fn refresh(&mut self) {
-        self.view = next::view(&self.play.m, self.human, self.two_player, self.peek);
+        self.view = engine::view(&self.play.m, self.human, self.two_player, self.peek);
         self.version += 1;
     }
 
@@ -472,12 +472,12 @@ impl Game {
 
     /// The seat that must choose next, if the game is not over.
     fn to_move(&self) -> Option<usize> {
-        self.play.m.to_move().map(next::index)
+        self.play.m.to_move().map(engine::index)
     }
 
     /// Picks the pending decision's `index`-th option.
     pub fn choose_option(&mut self, index: usize) {
-        if let Some(&step) = next::option_steps(&self.play.m).get(index)
+        if let Some(&step) = engine::option_steps(&self.play.m).get(index)
             && self.human_turn()
         {
             self.apply(step);
@@ -620,7 +620,7 @@ impl Game {
     /// A supply click claims an available achievement with this public back.
     pub fn achieve_standard(&mut self, age: u8, set: Set) {
         if self.human_turn()
-            && let Some(step) = next::achieve_step(&self.play.m, age, set)
+            && let Some(step) = engine::achieve_step(&self.play.m, age, set)
         {
             self.apply(step);
         }
@@ -628,7 +628,7 @@ impl Game {
     /// A Safe click claims `player`'s secret at `position`.
     pub fn choose_secret(&mut self, player: usize, position: usize) {
         if self.human_turn()
-            && let Some(step) = next::secret_step(&self.play.m, player, position)
+            && let Some(step) = engine::secret_step(&self.play.m, player, position)
         {
             self.apply(step);
         }
@@ -685,8 +685,8 @@ impl Game {
             .name("inari-ai".into())
             .spawn(move || {
                 let step = if sims == 0 {
-                    next::policy_step(&m, &net, temperature, seed)
-                        .or_else(|| next::greedy_step(&m, &net))
+                    engine::policy_step(&m, &net, temperature, seed)
+                        .or_else(|| engine::greedy_step(&m, &net))
                 } else {
                     let config = SearchConfig {
                         seed,
@@ -694,7 +694,7 @@ impl Game {
                     };
                     m.search_net_step(&net, config, LEAF_BATCH)
                         .ok()
-                        .or_else(|| next::greedy_step(&m, &net))
+                        .or_else(|| engine::greedy_step(&m, &net))
                 };
                 if let Some(step) = step.or_else(|| m.random_step(seed)) {
                     let _ = tx.send(step);
@@ -994,7 +994,8 @@ mod tests {
         }
         let mut game = Play::new(expansions, var("INARI_MIDGAME_SEED", 5), false).unwrap();
         let steps = var("INARI_MIDGAME_STEPS", 120) as usize;
-        while game.m.record().steps.len() < steps || game.m.to_move().map(next::index) != Some(0) {
+        while game.m.record().steps.len() < steps || game.m.to_move().map(engine::index) != Some(0)
+        {
             let seed = game.m.record().steps.len() as u64;
             let Some(step) = game.m.random_step(seed) else {
                 break;

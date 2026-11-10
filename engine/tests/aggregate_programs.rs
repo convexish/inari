@@ -104,7 +104,7 @@ fn rewards<const F: bool>() {
 }
 
 #[test]
-fn distinct_original_values_drive_optional_reward_count_and_score_in_both_kernels() {
+fn distinct_original_values_drive_optional_reward_count_and_score_with_and_without_figures() {
     rewards::<false>();
     rewards::<true>();
 }

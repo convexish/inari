@@ -920,7 +920,8 @@ fn clone_every_boundary(mut game: Game) {
 }
 
 #[test]
-fn draw_score_continuations_clone_at_every_boundary_in_both_kernels_and_unwind_on_exhaustion() {
+fn draw_score_continuations_clone_at_every_boundary_with_and_without_figures_and_unwind_on_exhaustion()
+ {
     for cards in [1, 2] {
         let mut f = Fixture::default();
         let source = printed(&mut f, "B007");

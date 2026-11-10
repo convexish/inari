@@ -1,4 +1,4 @@
-//! Remaining age-one clauses, public-back operands, and bounded shortcut oracles.
+//! Age-one clauses, public-back operands, and bounded shortcut oracles.
 use super::*;
 use crate::program::build;
 use shortcuts::common::*;

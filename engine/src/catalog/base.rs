@@ -1733,7 +1733,7 @@ const WHATABOUTISM: [Program; 1] = [&[
 ]];
 
 /// The printed effects of a Base card as (demand, program) pairs, or `None`
-/// for a card that is not yet authored.
+/// for an unknown code.
 pub(super) fn effects(code: &str) -> Option<&'static [(bool, Program)]> {
     const fn plain<const N: usize>(programs: [Program; N]) -> [(bool, Program); N] {
         let mut out = [(false, programs[0]); N];

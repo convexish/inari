@@ -17,7 +17,7 @@ fn splay(game: &mut Game, direction: Splay, events: &mut Vec<Event>) -> Status {
 }
 
 #[test]
-fn every_splay_exposes_the_correct_slots_in_both_kernels() {
+fn every_splay_exposes_the_correct_slots_with_and_without_figures() {
     let mut f = Fixture::default();
     let bottom = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let top = f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);

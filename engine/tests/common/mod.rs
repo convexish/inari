@@ -76,7 +76,7 @@ impl Fixture {
         self.add(base_card("B011").unwrap(), zone)
     }
 
-    /// B088 Ecology, transcribed from data/cards.json. Its return and score
+    /// B088 Ecology, transcribed from data/base.json. Its return and score
     /// are genuine single-card choices; only the whole-deck sweep is reduced.
     pub fn ecology(&mut self, zone: Zone) -> CardId {
         self.add(base_card("B088").unwrap(), zone)
@@ -88,7 +88,7 @@ impl Fixture {
         self.add(base_card("B010").unwrap(), zone)
     }
 
-    /// B002 from data/cards.json; repeat depends on the revealed icon, not
+    /// B002 from data/base.json; repeat depends on the revealed icon, not
     /// whether the following score survived a replacement.
     pub fn metalworking(&mut self, zone: Zone) -> CardId {
         self.add(base_card("B002").unwrap(), zone)

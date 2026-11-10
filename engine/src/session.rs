@@ -248,7 +248,7 @@ impl Match {
         Ok(self.game.search(config)?.step)
     }
 
-    /// The learned search's step with a next-1 network ([`Game::search_net`]);
+    /// The learned search's step with a network ([`Game::search_net`]);
     /// same contract as [`Match::search_step`].
     pub fn search_net_step(
         &self,

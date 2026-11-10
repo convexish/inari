@@ -1,4 +1,4 @@
-//! Observation and action contract `next-1`: one variable-length float row
+//! The observation and action contract: one variable-length float row
 //! per viewer and prompt:
 //!
 //! | Part | Size | Contents |

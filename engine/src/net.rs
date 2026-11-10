@@ -1,4 +1,4 @@
-//! Torch-free inference for the next-1 option-pointer networks
+//! Torch-free inference for the option-pointer Q networks
 //! (train/td_net.py `QNetNext1`, `QNetNext1V2` as architecture id 2,
 //! `QNetNext1V2HLGauss` as id 3 and `QNetNext1V2HLGaussPolicy` as id 4) from
 //! the INNONET1/INNONET2 files that train/export_td_weights.py
@@ -371,7 +371,7 @@ impl Tensors {
     }
 }
 
-/// A loaded next-1 network.
+/// A loaded network.
 ///
 /// Its `Debug` form is the architecture summary, not the weights.
 pub struct Net {
@@ -658,7 +658,7 @@ impl Net {
         argmax(&self.q(observation).ok()?)
     }
 
-    /// One Q per option of a flat next-1 row (`Observation::row`).
+    /// One Q per option of a flat observation row (`Observation::row`).
     pub fn q_row(&self, row: &[f32]) -> Result<Vec<f32>, String> {
         Ok(self.evaluate_row(row)?.0)
     }
@@ -696,7 +696,7 @@ impl Net {
         self.evaluate_row(&observation.row())
     }
 
-    /// [`Net::evaluate`] on a flat next-1 row (`Observation::row`).
+    /// [`Net::evaluate`] on a flat observation row (`Observation::row`).
     pub fn evaluate_row(&self, row: &[f32]) -> Result<(Vec<f32>, Option<Vec<f32>>), String> {
         let sizes = [row.len()];
         let counts: Counts = pack::measure(row, &sizes)?;
@@ -1117,7 +1117,7 @@ fn write_tensor(out: &mut Vec<u8>, name: &str, shape: &[usize], data: &[f32]) {
     }
 }
 
-/// A complete INNONET1 file of a next-1 network with small random weights
+/// A complete INNONET1 file of a network with small random weights
 /// (uniform in `±scale`), for tests and tools that need a loadable network
 /// without a trained checkpoint. `scale` 0 gives an all-zero network.
 pub fn synthetic_bytes(dims: Dimensions, seed: u64, scale: f32) -> Vec<u8> {

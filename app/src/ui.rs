@@ -2554,7 +2554,7 @@ fn private_owner(game: &Game) -> usize {
     game.view.private_owner
 }
 
-/// A player's hand, forecast or score pile, sorted by the backend.
+/// A player's hand, forecast or score pile, in the view's sorted order.
 fn pile_cards(game: &Game, player: usize, pile: Pile) -> Vec<FaceId> {
     let p = &game.view.players[player];
     match pile {
@@ -2987,7 +2987,7 @@ fn player_table(game: &Game, input: &Input, art: &Art, view: &mut View) {
     panel(r);
     let players = [game.human, 1 - game.human];
     let stats = players.map(|p| stats(game, p));
-    // Signed: an engine-next Figures score can be negative.
+    // Signed: a Figures score can be negative.
     let value = |column: usize, row: usize| match column {
         0 => stats[row].achievements as i64,
         1 => stats[row].score,
