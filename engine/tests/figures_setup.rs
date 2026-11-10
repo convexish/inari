@@ -29,7 +29,7 @@ fn figures_deal_keeps_the_base_deal_and_adds_figures_decrees_and_dormant_age_zer
         );
         for age in 1..=11 {
             let deck = with.cards(Zone::Deck(Deck::figures(age)));
-            let printed = FIGURE_METADATA.iter().filter(|m| m.value == age).count();
+            let printed = FIGURES_METADATA.iter().filter(|m| m.value == age).count();
             assert_eq!(deck.len(), printed);
             assert!(deck.iter().all(|&card| {
                 let card = with.card(card);

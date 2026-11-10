@@ -1,6 +1,4 @@
-// Generated metadata; do not edit by hand.
-// Preserve printed spatial order: top-left, bottom-left, bottom-center,
-// bottom-right. `value` is the printed age (the public back).
+// Generated from data/unseen.json by scripts/card_metadata.py; do not edit by hand.
 use super::CardMetadata;
 use crate::model::{CardSet, Color, Icon, Symbol};
 

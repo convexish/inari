@@ -1,9 +1,8 @@
-// Generated metadata; do not edit by hand.
-// Spatial order: TL, BL, BC, BR, TC, TR. An empty slot is the image.
+// Generated from data/cities.json by scripts/card_metadata.py; do not edit by hand.
 use super::CityMetadata;
 use crate::model::{CityIcon, Color, Icon, Symbol};
 
-pub const CITY_METADATA: [CityMetadata; 115] = [
+pub const CITIES_METADATA: [CityMetadata; 115] = [
     CityMetadata {
         code: "C001",
         title: "ATHENS",

@@ -1,7 +1,6 @@
 //! Card faces the table draws: every printed card once, keyed by publisher
-//! code, so a `FaceId` also names that card on the table. The five
-//! publisher sets come from `data/*.json` in the engine's stable-identity
-//! order; Figures and Age 0 follow from the engine's reference text.
+//! code, so a `FaceId` also names that card on the table. Every set comes
+//! from `data/*.json`, in the engine's stable-identity order.
 use super::table::title_case;
 use std::borrow::Cow;
 use std::collections::HashMap;
@@ -153,19 +152,17 @@ pub struct Face {
     pub paragraphs: Vec<Paragraph>,
 }
 
-/// The five publisher sets' faces, in the order their `FaceId`s run.
-const PRINTED_SETS: [(&str, Set); 5] = [
+/// Every set's card data, in the order the `FaceId`s run: the engine's
+/// stable-identity order. Age 0 cards are Base cards with their own codes.
+const SETS: [(&str, Set); 7] = [
     (include_str!("../../data/base.json"), Set::Base),
     (include_str!("../../data/echoes.json"), Set::Echoes),
     (include_str!("../../data/cities.json"), Set::Cities),
     (include_str!("../../data/unseen.json"), Set::Unseen),
     (include_str!("../../data/artifacts.json"), Set::Artifacts),
+    (include_str!("../../data/figures.json"), Set::Figures),
+    (include_str!("../../data/age_zero.json"), Set::Base),
 ];
-
-/// Cards in the five publisher sets: 115 each.
-pub const PRINTED_CARDS: usize = 5 * 115;
-
-const FIGURES_TEXT: &str = include_str!("../../engine/reference/figures-text.json");
 
 /// The icon a card's text or data names in capitals (`INDUSTRY`).
 pub fn icon_named(name: &str) -> Option<Icon> {
@@ -196,6 +193,9 @@ fn color_named(name: &str, code: &str) -> CardColor {
     }
 }
 
+/// Food, the Age 0 icon, as the data names it. It has no tile of its own.
+const FOOD: &str = "FOOD";
+
 #[derive(Deserialize)]
 struct RawIcons {
     top_left: Option<String>,
@@ -221,37 +221,57 @@ struct RawEffect {
 }
 
 #[derive(Deserialize)]
+struct RawKarma {
+    kind: String,
+    text: String,
+}
+
+/// One card of `data/*.json`. Every set shares the schema; a set leaves out
+/// the fields it never prints.
+#[derive(Deserialize)]
 struct RawCard {
     code: String,
     title: String,
     color: String,
     age: u8,
-    effects: Vec<RawEffect>,
+    #[serde(default)]
+    face_value: Option<u8>,
     icons: RawIcons,
+    #[serde(default)]
+    image_slot: Option<usize>,
     #[serde(default)]
     bonuses: Vec<Option<u8>>,
     #[serde(default)]
     city_icons: Vec<Option<CityIcon>>,
     #[serde(default)]
     echoes: Vec<RawEcho>,
+    effects: Vec<RawEffect>,
     #[serde(default)]
-    image_slot: Option<usize>,
+    karmas: Vec<RawKarma>,
 }
 
 impl RawCard {
     fn into_face(self, set: Set) -> Face {
         let code = &self.code;
         let slots = if set == Set::Cities { 6 } else { 4 };
-        let icons: Vec<Option<Icon>> = [
+        let names = [
             &self.icons.top_left,
             &self.icons.bottom_left,
             &self.icons.bottom_center,
             &self.icons.bottom_right,
             &self.icons.top_center,
             &self.icons.top_right,
-        ][..slots]
+        ];
+        let food_slots: Vec<usize> = (0..slots)
+            .filter(|&slot| names[slot].as_deref() == Some(FOOD))
+            .collect();
+        let icons: Vec<Option<Icon>> = names[..slots]
             .iter()
-            .map(|slot| slot.as_deref().map(|name| card_icon(name, code)))
+            .map(|name| {
+                name.as_deref()
+                    .filter(|&name| name != FOOD)
+                    .map(|name| card_icon(name, code))
+            })
             .collect();
         let bonuses = if self.bonuses.is_empty() {
             vec![None; slots]
@@ -264,12 +284,12 @@ impl RawCard {
             self.city_icons
         };
         assert!(
-            icons.len() == slots && bonuses.len() == slots && city_icons.len() == slots,
+            bonuses.len() == slots && city_icons.len() == slots,
             "{code}: expected {slots} slots"
         );
         let echo_slots: Vec<usize> = self.echoes.iter().map(|e| e.slot).collect();
         // The art fills the slot nothing else prints in, unless the data
-        // names one (Battleship Yamato prints no icon in two slots).
+        // names one (Battleship Yamato prints no icon in any slot).
         let image_slot = self.image_slot.unwrap_or_else(|| {
             (0..slots)
                 .find(|&slot| {
@@ -277,6 +297,7 @@ impl RawCard {
                         && bonuses[slot].is_none()
                         && city_icons[slot].is_none()
                         && !echo_slots.contains(&slot)
+                        && !food_slots.contains(&slot)
                 })
                 .unwrap_or_else(|| panic!("{code}: no slot for the image"))
         });
@@ -288,19 +309,31 @@ impl RawCard {
                 text: e.text,
             })
             .collect();
+        paragraphs.extend(self.karmas.into_iter().map(|karma| Paragraph {
+            lead: match karma.kind.as_str() {
+                "would" | "when" | "each" => Lead::Karma,
+                "decree" => Lead::Decree,
+                kind => panic!("{code}: unknown karma kind {kind:?}"),
+            },
+            text: karma.text,
+        }));
         paragraphs.extend(self.effects.into_iter().map(|e| Paragraph {
-            lead: Lead::Icon(card_icon(&e.featured_icon, code)),
+            lead: if e.featured_icon == FOOD {
+                Lead::Food
+            } else {
+                Lead::Icon(card_icon(&e.featured_icon, code))
+            },
             text: e.text,
         }));
         Face {
-            value: if self.code == "A077" { 11 } else { self.age },
+            value: self.face_value.unwrap_or(self.age),
             color: color_named(&self.color, code),
             code: self.code,
             title: self.title,
             age: self.age,
             set,
             icons,
-            food_slots: Vec::new(),
+            food_slots,
             bonuses,
             city_icons,
             echo_slots,
@@ -310,110 +343,8 @@ impl RawCard {
     }
 }
 
-#[derive(Deserialize)]
-struct Reference {
-    cards: Vec<ReferenceFace>,
-}
-
-#[derive(Deserialize)]
-struct ReferenceFace {
-    code: String,
-    title: String,
-    color: String,
-    age: u8,
-    origin_set: String,
-    symbols: Vec<serde_json::Value>,
-    #[serde(default)]
-    karmas: Vec<ReferenceKarma>,
-    #[serde(default)]
-    effects: Vec<ReferenceEffect>,
-}
-
-#[derive(Deserialize)]
-struct ReferenceKarma {
-    kind: String,
-    text: String,
-}
-
-#[derive(Deserialize)]
-struct ReferenceEffect {
-    featured_icon: String,
-    text: String,
-}
-
-impl ReferenceFace {
-    fn into_face(self) -> Face {
-        let code = &self.code;
-        let color = color_named(&self.color, code);
-        let set = match self.origin_set.as_str() {
-            "Figures" => Set::Figures,
-            "Base" => Set::Base,
-            set => panic!("{code}: unknown origin set {set:?}"),
-        };
-        assert_eq!(self.symbols.len(), 4, "{code}: expected four slots");
-        let mut icons = vec![None; 4];
-        let mut bonuses = vec![None; 4];
-        let mut food_slots = Vec::new();
-        let mut image_slot = None;
-        for (slot, symbol) in self.symbols.iter().enumerate() {
-            match symbol.as_str() {
-                Some("IMAGE") => {
-                    assert!(
-                        image_slot.replace(slot).is_none(),
-                        "{code}: duplicate image"
-                    );
-                }
-                Some("FOOD") => food_slots.push(slot),
-                Some(name) => icons[slot] = Some(card_icon(name, code)),
-                None => {
-                    let bonus = symbol
-                        .as_object()
-                        .filter(|object| object.len() == 1)
-                        .and_then(|object| object.get("bonus"))
-                        .and_then(serde_json::Value::as_u64)
-                        .and_then(|n| u8::try_from(n).ok())
-                        .unwrap_or_else(|| panic!("{code}: unknown symbol {symbol}"));
-                    bonuses[slot] = Some(bonus);
-                }
-            }
-        }
-        let mut paragraphs: Vec<_> = self
-            .karmas
-            .into_iter()
-            .map(|karma| Paragraph {
-                lead: match karma.kind.as_str() {
-                    "would" | "when" | "each" => Lead::Karma,
-                    "decree" => Lead::Decree,
-                    kind => panic!("{code}: unknown karma kind {kind:?}"),
-                },
-                text: karma.text,
-            })
-            .collect();
-        paragraphs.extend(self.effects.into_iter().map(|effect| Paragraph {
-            lead: if effect.featured_icon == "FOOD" {
-                Lead::Food
-            } else {
-                Lead::Icon(card_icon(&effect.featured_icon, code))
-            },
-            text: effect.text,
-        }));
-        let image_slot = image_slot.unwrap_or_else(|| panic!("{code}: missing image"));
-        Face {
-            code: self.code,
-            title: self.title,
-            color,
-            age: self.age,
-            value: self.age,
-            set,
-            icons,
-            food_slots,
-            bonuses,
-            city_icons: vec![None; 4],
-            echo_slots: Vec::new(),
-            image_slot,
-            paragraphs,
-        }
-    }
+fn raw_cards(json: &str) -> Vec<RawCard> {
+    serde_json::from_str(json).expect("card data parses")
 }
 
 struct Table {
@@ -424,17 +355,10 @@ struct Table {
 fn table() -> &'static Table {
     static TABLE: OnceLock<Table> = OnceLock::new();
     TABLE.get_or_init(|| {
-        let mut faces: Vec<Face> = PRINTED_SETS
+        let faces: Vec<Face> = SETS
             .into_iter()
-            .flat_map(|(json, set)| {
-                let raw: Vec<RawCard> = serde_json::from_str(json).expect("card data parses");
-                assert_eq!(raw.len(), PRINTED_CARDS / 5, "{} cards", set.name());
-                raw.into_iter().map(move |card| card.into_face(set))
-            })
+            .flat_map(|(json, set)| raw_cards(json).into_iter().map(move |c| c.into_face(set)))
             .collect();
-        let reference: Reference =
-            serde_json::from_str(FIGURES_TEXT).expect("invalid Figures face reference JSON");
-        faces.extend(reference.cards.into_iter().map(ReferenceFace::into_face));
         let by_code = faces
             .iter()
             .enumerate()
@@ -527,6 +451,7 @@ mod tests {
     }
 
     use super::*;
+    use inno_engine::{STABLE_IDS, StableId};
 
     #[test]
     fn martian_internet_reads_as_its_printed_text_only_under_that_rule() {
@@ -536,65 +461,96 @@ mod tests {
     }
 
     #[test]
-    fn reference_faces_preserve_order_slots_and_text() {
-        let reference: Reference = serde_json::from_str(FIGURES_TEXT).unwrap();
-        let added = &faces()[PRINTED_CARDS..];
-        assert_eq!(added.len(), 130);
-        assert_eq!(added.iter().filter(|f| f.set == Set::Figures).count(), 115);
-        assert_eq!(
-            added
-                .iter()
-                .filter(|f| f.set == Set::Base && f.age == 0)
-                .count(),
-            15
-        );
+    fn faces_follow_stable_identity_order_and_fill_every_slot_once() {
+        assert_eq!(faces().len(), usize::from(STABLE_IDS));
         let mut food_count = 0;
-        for (index, (f, record)) in added.iter().zip(reference.cards).enumerate() {
-            assert_eq!(f.code, record.code);
+        for (id, f) in faces().iter().enumerate() {
             assert_eq!(
-                by_code(&record.code),
-                Some((PRINTED_CARDS + index) as FaceId)
+                StableId::from_code(&f.code),
+                Some(StableId(id as u16)),
+                "{}",
+                f.code
             );
-            assert_eq!(f.title, record.title);
-            assert_eq!(f.age, record.age);
-            assert_eq!(f.value, record.age);
-            assert_eq!(f.icons.len(), 4, "{}", f.code);
-            assert_eq!(f.bonuses.len(), 4, "{}", f.code);
-            assert_eq!(f.city_icons, vec![None; 4], "{}", f.code);
-            assert!(f.echo_slots.is_empty());
-            assert_eq!(record.symbols.iter().filter(|s| *s == "IMAGE").count(), 1);
-            assert_eq!(record.symbols[f.image_slot], "IMAGE");
-            let expected_food: Vec<_> = record
-                .symbols
-                .iter()
-                .enumerate()
-                .filter_map(|(slot, s)| (s == "FOOD").then_some(slot))
-                .collect();
-            assert_eq!(f.food_slots, expected_food, "{}", f.code);
+            assert_eq!(by_code(&f.code), Some(id as FaceId));
+            let age_zero = f.code.starts_with('Z');
+            let set = [
+                Set::Base,
+                Set::Echoes,
+                Set::Cities,
+                Set::Unseen,
+                Set::Artifacts,
+                Set::Figures,
+                Set::Base,
+            ][id / 115];
+            assert_eq!(f.set, set, "{}", f.code);
+            assert_eq!(f.age == 0, age_zero, "{}", f.code);
+            let slots = if set == Set::Cities { 6 } else { 4 };
+            assert_eq!(f.icons.len(), slots, "{}", f.code);
+            assert_eq!(f.bonuses.len(), slots, "{}", f.code);
+            assert_eq!(f.city_icons.len(), slots, "{}", f.code);
+            assert!(age_zero || f.food_slots.is_empty(), "{}", f.code);
+            assert!(set == Set::Echoes || f.echo_slots.is_empty(), "{}", f.code);
+            assert!(
+                set == Set::Cities || f.city_icons.iter().all(Option::is_none),
+                "{}",
+                f.code
+            );
             food_count += f.food_slots.len();
-            for slot in 0..4 {
-                let occupied = usize::from(f.icons[slot].is_some())
+            let mut free = 0;
+            for slot in 0..slots {
+                let search = f.city_icons[slot] == Some(CityIcon::Search);
+                let printed = usize::from(f.icons[slot].is_some())
                     + usize::from(f.bonuses[slot].is_some())
-                    + usize::from(f.food_slots.contains(&slot))
-                    + usize::from(f.image_slot == slot);
-                assert_eq!(occupied, 1, "{} slot {slot}", f.code);
+                    + usize::from(f.city_icons[slot].is_some() && !search)
+                    + usize::from(f.echo_slots.contains(&slot))
+                    + usize::from(f.food_slots.contains(&slot));
+                assert!(printed <= 1, "{} slot {slot}", f.code);
+                assert!(!search || f.icons[slot].is_some(), "{} slot {slot}", f.code);
+                if printed == 0 {
+                    free += 1;
+                    assert!(
+                        f.image_slot == slot || f.code == "A077",
+                        "{} slot {slot}",
+                        f.code
+                    );
+                }
             }
-            let expected_text: Vec<_> = record
-                .karmas
-                .iter()
-                .map(|p| p.text.as_str())
-                .chain(record.effects.iter().map(|p| p.text.as_str()))
-                .collect();
+            // Battleship Yamato prints its image across four blank slots.
+            assert_eq!(free, if f.code == "A077" { 4 } else { 1 }, "{}", f.code);
             assert_eq!(
-                f.paragraphs
-                    .iter()
-                    .map(|p| p.text.as_str())
-                    .collect::<Vec<_>>(),
-                expected_text
+                f.value,
+                if f.code == "A077" { 11 } else { f.age },
+                "{}",
+                f.code
             );
         }
         assert_eq!(food_count, 14);
-        assert!(by_code("F052").is_some());
+        let yamato = face(by_code("A077").unwrap());
+        assert_eq!((yamato.age, yamato.value, yamato.image_slot), (8, 11, 1));
+        let archery = face(by_code("B001").unwrap());
+        assert_eq!(archery.title, "ARCHERY");
+        assert_eq!(archery.icons[0], Some(Icon::Authority));
+        assert_eq!(archery.image_slot, 2);
+    }
+
+    #[test]
+    fn paragraphs_keep_the_data_order_and_text() {
+        for (json, set) in SETS {
+            for card in raw_cards(json) {
+                let f = face(by_code(&card.code).unwrap());
+                assert_eq!(f.set, set, "{}", f.code);
+                assert_eq!(f.title, card.title);
+                let expected: Vec<_> = card
+                    .echoes
+                    .iter()
+                    .map(|e| e.text.as_str())
+                    .chain(card.karmas.iter().map(|k| k.text.as_str()))
+                    .chain(card.effects.iter().map(|e| e.text.as_str()))
+                    .collect();
+                let shown: Vec<_> = f.paragraphs.iter().map(|p| p.text.as_str()).collect();
+                assert_eq!(shown, expected, "{}", f.code);
+            }
+        }
     }
 
     #[test]
@@ -650,74 +606,39 @@ mod tests {
         assert_eq!(skinning.food_slots, vec![2, 3]);
     }
 
+    fn first_figure() -> RawCard {
+        raw_cards(SETS[5].0).remove(0)
+    }
+
     #[test]
     #[should_panic(expected = "F001: unknown color")]
-    fn unknown_reference_color_names_the_card() {
-        let mut reference: Reference = serde_json::from_str(FIGURES_TEXT).unwrap();
-        let mut card = reference.cards.remove(0);
+    fn unknown_color_names_the_card() {
+        let mut card = first_figure();
         card.color = "OCHRE".into();
-        card.into_face();
+        card.into_face(Set::Figures);
     }
 
     #[test]
     #[should_panic(expected = "F001: unknown icon")]
-    fn unknown_reference_icon_names_the_card() {
-        let mut reference: Reference = serde_json::from_str(FIGURES_TEXT).unwrap();
-        let mut card = reference.cards.remove(0);
-        card.symbols[0] = serde_json::json!("MYSTERY");
-        card.into_face();
+    fn unknown_icon_names_the_card() {
+        let mut card = first_figure();
+        card.icons.top_left = Some("MYSTERY".into());
+        card.into_face(Set::Figures);
     }
 
     #[test]
-    #[should_panic(expected = "F001: unknown symbol")]
-    fn unknown_reference_symbol_names_the_card() {
-        let mut reference: Reference = serde_json::from_str(FIGURES_TEXT).unwrap();
-        let mut card = reference.cards.remove(0);
-        card.symbols[0] = serde_json::json!({"mystery": 2});
-        card.into_face();
+    #[should_panic(expected = "F001: unknown karma kind")]
+    fn unknown_karma_kind_names_the_card() {
+        let mut card = first_figure();
+        card.karmas[0].kind = "whenever".into();
+        card.into_face(Set::Figures);
     }
 
     #[test]
-    fn printed_faces_keep_their_stable_order_and_fill_every_slot_once() {
-        assert_eq!(faces().len(), PRINTED_CARDS + 130);
-        for (id, f) in faces()[..PRINTED_CARDS].iter().enumerate() {
-            let set = [
-                Set::Base,
-                Set::Echoes,
-                Set::Cities,
-                Set::Unseen,
-                Set::Artifacts,
-            ][id / 115];
-            assert_eq!(f.set, set, "{}", f.code);
-            assert_eq!(by_code(&f.code), Some(id as FaceId));
-            let slots = if set == Set::Cities { 6 } else { 4 };
-            assert_eq!(f.icons.len(), slots, "{}", f.code);
-            let mut free = 0;
-            for slot in 0..slots {
-                let search = f.city_icons[slot] == Some(CityIcon::Search);
-                let printed = usize::from(f.icons[slot].is_some())
-                    + usize::from(f.bonuses[slot].is_some())
-                    + usize::from(f.city_icons[slot].is_some() && !search)
-                    + usize::from(f.echo_slots.contains(&slot));
-                assert!(printed <= 1, "{} slot {slot}", f.code);
-                assert!(!search || f.icons[slot].is_some(), "{} slot {slot}", f.code);
-                if printed == 0 {
-                    free += 1;
-                    assert!(
-                        f.image_slot == slot || f.code == "A077",
-                        "{} slot {slot}",
-                        f.code
-                    );
-                }
-            }
-            // Battleship Yamato prints its image across four blank slots.
-            assert_eq!(free, if f.code == "A077" { 4 } else { 1 }, "{}", f.code);
-        }
-        let yamato = face(by_code("A077").unwrap());
-        assert_eq!((yamato.age, yamato.value), (8, 11));
-        let archery = face(by_code("B001").unwrap());
-        assert_eq!(archery.title, "ARCHERY");
-        assert_eq!(archery.icons[0], Some(Icon::Authority));
-        assert_eq!(archery.image_slot, 2);
+    #[should_panic(expected = "F001: expected 4 slots")]
+    fn a_short_bonus_row_names_the_card() {
+        let mut card = first_figure();
+        card.bonuses.pop();
+        card.into_face(Set::Figures);
     }
 }

@@ -26,20 +26,20 @@ pixi run check   # fmt, Clippy (warnings denied), all tests
 | All 115 Base programs, with printed text | `src/catalog/base.rs` |
 | The 15 Age 0 programs, with printed text | `src/catalog/age_zero.rs` |
 | Figure declarations, with printed text | `src/catalog/figures.rs` |
+| Printed metadata of every set, generated from `data/*.json` | `src/catalog/*_metadata.rs` |
 | Interpreter: program steps, selection, expressions | `src/execution/interpreter.rs` |
 | Operations, frames, turn structure | `src/execution.rs` |
 | Karma discovery from declarations; native reactions | `src/execution/karma.rs` |
 | Choice reductions and their Figure guards | `src/execution/shortcuts.rs`, `src/shortcuts.rs` |
 | Setup, turns, legal actions | `src/execution/setup.rs`, `src/execution/turns.rs` |
 | Fusion, Reclamation, Space Traffic | `src/execution/terminal_effects.rs` |
-| Echoes programs and printed metadata | `src/catalog/echoes.rs`, `src/catalog/echoes_metadata.rs` |
+| Echoes programs | `src/catalog/echoes.rs` |
 | Echoes promotion, echo schedules and foreseen scope | `src/execution/echoes.rs` |
-| Cities catalog (generated from `data/cities.json`) | `src/catalog/city_metadata.rs` |
 | Cities rules: City draws, event claims, Meld-action icons, Search, endorsement | `src/execution/cities.rs` |
-| Artifacts programs and printed metadata | `src/catalog/artifacts.rs`, `src/catalog/artifacts_metadata.rs` |
+| Artifacts programs | `src/catalog/artifacts.rs` |
 | Artifacts rules: dig, seizure, showcase, rotation, Museum Check | `src/execution/artifacts.rs` |
 | Martian Internet's printed subgame | `src/execution/subgame.rs` |
-| Unseen programs and printed metadata (no Unseen-specific rules module) | `src/catalog/unseen.rs`, `src/catalog/unseen_metadata.rs` |
+| Unseen programs (no Unseen-specific rules module) | `src/catalog/unseen.rs` |
 
 ## The card language
 

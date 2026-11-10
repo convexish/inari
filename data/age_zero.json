@@ -1,0 +1,312 @@
+[
+  {
+    "code": "Z001",
+    "title": "FRESH WATER",
+    "color": "YELLOW",
+    "age": 0,
+    "icons": {
+      "top_left": "FOOD",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Splay an unsplayed color on your board left. If you don't, you lose."
+      }
+    ]
+  },
+  {
+    "code": "Z002",
+    "title": "SHELTER",
+    "color": "YELLOW",
+    "age": 0,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "CONCEPT",
+      "bottom_center": "AUTHORITY",
+      "bottom_right": "AUTHORITY"
+    },
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "demand",
+        "text": "I DEMAND you score a card from your hand! If there are fewer cards in your score pile than in mine, you lose!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "Exchange all cards in your hand with two cards in your score pile."
+      }
+    ]
+  },
+  {
+    "code": "Z003",
+    "title": "SKINNING",
+    "color": "YELLOW",
+    "age": 0,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "FOOD",
+      "bottom_right": "FOOD"
+    },
+    "effects": [
+      {
+        "featured_icon": "FOOD",
+        "kind": "non-demand",
+        "text": "Score a card with a {[FOOD]} on your board. If you do, meld a card from your hand for each {[FOOD]} on the scored card."
+      }
+    ]
+  },
+  {
+    "code": "Z004",
+    "title": "FISHING",
+    "color": "GREEN",
+    "age": 0,
+    "icons": {
+      "top_left": "FOOD",
+      "bottom_left": null,
+      "bottom_center": "FOOD",
+      "bottom_right": "PROSPERITY"
+    },
+    "effects": [
+      {
+        "featured_icon": "FOOD",
+        "kind": "non-demand",
+        "text": "Draw and meld a [0]. Reveal all hands and transfer all revealed cards of the drawn card's color to your hand, and if you draw Fresh Water, draw a [1]. If you have three cards of any one color in your hand, draw a [2]."
+      }
+    ]
+  },
+  {
+    "code": "Z005",
+    "title": "FORAGING",
+    "color": "GREEN",
+    "age": 0,
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "HEALTH",
+      "bottom_right": "FOOD"
+    },
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Draw a [0]. If it has no {[FOOD]}, you may reveal it, score it, and draw a [0]."
+      }
+    ]
+  },
+  {
+    "code": "Z006",
+    "title": "HUNTING",
+    "color": "GREEN",
+    "age": 0,
+    "icons": {
+      "top_left": "FOOD",
+      "bottom_left": "FOOD",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "effects": [
+      {
+        "featured_icon": "FOOD",
+        "kind": "demand",
+        "text": "I DEMAND you draw and reveal two [0]! Transfer the card of my choice to my board!"
+      }
+    ]
+  },
+  {
+    "code": "Z007",
+    "title": "FIRE",
+    "color": "RED",
+    "age": 0,
+    "icons": {
+      "top_left": "FOOD",
+      "bottom_left": "CONCEPT",
+      "bottom_center": "FOOD",
+      "bottom_right": null
+    },
+    "effects": [
+      {
+        "featured_icon": "FOOD",
+        "kind": "demand",
+        "text": "I DEMAND you reveal a card in your hand of color not on my board or of value greater than 0! If you don't, you lose!"
+      },
+      {
+        "featured_icon": "FOOD",
+        "kind": "non-demand",
+        "text": "Meld a card from your hand of color on your board. If you don't, you lose."
+      }
+    ]
+  },
+  {
+    "code": "Z008",
+    "title": "STONE KNIVES",
+    "color": "RED",
+    "age": 0,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "AUTHORITY",
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "AUTHORITY"
+    },
+    "effects": [
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "demand",
+        "text": "I DEMAND you draw, reveal, and return a [0]! Transfer your top card of the color of the revealed card to my board!"
+      },
+      {
+        "featured_icon": "AUTHORITY",
+        "kind": "non-demand",
+        "text": "If Skinning is a top card on your board, draw a [1]."
+      }
+    ]
+  },
+  {
+    "code": "Z009",
+    "title": "TRAPPING",
+    "color": "RED",
+    "age": 0,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "FOOD",
+      "bottom_center": "FOOD",
+      "bottom_right": "HEALTH"
+    },
+    "effects": [
+      {
+        "featured_icon": "FOOD",
+        "kind": "demand",
+        "text": "I DEMAND you reveal your hand and all cards in my score pile! Transfer all cards in your hand of the colors of the cards in my score pile to my hand!"
+      }
+    ]
+  },
+  {
+    "code": "Z010",
+    "title": "SPEAK WITH BIRD",
+    "color": "PURPLE",
+    "age": 0,
+    "icons": {
+      "top_left": null,
+      "bottom_left": "HEALTH",
+      "bottom_center": "HEALTH",
+      "bottom_right": "AUTHORITY"
+    },
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "If you have five top cards of value 0 on your board, you win."
+      }
+    ]
+  },
+  {
+    "code": "Z011",
+    "title": "TANNING",
+    "color": "PURPLE",
+    "age": 0,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": "PROSPERITY",
+      "bottom_center": null,
+      "bottom_right": "AUTHORITY"
+    },
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Score two cards from your hand."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Transfer a card from your score pile to another player's board. If you do, meld that player's bottom card of the transferred card's color."
+      }
+    ]
+  },
+  {
+    "code": "Z012",
+    "title": "TRACKING",
+    "color": "PURPLE",
+    "age": 0,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "PROSPERITY",
+      "bottom_right": "FOOD"
+    },
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Draw two [0]. Return one of them."
+      }
+    ]
+  },
+  {
+    "code": "Z013",
+    "title": "CURING",
+    "color": "BLUE",
+    "age": 0,
+    "icons": {
+      "top_left": "PROSPERITY",
+      "bottom_left": null,
+      "bottom_center": "FOOD",
+      "bottom_right": "PROSPERITY"
+    },
+    "effects": [
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "Score another top card with a {[FOOD]} on your board. If you don't, you lose."
+      },
+      {
+        "featured_icon": "PROSPERITY",
+        "kind": "non-demand",
+        "text": "You may exchange all cards in your hand with all the highest cards in an opponent's score pile."
+      }
+    ]
+  },
+  {
+    "code": "Z014",
+    "title": "FIRST AID",
+    "color": "BLUE",
+    "age": 0,
+    "icons": {
+      "top_left": "CONCEPT",
+      "bottom_left": "HEALTH",
+      "bottom_center": null,
+      "bottom_right": "HEALTH"
+    },
+    "effects": [
+      {
+        "featured_icon": "HEALTH",
+        "kind": "non-demand",
+        "text": "Return a top card from your board. Draw a [0]. Reveal your hand. If you have exactly one card in your hand of the color of the returned card, meld it. Otherwise, you lose."
+      }
+    ]
+  },
+  {
+    "code": "Z015",
+    "title": "KNOTS",
+    "color": "BLUE",
+    "age": 0,
+    "icons": {
+      "top_left": "HEALTH",
+      "bottom_left": null,
+      "bottom_center": "CONCEPT",
+      "bottom_right": "CONCEPT"
+    },
+    "effects": [
+      {
+        "featured_icon": "CONCEPT",
+        "kind": "non-demand",
+        "text": "Reveal a card in your score pile of a color on your board. If you do, draw a [1]."
+      }
+    ]
+  }
+]

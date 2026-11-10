@@ -246,12 +246,12 @@ fn expansion_shuffles_follow_base_then_echoes_cities_figures_in_ascending_ages()
                             .filter(|m| m.value == age)
                             .map(|m| m.code)
                             .collect(),
-                        CardSet::Cities => CITY_METADATA
+                        CardSet::Cities => CITIES_METADATA
                             .iter()
                             .filter(|m| m.value == age)
                             .map(|m| m.code)
                             .collect(),
-                        CardSet::Figures => FIGURE_METADATA
+                        CardSet::Figures => FIGURES_METADATA
                             .iter()
                             .filter(|m| m.value == age)
                             .map(|m| m.code)

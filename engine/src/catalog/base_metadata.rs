@@ -1,5 +1,4 @@
-// Generated metadata; do not edit by hand.
-// JSON null marks the Base card image, not a blank symbol.
+// Generated from data/base.json by scripts/card_metadata.py; do not edit by hand.
 use super::CardMetadata;
 use crate::model::{CardSet, Color, Icon, Symbol};
 

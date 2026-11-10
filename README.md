@@ -27,7 +27,7 @@ pixi run build-windows   # cross-build inari.exe (from Linux or WSL)
 
 ## License
 
-The code is [MIT](LICENSE) licensed. Card texts (`data/`, the engine's
-catalogs and `engine/reference/`) are © Asmadi Games and are not covered by
+The code is [MIT](LICENSE) licensed. Card texts (`data/` and the engine's
+catalogs) are © Asmadi Games and are not covered by
 that license; this project is not affiliated with or endorsed by Asmadi Games.
 The fonts in `app/assets/fonts/` are under the SIL Open Font License.

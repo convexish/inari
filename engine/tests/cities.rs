@@ -622,7 +622,7 @@ fn a_cities_deal_keeps_the_base_deal_and_shuffles_cities_like_production() {
             shuffle(&mut rng, deck);
         }
         for age in 1..=11u8 {
-            let mut codes: Vec<&str> = CITY_METADATA
+            let mut codes: Vec<&str> = CITIES_METADATA
                 .iter()
                 .filter(|m| m.value == age)
                 .map(|m| m.code)

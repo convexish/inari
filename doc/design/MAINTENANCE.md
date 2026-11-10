@@ -10,13 +10,14 @@ architectural contracts.
 | Set | Reference | Catalog |
 |---|---|---|
 | Base / Figures / Age 0 | [Architecture](ARCHITECTURE.md) | `engine/src/catalog/{base,figures,age_zero}.rs` |
-| Cities | [Cities](EXPANSIONS.md#cities) | `engine/src/catalog/city_metadata.rs` |
+| Cities | [Cities](EXPANSIONS.md#cities) | `engine/src/catalog/cities_metadata.rs` |
 | Echoes | [Echoes](EXPANSIONS.md#echoes) | `engine/src/catalog/echoes.rs` |
 | Artifacts | [Artifacts](EXPANSIONS.md#artifacts), [Martian Internet](EXPANSIONS.md#martian-internet) | `engine/src/catalog/artifacts.rs` |
 | Unseen | [Unseen](EXPANSIONS.md#unseen) | `engine/src/catalog/unseen.rs` |
 
-`data/` holds card text and symbols; the `*_metadata.rs` tables are generated
-from it.
+`data/` holds every set's card text and symbols in one schema
+([data/README.md](../../data/README.md)). `pixi run metadata` generates the
+`*_metadata.rs` tables from it; edit the data, never the tables.
 
 ## Architecture rules
 

@@ -2,7 +2,7 @@
 //! A Would clause's program starts with the event's card bound and, for a
 //! Dogma, the featured icon (or for a splay, the color) chosen; in it,
 //! `Demander` names the player whose operation triggered it.
-use super::{CardMetadata, FIGURE_METADATA};
+use super::{CardMetadata, FIGURES_METADATA};
 use crate::Decree::{self, Advancement, Expansion, Rivalry, Trade, War};
 use crate::model::{Card, Error, Figure};
 use crate::program::build::*;
@@ -2370,11 +2370,40 @@ impl Figure {
     }
 }
 
+/// A Figure's public name, for choices that name one.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct FigureName {
+    pub code: &'static str,
+    pub title: &'static str,
+    pub age: u8,
+}
+
+/// Every printed Figure's name. The roster never depends on where the cards
+/// are or on belief.
+pub static FIGURE_NAMES: [FigureName; 115] = {
+    let printed = FIGURES_METADATA;
+    let mut names = [FigureName {
+        code: "",
+        title: "",
+        age: 0,
+    }; 115];
+    let mut i = 0;
+    while i < names.len() {
+        names[i] = FigureName {
+            code: printed[i].code,
+            title: printed[i].title,
+            age: printed[i].value,
+        };
+        i += 1;
+    }
+    names
+};
+
 pub fn figure_metadata(code: &str) -> Option<&'static CardMetadata> {
-    FIGURE_METADATA
+    FIGURES_METADATA
         .binary_search_by_key(&code, |metadata| metadata.code)
         .ok()
-        .map(|index| &FIGURE_METADATA[index])
+        .map(|index| &FIGURES_METADATA[index])
 }
 
 /// Construct a declared Figure; physical metadata alone is insufficient.

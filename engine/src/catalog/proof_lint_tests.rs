@@ -104,7 +104,7 @@ fn programs() -> Vec<(String, &'static [Instruction])> {
     for m in UNSEEN_METADATA {
         card(unseen_card(m.code).unwrap());
     }
-    for m in FIGURE_METADATA {
+    for m in FIGURES_METADATA {
         card(figure_card(m.code).unwrap());
     }
     for m in AGE_ZERO_METADATA {

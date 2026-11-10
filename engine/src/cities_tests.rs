@@ -68,13 +68,13 @@ fn cities(layout: Layout) -> Position {
 
 #[test]
 fn catalog_matches_the_audited_census() {
-    assert_eq!(CITY_METADATA.len(), 115);
+    assert_eq!(CITIES_METADATA.len(), 115);
     let mut ages = [0; 12];
     let mut kinds = std::collections::BTreeMap::new();
     let mut bonuses = [0; 4];
     let mut bonus_values = std::collections::BTreeSet::new();
     let mut without_city_icons = 0;
-    for metadata in &CITY_METADATA {
+    for metadata in &CITIES_METADATA {
         ages[usize::from(metadata.value)] += 1;
         // Every City image is at top-right, and only there.
         assert_eq!(metadata.symbols[5], Symbol::Image, "{}", metadata.code);
@@ -127,7 +127,7 @@ fn catalog_matches_the_audited_census() {
 #[test]
 fn cities_have_reserved_identities_and_backs_and_no_dogma() {
     let mut seen = std::collections::BTreeSet::new();
-    for metadata in &CITY_METADATA {
+    for metadata in &CITIES_METADATA {
         let card = city_card(metadata.code).unwrap();
         let id = card.stable_id().unwrap().0;
         assert!((230..345).contains(&id) && seen.insert(id), "{}", card.code);

@@ -17,7 +17,6 @@ mod decrees;
 #[cfg(test)]
 mod echoes_tests;
 mod execution;
-mod figure_names;
 mod model;
 pub mod net;
 pub mod observation;
@@ -38,7 +37,6 @@ pub use achievements::*;
 pub use catalog::*;
 pub use decrees::*;
 pub use execution::*;
-pub use figure_names::*;
 pub use model::*;
 pub use net::Net;
 pub use observation::Observation;

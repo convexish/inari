@@ -9,21 +9,23 @@ use crate::model::{
 };
 
 mod age_zero;
+mod age_zero_metadata;
+pub use age_zero_metadata::AGE_ZERO_METADATA;
 mod artifacts;
 mod artifacts_metadata;
 pub use artifacts_metadata::ARTIFACTS_METADATA;
 mod base;
 mod base_metadata;
 pub use base_metadata::BASE_METADATA;
-mod city_metadata;
-pub use city_metadata::CITY_METADATA;
+mod cities_metadata;
+pub use cities_metadata::CITIES_METADATA;
 mod echoes;
 mod echoes_metadata;
 pub use echoes_metadata::ECHOES_METADATA;
-mod figure_metadata;
 mod figures;
-pub use figure_metadata::{AGE_ZERO_METADATA, FIGURE_METADATA};
-pub use figures::{figure_card, figure_metadata};
+mod figures_metadata;
+pub use figures::{FIGURE_NAMES, FigureName, figure_card, figure_metadata};
+pub use figures_metadata::FIGURES_METADATA;
 #[cfg(test)]
 mod proof_lint_tests;
 mod unseen;
@@ -52,10 +54,10 @@ pub struct CityMetadata {
 }
 
 pub fn city_metadata(code: &str) -> Option<&'static CityMetadata> {
-    CITY_METADATA
+    CITIES_METADATA
         .binary_search_by_key(&code, |metadata| metadata.code)
         .ok()
-        .map(|index| &CITY_METADATA[index])
+        .map(|index| &CITIES_METADATA[index])
 }
 
 /// A City card. Its icons are rules, not effects: it can never be a Dogma

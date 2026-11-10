@@ -5,8 +5,8 @@ covered by the [architecture](ARCHITECTURE.md).
 
 ## Cities
 
-- Card data: `data/cities.json`; metadata `engine/src/catalog/city_metadata.rs`
-  is generated from it.
+- Card data: `data/cities.json`; metadata
+  `engine/src/catalog/cities_metadata.rs` is generated from it.
 - Mechanics: `engine/src/execution/cities.rs` (City draws, event claims,
   Meld-action icons, Search, endorsement).
 - Tests: `engine/tests/cities.rs`, `cities_meld.rs`, `cities_dogma.rs`,

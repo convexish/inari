@@ -20,7 +20,7 @@ fn catalog_cards(expansions: Expansions) -> Result<Vec<Card>, Error> {
     let base = BASE_METADATA
         .iter()
         .map(|metadata| base_card(metadata.code));
-    let figures = FIGURE_METADATA
+    let figures = FIGURES_METADATA
         .iter()
         .map(|metadata| figure_card(metadata.code))
         .chain(
@@ -29,7 +29,7 @@ fn catalog_cards(expansions: Expansions) -> Result<Vec<Card>, Error> {
                 .map(|metadata| age_zero_card(metadata.code)),
         )
         .filter(|_| expansions.figures());
-    let cities = CITY_METADATA
+    let cities = CITIES_METADATA
         .iter()
         .map(|metadata| city_card(metadata.code))
         .filter(|_| expansions.cities());
