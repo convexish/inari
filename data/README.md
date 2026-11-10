@@ -17,7 +17,6 @@ set shares one schema and leaves out the fields it never prints. Age 0 cards
 | `echoes` | Echo effects: `slot` and `text` (Echoes). |
 | `effects` | Dogma effects in printed order: `featured_icon`, `kind` (`non-demand`, `demand` or `compel`) and `text`. |
 | `karmas` | A Figure's karmas in printed order: `kind` (`would`, `when`, `each` or `decree`), `reaction` (`first` or `instead` for `would`) and `text`. |
-| `appendix` | A clarifying note on the card, where the source data has one (Figures). |
 | `image_slot` | The slot holding the art, where more than one slot prints nothing (Battleship Yamato). |
 | `variant` | Marks text that follows a project ruling instead of the printed card. |
 
