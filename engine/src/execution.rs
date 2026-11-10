@@ -5104,8 +5104,8 @@ mod layout_tests {
             size_of::<Game>(),
             size_of::<Game>()
         );
-        // An explicit review gate for new continuation payloads, not proof of
-        // Base replay parity or heap allocation/clone cost.
+        // An explicit review gate for new continuation payloads, not a
+        // measure of heap allocation or clone cost.
         #[cfg(target_pointer_width = "64")]
         assert!(
             size_of::<Frame>() <= 56,

@@ -253,4 +253,4 @@ enabled tokens over 20 reserved slots.
 `Game::observe(viewer)` encodes the frozen
 [observation contract](../doc/design/OBSERVATION.md) (header 101, revision 7): scalars, belief-weighted
 card tokens and one option row per legal step, laid out for all six sets.
-Revision 5 fills Echoes Forecast ownership, foreign beliefs and structured retained context. It reads only the viewer's information; tests require a determinized world to encode identically for its sampling viewer across all 32 expansion combinations. Private historical scalar/control state is hidden and refuses sampling when it cannot be proved public; that conservative boundary is tested explicitly.
+It covers Echoes Forecast ownership, foreign beliefs and structured retained context, and reads only the viewer's information; tests require a determinized world to encode identically for its sampling viewer across all 32 expansion combinations. Private historical scalar/control state is hidden and refuses sampling when it cannot be proved public; that conservative boundary is tested explicitly.

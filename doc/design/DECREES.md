@@ -1,4 +1,4 @@
-# Decree effect source review
+# Decree effects and their sources
 
 Primary sources reviewed:
 

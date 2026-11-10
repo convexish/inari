@@ -43,8 +43,8 @@ fn kalashnikov_scores_foreign_red_then_resumes_original_meld_once() {
 fn kalashnikov_self_execution_keeps_owner_controller_and_suppression_across_choices() {
     let mut f = Fixture::default();
     let kalashnikov = f.figure(Figure::Kalashnikov, Zone::Board(A, Color::Red));
-    // Synthetic non-demand program exercises the same choice boundary as
-    // Fission's foreign self-execution without claiming a complete Base port.
+    // A synthetic non-demand program exercises the same choice boundary as
+    // Fission's foreign self-execution.
     let red = f.tech(
         Color::Red,
         9,

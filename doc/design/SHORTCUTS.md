@@ -58,7 +58,7 @@ action (`SWEEP_GAMES` raises the count). The ignored diagnostic
 `batch_menus_without_shortcuts_in_random_play` lists unannotated batches that
 still asked for an order.
 
-## Card-port checklist
+## New-card checklist
 
 1. Pick the kind whose equivalence (or policy) holds for the whole phase, or
    an alias over a public condition.

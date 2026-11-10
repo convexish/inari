@@ -9,7 +9,7 @@ architectural contracts.
 
 | Set | Reference | Catalog |
 |---|---|---|
-| Base / Figures / Age 0 | [Architecture](ARCHITECTURE.md) | `engine/src/catalog/{base,figures,age_zero}.rs` |
+| Base / Figures / Age 0 | [Architecture](ARCHITECTURE.md), [Decrees](DECREES.md) | `engine/src/catalog/{base,figures,age_zero}.rs` |
 | Cities | [Cities](EXPANSIONS.md#cities) | `engine/src/catalog/cities_metadata.rs` |
 | Echoes | [Echoes](EXPANSIONS.md#echoes) | `engine/src/catalog/echoes.rs` |
 | Artifacts | [Artifacts](EXPANSIONS.md#artifacts), [Martian Internet](EXPANSIONS.md#martian-internet) | `engine/src/catalog/artifacts.rs` |
@@ -42,7 +42,7 @@ architectural contracts.
 1. Add a focused expected-outcome scenario that reproduces the defect.
 2. Fix the shared boundary, checking other callers and expansions. Preserve
    stable IDs, replay/RNG and card conservation.
-3. Review choices against the [shortcut checklist](SHORTCUTS.md#card-port-checklist).
+3. Review choices against the [shortcut checklist](SHORTCUTS.md#new-card-checklist).
    Reveal what proves a hidden pick; a sampling refusal usually means a missing reveal, not a sampler bug.
 4. Check tracking, observation, search, replay and app presentation. An
    incompatible observation change needs a new revision.
