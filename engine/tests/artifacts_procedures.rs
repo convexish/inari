@@ -51,26 +51,6 @@ fn non_demand(instructions: Vec<Instruction>) -> Effect {
     }
 }
 
-fn no_decisions(game: &mut Game) -> (Status, Vec<Event>) {
-    play(game, |_| None)
-}
-
-fn moves(events: &[Event]) -> Vec<(Option<Verb>, CardId, Zone, Zone)> {
-    events
-        .iter()
-        .filter_map(|event| match *event {
-            Event::Moved(Movement {
-                verb,
-                card,
-                source,
-                destination,
-                ..
-            }) => Some((verb, card, source, destination)),
-            _ => None,
-        })
-        .collect()
-}
-
 fn option_index(decision: &Decision, pick: impl Fn(&Alternative) -> bool) -> Option<usize> {
     decision.options.iter().position(pick)
 }

@@ -1,14 +1,13 @@
 //! Age 10 Artifacts (A096-A105): expected outcomes on explicit positions.
-use super::*;
+use inno_engine::*;
+
+mod common;
+use common::*;
 
 const HAND_A: Zone = Zone::Hand(A);
 const HAND_B: Zone = Zone::Hand(B);
 const SCORE_A: Zone = Zone::Score(A);
 const SCORE_B: Zone = Zone::Score(B);
-
-fn base_deck(age: u8) -> Zone {
-    Zone::Deck(Deck::base(age))
-}
 
 fn artifact_deck(age: u8) -> Zone {
     Zone::Deck(Deck {
@@ -17,40 +16,31 @@ fn artifact_deck(age: u8) -> Zone {
     })
 }
 
-fn board(player: Player, color: Color) -> Zone {
-    Zone::Board(player, color)
-}
-
-fn sharing_icons(code: &str) -> [Icon; 3] {
-    [Card::from_code(code).unwrap().featured.unwrap(); 3]
-}
-
 fn any(game: &mut Game) -> (Status, Vec<Event>) {
     play(game, |_| Some(0))
 }
 
-/// The layout's game with these piles already splayed.
-fn splayed(l: Layout, splays: &[(Player, Color, Splay)]) -> Game {
-    let mut position = Position::new(l.cards, &l.placements, A).unwrap();
+/// The fixture's game with these piles already splayed.
+fn splayed(f: Fixture, splays: &[(Player, Color, Splay)]) -> Game {
+    let mut position = f.position();
     for &(player, color, direction) in splays {
-        position.players[player.index()].splays[color as usize] = direction;
+        position = position.with_splay(player, color, direction).unwrap();
     }
-    position.refresh_boards();
     Game::new(position, Expansions::ARTIFACTS).unwrap()
 }
 
 #[test]
 fn tanker_exxon_valdez_eliminates_the_victim() {
-    let mut l = Layout::default();
-    let tanker = l.artifact("A096", board(A, Color::Red));
-    l.tech(
+    let mut f = Fixture::default();
+    let tanker = f.card("A096", board(A, Color::Red));
+    f.plain(
         Color::Blue,
         3,
         board(B, Color::Blue),
         &sharing_icons("A096"),
     );
-    l.tech(Color::Green, 2, HAND_B, &[]);
-    let mut game = l.game();
+    f.plain(Color::Green, 2, HAND_B, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, tanker);
     let (status, _) = any(&mut game);
     assert_eq!(status, Status::Winner(A));
@@ -62,24 +52,24 @@ fn tanker_exxon_valdez_eliminates_the_victim() {
 
 #[test]
 fn maldives_keeps_two_of_each_for_the_victim_and_four_scored_for_the_owner() {
-    let mut l = Layout::default();
-    let maldives = l.artifact("A097", board(A, Color::Red));
-    l.tech(
+    let mut f = Fixture::default();
+    let maldives = f.card("A097", board(A, Color::Red));
+    f.plain(
         Color::Blue,
         3,
         board(B, Color::Blue),
         &sharing_icons("A097"),
     );
     for value in 1..=4 {
-        l.tech(Color::Green, value, HAND_B, &[]);
+        f.plain(Color::Green, value, HAND_B, &[]);
     }
     for value in 1..=3 {
-        l.tech(Color::Yellow, value, SCORE_B, &[]);
+        f.plain(Color::Yellow, value, SCORE_B, &[]);
     }
     for value in 1..=6 {
-        l.tech(Color::Purple, value, SCORE_A, &[]);
+        f.plain(Color::Purple, value, SCORE_A, &[]);
     }
-    let mut game = l.game();
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, maldives);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -96,13 +86,13 @@ fn maldives_keeps_two_of_each_for_the_victim_and_four_scored_for_the_owner() {
 #[test]
 fn dolly_the_sheep_wins_on_domestication_or_melds_the_highest_then_draws_an_eleven() {
     // Domestication at the bottom of yellow: declining both options still wins.
-    let mut l = Layout::default();
-    let dolly = l.artifact("A098", board(A, Color::Yellow));
-    l.cards[usize::from(dolly.0)].effects.truncate(1);
-    let domestication = l.base("B005", board(A, Color::Yellow));
-    l.placements.swap(0, 1);
-    l.tech(Color::Blue, 1, base_deck(1), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let dolly = f.card("A098", board(A, Color::Yellow));
+    f.cards[usize::from(dolly.0)].effects.truncate(1);
+    let domestication = f.card("B005", board(A, Color::Yellow));
+    f.placements.swap(0, 1);
+    f.plain(Color::Blue, 1, base_deck(1), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     assert_eq!(
         game.position().cards(board(A, Color::Yellow))[0],
         domestication
@@ -117,13 +107,13 @@ fn dolly_the_sheep_wins_on_domestication_or_melds_the_highest_then_draws_an_elev
     assert_eq!(status, Status::Winner(A));
 
     // Otherwise the highest hand card melds and an 11 is drawn.
-    let mut l = Layout::default();
-    let dolly = l.artifact("A098", board(A, Color::Yellow));
-    l.cards[usize::from(dolly.0)].effects.truncate(1);
-    let low = l.tech(Color::Blue, 3, HAND_A, &[]);
-    let high = l.tech(Color::Green, 5, HAND_A, &[]);
-    let eleven = l.tech(Color::Red, 11, base_deck(11), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let dolly = f.card("A098", board(A, Color::Yellow));
+    f.cards[usize::from(dolly.0)].effects.truncate(1);
+    let low = f.plain(Color::Blue, 3, HAND_A, &[]);
+    let high = f.plain(Color::Green, 5, HAND_A, &[]);
+    let eleven = f.plain(Color::Red, 11, base_deck(11), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, dolly);
     let (status, events) = play(&mut game, |decision| {
         decision
@@ -142,12 +132,12 @@ fn dolly_the_sheep_wins_on_domestication_or_melds_the_highest_then_draws_an_elev
     assert_eq!(game.position().cards(HAND_A), &[low, eleven]);
 
     // The second effect junks every available achievement.
-    let mut l = Layout::default();
-    let dolly = l.artifact("A098", board(A, Color::Yellow));
-    l.cards[usize::from(dolly.0)].effects.remove(0);
-    let one = l.tech(Color::Blue, 1, Zone::AvailableAchievements, &[]);
-    let two = l.tech(Color::Blue, 2, Zone::AvailableAchievements, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let dolly = f.card("A098", board(A, Color::Yellow));
+    f.cards[usize::from(dolly.0)].effects.remove(0);
+    let one = f.plain(Color::Blue, 1, Zone::AvailableAchievements, &[]);
+    let two = f.plain(Color::Blue, 2, Zone::AvailableAchievements, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, dolly);
     let (status, _) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -162,9 +152,9 @@ fn dolly_the_sheep_wins_on_domestication_or_melds_the_highest_then_draws_an_elev
 
 #[test]
 fn wheres_waldo_wins() {
-    let mut l = Layout::default();
-    let waldo = l.artifact("A099", board(A, Color::Yellow));
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let waldo = f.card("A099", board(A, Color::Yellow));
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, waldo);
     let (status, _) = any(&mut game);
     assert_eq!(status, Status::Winner(A));
@@ -173,22 +163,22 @@ fn wheres_waldo_wins() {
 #[test]
 fn musks_tesla_roadster_wins_on_most_scored_cards_or_scores_the_drawn_color() {
     // Tied most qualifies.
-    let mut l = Layout::default();
-    let roadster = l.artifact("A100", board(A, Color::Green));
-    l.tech(Color::Blue, 1, SCORE_A, &[]);
-    l.tech(Color::Blue, 1, SCORE_B, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let roadster = f.card("A100", board(A, Color::Green));
+    f.plain(Color::Blue, 1, SCORE_A, &[]);
+    f.plain(Color::Blue, 1, SCORE_B, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, roadster);
     assert_eq!(any(&mut game).0, Status::Winner(A));
 
     // Fewer scored cards: the drawn color's board cards score, the draw returns.
-    let mut l = Layout::default();
-    let roadster = l.artifact("A100", board(A, Color::Green));
-    l.tech(Color::Blue, 1, SCORE_B, &[]);
-    let red_low = l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    let red_top = l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    let drawn = l.tech(Color::Red, 11, base_deck(11), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let roadster = f.card("A100", board(A, Color::Green));
+    f.plain(Color::Blue, 1, SCORE_B, &[]);
+    let red_low = f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    let red_top = f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    let drawn = f.plain(Color::Red, 11, base_deck(11), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, roadster);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -201,11 +191,11 @@ fn musks_tesla_roadster_wins_on_most_scored_cards_or_scores_the_drawn_color() {
     assert_eq!(moved[3], (Some(Verb::Return), drawn, HAND_A, base_deck(11)));
 
     // Nothing of that color on the board: the draw melds instead.
-    let mut l = Layout::default();
-    let roadster = l.artifact("A100", board(A, Color::Green));
-    l.tech(Color::Blue, 1, SCORE_B, &[]);
-    let drawn = l.tech(Color::Purple, 11, base_deck(11), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let roadster = f.card("A100", board(A, Color::Green));
+    f.plain(Color::Blue, 1, SCORE_B, &[]);
+    let drawn = f.plain(Color::Purple, 11, base_deck(11), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, roadster);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -218,27 +208,27 @@ fn musks_tesla_roadster_wins_on_most_scored_cards_or_scores_the_drawn_color() {
 #[test]
 fn seikan_tunnel_wins_with_the_most_visible_cards_in_a_color_including_ties() {
     // A's splayed-up red shows two; B's unsplayed stack shows one.
-    let mut l = Layout::default();
-    let tunnel = l.artifact("A101", board(A, Color::Green));
-    l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    l.tech(Color::Blue, 1, board(B, Color::Blue), &[]);
-    l.tech(Color::Blue, 2, board(B, Color::Blue), &[]);
-    l.tech(Color::Blue, 3, board(B, Color::Blue), &[]);
-    let mut game = splayed(l, &[(A, Color::Red, Splay::Up)]);
+    let mut f = Fixture::default();
+    let tunnel = f.card("A101", board(A, Color::Green));
+    f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    f.plain(Color::Blue, 1, board(B, Color::Blue), &[]);
+    f.plain(Color::Blue, 2, board(B, Color::Blue), &[]);
+    f.plain(Color::Blue, 3, board(B, Color::Blue), &[]);
+    let mut game = splayed(f, &[(A, Color::Red, Splay::Up)]);
     dogma(&mut game, tunnel);
     assert_eq!(any(&mut game).0, Status::Winner(A));
 
     // B's splayed-up stack shows three: no win.
-    let mut l = Layout::default();
-    let tunnel = l.artifact("A101", board(A, Color::Green));
-    l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    l.tech(Color::Blue, 1, board(B, Color::Blue), &[]);
-    l.tech(Color::Blue, 2, board(B, Color::Blue), &[]);
-    l.tech(Color::Blue, 3, board(B, Color::Blue), &[]);
+    let mut f = Fixture::default();
+    let tunnel = f.card("A101", board(A, Color::Green));
+    f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    f.plain(Color::Blue, 1, board(B, Color::Blue), &[]);
+    f.plain(Color::Blue, 2, board(B, Color::Blue), &[]);
+    f.plain(Color::Blue, 3, board(B, Color::Blue), &[]);
     let mut game = splayed(
-        l,
+        f,
         &[(A, Color::Red, Splay::Up), (B, Color::Blue, Splay::Up)],
     );
     dogma(&mut game, tunnel);
@@ -247,12 +237,12 @@ fn seikan_tunnel_wins_with_the_most_visible_cards_in_a_color_including_ties() {
 
 #[test]
 fn rover_curiosity_draws_melds_and_self_executes_an_artifact_ten() {
-    let mut l = Layout::default();
-    let rover = l.artifact("A102", board(A, Color::Blue));
-    let waldo = l.artifact("A099", artifact_deck(10));
+    let mut f = Fixture::default();
+    let rover = f.card("A102", board(A, Color::Blue));
+    let waldo = f.card("A099", artifact_deck(10));
     // The age comes from the Base decks, as for any draw.
-    let base_ten = l.tech(Color::Red, 10, base_deck(10), &[]);
-    let mut game = l.game();
+    let base_ten = f.plain(Color::Red, 10, base_deck(10), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, rover);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Winner(A));
@@ -268,12 +258,12 @@ fn rover_curiosity_draws_melds_and_self_executes_an_artifact_ten() {
 
 #[test]
 fn higgs_boson_scores_the_whole_board() {
-    let mut l = Layout::default();
-    let higgs = l.artifact("A103", board(A, Color::Blue));
-    let red_low = l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    let red_top = l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    let green = l.tech(Color::Green, 3, board(A, Color::Green), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let higgs = f.card("A103", board(A, Color::Blue));
+    let red_low = f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    let red_top = f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    let green = f.plain(Color::Green, 3, board(A, Color::Green), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, higgs);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -291,14 +281,14 @@ fn higgs_boson_scores_the_whole_board() {
 
 #[test]
 fn delorean_junks_one_top_per_pile_and_every_hand_only_while_it_is_a_top() {
-    let mut l = Layout::default();
-    let delorean = l.artifact("A104", board(A, Color::Purple));
-    let a_red_low = l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    let a_red_top = l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    let b_blue = l.tech(Color::Blue, 3, board(B, Color::Blue), &[]);
-    let a_hand = l.tech(Color::Green, 4, HAND_A, &[]);
-    let b_hand = l.tech(Color::Yellow, 5, HAND_B, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let delorean = f.card("A104", board(A, Color::Purple));
+    let a_red_low = f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    let a_red_top = f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    let b_blue = f.plain(Color::Blue, 3, board(B, Color::Blue), &[]);
+    let a_hand = f.plain(Color::Green, 4, HAND_A, &[]);
+    let b_hand = f.plain(Color::Yellow, 5, HAND_B, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, delorean);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -314,11 +304,11 @@ fn delorean_junks_one_top_per_pile_and_every_hand_only_while_it_is_a_top() {
     assert_eq!(game.position().top(A, Color::Red), Some(a_red_low));
 
     // Covered: nothing happens.
-    let mut l = Layout::default();
-    let delorean = l.artifact("A104", board(A, Color::Purple));
-    l.tech(Color::Purple, 9, board(A, Color::Purple), &[]);
-    l.tech(Color::Green, 4, HAND_A, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let delorean = f.card("A104", board(A, Color::Purple));
+    f.plain(Color::Purple, 9, board(A, Color::Purple), &[]);
+    f.plain(Color::Green, 4, HAND_A, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     game.self_execute(delorean, Context::new(A)).unwrap();
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -329,24 +319,24 @@ fn delorean_junks_one_top_per_pile_and_every_hand_only_while_it_is_a_top() {
 fn dragons_lair_loses_on_a_single_meld_and_junks_deck_tops_otherwise() {
     // A unique-valued 5 melds, a green hand card follows: two melds, so
     // the top of every deck is junked.
-    let mut l = Layout::default();
-    let lair = l.artifact("A105", board(A, Color::Purple));
-    l.tech(
+    let mut f = Fixture::default();
+    let lair = f.card("A105", board(A, Color::Purple));
+    f.plain(
         Color::Blue,
         1,
         board(B, Color::Blue),
         &sharing_icons("A105"),
     );
-    l.tech(Color::Red, 3, SCORE_B, &[]);
-    l.tech(Color::Yellow, 3, SCORE_B, &[]);
-    let five = l.tech(Color::Green, 5, SCORE_B, &[]);
-    let green = l.tech(Color::Green, 2, HAND_B, &[]);
-    let deck_one = l.tech(Color::Blue, 1, base_deck(1), &[]);
-    let deck_one_under = l.tech(Color::Blue, 1, base_deck(1), &[]);
-    l.placements.swap(6, 7);
-    let deck_seven = l.tech(Color::Blue, 7, base_deck(7), &[]);
-    let artifact_two = l.artifact("A016", artifact_deck(2));
-    let mut game = l.game();
+    f.plain(Color::Red, 3, SCORE_B, &[]);
+    f.plain(Color::Yellow, 3, SCORE_B, &[]);
+    let five = f.plain(Color::Green, 5, SCORE_B, &[]);
+    let green = f.plain(Color::Green, 2, HAND_B, &[]);
+    let deck_one = f.plain(Color::Blue, 1, base_deck(1), &[]);
+    let deck_one_under = f.plain(Color::Blue, 1, base_deck(1), &[]);
+    f.placements.swap(6, 7);
+    let deck_seven = f.plain(Color::Blue, 7, base_deck(7), &[]);
+    let artifact_two = f.card("A016", artifact_deck(2));
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, lair);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -367,17 +357,17 @@ fn dragons_lair_loses_on_a_single_meld_and_junks_deck_tops_otherwise() {
     assert_eq!(game.position().cards(base_deck(1)), &[deck_one_under]);
 
     // No matching hand card: one meld total, the victim loses.
-    let mut l = Layout::default();
-    let lair = l.artifact("A105", board(A, Color::Purple));
-    l.tech(
+    let mut f = Fixture::default();
+    let lair = f.card("A105", board(A, Color::Purple));
+    f.plain(
         Color::Blue,
         1,
         board(B, Color::Blue),
         &sharing_icons("A105"),
     );
-    l.tech(Color::Green, 5, SCORE_B, &[]);
-    l.tech(Color::Red, 2, HAND_B, &[]);
-    let mut game = l.game();
+    f.plain(Color::Green, 5, SCORE_B, &[]);
+    f.plain(Color::Red, 2, HAND_B, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, lair);
     let (status, _) = any(&mut game);
     assert_eq!(status, Status::Winner(A));
@@ -394,26 +384,26 @@ fn dragons_lair_deck_top_snapshot_samples_by_deck_position() {
     // sweep never selects). Every card here is a [4] or more, so he never
     // fires. The frozen originals are hidden deck tops: membership is their
     // place, so each observer's world junks its own sampled tops.
-    let mut l = Layout::default();
-    let lair = l.artifact("A105", board(A, Color::Purple));
-    l.tech(
+    let mut f = Fixture::default();
+    let lair = f.card("A105", board(A, Color::Purple));
+    f.plain(
         Color::Blue,
         1,
         board(B, Color::Blue),
         &sharing_icons("A105"),
     );
-    l.figure(Figure::RodSerling, B);
-    l.tech(Color::Red, 3, SCORE_B, &[]);
-    l.tech(Color::Yellow, 3, SCORE_B, &[]);
-    l.tech(Color::Green, 5, SCORE_B, &[]);
-    l.tech(Color::Green, 4, HAND_B, &[]);
+    f.top_figure(Figure::RodSerling, B);
+    f.plain(Color::Red, 3, SCORE_B, &[]);
+    f.plain(Color::Yellow, 3, SCORE_B, &[]);
+    f.plain(Color::Green, 5, SCORE_B, &[]);
+    f.plain(Color::Green, 4, HAND_B, &[]);
     for color in [Color::Red, Color::Green, Color::Purple] {
-        l.tech(color, 4, base_deck(4), &[]);
-        l.tech(color, 5, base_deck(5), &[]);
-        l.tech(color, 7, base_deck(7), &[]);
+        f.plain(color, 4, base_deck(4), &[]);
+        f.plain(color, 5, base_deck(5), &[]);
+        f.plain(color, 7, base_deck(7), &[]);
     }
-    let mut game = l
-        .game_with(Expansions::ARTIFACTS.union(Expansions::FIGURES))
+    let mut game = f
+        .game(Expansions::ARTIFACTS.union(Expansions::FIGURES))
         .with_tracking()
         .unwrap();
     dogma(&mut game, lair);

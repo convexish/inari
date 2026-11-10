@@ -1,21 +1,12 @@
 //! Age 3 Artifacts (A026-A035): expected outcomes on explicit positions.
-use super::*;
+use inno_engine::*;
+
+mod common;
+use common::*;
 
 const HAND_A: Zone = Zone::Hand(A);
 const HAND_B: Zone = Zone::Hand(B);
 const SCORE_A: Zone = Zone::Score(A);
-
-fn base_deck(age: u8) -> Zone {
-    Zone::Deck(Deck::base(age))
-}
-
-fn board(player: Player, color: Color) -> Zone {
-    Zone::Board(player, color)
-}
-
-fn sharing_icons(code: &str) -> [Icon; 3] {
-    [Card::from_code(code).unwrap().featured.unwrap(); 3]
-}
 
 fn with_effect(mut card: Card, color: Color, instructions: Vec<Instruction>) -> Card {
     card.color = color;
@@ -28,17 +19,17 @@ fn with_effect(mut card: Card, color: Color, instructions: Vec<Instruction>) -> 
 
 #[test]
 fn excalibur_takes_a_top_card_higher_than_the_demanders_top_of_that_color() {
-    let mut l = Layout::default();
-    let excalibur = l.artifact("A026", board(A, Color::Red));
-    l.tech(Color::Blue, 2, board(A, Color::Blue), &[]);
-    let higher = l.tech(
+    let mut f = Fixture::default();
+    let excalibur = f.card("A026", board(A, Color::Red));
+    f.plain(Color::Blue, 2, board(A, Color::Blue), &[]);
+    let higher = f.plain(
         Color::Blue,
         5,
         board(B, Color::Blue),
         &sharing_icons("A026"),
     );
-    l.tech(Color::Green, 1, board(B, Color::Green), &[]); // A has no green: 1 > 0.
-    let mut game = l.game();
+    f.plain(Color::Green, 1, board(B, Color::Green), &[]); // A has no green: 1 > 0.
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, excalibur);
     let (status, events) = play(&mut game, |decision| option_moving(decision, higher));
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -55,17 +46,17 @@ fn excalibur_takes_a_top_card_higher_than_the_demanders_top_of_that_color() {
 
 #[test]
 fn mjolnir_amulet_moves_the_chosen_tops_whole_stack_to_the_demanders_score() {
-    let mut l = Layout::default();
-    let amulet = l.artifact("A027", board(A, Color::Red));
-    let under = l.tech(Color::Green, 1, board(B, Color::Green), &[]);
-    let top = l.tech(
+    let mut f = Fixture::default();
+    let amulet = f.card("A027", board(A, Color::Red));
+    let under = f.plain(Color::Green, 1, board(B, Color::Green), &[]);
+    let top = f.plain(
         Color::Green,
         4,
         board(B, Color::Green),
         &sharing_icons("A027"),
     );
-    let other = l.tech(Color::Blue, 2, board(B, Color::Blue), &[]);
-    let mut game = l.game();
+    let other = f.plain(Color::Blue, 2, board(B, Color::Blue), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, amulet);
     let (status, events) = play(&mut game, |decision| {
         assert_eq!(decision.player, B);
@@ -85,18 +76,18 @@ fn mjolnir_amulet_moves_the_chosen_tops_whole_stack_to_the_demanders_score() {
 
 #[test]
 fn moylough_belt_shrine_lets_the_demander_pick_from_the_revealed_hand() {
-    let mut l = Layout::default();
-    let shrine = l.artifact("A028", board(A, Color::Yellow));
-    l.tech(
+    let mut f = Fixture::default();
+    let shrine = f.card("A028", board(A, Color::Yellow));
+    f.plain(
         Color::Blue,
         1,
         board(B, Color::Blue),
         &sharing_icons("A028"),
     );
-    let red = l.tech(Color::Red, 3, HAND_B, &[]);
-    let green = l.tech(Color::Green, 5, HAND_B, &[]);
-    let three = l.tech(Color::Purple, 3, base_deck(3), &[]);
-    let mut game = l.game();
+    let red = f.plain(Color::Red, 3, HAND_B, &[]);
+    let green = f.plain(Color::Green, 5, HAND_B, &[]);
+    let three = f.plain(Color::Purple, 3, base_deck(3), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, shrine);
     let (status, events) = play(&mut game, |decision| {
         assert_eq!(decision.player, A);
@@ -122,11 +113,11 @@ fn moylough_belt_shrine_lets_the_demander_pick_from_the_revealed_hand() {
 
 #[test]
 fn along_the_river_tucks_yellow_scores_purple_and_repeats_on_other_colors() {
-    let mut l = Layout::default();
-    let river = l.artifact("A029", board(A, Color::Yellow));
-    let purple = l.tech(Color::Purple, 4, base_deck(4), &[]);
-    let red = l.tech(Color::Red, 4, base_deck(4), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let river = f.card("A029", board(A, Color::Yellow));
+    let purple = f.plain(Color::Purple, 4, base_deck(4), &[]);
+    let red = f.plain(Color::Red, 4, base_deck(4), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, river);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -139,10 +130,10 @@ fn along_the_river_tucks_yellow_scores_purple_and_repeats_on_other_colors() {
         ]
     );
 
-    let mut l = Layout::default();
-    let river = l.artifact("A029", board(A, Color::Yellow));
-    let yellow = l.tech(Color::Yellow, 4, base_deck(4), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let river = f.card("A029", board(A, Color::Yellow));
+    let yellow = f.plain(Color::Yellow, 4, base_deck(4), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, river);
     let (_, events) = no_decisions(&mut game);
     assert_eq!(
@@ -157,13 +148,13 @@ fn along_the_river_tucks_yellow_scores_purple_and_repeats_on_other_colors() {
 
 #[test]
 fn philosophers_stone_scores_as_many_as_the_returned_value_and_junks_their_total() {
-    let mut l = Layout::default();
-    let stone = l.artifact("A030", board(A, Color::Green));
-    let two = l.tech(Color::Red, 2, HAND_A, &[]);
-    let three = l.tech(Color::Blue, 3, HAND_A, &[]);
-    let four = l.tech(Color::Yellow, 4, HAND_A, &[]);
-    let seven = l.tech(Color::Purple, 7, base_deck(7), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let stone = f.card("A030", board(A, Color::Green));
+    let two = f.plain(Color::Red, 2, HAND_A, &[]);
+    let three = f.plain(Color::Blue, 3, HAND_A, &[]);
+    let four = f.plain(Color::Yellow, 4, HAND_A, &[]);
+    let seven = f.plain(Color::Purple, 7, base_deck(7), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, stone);
     let (status, events) = play(&mut game, |decision| {
         option_moving(decision, two)
@@ -183,12 +174,12 @@ fn philosophers_stone_scores_as_many_as_the_returned_value_and_junks_their_total
 
 #[test]
 fn ife_head_splays_an_unsplayed_color_right_then_junks_or_draws_its_count() {
-    let mut l = Layout::default();
-    let head = l.artifact("A031", board(A, Color::Green));
-    l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    let ach2 = l.tech(Color::Blue, 2, Zone::AvailableAchievements, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let head = f.card("A031", board(A, Color::Green));
+    f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    let ach2 = f.plain(Color::Blue, 2, Zone::AvailableAchievements, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, head);
     let (status, events) = play(&mut game, |decision| {
         decision
@@ -209,12 +200,12 @@ fn ife_head_splays_an_unsplayed_color_right_then_junks_or_draws_its_count() {
     );
 
     // No matching achievement: draw a card of that value instead.
-    let mut l = Layout::default();
-    let head = l.artifact("A031", board(A, Color::Green));
-    l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    let two = l.tech(Color::Blue, 2, base_deck(2), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let head = f.card("A031", board(A, Color::Green));
+    f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    let two = f.plain(Color::Blue, 2, base_deck(2), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, head);
     let (_, events) = play(&mut game, |decision| {
         decision
@@ -227,12 +218,12 @@ fn ife_head_splays_an_unsplayed_color_right_then_junks_or_draws_its_count() {
 
 #[test]
 fn dunhuang_star_chart_returns_the_hand_and_draws_the_count() {
-    let mut l = Layout::default();
-    let chart = l.artifact("A032", board(A, Color::Blue));
-    let one = l.tech(Color::Red, 1, HAND_A, &[]);
-    let four = l.tech(Color::Green, 4, HAND_A, &[]);
-    let two = l.tech(Color::Yellow, 2, base_deck(2), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let chart = f.card("A032", board(A, Color::Blue));
+    let one = f.plain(Color::Red, 1, HAND_A, &[]);
+    let four = f.plain(Color::Green, 4, HAND_A, &[]);
+    let two = f.plain(Color::Yellow, 2, base_deck(2), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, chart);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -244,12 +235,12 @@ fn dunhuang_star_chart_returns_the_hand_and_draws_the_count() {
 
 #[test]
 fn yata_no_kagami_splays_the_revealed_color_and_self_executes_a_matching_top_anywhere() {
-    let mut l = Layout::default();
-    let mirror = l.artifact("A033", board(A, Color::Blue));
-    let shown = l.tech(Color::Red, 2, HAND_A, &[]);
-    l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    let b_red = l.add(
+    let mut f = Fixture::default();
+    let mirror = f.card("A033", board(A, Color::Blue));
+    let shown = f.plain(Color::Red, 2, HAND_A, &[]);
+    f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    let b_red = f.add(
         with_effect(
             Card::from_code("B001").unwrap(),
             Color::Red,
@@ -257,8 +248,8 @@ fn yata_no_kagami_splays_the_revealed_color_and_self_executes_a_matching_top_any
         ),
         board(B, Color::Red),
     );
-    let one = l.tech(Color::Yellow, 1, base_deck(1), &[]);
-    let mut game = l.game();
+    let one = f.plain(Color::Yellow, 1, base_deck(1), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, mirror);
     let (status, events) = play(&mut game, |decision| {
         decision.options.iter().position(|o| matches!(o, Alternative::Select { target: TargetDescriptor::Known { card, .. } } if *card == b_red))
@@ -283,15 +274,15 @@ fn necronomicon_branches_on_the_revealed_color() {
         (Color::Purple, "nothing"),
     ];
     for (color, what) in cases {
-        let mut l = Layout::default();
-        let book = l.artifact("A034", board(A, Color::Purple));
-        let hand = l.tech(Color::Red, 1, HAND_A, &[]);
-        let scored = l.tech(Color::Red, 2, SCORE_A, &[]);
-        l.tech(Color::Green, 1, board(A, Color::Green), &[]);
-        l.tech(Color::Green, 2, board(A, Color::Green), &[]);
-        let drawn = l.tech(color, 3, base_deck(3), &[]);
-        let nine = l.tech(Color::Red, 9, base_deck(9), &[]);
-        let mut game = l.game();
+        let mut f = Fixture::default();
+        let book = f.card("A034", board(A, Color::Purple));
+        let hand = f.plain(Color::Red, 1, HAND_A, &[]);
+        let scored = f.plain(Color::Red, 2, SCORE_A, &[]);
+        f.plain(Color::Green, 1, board(A, Color::Green), &[]);
+        f.plain(Color::Green, 2, board(A, Color::Green), &[]);
+        let drawn = f.plain(color, 3, base_deck(3), &[]);
+        let nine = f.plain(Color::Red, 9, base_deck(9), &[]);
+        let mut game = f.game(Expansions::ARTIFACTS);
         let mut position = game.position().clone();
         position = position.with_splay(A, Color::Green, Splay::Left).unwrap();
         game = Game::new(position, Expansions::ARTIFACTS).unwrap();
@@ -323,13 +314,13 @@ fn necronomicon_branches_on_the_revealed_color() {
 #[test]
 fn shroud_of_turin_claims_only_after_all_three_returns() {
     for scored_color in [Color::Red, Color::Blue] {
-        let mut l = Layout::default();
-        let shroud = l.artifact("A035", board(A, Color::Purple));
-        let hand = l.tech(Color::Red, 1, HAND_A, &[]);
-        let top = l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-        let scored = l.tech(scored_color, 3, SCORE_A, &[]);
-        let ach = l.tech(Color::Green, 9, Zone::AvailableAchievements, &[]);
-        let mut game = l.game();
+        let mut f = Fixture::default();
+        let shroud = f.card("A035", board(A, Color::Purple));
+        let hand = f.plain(Color::Red, 1, HAND_A, &[]);
+        let top = f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+        let scored = f.plain(scored_color, 3, SCORE_A, &[]);
+        let ach = f.plain(Color::Green, 9, Zone::AvailableAchievements, &[]);
+        let mut game = f.game(Expansions::ARTIFACTS);
         dogma(&mut game, shroud);
         // The claim may take any available achievement, a special included.
         let (status, events) = play(&mut game, |decision| {

@@ -1,24 +1,30 @@
 //! Age 11 Artifacts (A106-A115): expected outcomes on explicit positions.
-use super::*;
+use inno_engine::*;
+
+mod common;
+use common::*;
 
 const HAND_A: Zone = Zone::Hand(A);
 const HAND_B: Zone = Zone::Hand(B);
 const SCORE_A: Zone = Zone::Score(A);
 const SCORE_B: Zone = Zone::Score(B);
 
-fn base_deck(age: u8) -> Zone {
-    Zone::Deck(Deck::base(age))
-}
-
-fn board(player: Player, color: Color) -> Zone {
-    Zone::Board(player, color)
-}
-
-fn sharing_icons(code: &str) -> [Icon; 3] {
-    [Card::from_code(code).unwrap().featured.unwrap(); 3]
-}
-
 /// A synthetic Base card with one non-demand effect.
+/// A blank Artifact.
+fn blank(color: Color, value: u8) -> Card {
+    Card {
+        code: "synthetic-artifact",
+        set: CardSet::Artifacts,
+        color,
+        value,
+        figure: None,
+        echo: None,
+        symbols: [Symbol::Blank; SLOTS],
+        featured: None,
+        effects: Vec::new(),
+    }
+}
+
 fn with_effect(mut card: Card, instructions: Vec<Instruction>) -> Card {
     card.set = CardSet::Base;
     card.code = "synthetic-base-program";
@@ -43,23 +49,16 @@ fn option_selecting(decision: &Decision, card: CardId) -> Option<usize> {
     })
 }
 
-fn pick_value(decision: &Decision, value: u8) -> Option<usize> {
-    decision
-        .options
-        .iter()
-        .position(|o| *o == Alternative::Value(value))
-}
-
 #[test]
 fn sixteen_psyche_offers_values_absent_from_the_tops_and_scores_that_deck_and_junk() {
-    let mut l = Layout::default();
-    let psyche = l.artifact("A106", board(A, Color::Red));
-    l.tech(Color::Blue, 3, board(A, Color::Blue), &[]);
-    let deck_low = l.tech(Color::Green, 5, base_deck(5), &[]);
-    let deck_top = l.tech(Color::Yellow, 5, base_deck(5), &[]);
-    let junked = l.tech(Color::Purple, 5, Zone::Junk, &[]);
-    l.tech(Color::Purple, 6, Zone::Junk, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let psyche = f.card("A106", board(A, Color::Red));
+    f.plain(Color::Blue, 3, board(A, Color::Blue), &[]);
+    let deck_low = f.plain(Color::Green, 5, base_deck(5), &[]);
+    let deck_top = f.plain(Color::Yellow, 5, base_deck(5), &[]);
+    let junked = f.plain(Color::Purple, 5, Zone::Junk, &[]);
+    f.plain(Color::Purple, 6, Zone::Junk, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, psyche);
     let mut offered = Vec::new();
     let (status, events) = play(&mut game, |decision| {
@@ -86,9 +85,9 @@ fn sixteen_psyche_offers_values_absent_from_the_tops_and_scores_that_deck_and_ju
 
 #[test]
 fn pizza_pacaya_junks_the_victims_board_then_draws_and_melds_every_value() {
-    let mut l = Layout::default();
-    let pizza = l.artifact("A107", board(A, Color::Red));
-    let b_top = l.tech(
+    let mut f = Fixture::default();
+    let pizza = f.card("A107", board(A, Color::Red));
+    let b_top = f.plain(
         Color::Blue,
         1,
         board(B, Color::Blue),
@@ -102,9 +101,9 @@ fn pizza_pacaya_junks_the_victims_board_then_draws_and_melds_every_value() {
         Color::Red,
     ];
     let drawn: Vec<_> = (1..=11)
-        .map(|value| l.tech(colors[usize::from(value) % 5], value, base_deck(value), &[]))
+        .map(|value| f.plain(colors[usize::from(value) % 5], value, base_deck(value), &[]))
         .collect();
-    let mut game = l.game();
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, pizza);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -124,19 +123,19 @@ fn pizza_pacaya_junks_the_victims_board_then_draws_and_melds_every_value() {
 
 #[test]
 fn what_does_the_fox_say_melds_both_elevens_and_executes_the_second_on_its_turn() {
-    let mut l = Layout::default();
-    let fox = l.artifact("A108", board(A, Color::Yellow));
-    let second = l.add(
+    let mut f = Fixture::default();
+    let fox = f.card("A108", board(A, Color::Yellow));
+    let second = f.add(
         with_effect(blank(Color::Blue, 11), vec![build::draw(1)]),
         base_deck(11),
     );
-    let first = l.add(
+    let first = f.add(
         with_effect(blank(Color::Green, 11), vec![build::draw(2)]),
         base_deck(11),
     );
-    let one = l.tech(Color::Red, 1, base_deck(1), &[]);
-    let two = l.tech(Color::Red, 2, base_deck(2), &[]);
-    let mut game = l.game();
+    let one = f.plain(Color::Red, 1, base_deck(1), &[]);
+    let two = f.plain(Color::Red, 2, base_deck(2), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, fox);
     let (status, events) = play(&mut game, |decision| option_moving(decision, first));
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -155,14 +154,14 @@ fn what_does_the_fox_say_melds_both_elevens_and_executes_the_second_on_its_turn(
 
 #[test]
 fn tasmanian_tiger_exchanges_a_scored_card_with_a_matching_top_and_repeats_on_two_returns() {
-    let mut l = Layout::default();
-    let tiger = l.artifact("A109", board(A, Color::Yellow));
-    let scored = l.tech(Color::Red, 3, SCORE_A, &[]);
-    let b_low = l.tech(Color::Red, 1, board(B, Color::Red), &[]);
-    let b_top = l.tech(Color::Red, 7, board(B, Color::Red), &[]);
-    let hand_one = l.tech(Color::Blue, 2, HAND_A, &[]);
-    let hand_two = l.tech(Color::Green, 4, HAND_A, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let tiger = f.card("A109", board(A, Color::Yellow));
+    let scored = f.plain(Color::Red, 3, SCORE_A, &[]);
+    let b_low = f.plain(Color::Red, 1, board(B, Color::Red), &[]);
+    let b_top = f.plain(Color::Red, 7, board(B, Color::Red), &[]);
+    let hand_one = f.plain(Color::Blue, 2, HAND_A, &[]);
+    let hand_two = f.plain(Color::Green, 4, HAND_A, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, tiger);
     let mut exchanges = 0;
     let (status, events) = play(&mut game, |decision| {
@@ -216,20 +215,20 @@ fn tasmanian_tiger_exchanges_a_scored_card_with_a_matching_top_and_repeats_on_tw
 
 #[test]
 fn greenland_returns_qualifying_tops_until_none_remain() {
-    let mut l = Layout::default();
-    let greenland = l.artifact("A110", board(A, Color::Green));
-    let b_under = l.tech(Color::Blue, 1, board(B, Color::Blue), &[Icon::Efficiency]);
+    let mut f = Fixture::default();
+    let greenland = f.card("A110", board(A, Color::Green));
+    let b_under = f.plain(Color::Blue, 1, board(B, Color::Blue), &[Icon::Efficiency]);
     let featured = Card::from_code("A110").unwrap().featured.unwrap();
-    let b_top = l.tech(
+    let b_top = f.plain(
         Color::Blue,
         2,
         board(B, Color::Blue),
         &[featured, featured, featured, Icon::Efficiency],
     );
-    let b_red = l.tech(Color::Red, 3, board(B, Color::Red), &[Icon::Efficiency]);
-    let a_under = l.tech(Color::Red, 1, board(A, Color::Red), &[Icon::Prosperity]);
-    let a_top = l.tech(Color::Red, 2, board(A, Color::Red), &[Icon::Prosperity]);
-    let mut game = l.game();
+    let b_red = f.plain(Color::Red, 3, board(B, Color::Red), &[Icon::Efficiency]);
+    let a_under = f.plain(Color::Red, 1, board(A, Color::Red), &[Icon::Prosperity]);
+    let a_top = f.plain(Color::Red, 2, board(A, Color::Red), &[Icon::Prosperity]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, greenland);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -249,12 +248,12 @@ fn greenland_returns_qualifying_tops_until_none_remain() {
 #[test]
 fn sanskrit_junks_score_piles_or_scores_every_other_color_top() {
     // Scored cards exist: they are junked and nothing else happens.
-    let mut l = Layout::default();
-    let sanskrit = l.artifact("A111", board(A, Color::Green));
-    let a_scored = l.tech(Color::Red, 3, SCORE_A, &[]);
-    let b_scored = l.tech(Color::Blue, 4, SCORE_B, &[]);
-    l.tech(Color::Yellow, 2, board(A, Color::Yellow), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let sanskrit = f.card("A111", board(A, Color::Green));
+    let a_scored = f.plain(Color::Red, 3, SCORE_A, &[]);
+    let b_scored = f.plain(Color::Blue, 4, SCORE_B, &[]);
+    f.plain(Color::Yellow, 2, board(A, Color::Yellow), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, sanskrit);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -264,12 +263,12 @@ fn sanskrit_junks_score_piles_or_scores_every_other_color_top() {
 
     // Empty score piles: each player's non-highest tops transfer to their
     // own score pile.
-    let mut l = Layout::default();
-    let sanskrit = l.artifact("A111", board(A, Color::Green));
-    let a_low = l.tech(Color::Yellow, 2, board(A, Color::Yellow), &[]);
-    let b_high = l.tech(Color::Blue, 4, board(B, Color::Blue), &[]);
-    let b_low = l.tech(Color::Red, 1, board(B, Color::Red), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let sanskrit = f.card("A111", board(A, Color::Green));
+    let a_low = f.plain(Color::Yellow, 2, board(A, Color::Yellow), &[]);
+    let b_high = f.plain(Color::Blue, 4, board(B, Color::Blue), &[]);
+    let b_low = f.plain(Color::Red, 1, board(B, Color::Red), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, sanskrit);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -291,12 +290,12 @@ fn sanskrit_junks_score_piles_or_scores_every_other_color_top() {
 
 #[test]
 fn great_barrier_reef_keeps_the_top_five_of_each_color_then_splays_aslant() {
-    let mut l = Layout::default();
-    let reef = l.artifact("A112", board(A, Color::Blue));
+    let mut f = Fixture::default();
+    let reef = f.card("A112", board(A, Color::Blue));
     let reds: Vec<_> = (1..=7)
-        .map(|value| l.tech(Color::Red, value, board(A, Color::Red), &[]))
+        .map(|value| f.plain(Color::Red, value, board(A, Color::Red), &[]))
         .collect();
-    let mut game = l.game();
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, reef);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -310,24 +309,24 @@ fn great_barrier_reef_keeps_the_top_five_of_each_color_then_splays_aslant() {
 
 #[test]
 fn martian_internet_ends_the_game_in_a_draw() {
-    let mut l = Layout::default();
-    let martian = l.artifact("A113", board(A, Color::Blue));
-    l.tech(Color::Red, 5, SCORE_A, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let martian = f.card("A113", board(A, Color::Blue));
+    f.plain(Color::Red, 5, SCORE_A, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, martian);
     assert_eq!(any(&mut game).0, Status::Draw(DrawReason::Effect));
 }
 
 #[test]
 fn jumbo_kingdom_junks_a_color_everywhere_and_scores_junk_values_under_eleven_points() {
-    let mut l = Layout::default();
-    let jumbo = l.artifact("A114", board(A, Color::Purple));
-    l.cards[usize::from(jumbo.0)].effects.truncate(1);
-    let a_red = l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    let b_red_low = l.tech(Color::Red, 1, board(B, Color::Red), &[]);
-    let b_red_top = l.tech(Color::Red, 3, board(B, Color::Red), &[]);
-    l.tech(Color::Blue, 4, board(B, Color::Blue), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let jumbo = f.card("A114", board(A, Color::Purple));
+    f.cards[usize::from(jumbo.0)].effects.truncate(1);
+    let a_red = f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    let b_red_low = f.plain(Color::Red, 1, board(B, Color::Red), &[]);
+    let b_red_top = f.plain(Color::Red, 3, board(B, Color::Red), &[]);
+    f.plain(Color::Blue, 4, board(B, Color::Blue), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, jumbo);
     let (status, events) = play(&mut game, |decision| {
         decision
@@ -344,13 +343,13 @@ fn jumbo_kingdom_junks_a_color_everywhere_and_scores_junk_values_under_eleven_po
     }
 
     // Two fives score ten points, so a second pass scores the three.
-    let mut l = Layout::default();
-    let jumbo = l.artifact("A114", board(A, Color::Purple));
-    l.cards[usize::from(jumbo.0)].effects.remove(0);
-    let five_a = l.tech(Color::Red, 5, Zone::Junk, &[]);
-    let five_b = l.tech(Color::Blue, 5, Zone::Junk, &[]);
-    let three = l.tech(Color::Green, 3, Zone::Junk, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let jumbo = f.card("A114", board(A, Color::Purple));
+    f.cards[usize::from(jumbo.0)].effects.remove(0);
+    let five_a = f.plain(Color::Red, 5, Zone::Junk, &[]);
+    let five_b = f.plain(Color::Blue, 5, Zone::Junk, &[]);
+    let three = f.plain(Color::Green, 3, Zone::Junk, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, jumbo);
     // The junk is uninspectable: the choice names a back, here an age 5.
     let (status, events) = play(&mut game, |decision| {
@@ -372,18 +371,18 @@ fn jumbo_kingdom_junks_a_color_everywhere_and_scores_junk_values_under_eleven_po
 
 #[test]
 fn oculus_quest_moves_the_victims_whole_board_to_their_hand() {
-    let mut l = Layout::default();
-    let oculus = l.artifact("A115", board(A, Color::Purple));
-    let b_top = l.tech(
+    let mut f = Fixture::default();
+    let oculus = f.card("A115", board(A, Color::Purple));
+    let b_top = f.plain(
         Color::Blue,
         2,
         board(B, Color::Blue),
         &sharing_icons("A115"),
     );
-    let b_under = l.tech(Color::Blue, 1, board(B, Color::Blue), &[]);
-    l.placements.swap(1, 2);
-    let b_red = l.tech(Color::Red, 3, board(B, Color::Red), &[]);
-    let mut game = l.game();
+    let b_under = f.plain(Color::Blue, 1, board(B, Color::Blue), &[]);
+    f.placements.swap(1, 2);
+    let b_red = f.plain(Color::Red, 3, board(B, Color::Red), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, oculus);
     let (status, events) = any(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));

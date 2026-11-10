@@ -542,3 +542,9 @@ fn zone_color(zone: Zone) -> Color {
         _ => Color::ALL[0],
     }
 }
+
+#[cfg(test)]
+use super::shortcuts;
+#[cfg(test)]
+#[path = "subgame_tests.rs"]
+mod tests;

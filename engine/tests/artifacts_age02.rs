@@ -1,28 +1,18 @@
 //! Age 2 Artifacts (A016-A025): expected outcomes on explicit positions.
-use super::*;
+use inno_engine::*;
+
+mod common;
+use common::*;
 
 const HAND_A: Zone = Zone::Hand(A);
 const HAND_B: Zone = Zone::Hand(B);
 const SCORE_A: Zone = Zone::Score(A);
-
-fn base_deck(age: u8) -> Zone {
-    Zone::Deck(Deck::base(age))
-}
 
 fn artifact_deck(age: u8) -> Zone {
     Zone::Deck(Deck {
         set: CardSet::Artifacts,
         age,
     })
-}
-
-fn board(player: Player, color: Color) -> Zone {
-    Zone::Board(player, color)
-}
-
-/// Three of the card's featured icon: enough for B to share any Artifact.
-fn sharing_icons(code: &str) -> [Icon; 3] {
-    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 fn with_effect(mut card: Card, instructions: Vec<Instruction>) -> Card {
@@ -35,17 +25,17 @@ fn with_effect(mut card: Card, instructions: Vec<Instruction>) -> Card {
 
 #[test]
 fn chronicle_of_zuo_draws_when_tied_or_behind_on_icons() {
-    let mut l = Layout::default();
-    let chronicle = l.artifact("A016", board(A, Color::Red));
+    let mut f = Fixture::default();
+    let chronicle = f.card("A016", board(A, Color::Red));
     // With Chronicle's own icons A has 1 Authority, 1 Prosperity and 4
     // Concept; B has 2 Authority and 4 Concept: least Authority, tied Concept.
-    l.tech(
+    f.plain(
         Color::Blue,
         1,
         board(A, Color::Blue),
         &[Icon::Authority, Icon::Concept, Icon::Concept],
     );
-    l.tech(
+    f.plain(
         Color::Green,
         1,
         board(B, Color::Green),
@@ -56,18 +46,18 @@ fn chronicle_of_zuo_draws_when_tied_or_behind_on_icons() {
             Icon::Concept,
         ],
     );
-    l.tech(
+    f.plain(
         Color::Purple,
         1,
         board(B, Color::Purple),
         &[Icon::Concept, Icon::Concept],
     );
     for _ in 0..2 {
-        l.tech(Color::Yellow, 3, base_deck(3), &[]);
-        l.tech(Color::Yellow, 4, base_deck(4), &[]);
+        f.plain(Color::Yellow, 3, base_deck(3), &[]);
+        f.plain(Color::Yellow, 4, base_deck(4), &[]);
     }
-    let reward = l.tech(Color::Yellow, 2, base_deck(2), &[]);
-    let mut game = l.game();
+    let reward = f.plain(Color::Yellow, 2, base_deck(2), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, chronicle);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -84,14 +74,14 @@ fn chronicle_of_zuo_draws_when_tied_or_behind_on_icons() {
 
 #[test]
 fn babylonian_chronicles_takes_a_non_red_authority_top_then_scores_a_three() {
-    let mut l = Layout::default();
-    let chronicles = l.artifact("A017", board(A, Color::Red));
-    let red = l.tech(Color::Red, 2, board(B, Color::Red), &sharing_icons("A017"));
-    let blue = l.tech(Color::Blue, 2, board(B, Color::Blue), &[Icon::Authority]);
-    let three_a = l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    let three_b = l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    l.tech(Color::Yellow, 2, base_deck(2), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let chronicles = f.card("A017", board(A, Color::Red));
+    let red = f.plain(Color::Red, 2, board(B, Color::Red), &sharing_icons("A017"));
+    let blue = f.plain(Color::Blue, 2, board(B, Color::Blue), &[Icon::Authority]);
+    let three_a = f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    let three_b = f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    f.plain(Color::Yellow, 2, base_deck(2), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, chronicles);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -118,12 +108,12 @@ fn babylonian_chronicles_takes_a_non_red_authority_top_then_scores_a_three() {
 
 #[test]
 fn holy_grail_claims_the_returned_value_ignoring_eligibility() {
-    let mut l = Layout::default();
-    let grail = l.artifact("A018", board(A, Color::Yellow));
-    let returned = l.tech(Color::Red, 4, HAND_A, &[]);
-    let ach4 = l.tech(Color::Green, 4, Zone::AvailableAchievements, &[]);
-    l.tech(Color::Green, 3, Zone::AvailableAchievements, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let grail = f.card("A018", board(A, Color::Yellow));
+    let returned = f.plain(Color::Red, 4, HAND_A, &[]);
+    let ach4 = f.plain(Color::Green, 4, Zone::AvailableAchievements, &[]);
+    f.plain(Color::Green, 3, Zone::AvailableAchievements, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, grail);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -144,12 +134,12 @@ fn holy_grail_claims_the_returned_value_ignoring_eligibility() {
 #[test]
 fn terracotta_army_junks_the_scored_value_or_tucks_itself() {
     // Score a 2 without Authority: junk the [2] deck.
-    let mut l = Layout::default();
-    let army = l.artifact("A019", board(A, Color::Yellow));
-    let plain = l.tech(Color::Red, 2, HAND_A, &[]);
-    l.tech(Color::Blue, 2, HAND_A, &[Icon::Authority]);
-    let two = l.tech(Color::Green, 2, base_deck(2), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let army = f.card("A019", board(A, Color::Yellow));
+    let plain = f.plain(Color::Red, 2, HAND_A, &[]);
+    f.plain(Color::Blue, 2, HAND_A, &[Icon::Authority]);
+    let two = f.plain(Color::Green, 2, base_deck(2), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, army);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -162,11 +152,11 @@ fn terracotta_army_junks_the_scored_value_or_tucks_itself() {
     );
 
     // Only Authority cards in hand: Terracotta Army tucks under its pile.
-    let mut l = Layout::default();
-    let under = l.tech(Color::Yellow, 1, board(A, Color::Yellow), &[]);
-    let army = l.artifact("A019", board(A, Color::Yellow));
-    l.tech(Color::Blue, 2, HAND_A, &[Icon::Authority]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let under = f.plain(Color::Yellow, 1, board(A, Color::Yellow), &[]);
+    let army = f.card("A019", board(A, Color::Yellow));
+    f.plain(Color::Blue, 2, HAND_A, &[Icon::Authority]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, army);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -185,10 +175,10 @@ fn terracotta_army_junks_the_scored_value_or_tucks_itself() {
     );
 
     // The compel returns a top without Authority.
-    let mut l = Layout::default();
-    let army = l.artifact("A019", board(A, Color::Yellow));
-    let b_top = l.tech(Color::Red, 3, board(B, Color::Red), &sharing_icons("A019"));
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let army = f.card("A019", board(A, Color::Yellow));
+    let b_top = f.plain(Color::Red, 3, board(B, Color::Red), &sharing_icons("A019"));
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, army);
     let (_, events) = no_decisions(&mut game);
     assert_eq!(
@@ -204,11 +194,11 @@ fn terracotta_army_junks_the_scored_value_or_tucks_itself() {
 
 #[test]
 fn holy_lance_takes_a_top_artifact_and_wins_with_holy_grail_on_top() {
-    let mut l = Layout::default();
-    let lance = l.artifact("A020", board(A, Color::Green));
-    let b_artifact = l.artifact("A018", board(B, Color::Yellow));
-    l.tech(Color::Red, 1, board(B, Color::Red), &sharing_icons("A020"));
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let lance = f.card("A020", board(A, Color::Green));
+    let b_artifact = f.card("A018", board(B, Color::Yellow));
+    f.plain(Color::Red, 1, board(B, Color::Red), &sharing_icons("A020"));
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, lance);
     let (status, events) = no_decisions(&mut game);
     // Holy Grail arrives on A's board as a top card: A wins.
@@ -227,13 +217,13 @@ fn holy_lance_takes_a_top_artifact_and_wins_with_holy_grail_on_top() {
 #[test]
 fn baghdad_battery_junks_both_decks_only_for_different_values() {
     for (score_value, junked) in [(5, 2), (3, 0)] {
-        let mut l = Layout::default();
-        let battery = l.artifact("A021", board(A, Color::Green));
-        let melded = l.tech(Color::Red, 3, HAND_A, &[]);
-        let scored = l.tech(Color::Blue, score_value, HAND_A, &[]);
-        l.tech(Color::Yellow, 3, base_deck(3), &[]);
-        l.tech(Color::Yellow, 5, base_deck(5), &[]);
-        let mut game = l.game();
+        let mut f = Fixture::default();
+        let battery = f.card("A021", board(A, Color::Green));
+        let melded = f.plain(Color::Red, 3, HAND_A, &[]);
+        let scored = f.plain(Color::Blue, score_value, HAND_A, &[]);
+        f.plain(Color::Yellow, 3, base_deck(3), &[]);
+        f.plain(Color::Yellow, 5, base_deck(5), &[]);
+        let mut game = f.game(Expansions::ARTIFACTS);
         dogma(&mut game, battery);
         let (status, events) = play(&mut game, |decision| {
             option_moving(decision, melded).or_else(|| option_moving(decision, scored))
@@ -254,16 +244,16 @@ fn baghdad_battery_junks_both_decks_only_for_different_values() {
 
 #[test]
 fn seikilos_epitaph_melds_the_bottom_of_the_drawn_color_and_self_executes_it() {
-    let mut l = Layout::default();
-    let epitaph = l.artifact("A022", board(A, Color::Blue));
-    let bottom = l.add(
+    let mut f = Fixture::default();
+    let epitaph = f.card("A022", board(A, Color::Blue));
+    let bottom = f.add(
         with_effect(Card::from_code("B001").unwrap(), vec![build::draw(1)]),
         board(A, Color::Red),
     );
-    l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    let drawn = l.tech(Color::Red, 3, base_deck(3), &[]);
-    let one = l.tech(Color::Yellow, 1, base_deck(1), &[]);
-    let mut game = l.game();
+    f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    let drawn = f.plain(Color::Red, 3, base_deck(3), &[]);
+    let one = f.plain(Color::Yellow, 1, base_deck(1), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, epitaph);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -286,12 +276,12 @@ fn seikilos_epitaph_melds_the_bottom_of_the_drawn_color_and_self_executes_it() {
 
 #[test]
 fn rosetta_stone_draws_two_from_the_chosen_set_melds_one_and_gives_the_other() {
-    let mut l = Layout::default();
-    let stone = l.artifact("A023", board(A, Color::Blue));
-    let first = l.tech(Color::Red, 2, base_deck(2), &[]);
-    let second = l.tech(Color::Green, 2, base_deck(2), &[]);
-    l.artifact("A016", artifact_deck(2));
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let stone = f.card("A023", board(A, Color::Blue));
+    let first = f.plain(Color::Red, 2, base_deck(2), &[]);
+    let second = f.plain(Color::Green, 2, base_deck(2), &[]);
+    f.card("A016", artifact_deck(2));
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, stone);
     let mut set_choices = 0;
     let (status, events) = play(&mut game, |decision| {
@@ -324,15 +314,15 @@ fn rosetta_stone_draws_two_from_the_chosen_set_melds_one_and_gives_the_other() {
 
 #[test]
 fn dead_sea_scrolls_draws_an_artifact_at_the_highest_top_then_junks_that_artifact_deck() {
-    let mut l = Layout::default();
-    let scrolls = l.artifact("A024", board(A, Color::Purple));
+    let mut f = Fixture::default();
+    let scrolls = f.card("A024", board(A, Color::Purple));
     // Highest top is Dead Sea Scrolls itself: a 2.
-    let left = l.artifact("A016", artifact_deck(2));
-    let drawn = l.artifact("A017", artifact_deck(2));
+    let left = f.card("A016", artifact_deck(2));
+    let drawn = f.card("A017", artifact_deck(2));
     let _ = left;
-    l.tech(Color::Yellow, 2, base_deck(2), &[]);
-    let ach4 = l.tech(Color::Green, 2, Zone::AvailableAchievements, &[]);
-    let mut game = l.game();
+    f.plain(Color::Yellow, 2, base_deck(2), &[]);
+    let ach4 = f.plain(Color::Green, 2, Zone::AvailableAchievements, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, scrolls);
     // B's empty board stands for value 0: choose 0 or the highest top value.
     let (status, events) = play(&mut game, |decision| {
@@ -360,14 +350,14 @@ fn dead_sea_scrolls_draws_an_artifact_at_the_highest_top_then_junks_that_artifac
 
 #[test]
 fn dead_sea_scrolls_junks_a_whole_artifact_deck_without_asking_its_order() {
-    let mut l = Layout::default();
-    let scrolls = l.artifact("A024", board(A, Color::Purple));
-    let bottom = l.artifact("A016", artifact_deck(2));
-    let top = l.artifact("A018", artifact_deck(2));
-    let drawn = l.artifact("A017", artifact_deck(2));
-    l.tech(Color::Yellow, 2, base_deck(2), &[]);
-    let ach = l.tech(Color::Green, 2, Zone::AvailableAchievements, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let scrolls = f.card("A024", board(A, Color::Purple));
+    let bottom = f.card("A016", artifact_deck(2));
+    let top = f.card("A018", artifact_deck(2));
+    let drawn = f.card("A017", artifact_deck(2));
+    f.plain(Color::Yellow, 2, base_deck(2), &[]);
+    let ach = f.plain(Color::Green, 2, Zone::AvailableAchievements, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, scrolls);
     // The only question is B's empty board: every junk order is the same.
     let (status, events) = play(&mut game, |decision| {
@@ -397,20 +387,20 @@ fn dead_sea_scrolls_junks_a_whole_artifact_deck_without_asking_its_order() {
 #[test]
 fn dead_sea_scrolls_still_chooses_the_set_among_same_value_achievements() {
     // Equal highest tops skip the value, not which achievement of it.
-    let mut l = Layout::default();
-    let scrolls = l.artifact("A024", board(A, Color::Purple));
-    l.artifact("A016", artifact_deck(2));
-    l.artifact("A017", artifact_deck(2));
+    let mut f = Fixture::default();
+    let scrolls = f.card("A024", board(A, Color::Purple));
+    f.card("A016", artifact_deck(2));
+    f.card("A017", artifact_deck(2));
     for age in 2..=4 {
-        l.tech(Color::Yellow, age, base_deck(age), &[]);
+        f.plain(Color::Yellow, age, base_deck(age), &[]);
     }
-    l.tech(Color::Red, 2, board(B, Color::Red), &[]);
-    l.tech(Color::Green, 2, Zone::AvailableAchievements, &[]);
-    let echo = l.add(
+    f.plain(Color::Red, 2, board(B, Color::Red), &[]);
+    f.plain(Color::Green, 2, Zone::AvailableAchievements, &[]);
+    let echo = f.add(
         Card::from_code("E016").unwrap(),
         Zone::AvailableAchievements,
     );
-    let mut game = l.game_with(Expansions::ARTIFACTS.union(Expansions::ECHOES));
+    let mut game = f.game(Expansions::ARTIFACTS.union(Expansions::ECHOES));
     dogma(&mut game, scrolls);
     let mut asked = Vec::new();
     let (status, events) = play(&mut game, |decision| {
@@ -440,17 +430,17 @@ fn dead_sea_scrolls_still_chooses_the_set_among_same_value_achievements() {
 
 #[test]
 fn dead_sea_scrolls_chooses_between_the_two_highest_top_values() {
-    let mut l = Layout::default();
-    let scrolls = l.artifact("A024", board(A, Color::Purple));
-    l.artifact("A016", artifact_deck(2));
-    l.artifact("A017", artifact_deck(2));
+    let mut f = Fixture::default();
+    let scrolls = f.card("A024", board(A, Color::Purple));
+    f.card("A016", artifact_deck(2));
+    f.card("A017", artifact_deck(2));
     for age in 2..=4 {
-        l.tech(Color::Yellow, age, base_deck(age), &[]);
+        f.plain(Color::Yellow, age, base_deck(age), &[]);
     }
-    l.tech(Color::Red, 3, board(B, Color::Red), &[]);
-    l.tech(Color::Green, 2, Zone::AvailableAchievements, &[]);
-    let three = l.tech(Color::Green, 3, Zone::AvailableAchievements, &[]);
-    let mut game = l.game();
+    f.plain(Color::Red, 3, board(B, Color::Red), &[]);
+    f.plain(Color::Green, 2, Zone::AvailableAchievements, &[]);
+    let three = f.plain(Color::Green, 3, Zone::AvailableAchievements, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, scrolls);
     let mut offered = Vec::new();
     let (status, events) = play(&mut game, |decision| {
@@ -475,16 +465,16 @@ fn dead_sea_scrolls_asks_for_a_player_only_when_the_answer_matters() {
     // Equal highest tops, or no achievement of either value: both answers
     // junk the same card or none, so nothing is asked.
     for (b_top, achievement) in [(2, 2), (3, 5)] {
-        let mut l = Layout::default();
-        let scrolls = l.artifact("A024", board(A, Color::Purple));
-        l.artifact("A016", artifact_deck(2));
-        l.artifact("A017", artifact_deck(2));
+        let mut f = Fixture::default();
+        let scrolls = f.card("A024", board(A, Color::Purple));
+        f.card("A016", artifact_deck(2));
+        f.card("A017", artifact_deck(2));
         for age in 2..=4 {
-            l.tech(Color::Yellow, age, base_deck(age), &[]);
+            f.plain(Color::Yellow, age, base_deck(age), &[]);
         }
-        l.tech(Color::Red, b_top, board(B, Color::Red), &[]);
-        let ach = l.tech(Color::Green, achievement, Zone::AvailableAchievements, &[]);
-        let mut game = l.game();
+        f.plain(Color::Red, b_top, board(B, Color::Red), &[]);
+        let ach = f.plain(Color::Green, achievement, Zone::AvailableAchievements, &[]);
+        let mut game = f.game(Expansions::ARTIFACTS);
         dogma(&mut game, scrolls);
         let (status, events) = no_decisions(&mut game);
         assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -495,15 +485,15 @@ fn dead_sea_scrolls_asks_for_a_player_only_when_the_answer_matters() {
 
 #[test]
 fn cyrus_cylinder_splays_any_board_left_and_self_executes_another_purple_top() {
-    let mut l = Layout::default();
-    let cylinder = l.artifact("A025", board(A, Color::Purple));
-    l.tech(Color::Red, 1, board(B, Color::Red), &[]);
-    l.tech(Color::Red, 2, board(B, Color::Red), &[]);
+    let mut f = Fixture::default();
+    let cylinder = f.card("A025", board(A, Color::Purple));
+    f.plain(Color::Red, 1, board(B, Color::Red), &[]);
+    f.plain(Color::Red, 2, board(B, Color::Red), &[]);
     let mut purple = with_effect(Card::from_code("B001").unwrap(), vec![build::draw(1)]);
     purple.color = Color::Purple;
-    let b_purple = l.add(purple, board(B, Color::Purple));
-    let one = l.tech(Color::Yellow, 1, base_deck(1), &[]);
-    let mut game = l.game();
+    let b_purple = f.add(purple, board(B, Color::Purple));
+    let one = f.plain(Color::Yellow, 1, base_deck(1), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, cylinder);
     let (status, events) = play(&mut game, |decision| {
         decision.options.iter().position(|o| {
@@ -540,13 +530,13 @@ fn choose_base_draw(decision: &Decision) -> Option<usize> {
 fn choosing_base_from_any_set_is_never_redirected_to_echoes() {
     // Rosetta Stone: A has a unique highest top, which redirects ordinary
     // draws to Echoes, but the explicit Base choice draws from Base.
-    let mut l = Layout::default();
-    let stone = l.artifact("A023", board(A, Color::Blue));
-    let first = l.tech(Color::Red, 2, base_deck(2), &[]);
-    let second = l.tech(Color::Green, 2, base_deck(2), &[]);
-    let echo = l.echo("E016");
+    let mut f = Fixture::default();
+    let stone = f.card("A023", board(A, Color::Blue));
+    let first = f.plain(Color::Red, 2, base_deck(2), &[]);
+    let second = f.plain(Color::Green, 2, base_deck(2), &[]);
+    let echo = f.in_deck("E016");
     let echo_deck = Zone::Deck(Card::from_code("E016").unwrap().origin_deck());
-    let mut game = l.game_with(Expansions::ARTIFACTS.union(Expansions::ECHOES));
+    let mut game = f.game(Expansions::ARTIFACTS.union(Expansions::ECHOES));
     dogma(&mut game, stone);
     let (status, events) = play(&mut game, |decision| {
         choose_base_draw(decision).or_else(|| option_moving(decision, first))
@@ -562,13 +552,13 @@ fn choosing_base_from_any_set_is_never_redirected_to_echoes() {
     assert_eq!(game.position().cards(echo_deck), &[echo]);
 
     // Papyrus of Ani's single any-set draw likewise.
-    let mut l = Layout::default();
-    let papyrus = l.artifact("A002", board(A, Color::Red));
-    let returned = l.tech(Color::Purple, 1, HAND_A, &[]);
-    let base = l.tech(Color::Green, 3, base_deck(3), &[]);
-    let echo = l.echo("E026");
+    let mut f = Fixture::default();
+    let papyrus = f.card("A002", board(A, Color::Red));
+    let returned = f.plain(Color::Purple, 1, HAND_A, &[]);
+    let base = f.plain(Color::Green, 3, base_deck(3), &[]);
+    let echo = f.in_deck("E026");
     let echo_deck = Zone::Deck(Card::from_code("E026").unwrap().origin_deck());
-    let mut game = l.game_with(Expansions::ARTIFACTS.union(Expansions::ECHOES));
+    let mut game = f.game(Expansions::ARTIFACTS.union(Expansions::ECHOES));
     dogma(&mut game, papyrus);
     let (status, events) = play(&mut game, |decision| {
         choose_base_draw(decision).or_else(|| option_moving(decision, returned))

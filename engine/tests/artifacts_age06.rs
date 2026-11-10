@@ -1,50 +1,34 @@
 //! Age 6 Artifacts (A056-A065): expected outcomes on explicit positions.
-use super::*;
+use inno_engine::*;
+
+mod common;
+use common::*;
 
 const HAND_A: Zone = Zone::Hand(A);
 const HAND_B: Zone = Zone::Hand(B);
 const SCORE_A: Zone = Zone::Score(A);
 const SCORE_B: Zone = Zone::Score(B);
 
-fn base_deck(age: u8) -> Zone {
-    Zone::Deck(Deck::base(age))
-}
-
-fn board(player: Player, color: Color) -> Zone {
-    Zone::Board(player, color)
-}
-
-fn sharing_icons(code: &str) -> [Icon; 3] {
-    [Card::from_code(code).unwrap().featured.unwrap(); 3]
-}
-
-fn pick_value(decision: &Decision, value: u8) -> Option<usize> {
-    decision
-        .options
-        .iter()
-        .position(|o| *o == Alternative::Value(value))
-}
-
 #[test]
 fn frigate_constitution_returns_the_revealed_card_and_its_color_when_a_top_matches() {
-    let mut l = Layout::default();
-    let frigate = l.artifact("A056", board(A, Color::Red));
-    l.tech(Color::Blue, 3, board(A, Color::Blue), &[]);
-    let shown = l.tech(Color::Green, 3, HAND_B, &[]);
-    let other = l.tech(Color::Yellow, 5, HAND_B, &[]);
-    let g1 = l.tech(
+    let mut f = Fixture::default();
+    let frigate = f.card("A056", board(A, Color::Red));
+    f.plain(Color::Blue, 3, board(A, Color::Blue), &[]);
+    let shown = f.plain(Color::Green, 3, HAND_B, &[]);
+    let other = f.plain(Color::Yellow, 5, HAND_B, &[]);
+    let g1 = f.plain(
         Color::Green,
         1,
         board(B, Color::Green),
         &sharing_icons("A056"),
     );
-    let g2 = l.tech(
+    let g2 = f.plain(
         Color::Green,
         2,
         board(B, Color::Green),
         &sharing_icons("A056"),
     );
-    let mut game = l.game();
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, frigate);
     let (status, events) = play(&mut game, |decision| {
         assert_eq!(decision.player, B);
@@ -61,20 +45,20 @@ fn frigate_constitution_returns_the_revealed_card_and_its_color_when_a_top_match
 
 #[test]
 fn us_declaration_takes_the_highest_hand_score_and_industry_cards() {
-    let mut l = Layout::default();
-    let declaration = l.artifact("A057", board(A, Color::Red));
-    let hand_high = l.tech(Color::Blue, 7, HAND_B, &[]);
-    l.tech(Color::Blue, 2, HAND_B, &[]);
-    let score_high = l.tech(Color::Green, 6, SCORE_B, &[]);
-    l.tech(Color::Green, 1, SCORE_B, &[]);
-    let industry = l.tech(Color::Yellow, 4, board(B, Color::Yellow), &[Icon::Industry]);
-    l.tech(
+    let mut f = Fixture::default();
+    let declaration = f.card("A057", board(A, Color::Red));
+    let hand_high = f.plain(Color::Blue, 7, HAND_B, &[]);
+    f.plain(Color::Blue, 2, HAND_B, &[]);
+    let score_high = f.plain(Color::Green, 6, SCORE_B, &[]);
+    f.plain(Color::Green, 1, SCORE_B, &[]);
+    let industry = f.plain(Color::Yellow, 4, board(B, Color::Yellow), &[Icon::Industry]);
+    f.plain(
         Color::Purple,
         9,
         board(B, Color::Purple),
         &sharing_icons("A057"),
     );
-    let mut game = l.game();
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, declaration);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -95,14 +79,14 @@ fn us_declaration_takes_the_highest_hand_score_and_industry_cards() {
 
 #[test]
 fn qianlongs_dragon_robe_makes_four_independent_transfers() {
-    let mut l = Layout::default();
-    let robe = l.artifact("A058", board(A, Color::Yellow));
-    let red = l.tech(Color::Red, 2, board(B, Color::Red), &sharing_icons("A058"));
-    let green = l.tech(Color::Green, 3, board(B, Color::Green), &[]);
-    let yellow = l.tech(Color::Yellow, 4, SCORE_B, &[]);
-    let purple = l.tech(Color::Purple, 5, SCORE_B, &[]);
-    let blue = l.tech(Color::Blue, 6, SCORE_B, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let robe = f.card("A058", board(A, Color::Yellow));
+    let red = f.plain(Color::Red, 2, board(B, Color::Red), &sharing_icons("A058"));
+    let green = f.plain(Color::Green, 3, board(B, Color::Green), &[]);
+    let yellow = f.plain(Color::Yellow, 4, SCORE_B, &[]);
+    let purple = f.plain(Color::Purple, 5, SCORE_B, &[]);
+    let blue = f.plain(Color::Blue, 6, SCORE_B, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, robe);
     let (status, events) = play(&mut game, |_| Some(0));
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -125,15 +109,15 @@ fn qianlongs_dragon_robe_makes_four_independent_transfers() {
 
 #[test]
 fn pride_and_prejudice_scores_and_repeats_while_the_melded_color_shows_the_fewest_cards() {
-    let mut l = Layout::default();
-    l.tech(Color::Yellow, 1, board(A, Color::Yellow), &[]);
-    let pride = l.artifact("A059", board(A, Color::Yellow));
-    l.tech(Color::Blue, 1, board(A, Color::Blue), &[]);
-    l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    let red = l.tech(Color::Red, 6, base_deck(6), &[]);
-    let green = l.tech(Color::Green, 6, base_deck(6), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    f.plain(Color::Yellow, 1, board(A, Color::Yellow), &[]);
+    let pride = f.card("A059", board(A, Color::Yellow));
+    f.plain(Color::Blue, 1, board(A, Color::Blue), &[]);
+    f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    let red = f.plain(Color::Red, 6, base_deck(6), &[]);
+    let green = f.plain(Color::Green, 6, base_deck(6), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     // Red shows two cards; yellow and blue show one each.
     let position = game
         .position()
@@ -159,13 +143,13 @@ fn pride_and_prejudice_scores_and_repeats_while_the_melded_color_shows_the_fewes
 
 #[test]
 fn the_wealth_of_nations_scores_a_one_then_the_rounded_up_fifth_of_its_score() {
-    let mut l = Layout::default();
-    let wealth = l.artifact("A060", board(A, Color::Green));
-    l.tech(Color::Red, 8, SCORE_A, &[]);
-    let one = l.tech(Color::Blue, 1, base_deck(1), &[]);
-    let two_left = l.tech(Color::Purple, 2, base_deck(2), &[]);
-    let two = l.tech(Color::Blue, 2, base_deck(2), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let wealth = f.card("A060", board(A, Color::Green));
+    f.plain(Color::Red, 8, SCORE_A, &[]);
+    let one = f.plain(Color::Blue, 1, base_deck(1), &[]);
+    let two_left = f.plain(Color::Purple, 2, base_deck(2), &[]);
+    let two = f.plain(Color::Blue, 2, base_deck(2), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, wealth);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -185,15 +169,15 @@ fn the_wealth_of_nations_scores_a_one_then_the_rounded_up_fifth_of_its_score() {
 #[test]
 fn buttonwood_agreement_scores_a_chosen_color_or_punishes_another() {
     for (drawn_color, hit) in [(Color::Red, true), (Color::Purple, false)] {
-        let mut l = Layout::default();
-        let buttonwood = l.artifact("A061", board(A, Color::Green));
-        l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-        l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-        l.tech(Color::Purple, 1, board(A, Color::Purple), &[]);
-        l.tech(Color::Purple, 2, board(A, Color::Purple), &[]);
-        let purple_scored = l.tech(Color::Purple, 3, SCORE_A, &[]);
-        let eight = l.tech(drawn_color, 8, base_deck(8), &[]);
-        let mut game = l.game();
+        let mut f = Fixture::default();
+        let buttonwood = f.card("A061", board(A, Color::Green));
+        f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+        f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+        f.plain(Color::Purple, 1, board(A, Color::Purple), &[]);
+        f.plain(Color::Purple, 2, board(A, Color::Purple), &[]);
+        let purple_scored = f.plain(Color::Purple, 3, SCORE_A, &[]);
+        let eight = f.plain(drawn_color, 8, base_deck(8), &[]);
+        let mut game = f.game(Expansions::ARTIFACTS);
         let position = game
             .position()
             .clone()
@@ -227,13 +211,13 @@ fn buttonwood_agreement_scores_a_chosen_color_or_punishes_another() {
 #[test]
 fn kilogram_of_the_archives_scores_a_ten_for_a_sum_of_ten_or_junks_the_sum() {
     for (top_value, sums_to_ten) in [(6, true), (3, false)] {
-        let mut l = Layout::default();
-        let kilogram = l.artifact("A062", board(A, Color::Blue));
-        let hand = l.tech(Color::Red, 4, HAND_A, &[]);
-        let top = l.tech(Color::Green, top_value, board(A, Color::Green), &[]);
-        let ten = l.tech(Color::Yellow, 10, base_deck(10), &[]);
-        let seven = l.tech(Color::Yellow, 7, base_deck(7), &[]);
-        let mut game = l.game();
+        let mut f = Fixture::default();
+        let kilogram = f.card("A062", board(A, Color::Blue));
+        let hand = f.plain(Color::Red, 4, HAND_A, &[]);
+        let top = f.plain(Color::Green, top_value, board(A, Color::Green), &[]);
+        let ten = f.plain(Color::Yellow, 10, base_deck(10), &[]);
+        let seven = f.plain(Color::Yellow, 7, base_deck(7), &[]);
+        let mut game = f.game(Expansions::ARTIFACTS);
         dogma(&mut game, kilogram);
         let (status, events) = play(&mut game, |decision| option_moving(decision, top));
         assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -262,16 +246,16 @@ fn kilogram_of_the_archives_scores_a_ten_for_a_sum_of_ten_or_junks_the_sum() {
 
 #[test]
 fn puffing_billy_tucks_splays_and_draws_the_most_common_icon_count() {
-    let mut l = Layout::default();
-    let billy = l.artifact("A063", board(A, Color::Blue));
-    let tucked = l.tech(
+    let mut f = Fixture::default();
+    let billy = f.card("A063", board(A, Color::Blue));
+    let tucked = f.plain(
         Color::Red,
         2,
         HAND_A,
         &[Icon::Industry, Icon::Industry, Icon::Industry, Icon::Health],
     );
-    let three = l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    let mut game = l.game();
+    let three = f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, billy);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -289,8 +273,8 @@ fn puffing_billy_tucks_splays_and_draws_the_most_common_icon_count() {
 fn puffing_billy_counts_bonuses_as_one_icon_type() {
     // Three visible bonuses of different values outnumber the one Industry: bonuses are
     // one icon type, as for Supremacy.
-    let mut l = Layout::default();
-    let billy = l.artifact("A063", board(A, Color::Blue));
+    let mut f = Fixture::default();
+    let billy = f.card("A063", board(A, Color::Blue));
     let mut symbols = [Symbol::Blank; SLOTS];
     symbols[..4].copy_from_slice(&[
         Symbol::Bonus(3),
@@ -298,7 +282,7 @@ fn puffing_billy_counts_bonuses_as_one_icon_type() {
         Symbol::Bonus(2),
         Symbol::Icon(Icon::Industry),
     ]);
-    let tucked = l.add(
+    let tucked = f.add(
         Card {
             code: "synthetic-echoes-bonuses",
             set: CardSet::Echoes,
@@ -312,9 +296,9 @@ fn puffing_billy_counts_bonuses_as_one_icon_type() {
         },
         HAND_A,
     );
-    let three = l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    l.tech(Color::Yellow, 1, base_deck(1), &[]);
-    let mut game = l.game_with(Expansions::ARTIFACTS.union(Expansions::ECHOES));
+    let three = f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    f.plain(Color::Yellow, 1, base_deck(1), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS.union(Expansions::ECHOES));
     dogma(&mut game, billy);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -329,14 +313,14 @@ fn puffing_billy_counts_bonuses_as_one_icon_type() {
 
 #[test]
 fn moonlight_sonata_melds_the_bottom_of_a_highest_color_then_claims_and_junks_standards() {
-    let mut l = Layout::default();
-    let sonata = l.artifact("A064", board(A, Color::Purple));
-    let bottom = l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    let top = l.tech(Color::Red, 9, board(A, Color::Red), &[]);
-    l.tech(Color::Blue, 3, board(A, Color::Blue), &[]);
-    let ach_a = l.tech(Color::Green, 4, Zone::AvailableAchievements, &[]);
-    let ach_b = l.tech(Color::Green, 5, Zone::AvailableAchievements, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let sonata = f.card("A064", board(A, Color::Purple));
+    let bottom = f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    let top = f.plain(Color::Red, 9, board(A, Color::Red), &[]);
+    f.plain(Color::Blue, 3, board(A, Color::Blue), &[]);
+    let ach_a = f.plain(Color::Green, 4, Zone::AvailableAchievements, &[]);
+    let ach_b = f.plain(Color::Green, 5, Zone::AvailableAchievements, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, sonata);
     let (status, events) = play(&mut game, |decision| {
         option_moving(decision, ach_a).or(Some(0))
@@ -375,13 +359,13 @@ fn moonlight_sonata_melds_the_bottom_of_a_highest_color_then_claims_and_junks_st
 
 #[test]
 fn marcha_real_rewards_a_returned_pair_sharing_a_value_or_a_color() {
-    let mut l = Layout::default();
-    let marcha = l.artifact("A065", board(A, Color::Purple));
-    let r4 = l.tech(Color::Red, 4, HAND_A, &[]);
-    let r4b = l.tech(Color::Red, 4, HAND_A, &[]);
-    let five = l.tech(Color::Yellow, 5, base_deck(5), &[]);
-    let ach = l.tech(Color::Green, 9, Zone::AvailableAchievements, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let marcha = f.card("A065", board(A, Color::Purple));
+    let r4 = f.plain(Color::Red, 4, HAND_A, &[]);
+    let r4b = f.plain(Color::Red, 4, HAND_A, &[]);
+    let five = f.plain(Color::Yellow, 5, base_deck(5), &[]);
+    let ach = f.plain(Color::Green, 9, Zone::AvailableAchievements, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, marcha);
     let (status, events) = play(&mut game, |_| Some(0));
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -406,12 +390,12 @@ fn marcha_real_rewards_a_returned_pair_sharing_a_value_or_a_color() {
 
 #[test]
 fn frigate_constitution_sees_a_revealed_hand_yamato_as_eleven() {
-    let mut l = Layout::default();
-    let frigate = l.artifact("A056", board(A, Color::Red));
-    l.tech(Color::Blue, 11, board(A, Color::Blue), &[]);
-    let b_red = l.tech(Color::Red, 2, board(B, Color::Red), &sharing_icons("A056"));
-    let yamato = l.artifact("A077", HAND_B);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let frigate = f.card("A056", board(A, Color::Red));
+    f.plain(Color::Blue, 11, board(A, Color::Blue), &[]);
+    let b_red = f.plain(Color::Red, 2, board(B, Color::Red), &sharing_icons("A056"));
+    let yamato = f.card("A077", HAND_B);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, frigate);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));

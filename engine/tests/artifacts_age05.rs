@@ -1,21 +1,12 @@
 //! Age 5 Artifacts (A046-A055): expected outcomes on explicit positions.
-use super::*;
+use inno_engine::*;
+
+mod common;
+use common::*;
 
 const HAND_A: Zone = Zone::Hand(A);
 const SCORE_A: Zone = Zone::Score(A);
 const SCORE_B: Zone = Zone::Score(B);
-
-fn base_deck(age: u8) -> Zone {
-    Zone::Deck(Deck::base(age))
-}
-
-fn board(player: Player, color: Color) -> Zone {
-    Zone::Board(player, color)
-}
-
-fn sharing_icons(code: &str) -> [Icon; 3] {
-    [Card::from_code(code).unwrap().featured.unwrap(); 3]
-}
 
 fn with_effect(mut card: Card, color: Color, instructions: Vec<Instruction>) -> Card {
     card.color = color;
@@ -37,21 +28,18 @@ fn pick_color(decision: &Decision, color: Color) -> Option<usize> {
 fn galley_whydah_counts_visible_cards_not_symbols() {
     // B's lone red City (Lyon) shows six symbol positions to Galley Whydah's four, but
     // each red pile shows one card, so red does not qualify.
-    let mut l = Layout::default();
-    let galley = l.artifact("A046", board(A, Color::Red));
-    l.add(
-        crate::Card::from_code("C066").unwrap(),
-        board(B, Color::Red),
-    );
-    l.tech(
+    let mut f = Fixture::default();
+    let galley = f.card("A046", board(A, Color::Red));
+    f.add(Card::from_code("C066").unwrap(), board(B, Color::Red));
+    f.plain(
         Color::Yellow,
         1,
         board(B, Color::Yellow),
         &sharing_icons("A046"),
     );
-    let b_blue = l.tech(Color::Blue, 1, board(B, Color::Blue), &[]);
-    l.tech(Color::Green, 1, board(B, Color::Green), &[]);
-    let mut game = l.game_with(Expansions::ARTIFACTS.union(Expansions::CITIES));
+    let b_blue = f.plain(Color::Blue, 1, board(B, Color::Blue), &[]);
+    f.plain(Color::Green, 1, board(B, Color::Green), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS.union(Expansions::CITIES));
     dogma(&mut game, galley);
     let (status, events) = play(&mut game, |decision| {
         assert_eq!(decision.player, B);
@@ -73,23 +61,23 @@ fn galley_whydah_counts_visible_cards_not_symbols() {
 
 #[test]
 fn galley_whydah_swaps_a_color_the_victim_shows_more_of_bottom_up() {
-    let mut l = Layout::default();
-    let galley = l.artifact("A046", board(A, Color::Red));
-    let a_green = l.tech(Color::Green, 2, board(A, Color::Green), &[]);
-    let b_bottom = l.tech(
+    let mut f = Fixture::default();
+    let galley = f.card("A046", board(A, Color::Red));
+    let a_green = f.plain(Color::Green, 2, board(A, Color::Green), &[]);
+    let b_bottom = f.plain(
         Color::Green,
         1,
         board(B, Color::Green),
         &sharing_icons("A046"),
     );
-    let b_top = l.tech(
+    let b_top = f.plain(
         Color::Green,
         3,
         board(B, Color::Green),
         &sharing_icons("A046"),
     );
-    l.tech(Color::Blue, 1, board(B, Color::Blue), &[]);
-    let mut game = l.game();
+    f.plain(Color::Blue, 1, board(B, Color::Blue), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     // B's green shows one card (unsplayed), A's one: splay B's green to show two.
     let position = game
         .position()
@@ -136,11 +124,11 @@ fn galley_whydah_swaps_a_color_the_victim_shows_more_of_bottom_up() {
 
 #[test]
 fn ship_of_the_line_sussex_scores_a_color_with_an_empty_score_pile_or_returns_the_pile() {
-    let mut l = Layout::default();
-    let sussex = l.artifact("A047", board(A, Color::Red));
-    let under = l.tech(Color::Blue, 1, board(A, Color::Blue), &[]);
-    let top = l.tech(Color::Blue, 2, board(A, Color::Blue), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let sussex = f.card("A047", board(A, Color::Red));
+    let under = f.plain(Color::Blue, 1, board(A, Color::Blue), &[]);
+    let top = f.plain(Color::Blue, 2, board(A, Color::Blue), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, sussex);
     let (status, events) = play(&mut game, |decision| pick_color(decision, Color::Blue));
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -153,10 +141,10 @@ fn ship_of_the_line_sussex_scores_a_color_with_an_empty_score_pile_or_returns_th
     );
     assert!(moved.iter().any(|m| m.1 == under) && moved.iter().any(|m| m.1 == top));
 
-    let mut l = Layout::default();
-    let sussex = l.artifact("A047", board(A, Color::Red));
-    let scored = l.tech(Color::Blue, 3, SCORE_A, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let sussex = f.card("A047", board(A, Color::Red));
+    let scored = f.plain(Color::Blue, 3, SCORE_A, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, sussex);
     let (_, events) = no_decisions(&mut game);
     assert_eq!(
@@ -167,14 +155,14 @@ fn ship_of_the_line_sussex_scores_a_color_with_an_empty_score_pile_or_returns_th
 
 #[test]
 fn gujin_tushu_jicheng_super_executes_an_opposing_top_on_your_turn() {
-    let mut l = Layout::default();
-    let gujin = l.artifact("A048", board(A, Color::Yellow));
+    let mut f = Fixture::default();
+    let gujin = f.card("A048", board(A, Color::Yellow));
     let mut oars = Card::from_code("B003").unwrap();
     oars.color = Color::Red;
-    l.add(oars, board(B, Color::Red));
-    let prosperity = l.tech(Color::Green, 1, Zone::Hand(B), &[Icon::Prosperity]);
-    l.tech(Color::Green, 1, base_deck(1), &[]);
-    let mut game = l.game();
+    f.add(oars, board(B, Color::Red));
+    let prosperity = f.plain(Color::Green, 1, Zone::Hand(B), &[Icon::Prosperity]);
+    f.plain(Color::Green, 1, base_deck(1), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, gujin);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -187,19 +175,19 @@ fn gujin_tushu_jicheng_super_executes_an_opposing_top_on_your_turn() {
 
 #[test]
 fn the_daily_courant_returns_a_six_then_melds_and_executes_at_the_matching_top_value() {
-    let mut l = Layout::default();
-    let courant = l.artifact("A049", board(A, Color::Yellow));
-    l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-    let six = l.tech(Color::Red, 6, base_deck(6), &[]);
+    let mut f = Fixture::default();
+    let courant = f.card("A049", board(A, Color::Yellow));
+    f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+    let six = f.plain(Color::Red, 6, base_deck(6), &[]);
     let mut two_card = with_effect(
         Card::from_code("B001").unwrap(),
         Color::Green,
         vec![build::draw(1)],
     );
     two_card.value = 2;
-    let two = l.add(two_card, base_deck(2));
-    let one = l.tech(Color::Blue, 1, base_deck(1), &[]);
-    let mut game = l.game();
+    let two = f.add(two_card, base_deck(2));
+    let one = f.plain(Color::Blue, 1, base_deck(1), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, courant);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -217,11 +205,11 @@ fn the_daily_courant_returns_a_six_then_melds_and_executes_at_the_matching_top_v
 
 #[test]
 fn barque_longue_la_belle_melds_fives_until_a_green_one() {
-    let mut l = Layout::default();
-    let belle = l.artifact("A050", board(A, Color::Green));
-    let green = l.tech(Color::Green, 5, base_deck(5), &[]);
-    let red = l.tech(Color::Red, 5, base_deck(5), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let belle = f.card("A050", board(A, Color::Green));
+    let green = f.plain(Color::Green, 5, base_deck(5), &[]);
+    let red = f.plain(Color::Red, 5, base_deck(5), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, belle);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -238,13 +226,13 @@ fn barque_longue_la_belle_melds_fives_until_a_green_one() {
 
 #[test]
 fn hudsons_bay_scores_every_bottom_then_melds_from_score_splays_and_junks() {
-    let mut l = Layout::default();
-    let archives = l.artifact("A051", board(A, Color::Green));
-    let red_bottom = l.tech(Color::Red, 3, board(A, Color::Red), &[]);
-    let red_top = l.tech(Color::Red, 4, board(A, Color::Red), &[]);
-    let blue = l.tech(Color::Blue, 2, board(A, Color::Blue), &[]);
-    let three = l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let archives = f.card("A051", board(A, Color::Green));
+    let red_bottom = f.plain(Color::Red, 3, board(A, Color::Red), &[]);
+    let red_top = f.plain(Color::Red, 4, board(A, Color::Red), &[]);
+    let blue = f.plain(Color::Blue, 2, board(A, Color::Blue), &[]);
+    let three = f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, archives);
     let (status, events) = play(&mut game, |decision| option_moving(decision, red_bottom));
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -275,13 +263,13 @@ fn hudsons_bay_scores_every_bottom_then_melds_from_score_splays_and_junks() {
 
 #[test]
 fn boerhaave_microscope_returns_the_lowest_hand_and_top_cards_and_scores_their_sum() {
-    let mut l = Layout::default();
-    let microscope = l.artifact("A052", board(A, Color::Blue));
-    let hand_low = l.tech(Color::Red, 2, HAND_A, &[]);
-    l.tech(Color::Red, 4, HAND_A, &[]);
-    let top_low = l.tech(Color::Green, 3, board(A, Color::Green), &[]);
-    let five = l.tech(Color::Yellow, 5, base_deck(5), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let microscope = f.card("A052", board(A, Color::Blue));
+    let hand_low = f.plain(Color::Red, 2, HAND_A, &[]);
+    f.plain(Color::Red, 4, HAND_A, &[]);
+    let top_low = f.plain(Color::Green, 3, board(A, Color::Green), &[]);
+    let five = f.plain(Color::Yellow, 5, base_deck(5), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, microscope);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -303,13 +291,13 @@ fn boerhaave_microscope_returns_the_lowest_hand_and_top_cards_and_scores_their_s
 
 #[test]
 fn principia_returns_non_blue_tops_then_draws_and_melds_one_higher_ascending() {
-    let mut l = Layout::default();
-    let principia = l.artifact("A053", board(A, Color::Blue));
-    let red = l.tech(Color::Red, 4, board(A, Color::Red), &[]);
-    let green = l.tech(Color::Green, 2, board(A, Color::Green), &[]);
-    let three = l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    let five = l.tech(Color::Purple, 5, base_deck(5), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let principia = f.card("A053", board(A, Color::Blue));
+    let red = f.plain(Color::Red, 4, board(A, Color::Red), &[]);
+    let green = f.plain(Color::Green, 2, board(A, Color::Green), &[]);
+    let three = f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    let five = f.plain(Color::Purple, 5, base_deck(5), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, principia);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -329,11 +317,11 @@ fn principia_returns_non_blue_tops_then_draws_and_melds_one_higher_ascending() {
 #[test]
 fn sandham_room_cricket_bat_claims_on_red_and_junks_otherwise() {
     for (color, claims) in [(Color::Red, true), (Color::Blue, false)] {
-        let mut l = Layout::default();
-        let bat = l.artifact("A054", board(A, Color::Purple));
-        let six = l.tech(color, 6, base_deck(6), &[]);
-        let ach = l.tech(Color::Green, 9, Zone::AvailableAchievements, &[]);
-        let mut game = l.game();
+        let mut f = Fixture::default();
+        let bat = f.card("A054", board(A, Color::Purple));
+        let six = f.plain(color, 6, base_deck(6), &[]);
+        let ach = f.plain(Color::Green, 9, Zone::AvailableAchievements, &[]);
+        let mut game = f.game(Expansions::ARTIFACTS);
         dogma(&mut game, bat);
         let (status, events) = no_decisions(&mut game);
         assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -351,11 +339,11 @@ fn sandham_room_cricket_bat_claims_on_red_and_junks_otherwise() {
 
 #[test]
 fn almira_claims_the_melded_value_or_junks_the_lowest_achievements_deck() {
-    let mut l = Layout::default();
-    let almira = l.artifact("A055", board(A, Color::Purple));
-    let four = l.tech(Color::Red, 4, HAND_A, &[]);
-    let ach4 = l.tech(Color::Green, 4, Zone::AvailableAchievements, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let almira = f.card("A055", board(A, Color::Purple));
+    let four = f.plain(Color::Red, 4, HAND_A, &[]);
+    let ach4 = f.plain(Color::Green, 4, Zone::AvailableAchievements, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, almira);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -372,12 +360,12 @@ fn almira_claims_the_melded_value_or_junks_the_lowest_achievements_deck() {
         ]
     );
 
-    let mut l = Layout::default();
-    let almira = l.artifact("A055", board(A, Color::Purple));
-    l.tech(Color::Green, 3, Zone::AvailableAchievements, &[]);
-    l.tech(Color::Green, 6, Zone::AvailableAchievements, &[]);
-    let three = l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let almira = f.card("A055", board(A, Color::Purple));
+    f.plain(Color::Green, 3, Zone::AvailableAchievements, &[]);
+    f.plain(Color::Green, 6, Zone::AvailableAchievements, &[]);
+    let three = f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, almira);
     let (_, events) = no_decisions(&mut game);
     assert_eq!(
@@ -391,11 +379,11 @@ fn almira_claims_the_melded_value_or_junks_the_lowest_achievements_deck() {
 fn principia_uses_the_values_its_returns_showed_including_a_returned_yamato() {
     // Yamato's board value 11 is what Principia returned: it asks for a 12
     // and the game ends by exhaustion, instead of reading its back (8).
-    let mut l = Layout::default();
-    let principia = l.artifact("A053", board(A, Color::Blue));
-    let yamato = l.artifact("A077", board(A, Color::Red));
-    let nine = l.tech(Color::Green, 9, base_deck(9), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let principia = f.card("A053", board(A, Color::Blue));
+    let yamato = f.card("A077", board(A, Color::Red));
+    let nine = f.plain(Color::Green, 9, base_deck(9), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     assert_eq!(game.position().value(yamato), 11);
     dogma(&mut game, principia);
     let (status, events) = no_decisions(&mut game);
@@ -420,12 +408,12 @@ fn principia_uses_the_values_its_returns_showed_including_a_returned_yamato() {
 
     // Several returns keep their shown values in ascending order: the 2
     // draws and melds a 3 before Yamato's 12 exhausts the decks.
-    let mut l = Layout::default();
-    let principia = l.artifact("A053", board(A, Color::Blue));
-    let yamato = l.artifact("A077", board(A, Color::Red));
-    let green = l.tech(Color::Green, 2, board(A, Color::Green), &[]);
-    let three = l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let principia = f.card("A053", board(A, Color::Blue));
+    let yamato = f.card("A077", board(A, Color::Red));
+    let green = f.plain(Color::Green, 2, board(A, Color::Green), &[]);
+    let three = f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, principia);
     let (status, events) = no_decisions(&mut game);
     assert!(

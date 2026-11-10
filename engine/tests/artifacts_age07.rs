@@ -1,22 +1,13 @@
 //! Age 7 Artifacts (A066-A075): expected outcomes on explicit positions.
-use super::*;
+use inno_engine::*;
+
+mod common;
+use common::*;
 
 const HAND_A: Zone = Zone::Hand(A);
 const HAND_B: Zone = Zone::Hand(B);
 const SCORE_A: Zone = Zone::Score(A);
 const SCORE_B: Zone = Zone::Score(B);
-
-fn base_deck(age: u8) -> Zone {
-    Zone::Deck(Deck::base(age))
-}
-
-fn board(player: Player, color: Color) -> Zone {
-    Zone::Board(player, color)
-}
-
-fn sharing_icons(code: &str) -> [Icon; 3] {
-    [Card::from_code(code).unwrap().featured.unwrap(); 3]
-}
 
 fn with_effect(mut card: Card, color: Color, value: u8, instructions: Vec<Instruction>) -> Card {
     card.color = color;
@@ -26,13 +17,6 @@ fn with_effect(mut card: Card, color: Color, value: u8, instructions: Vec<Instru
         instructions,
     }];
     card
-}
-
-fn pick_value(decision: &Decision, value: u8) -> Option<usize> {
-    decision
-        .options
-        .iter()
-        .position(|o| *o == Alternative::Value(value))
 }
 
 fn pick_known(decision: &Decision, card: CardId) -> Option<usize> {
@@ -47,16 +31,16 @@ fn pick_known(decision: &Decision, card: CardId) -> Option<usize> {
 #[test]
 fn submarine_hunley_returns_the_melded_color_when_its_bottom_is_even() {
     for (bottom_value, returns) in [(2, true), (3, false)] {
-        let mut l = Layout::default();
-        let hunley = l.artifact("A066", board(A, Color::Red));
-        let bottom = l.tech(
+        let mut f = Fixture::default();
+        let hunley = f.card("A066", board(A, Color::Red));
+        let bottom = f.plain(
             Color::Green,
             bottom_value,
             board(B, Color::Green),
             &sharing_icons("A066"),
         );
-        let seven = l.tech(Color::Green, 7, base_deck(7), &[]);
-        let mut game = l.game();
+        let seven = f.plain(Color::Green, 7, base_deck(7), &[]);
+        let mut game = f.game(Expansions::ARTIFACTS);
         dogma(&mut game, hunley);
         let (status, events) = play(&mut game, |_| Some(0));
         assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -80,12 +64,12 @@ fn submarine_hunley_returns_the_melded_color_when_its_bottom_is_even() {
 
 #[test]
 fn jedlik_scores_an_eight_then_melds_one_and_junks_a_chosen_deck_if_it_was_an_eight() {
-    let mut l = Layout::default();
-    let jedlik = l.artifact("A067", board(A, Color::Red));
-    let eight_a = l.tech(Color::Blue, 8, base_deck(8), &[]);
-    let eight_b = l.tech(Color::Green, 8, base_deck(8), &[]);
-    let three = l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let jedlik = f.card("A067", board(A, Color::Red));
+    let eight_a = f.plain(Color::Blue, 8, base_deck(8), &[]);
+    let eight_b = f.plain(Color::Green, 8, base_deck(8), &[]);
+    let three = f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, jedlik);
     let (status, events) = play(&mut game, |decision| pick_value(decision, 3));
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -101,12 +85,12 @@ fn jedlik_scores_an_eight_then_melds_one_and_junks_a_chosen_deck_if_it_was_an_ei
     );
 
     // The [8] deck is empty: the meld is a 9, so no junk.
-    let mut l = Layout::default();
-    let jedlik = l.artifact("A067", board(A, Color::Red));
-    l.tech(Color::Blue, 8, base_deck(8), &[]);
-    let nine = l.tech(Color::Green, 9, base_deck(9), &[]);
-    l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let jedlik = f.card("A067", board(A, Color::Red));
+    f.plain(Color::Blue, 8, base_deck(8), &[]);
+    let nine = f.plain(Color::Green, 9, base_deck(9), &[]);
+    f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, jedlik);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -120,18 +104,18 @@ fn jedlik_scores_an_eight_then_melds_one_and_junks_a_chosen_deck_if_it_was_an_ei
 #[test]
 fn colt_paterson_revolver_returns_hand_and_score_when_the_draw_matches_a_held_color() {
     for (drawn_color, returns) in [(Color::Red, true), (Color::Green, false)] {
-        let mut l = Layout::default();
-        let colt = l.artifact("A068", board(A, Color::Yellow));
-        l.tech(
+        let mut f = Fixture::default();
+        let colt = f.card("A068", board(A, Color::Yellow));
+        f.plain(
             Color::Blue,
             1,
             board(B, Color::Blue),
             &sharing_icons("A068"),
         );
-        let held = l.tech(Color::Red, 2, HAND_B, &[]);
-        let scored = l.tech(Color::Purple, 3, SCORE_B, &[]);
-        let seven = l.tech(drawn_color, 7, base_deck(7), &[]);
-        let mut game = l.game();
+        let held = f.plain(Color::Red, 2, HAND_B, &[]);
+        let scored = f.plain(Color::Purple, 3, SCORE_B, &[]);
+        let seven = f.plain(drawn_color, 7, base_deck(7), &[]);
+        let mut game = f.game(Expansions::ARTIFACTS);
         dogma(&mut game, colt);
         let (status, events) = play(&mut game, |_| Some(0));
         assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -151,14 +135,14 @@ fn colt_paterson_revolver_returns_hand_and_score_when_the_draw_matches_a_held_co
 
 #[test]
 fn singer_model_27_tucks_splays_up_tucks_matching_scores_and_junks_a_standard() {
-    let mut l = Layout::default();
-    let singer = l.artifact("A069", board(A, Color::Yellow));
-    l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    let tucked = l.tech(Color::Red, 2, HAND_A, &[]);
-    let scored_red = l.tech(Color::Red, 3, SCORE_A, &[]);
-    l.tech(Color::Blue, 3, SCORE_A, &[]);
-    let ach = l.tech(Color::Green, 9, Zone::AvailableAchievements, &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let singer = f.card("A069", board(A, Color::Yellow));
+    f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    let tucked = f.plain(Color::Red, 2, HAND_A, &[]);
+    let scored_red = f.plain(Color::Red, 3, SCORE_A, &[]);
+    f.plain(Color::Blue, 3, SCORE_A, &[]);
+    let ach = f.plain(Color::Green, 9, Zone::AvailableAchievements, &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, singer);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -181,16 +165,14 @@ fn singer_model_27_tucks_splays_up_tucks_matching_scores_and_junks_a_standard() 
 #[test]
 fn singer_model_27_junks_nothing_when_its_color_was_already_splayed_up() {
     // "If you do" needs the splay to change the pile (doc/rules/IF_YOU_DO_AUDIT.md).
-    let mut l = Layout::default();
-    let singer = l.artifact("A069", board(A, Color::Yellow));
-    l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    let tucked = l.tech(Color::Red, 2, HAND_A, &[]);
-    let scored_red = l.tech(Color::Red, 3, SCORE_A, &[]);
-    l.tech(Color::Green, 9, Zone::AvailableAchievements, &[]);
-    let mut position = Position::new(l.cards, &l.placements, A).unwrap();
-    position.players[A.index()].splays[Color::Red as usize] = Splay::Up;
-    position.refresh_boards();
+    let mut f = Fixture::default();
+    let singer = f.card("A069", board(A, Color::Yellow));
+    f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    let tucked = f.plain(Color::Red, 2, HAND_A, &[]);
+    let scored_red = f.plain(Color::Red, 3, SCORE_A, &[]);
+    f.plain(Color::Green, 9, Zone::AvailableAchievements, &[]);
+    let position = f.position().with_splay(A, Color::Red, Splay::Up).unwrap();
     let mut game = Game::new(position, Expansions::ARTIFACTS).unwrap();
     dogma(&mut game, singer);
     let (status, events) = no_decisions(&mut game);
@@ -207,18 +189,18 @@ fn singer_model_27_junks_nothing_when_its_color_was_already_splayed_up() {
 #[test]
 fn metre_bar_wins_when_each_drawn_color_has_the_chosen_number_of_cards_else_returns_them() {
     for (extra, wins) in [(true, true), (false, false)] {
-        let mut l = Layout::default();
-        let metre = l.artifact("A070", board(A, Color::Green));
-        l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-        l.tech(Color::Red, 2, board(A, Color::Red), &[]);
-        l.tech(Color::Blue, 1, board(A, Color::Blue), &[]);
+        let mut f = Fixture::default();
+        let metre = f.card("A070", board(A, Color::Green));
+        f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+        f.plain(Color::Red, 2, board(A, Color::Red), &[]);
+        f.plain(Color::Blue, 1, board(A, Color::Blue), &[]);
         if extra {
-            l.tech(Color::Blue, 2, board(A, Color::Blue), &[]);
+            f.plain(Color::Blue, 2, board(A, Color::Blue), &[]);
         }
         for color in [Color::Red, Color::Red, Color::Blue] {
-            l.tech(color, 2, base_deck(2), &[]);
+            f.plain(color, 2, base_deck(2), &[]);
         }
-        let mut game = l.game();
+        let mut game = f.game(Expansions::ARTIFACTS);
         dogma(&mut game, metre);
         let (status, events) = play(&mut game, |decision| pick_value(decision, 2).or(Some(0)));
         if wins {
@@ -240,21 +222,21 @@ fn metre_bar_wins_when_each_drawn_color_has_the_chosen_number_of_cards_else_retu
 
 #[test]
 fn hansen_writing_ball_compels_four_draws_a_blue_meld_and_a_hand_transfer() {
-    let mut l = Layout::default();
-    let hansen = l.artifact("A071", board(A, Color::Green));
-    l.cards[usize::from(hansen.0)].effects.truncate(1);
-    l.tech(
+    let mut f = Fixture::default();
+    let hansen = f.card("A071", board(A, Color::Green));
+    f.cards[usize::from(hansen.0)].effects.truncate(1);
+    f.plain(
         Color::Yellow,
         1,
         board(B, Color::Yellow),
         &sharing_icons("A071"),
     );
-    let held = l.tech(Color::Green, 2, HAND_B, &[]);
+    let held = f.plain(Color::Green, 2, HAND_B, &[]);
     for _ in 0..3 {
-        l.tech(Color::Red, 7, base_deck(7), &[]);
+        f.plain(Color::Red, 7, base_deck(7), &[]);
     }
-    let blue = l.tech(Color::Blue, 7, base_deck(7), &[]);
-    let mut game = l.game();
+    let blue = f.plain(Color::Blue, 7, base_deck(7), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, hansen);
     let (status, events) = play(&mut game, |_| Some(0));
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -277,11 +259,11 @@ fn hansen_writing_ball_compels_four_draws_a_blue_meld_and_a_hand_transfer() {
 
 #[test]
 fn hansen_writing_ball_tucks_and_repeats_until_a_drawn_seven_has_efficiency() {
-    let mut l = Layout::default();
-    let hansen = l.artifact("A071", board(A, Color::Green));
-    let with_efficiency = l.tech(Color::Purple, 7, base_deck(7), &[Icon::Efficiency]);
-    let plain = l.tech(Color::Purple, 7, base_deck(7), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let hansen = f.card("A071", board(A, Color::Green));
+    let with_efficiency = f.plain(Color::Purple, 7, base_deck(7), &[Icon::Efficiency]);
+    let plain = f.plain(Color::Purple, 7, base_deck(7), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, hansen);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -297,14 +279,14 @@ fn hansen_writing_ball_tucks_and_repeats_until_a_drawn_seven_has_efficiency() {
 
 #[test]
 fn periodic_table_draws_one_higher_and_repeats_when_melding_over_a_chosen_card() {
-    let mut l = Layout::default();
-    let table = l.artifact("A072", board(A, Color::Blue));
-    let red = l.tech(Color::Red, 3, board(A, Color::Red), &[]);
-    let green = l.tech(Color::Green, 3, board(A, Color::Green), &[]);
-    l.tech(Color::Yellow, 5, board(A, Color::Yellow), &[]);
-    let four_purple = l.tech(Color::Purple, 4, base_deck(4), &[]);
-    let four_red = l.tech(Color::Red, 4, base_deck(4), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let table = f.card("A072", board(A, Color::Blue));
+    let red = f.plain(Color::Red, 3, board(A, Color::Red), &[]);
+    let green = f.plain(Color::Green, 3, board(A, Color::Green), &[]);
+    f.plain(Color::Yellow, 5, board(A, Color::Yellow), &[]);
+    let four_purple = f.plain(Color::Purple, 4, base_deck(4), &[]);
+    let four_red = f.plain(Color::Red, 4, base_deck(4), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, table);
     let (status, events) = play(&mut game, |decision| {
         pick_known(decision, red).or_else(|| pick_known(decision, green))
@@ -324,13 +306,13 @@ fn periodic_table_draws_one_higher_and_repeats_when_melding_over_a_chosen_card()
 
 #[test]
 fn corvette_challenger_tucks_splays_up_and_uses_the_stack_count() {
-    let mut l = Layout::default();
-    let corvette = l.artifact("A073", board(A, Color::Blue));
-    l.tech(Color::Red, 1, board(A, Color::Red), &[]);
-    let eight = l.tech(Color::Red, 8, base_deck(8), &[]);
-    let two = l.tech(Color::Yellow, 2, base_deck(2), &[]);
-    let two_left = l.tech(Color::Yellow, 2, base_deck(2), &[]);
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let corvette = f.card("A073", board(A, Color::Blue));
+    f.plain(Color::Red, 1, board(A, Color::Red), &[]);
+    let eight = f.plain(Color::Red, 8, base_deck(8), &[]);
+    let two = f.plain(Color::Yellow, 2, base_deck(2), &[]);
+    let two_left = f.plain(Color::Yellow, 2, base_deck(2), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, corvette);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -349,9 +331,9 @@ fn corvette_challenger_tucks_splays_up_and_uses_the_stack_count() {
 
 #[test]
 fn roundhay_garden_scene_melds_the_highest_scored_card_scores_two_of_its_value_and_executes_it() {
-    let mut l = Layout::default();
-    let roundhay = l.artifact("A074", board(A, Color::Purple));
-    let high = l.add(
+    let mut f = Fixture::default();
+    let roundhay = f.card("A074", board(A, Color::Purple));
+    let high = f.add(
         with_effect(
             Card::from_code("B001").unwrap(),
             Color::Green,
@@ -360,11 +342,11 @@ fn roundhay_garden_scene_melds_the_highest_scored_card_scores_two_of_its_value_a
         ),
         SCORE_A,
     );
-    l.tech(Color::Red, 2, SCORE_A, &[]);
-    let three_a = l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    let three_b = l.tech(Color::Yellow, 3, base_deck(3), &[]);
-    let one = l.tech(Color::Blue, 1, base_deck(1), &[]);
-    let mut game = l.game();
+    f.plain(Color::Red, 2, SCORE_A, &[]);
+    let three_a = f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    let three_b = f.plain(Color::Yellow, 3, base_deck(3), &[]);
+    let one = f.plain(Color::Blue, 1, base_deck(1), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, roundhay);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -383,9 +365,9 @@ fn roundhay_garden_scene_melds_the_highest_scored_card_scores_two_of_its_value_a
 
 #[test]
 fn communist_manifesto_gives_one_drawn_seven_to_the_opponent_and_executes_the_other() {
-    let mut l = Layout::default();
-    let manifesto = l.artifact("A075", board(A, Color::Purple));
-    let given = l.add(
+    let mut f = Fixture::default();
+    let manifesto = f.card("A075", board(A, Color::Purple));
+    let given = f.add(
         with_effect(
             Card::from_code("B001").unwrap(),
             Color::Red,
@@ -394,7 +376,7 @@ fn communist_manifesto_gives_one_drawn_seven_to_the_opponent_and_executes_the_ot
         ),
         base_deck(7),
     );
-    let kept = l.add(
+    let kept = f.add(
         with_effect(
             Card::from_code("B001").unwrap(),
             Color::Green,
@@ -403,9 +385,9 @@ fn communist_manifesto_gives_one_drawn_seven_to_the_opponent_and_executes_the_ot
         ),
         base_deck(7),
     );
-    let two = l.tech(Color::Blue, 2, base_deck(2), &[]);
-    l.tech(Color::Blue, 1, base_deck(1), &[]);
-    let mut game = l.game();
+    let two = f.plain(Color::Blue, 2, base_deck(2), &[]);
+    f.plain(Color::Blue, 1, base_deck(1), &[]);
+    let mut game = f.game(Expansions::ARTIFACTS);
     dogma(&mut game, manifesto);
     let (status, events) = play(&mut game, |decision| pick_known(decision, given));
     assert_eq!(status, Status::Complete(ReturnValue::Unit));

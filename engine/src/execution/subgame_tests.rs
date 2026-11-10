@@ -3,6 +3,7 @@
 
 use super::*;
 use crate::program::build::{HAND, score as score_from};
+use shortcuts::common::*;
 
 const HAND_A: Zone = Zone::Hand(A);
 const HAND_B: Zone = Zone::Hand(B);
@@ -23,7 +24,7 @@ fn sharing_icons(code: &str) -> [Icon; 3] {
 
 /// A Base card with this code (its alphabetical rank) and dogma.
 fn programmed(
-    l: &mut Layout,
+    f: &mut Fixture,
     code: &'static str,
     color: Color,
     value: u8,
@@ -35,7 +36,7 @@ fn programmed(
     if !instructions.is_empty() {
         symbols[..3].fill(Symbol::Icon(Icon::Authority));
     }
-    l.add(
+    f.add(
         Card {
             code,
             set: CardSet::Base,
@@ -55,18 +56,21 @@ fn programmed(
 }
 
 /// Martian Internet on A's board, with A's and B's other cards to set aside.
-fn parents(l: &mut Layout) -> (CardId, [CardId; 3]) {
-    let martian = l.artifact("A113", board(A, Color::Blue));
+fn parents(f: &mut Fixture) -> (CardId, [CardId; 3]) {
+    let martian = f.card("A113", board(A, Color::Blue));
     let held = [
-        l.tech(Color::Red, 5, HAND_A, &[]),
-        l.tech(Color::Yellow, 3, SCORE_A, &[]),
-        l.tech(Color::Green, 2, board(B, Color::Green), &[]),
+        f.plain(Color::Red, 5, HAND_A, &[]),
+        f.plain(Color::Yellow, 3, SCORE_A, &[]),
+        f.plain(Color::Green, 2, board(B, Color::Green), &[]),
     ];
     (martian, held)
 }
 
-fn printed(l: Layout) -> Game {
-    l.game().with_tracking().unwrap().with_subgames(true)
+fn printed(f: Fixture) -> Game {
+    f.game(Expansions::ARTIFACTS)
+        .with_tracking()
+        .unwrap()
+        .with_subgames(true)
 }
 
 fn act(game: &mut Game, action: Action) -> (Status, Vec<Event>) {
@@ -117,10 +121,10 @@ fn sorted(cards: &[CardId]) -> Vec<CardId> {
 
 #[test]
 fn without_two_high_cards_the_effect_does_nothing() {
-    let mut l = Layout::default();
-    let (martian, _) = parents(&mut l);
-    l.tech(Color::Red, 8, base_deck(8), &[]);
-    let mut game = printed(l);
+    let mut f = Fixture::default();
+    let (martian, _) = parents(&mut f);
+    f.plain(Color::Red, 8, base_deck(8), &[]);
+    let mut game = printed(f);
     dogma(&mut game, martian);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -132,10 +136,10 @@ fn without_two_high_cards_the_effect_does_nothing() {
 
 #[test]
 fn with_one_high_card_it_is_junked_instead() {
-    let mut l = Layout::default();
-    let (martian, _) = parents(&mut l);
-    let ten = l.tech(Color::Red, 10, base_deck(10), &[]);
-    let mut game = printed(l);
+    let mut f = Fixture::default();
+    let (martian, _) = parents(&mut f);
+    let ten = f.plain(Color::Red, 10, base_deck(10), &[]);
+    let mut game = printed(f);
     dogma(&mut game, martian);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -147,13 +151,13 @@ fn with_one_high_card_it_is_junked_instead() {
 
 #[test]
 fn two_high_cards_start_a_subgame_on_the_shared_supply() {
-    let mut l = Layout::default();
-    let (martian, [hand, score, green]) = parents(&mut l);
+    let mut f = Fixture::default();
+    let (martian, [hand, score, green]) = parents(&mut f);
     // Player One draws the top (last) card; the lower code moves first.
-    let x = programmed(&mut l, "AAA", Color::Red, 9, base_deck(9), Vec::new());
-    let y = programmed(&mut l, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new());
-    let eleven = l.tech(Color::Blue, 11, base_deck(11), &[]);
-    let mut game = printed(l);
+    let x = programmed(&mut f, "AAA", Color::Red, 9, base_deck(9), Vec::new());
+    let y = programmed(&mut f, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new());
+    let eleven = f.plain(Color::Blue, 11, base_deck(11), &[]);
+    let mut game = printed(f);
     dogma(&mut game, martian);
     let (status, events) = no_decisions(&mut game);
     assert_eq!(status, Status::Complete(ReturnValue::Unit));
@@ -181,11 +185,11 @@ fn two_high_cards_start_a_subgame_on_the_shared_supply() {
 
 #[test]
 fn a_drawn_subgame_junks_everything_and_resumes_the_parent() {
-    let mut l = Layout::default();
-    let (martian, [hand, score, green]) = parents(&mut l);
-    let x = programmed(&mut l, "AAA", Color::Red, 9, base_deck(9), Vec::new());
-    let y = programmed(&mut l, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new());
-    let mut game = printed(l);
+    let mut f = Fixture::default();
+    let (martian, [hand, score, green]) = parents(&mut f);
+    let x = programmed(&mut f, "AAA", Color::Red, 9, base_deck(9), Vec::new());
+    let y = programmed(&mut f, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new());
+    let mut game = printed(f);
     dogma(&mut game, martian);
     no_decisions(&mut game);
     // B's one action: a draw past the empty 9s, 10s and 11s ends the
@@ -217,21 +221,21 @@ fn a_drawn_subgame_junks_everything_and_resumes_the_parent() {
 
 #[test]
 fn the_winner_transfers_hand_score_and_board_and_the_loser_is_junked() {
-    let mut l = Layout::default();
-    let (martian, [hand, score, green]) = parents(&mut l);
-    let c = programmed(&mut l, "CCC", Color::Yellow, 9, base_deck(9), Vec::new());
-    let d = programmed(&mut l, "DDD", Color::Blue, 9, base_deck(9), Vec::new());
+    let mut f = Fixture::default();
+    let (martian, [hand, score, green]) = parents(&mut f);
+    let c = programmed(&mut f, "CCC", Color::Yellow, 9, base_deck(9), Vec::new());
+    let d = programmed(&mut f, "DDD", Color::Blue, 9, base_deck(9), Vec::new());
     // B draws and melds X: scoring a card from hand and winning the subgame.
     let x = programmed(
-        &mut l,
+        &mut f,
         "XXX",
         Color::Green,
         9,
         base_deck(9),
         vec![score_from(HAND), Instruction::Win(WinRule::Executor)],
     );
-    let y = programmed(&mut l, "YYY", Color::Purple, 9, base_deck(9), Vec::new());
-    let mut game = printed(l);
+    let y = programmed(&mut f, "YYY", Color::Purple, 9, base_deck(9), Vec::new());
+    let mut game = printed(f);
     dogma(&mut game, martian);
     no_decisions(&mut game);
     assert_eq!(game.position().turn_owner(), B);
@@ -276,21 +280,21 @@ fn the_winner_transfers_hand_score_and_board_and_the_loser_is_junked() {
 
 #[test]
 fn a_shared_execution_runs_one_subgame_per_executor() {
-    let mut l = Layout::default();
-    let (martian, _) = parents(&mut l);
-    l.tech(Color::Red, 4, board(B, Color::Red), &sharing_icons("A113"));
-    let c = programmed(&mut l, "CCC", Color::Yellow, 9, base_deck(9), Vec::new());
-    let d = programmed(&mut l, "DDD", Color::Blue, 9, base_deck(9), Vec::new());
-    let y = programmed(&mut l, "YYY", Color::Purple, 9, base_deck(9), Vec::new());
+    let mut f = Fixture::default();
+    let (martian, _) = parents(&mut f);
+    f.plain(Color::Red, 4, board(B, Color::Red), &sharing_icons("A113"));
+    let c = programmed(&mut f, "CCC", Color::Yellow, 9, base_deck(9), Vec::new());
+    let d = programmed(&mut f, "DDD", Color::Blue, 9, base_deck(9), Vec::new());
+    let y = programmed(&mut f, "YYY", Color::Purple, 9, base_deck(9), Vec::new());
     let x = programmed(
-        &mut l,
+        &mut f,
         "XXX",
         Color::Red,
         9,
         base_deck(9),
         vec![Instruction::Win(WinRule::Executor)],
     );
-    let mut game = printed(l);
+    let mut game = printed(f);
     dogma(&mut game, martian);
     // B shares and executes first: the first subgame deals X to A and Y to
     // B; A moves first and wins it with X.
@@ -332,15 +336,15 @@ fn a_shared_execution_runs_one_subgame_per_executor() {
 
 #[test]
 fn search_inside_a_subgame_plays_to_win_it_and_never_rejoins() {
-    let mut l = Layout::default();
-    let (martian, _) = parents(&mut l);
-    programmed(&mut l, "AAA", Color::Red, 9, base_deck(9), Vec::new());
-    programmed(&mut l, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new());
+    let mut f = Fixture::default();
+    let (martian, _) = parents(&mut f);
+    programmed(&mut f, "AAA", Color::Red, 9, base_deck(9), Vec::new());
+    programmed(&mut f, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new());
     for age in [10, 11] {
-        l.tech(Color::Blue, age, base_deck(age), &[]);
-        l.tech(Color::Green, age, base_deck(age), &[]);
+        f.plain(Color::Blue, age, base_deck(age), &[]);
+        f.plain(Color::Green, age, base_deck(age), &[]);
     }
-    let mut game = printed(l);
+    let mut game = printed(f);
     dogma(&mut game, martian);
     no_decisions(&mut game);
     assert_eq!(game.subgame_depth(), 1);
@@ -362,11 +366,11 @@ fn search_inside_a_subgame_plays_to_win_it_and_never_rejoins() {
 
 #[test]
 fn the_draw_variant_is_unchanged_without_the_flag() {
-    let mut l = Layout::default();
-    let (martian, _) = parents(&mut l);
-    programmed(&mut l, "AAA", Color::Red, 9, base_deck(9), Vec::new());
-    programmed(&mut l, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new());
-    let mut game = l.game();
+    let mut f = Fixture::default();
+    let (martian, _) = parents(&mut f);
+    programmed(&mut f, "AAA", Color::Red, 9, base_deck(9), Vec::new());
+    programmed(&mut f, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new());
+    let mut game = f.game(Expansions::ARTIFACTS);
     assert!(!game.subgames());
     dogma(&mut game, martian);
     let (status, events) = no_decisions(&mut game);
@@ -376,14 +380,14 @@ fn the_draw_variant_is_unchanged_without_the_flag() {
 
 #[test]
 fn a_subgame_hitting_the_work_cap_rejoins_its_parent_as_a_draw() {
-    let mut l = Layout::default();
-    let (martian, held) = parents(&mut l);
+    let mut f = Fixture::default();
+    let (martian, held) = parents(&mut f);
     let nines = [
-        programmed(&mut l, "AAA", Color::Red, 9, base_deck(9), Vec::new()),
-        programmed(&mut l, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new()),
+        programmed(&mut f, "AAA", Color::Red, 9, base_deck(9), Vec::new()),
+        programmed(&mut f, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new()),
     ];
-    l.tech(Color::Blue, 10, base_deck(10), &[]);
-    let mut game = printed(l);
+    f.plain(Color::Blue, 10, base_deck(10), &[]);
+    let mut game = printed(f);
     dogma(&mut game, martian);
     no_decisions(&mut game);
     assert_eq!(game.subgame_depth(), 1);
@@ -406,16 +410,16 @@ fn a_subgame_hitting_the_work_cap_rejoins_its_parent_as_a_draw() {
 
 #[test]
 fn a_sampled_subgame_world_leaves_the_parents_hidden_cards_out() {
-    let mut l = Layout::default();
-    let (martian, _) = parents(&mut l);
-    programmed(&mut l, "AAA", Color::Red, 9, base_deck(9), Vec::new());
-    programmed(&mut l, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new());
+    let mut f = Fixture::default();
+    let (martian, _) = parents(&mut f);
+    programmed(&mut f, "AAA", Color::Red, 9, base_deck(9), Vec::new());
+    programmed(&mut f, "ZZZ", Color::Purple, 9, base_deck(9), Vec::new());
     // B's hidden 10 shares a back with two supply 10s. Whichever identity a
     // world leaves in B's hand is the one the child's supply does without.
-    l.tech(Color::Green, 10, HAND_B, &[]);
-    l.tech(Color::Blue, 10, base_deck(10), &[]);
-    l.tech(Color::Yellow, 10, base_deck(10), &[]);
-    let mut game = printed(l);
+    f.plain(Color::Green, 10, HAND_B, &[]);
+    f.plain(Color::Blue, 10, base_deck(10), &[]);
+    f.plain(Color::Yellow, 10, base_deck(10), &[]);
+    let mut game = printed(f);
     dogma(&mut game, martian);
     no_decisions(&mut game);
     assert_eq!(game.subgame_depth(), 1);

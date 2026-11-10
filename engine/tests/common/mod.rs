@@ -118,6 +118,42 @@ impl Fixture {
         self.add(Card::from_code(figure.code()).unwrap(), zone)
     }
 
+    /// A printed Figure as that player's top card of its own color.
+    pub fn top_figure(&mut self, figure: Figure, player: Player) -> CardId {
+        let card = Card::from_code(figure.code()).unwrap();
+        let zone = Zone::Board(player, card.color);
+        self.add(card, zone)
+    }
+
+    /// A printed card in its own deck.
+    pub fn in_deck(&mut self, code: &str) -> CardId {
+        let card = Card::from_code(code).unwrap();
+        let zone = Zone::Deck(card.origin_deck());
+        self.add(card, zone)
+    }
+
+    /// A Base card without effects, these icons in its first positions.
+    pub fn plain(&mut self, color: Color, value: u8, zone: Zone, icons: &[Icon]) -> CardId {
+        let mut symbols = [Symbol::Blank; SLOTS];
+        for (slot, &icon) in symbols.iter_mut().zip(icons) {
+            *slot = Symbol::Icon(icon);
+        }
+        self.add(
+            Card {
+                code: "synthetic-base-program",
+                set: CardSet::Base,
+                color,
+                value,
+                figure: None,
+                echo: None,
+                symbols,
+                featured: Some(Icon::Authority),
+                effects: Vec::new(),
+            },
+            zone,
+        )
+    }
+
     pub fn add(&mut self, card: Card, zone: Zone) -> CardId {
         let id = CardId(self.cards.len() as u16);
         self.cards.push(card);
@@ -127,6 +163,11 @@ impl Fixture {
 
     pub fn position(self) -> Position {
         Position::new(self.cards, &self.placements, A).unwrap()
+    }
+
+    /// A game on this position, the first player to move.
+    pub fn game(self, expansions: Expansions) -> Game {
+        Game::new(self.position(), expansions).unwrap()
     }
 }
 
@@ -315,4 +356,55 @@ pub fn run(game: &mut Game, events: &mut Vec<Event>, preferred: &[CardId]) -> St
         }
     }
     panic!("did not terminate");
+}
+
+pub fn no_decisions(game: &mut Game) -> (Status, Vec<Event>) {
+    play(game, |_| None)
+}
+
+/// Each physical move as (verb, card, source, destination).
+pub fn moves(events: &[Event]) -> Vec<(Option<Verb>, CardId, Zone, Zone)> {
+    events
+        .iter()
+        .filter_map(|event| match *event {
+            Event::Moved(Movement {
+                verb,
+                card,
+                source,
+                destination,
+                ..
+            }) => Some((verb, card, source, destination)),
+            _ => None,
+        })
+        .collect()
+}
+
+/// The option moving this card, by its known identity.
+pub fn option_moving(decision: &Decision, card: CardId) -> Option<usize> {
+    decision.options.iter().position(|option| {
+        matches!(
+            option,
+            Alternative::Move { target: TargetDescriptor::Known { card: c, .. }, .. } if *c == card
+        )
+    })
+}
+
+pub fn base_deck(age: u8) -> Zone {
+    Zone::Deck(Deck::base(age))
+}
+
+pub fn board(player: Player, color: Color) -> Zone {
+    Zone::Board(player, color)
+}
+
+pub fn pick_value(decision: &Decision, value: u8) -> Option<usize> {
+    decision
+        .options
+        .iter()
+        .position(|o| *o == Alternative::Value(value))
+}
+
+/// Three of the card's featured icon: enough for B to share any Artifact.
+pub fn sharing_icons(code: &str) -> [Icon; 3] {
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }

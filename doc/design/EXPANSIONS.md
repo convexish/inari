@@ -44,9 +44,10 @@ foreseen source identity through its free Dogma. Bonuses span 1–12.
 - Mechanics: `engine/src/execution/artifacts.rs`. Dig, seize, showcase,
   rotation and the Museum Check are scheduler procedures, not card
   instructions.
-- Tests: `engine/tests/artifacts_foundation.rs`, `artifacts_procedures.rs`,
-  `artifacts_cleanup.rs`, `artifacts_rulings.rs`; in-crate tests under
-  `engine/src/artifacts_tests/`.
+- Tests: `engine/tests/artifacts_*.rs` (foundation, procedures, cleanup,
+  rulings, reveals, one file per age); Museum storage in
+  `engine/src/artifacts_tests.rs` and the printed subgame in
+  `engine/src/execution/subgame_tests.rs`, which read crate internals.
 
 Display and Museum storage are dedicated public zones, not logical hands or
 boards; their icons do not count toward board queries. Museums are physical

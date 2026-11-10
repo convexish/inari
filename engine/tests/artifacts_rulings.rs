@@ -82,26 +82,6 @@ fn new_game(f: Fixture, expansions: Expansions) -> Game {
     Game::new(f.position(), expansions).unwrap()
 }
 
-fn no_decisions(game: &mut Game) -> (Status, Vec<Event>) {
-    play(game, |_| None)
-}
-
-fn moves(events: &[Event]) -> Vec<(Option<Verb>, CardId, Zone, Zone)> {
-    events
-        .iter()
-        .filter_map(|event| match *event {
-            Event::Moved(Movement {
-                verb,
-                card,
-                source,
-                destination,
-                ..
-            }) => Some((verb, card, source, destination)),
-            _ => None,
-        })
-        .collect()
-}
-
 /// Who drew each card, in order.
 fn drawers(events: &[Event]) -> Vec<Player> {
     events
