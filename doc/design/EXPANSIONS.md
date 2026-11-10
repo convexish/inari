@@ -28,7 +28,9 @@ Endorsement is offered and charged once per original Dogma action.
   foreseen scope); retained slots and structured bodies use
   `execution/slots.rs` and `execution/blocks.rs`.
 - Tests: `engine/tests/echoes_setup.rs`, `echoes_session.rs`,
-  `echoes_combinations.rs`, `ported_echoes15.rs`, `ported_echoes611.rs`.
+  `echoes_combinations.rs`, `echoes_rulings_age01_05.rs`,
+  `echoes_rulings_age06_11.rs`; in-crate tests under
+  `engine/src/execution/echoes_tests/`.
 
 The Forecast is a capacity-limited hidden zone. Ordinary draws and explicitly
 requested draws are distinct. A Dogma freezes the echo schedule of the visible
@@ -43,7 +45,8 @@ foreseen source identity through its free Dogma. Bonuses span 1–12.
   rotation and the Museum Check are scheduler procedures, not card
   instructions.
 - Tests: `engine/tests/artifacts_foundation.rs`, `artifacts_procedures.rs`,
-  `artifacts_cleanup.rs`, `ported_artifacts.rs`.
+  `artifacts_cleanup.rs`, `artifacts_rulings.rs`; in-crate tests under
+  `engine/src/artifacts_tests/`.
 
 Display and Museum storage are dedicated public zones, not logical hands or
 boards; their icons do not count toward board queries. Museums are physical
@@ -90,7 +93,7 @@ subgame banner, its own turn count, and the parked parent boards.
   `engine/src/execution/` and `engine/src/tracking/`; no Unseen-specific opcodes.
 - Tests: `engine/tests/unseen_*.rs` (foundation, safe, draws, execution,
   histories, teleprompter, specials, hard cases, one file per age) and
-  `ported_cities_unseen.rs`.
+  `cities_unseen_rulings.rs`.
 
 The Safe is an ordered pile hidden from everyone, its owner included, with
 capacity checked at commit. Secrets are proved by reveals. Hitchhiking's

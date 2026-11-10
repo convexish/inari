@@ -1,4 +1,4 @@
-//! Expected outcomes for the last six Base programs: Road Building,
+//! Expected outcomes for six Base programs: Road Building,
 //! Vaccination, Classification, Composites, Collaboration, Miniaturization.
 use inno_engine::*;
 
