@@ -5,7 +5,10 @@ use common::*;
 #[test]
 fn wheel_draws_two_cards_with_boxes_adjusted_but_not_the_quantity() {
     let mut f = Fixture::default();
-    let wheel = f.add(base_card("B009").unwrap(), Zone::Board(A, Color::Green));
+    let wheel = f.add(
+        Card::from_code("B009").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     f.figure(Figure::Archimedes, Zone::Board(A, Color::Blue));
     let bottom = f.tech(Color::Yellow, 2, Zone::Deck(Deck::base(2)), vec![]);
     let top = f.tech(Color::Purple, 2, Zone::Deck(Deck::base(2)), vec![]);
@@ -38,7 +41,10 @@ fn wheel_draws_two_cards_with_boxes_adjusted_but_not_the_quantity() {
 #[test]
 fn mathematics_uses_the_successful_return_value_not_a_boxed_draw_literal() {
     let mut f = Fixture::default();
-    let math = f.add(base_card("B023").unwrap(), Zone::Board(A, Color::Blue));
+    let math = f.add(
+        Card::from_code("B023").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     f.figure(Figure::Archimedes, Zone::Board(A, Color::Blue));
     let payment = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let drawn = f.tech(Color::Green, 2, Zone::Deck(Deck::base(2)), vec![]);
@@ -66,7 +72,10 @@ fn mathematics_uses_the_successful_return_value_not_a_boxed_draw_literal() {
 fn quantum_theory_keeps_every_optional_stop_and_scores_only_the_second_reward() {
     for count in 0..=2 {
         let mut f = Fixture::default();
-        let quantum = f.add(base_card("B082").unwrap(), Zone::Board(A, Color::Blue));
+        let quantum = f.add(
+            Card::from_code("B082").unwrap(),
+            Zone::Board(A, Color::Blue),
+        );
         let payments = [
             f.tech(Color::Red, 1, Zone::Hand(A), vec![]),
             f.tech(Color::Green, 2, Zone::Hand(A), vec![]),
@@ -117,7 +126,10 @@ fn quantum_theory_keeps_every_optional_stop_and_scores_only_the_second_reward() 
 #[test]
 fn quantum_theory_requires_two_original_returns_not_two_attempts() {
     let mut f = Fixture::default();
-    let quantum = f.add(base_card("B082").unwrap(), Zone::Board(A, Color::Blue));
+    let quantum = f.add(
+        Card::from_code("B082").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     f.figure(Figure::Homer, Zone::Board(A, Color::Purple));
     let replaced = f.figure(Figure::Archimedes, Zone::Hand(A));
     let returned = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
@@ -142,7 +154,10 @@ fn quantum_theory_requires_two_original_returns_not_two_attempts() {
 #[test]
 fn quantum_theory_second_draw_exhaustion_does_not_score_the_first_draw() {
     let mut f = Fixture::default();
-    let quantum = f.add(base_card("B082").unwrap(), Zone::Board(A, Color::Blue));
+    let quantum = f.add(
+        Card::from_code("B082").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     let one = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let two = f.tech(Color::Green, 2, Zone::Hand(A), vec![]);
     let last = f.tech(Color::Yellow, 10, Zone::Deck(Deck::base(10)), vec![]);

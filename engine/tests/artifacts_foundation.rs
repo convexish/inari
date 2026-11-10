@@ -51,11 +51,11 @@ fn printed_catalog_matches_the_publisher_decks_and_reserved_identities() {
 #[test]
 fn every_card_is_authored_and_a_full_game_deals() {
     assert_eq!(
-        artifacts_card("A999").unwrap_err(),
-        Error::InvalidSetup("unknown Artifacts card")
+        Card::from_code("A999").unwrap_err(),
+        Error::InvalidSetup("unknown card")
     );
     for metadata in &ARTIFACTS_METADATA {
-        assert!(artifacts_card(metadata.code).is_ok(), "{}", metadata.code);
+        assert!(Card::from_code(metadata.code).is_ok(), "{}", metadata.code);
     }
     let game = Game::new_game(1, Expansions::ARTIFACTS).unwrap();
     assert!(game.position().check_conservation());
@@ -63,7 +63,7 @@ fn every_card_is_authored_and_a_full_game_deals() {
 
 #[test]
 fn yamato_is_eleven_only_on_boards_displays_and_museums() {
-    let yamato = artifacts_card("A077").unwrap();
+    let yamato = Card::from_code("A077").unwrap();
     assert_eq!((yamato.value, yamato.face_value()), (8, 11));
     assert_eq!(
         yamato.origin_deck(),
@@ -73,7 +73,7 @@ fn yamato_is_eleven_only_on_boards_displays_and_museums() {
         }
     );
     assert!(yamato.effects.is_empty());
-    assert_eq!(base_card("B001").unwrap().face_value(), 1);
+    assert_eq!(Card::from_code("B001").unwrap().face_value(), 1);
     let cases = [
         (Zone::Hand(A), 8),
         (Zone::Score(A), 8),
@@ -215,7 +215,7 @@ fn records_and_results_keep_the_value_their_move_showed() {
     for (zone, program, expected) in cases {
         let mut f = Fixture::default();
         let source = f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), program);
-        let yamato = f.add(artifacts_card("A077").unwrap(), zone);
+        let yamato = f.add(Card::from_code("A077").unwrap(), zone);
         let eight = f.tech(Color::Green, 8, Zone::Deck(Deck::base(8)), vec![]);
         let eleven = f.tech(Color::Green, 11, Zone::Deck(Deck::base(11)), vec![]);
         let mut game = Game::new(f.position(), Expansions::ARTIFACTS).unwrap();
@@ -268,7 +268,7 @@ fn an_explicit_reveal_shows_yamatos_face_through_the_effect_and_its_children() {
         Zone::Board(A, Color::Green),
         vec![draw_age(Expr::Max(&HAND)), score(LAST)],
     );
-    let yamato = f.add(artifacts_card("A077").unwrap(), Zone::Hand(A));
+    let yamato = f.add(Card::from_code("A077").unwrap(), Zone::Hand(A));
     let eight = f.tech(Color::Yellow, 8, Zone::Deck(Deck::base(8)), vec![]);
     let first = f.tech(Color::Yellow, 11, Zone::Deck(Deck::base(11)), vec![]);
     let second = f.tech(Color::Purple, 11, Zone::Deck(Deck::base(11)), vec![]);
@@ -303,7 +303,7 @@ fn an_explicit_reveal_shows_yamatos_face_through_the_effect_and_its_children() {
         ],
     );
     icons(&mut f, source, Icon::Authority, 1);
-    let yamato = f.add(artifacts_card("A077").unwrap(), Zone::Hand(A));
+    let yamato = f.add(Card::from_code("A077").unwrap(), Zone::Hand(A));
     f.tech(Color::Yellow, 8, Zone::Deck(Deck::base(8)), vec![]);
     let eleven = f.tech(Color::Yellow, 11, Zone::Deck(Deck::base(11)), vec![]);
     let mut game = Game::new(f.position(), Expansions::ARTIFACTS).unwrap();

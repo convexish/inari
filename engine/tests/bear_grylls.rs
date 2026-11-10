@@ -522,7 +522,7 @@ fn bear_sweeps_without_choices_past_claim_karmas_it_suppresses() {
         vec![build::verb(Verb::Meld, build::HAND).to(Destination::Board(Who::Executor))],
     );
     let bear = f.figure(Figure::BearGrylls, Zone::Hand(A));
-    let color = |figure: Figure| figure_card(figure.code()).unwrap().color;
+    let color = |figure: Figure| Card::from_code(figure.code()).unwrap().color;
     let zhang = color(Figure::ZhangHeng);
     f.figure(Figure::ZhangHeng, Zone::Board(B, zhang));
     let darwin = color(Figure::CharlesDarwin);

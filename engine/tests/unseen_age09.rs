@@ -7,7 +7,7 @@ mod common;
 use common::*;
 
 fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(unseen_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
@@ -68,7 +68,7 @@ fn mccarthyism_melds_an_eight_and_eliminates_a_socialism_top() {
         let mut f = Fixture::default();
         let card = unseen(&mut f, "U087", Zone::Board(A, Color::Red));
         let eight = if socialism {
-            f.add(base_card("B085").unwrap(), Zone::Deck(Deck::base(8)))
+            f.add(Card::from_code("B085").unwrap(), Zone::Deck(Deck::base(8)))
         } else {
             f.tech(Color::Red, 8, Zone::Deck(Deck::base(8)), vec![])
         };

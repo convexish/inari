@@ -80,10 +80,11 @@ fn bandage_verifies_the_returned_score_card_and_junks_one_mixed_quota_only_after
     for (score_succeeds, board_succeeds) in [(true, true), (false, true), (true, false)] {
         let mut f = Layout::default();
         let selected = f.add(
-            base_card(if score_succeeds { "B076" } else { "B001" }).unwrap(),
+            Card::from_code(if score_succeeds { "B076" } else { "B001" }).unwrap(),
             Zone::Score(A),
         );
-        let same_back = score_succeeds.then(|| f.add(base_card("B077").unwrap(), Zone::Score(A)));
+        let same_back =
+            score_succeeds.then(|| f.add(Card::from_code("B077").unwrap(), Zone::Score(A)));
         let board = tech(
             &mut f,
             Color::Blue,
@@ -424,9 +425,9 @@ fn algocracy_uses_featured_icons_reveals_nonmatches_and_preserves_bonus_noop() {
         );
         // Printed Health is insufficient when the featured type differs.
         f.cards[usize::from(nonmatching.0)].symbols[1] = Symbol::Icon(Icon::Health);
-        let city = f.add(city_card("C035").unwrap(), Zone::Score(A));
+        let city = f.add(Card::from_code("C035").unwrap(), Zone::Score(A));
         let figure = f.add(
-            figure_card(Figure::NapoleonBonaparte.code()).unwrap(),
+            Card::from_code(Figure::NapoleonBonaparte.code()).unwrap(),
             Zone::Score(B),
         );
         let leaders_hand = tech(

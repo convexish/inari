@@ -4,7 +4,7 @@ use super::*;
 use program::build::{self, HAND, filtered};
 
 pub(super) fn card(code: &str) -> Card {
-    echoes_card(code).unwrap()
+    Card::from_code(code).unwrap()
 }
 
 /// Advance to the end, answering each decision with `pick`; whether A won.
@@ -85,7 +85,7 @@ fn authored_echoes_cards_match_their_printed_echoes() {
         assert_eq!(card.set, CardSet::Echoes);
         let printed = card.symbols.contains(&Symbol::Echo);
         assert_eq!(card.echo.is_some(), printed, "{code}");
-        let metadata = echoes_metadata(code).unwrap();
+        let metadata = card_metadata(code).unwrap();
         assert_eq!(
             card.effects.len(),
             echoes_effect_count(metadata.code),
@@ -1344,7 +1344,10 @@ fn canning_still_tucks_a_card_drawn_above_its_age() {
     // "You may draw and tuck a [6]": an empty [6] deck gives a [7], which is
     // still tucked; the optional draw was taken.
     let mut layout = Layout::default();
-    let canning = layout.add(base_card("B058").unwrap(), Zone::Board(A, Color::Yellow));
+    let canning = layout.add(
+        Card::from_code("B058").unwrap(),
+        Zone::Board(A, Color::Yellow),
+    );
     let seven = deck_card(&mut layout, CardSet::Base, Color::Red, 7);
     let mut game = Game::new(layout.position(Expansions::BASE), Expansions::BASE).unwrap();
     game.start(

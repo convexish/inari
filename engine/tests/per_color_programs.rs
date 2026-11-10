@@ -3,7 +3,7 @@ mod common;
 use common::*;
 
 fn native(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = base_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(player, color))
 }
@@ -295,11 +295,14 @@ fn whataboutism_exchange_includes_still_active_logical_score_hand_members() {
 fn replaced_per_color_transfers_consume_each_color_once_and_do_not_unlock_the_exchange() {
     let mut f = Fixture::default();
     let source = native(&mut f, "B115", A);
-    let yi = figure_card("F037").unwrap();
+    let yi = Card::from_code("F037").unwrap();
     let yi_color = yi.color;
     f.add(yi, Zone::Board(A, yi_color));
-    let red = f.add(base_card("B037").unwrap(), Zone::Board(B, Color::Red));
-    let purple = f.add(base_card("B065").unwrap(), Zone::Board(B, Color::Purple));
+    let red = f.add(Card::from_code("B037").unwrap(), Zone::Board(B, Color::Red));
+    let purple = f.add(
+        Card::from_code("B065").unwrap(),
+        Zone::Board(B, Color::Purple),
+    );
     // These native demands and the child draws have no Authority. Yi cannot
     // score a still-unconsidered demand before its own transfer is attempted.
     for color in [Color::Yellow, Color::Blue] {
@@ -342,7 +345,7 @@ fn replaced_per_color_transfers_consume_each_color_once_and_do_not_unlock_the_ex
 fn electricity_keeps_its_boxed_age_after_returning_archimedes_but_does_not_boost_the_count() {
     let mut f = Fixture::default();
     let source = native(&mut f, "B071", A);
-    let archimedes = figure_card("F022").unwrap();
+    let archimedes = Card::from_code("F022").unwrap();
     let color = archimedes.color;
     let figure = f.add(archimedes, Zone::Board(A, color));
     let red = card(&mut f, A, Color::Red, 1, None);

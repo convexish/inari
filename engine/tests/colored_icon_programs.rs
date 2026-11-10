@@ -3,7 +3,7 @@ mod common;
 use common::*;
 
 fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 fn invoke(g: &mut Game, card: CardId, effect: u16) {
     g.start(

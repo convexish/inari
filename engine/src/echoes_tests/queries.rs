@@ -12,7 +12,7 @@ fn printed(f: &mut Fixture, color: Color, value: u8, symbols: [Symbol; 4], zone:
 }
 
 fn source(f: &mut Fixture, code: &str) -> CardId {
-    f.add(echoes_card(code).unwrap(), Zone::Junk)
+    f.add(Card::from_code(code).unwrap(), Zone::Junk)
 }
 
 fn start(
@@ -106,7 +106,7 @@ fn novel_common_types_include_bonus_city_search_and_figure_but_exclude_prosperit
     }
     let mut f = Fixture::default();
     let novel = source(&mut f, "E034");
-    let napoleon = figure_card(Figure::NapoleonBonaparte.code()).unwrap();
+    let napoleon = Card::from_code(Figure::NapoleonBonaparte.code()).unwrap();
     assert_eq!(napoleon.bonus(), Some(6));
     let other = Color::ALL
         .into_iter()
@@ -428,7 +428,7 @@ fn novel_forecast_return_oracle_keeps_same_deck_orders_and_runs_maxwell() {
             );
         }
         if reacting {
-            let maxwell = figure_card(Figure::JamesClerkMaxwell.code()).unwrap();
+            let maxwell = Card::from_code(Figure::JamesClerkMaxwell.code()).unwrap();
             f.add(maxwell.clone(), Zone::Board(A, maxwell.color));
             for _ in 0..3 {
                 printed(
@@ -475,7 +475,7 @@ fn novel_forecast_return_oracle_keeps_same_deck_orders_and_runs_maxwell() {
 fn meritocracy_game(foreseen: bool, reacting: bool) -> (Game, Vec<CardId>, CardId) {
     let mut f = Fixture::default();
     let merit = f.add(
-        echoes_card("E115").unwrap(),
+        Card::from_code("E115").unwrap(),
         if foreseen {
             Zone::Forecast(A)
         } else {
@@ -544,7 +544,7 @@ fn meritocracy_game(foreseen: bool, reacting: bool) -> (Game, Vec<CardId>, CardI
         Zone::Deck(Deck::base(7)),
     );
     if reacting {
-        let nobel = figure_card(Figure::AlfredNobel.code()).unwrap();
+        let nobel = Card::from_code(Figure::AlfredNobel.code()).unwrap();
         f.add(nobel.clone(), Zone::Board(A, nobel.color));
     }
     let mut position = f.position();

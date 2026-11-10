@@ -4,23 +4,23 @@ mod common;
 use common::*;
 
 fn city(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(city_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn city_on_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = city_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let zone = Zone::Board(player, card.color);
     f.add(card, zone)
 }
 
 fn base_on_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = base_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let zone = Zone::Board(player, card.color);
     f.add(card, zone)
 }
 
 fn figure(f: &mut Fixture, figure: Figure, zone: Option<Zone>) -> CardId {
-    let card = figure_card(figure.code()).unwrap();
+    let card = Card::from_code(figure.code()).unwrap();
     let zone = zone.unwrap_or(Zone::Board(A, card.color));
     f.add(card, zone)
 }

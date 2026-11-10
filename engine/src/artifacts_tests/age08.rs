@@ -15,7 +15,7 @@ fn board(player: Player, color: Color) -> Zone {
 }
 
 fn sharing_icons(code: &str) -> [Icon; 3] {
-    [artifacts_card(code).unwrap().featured.unwrap(); 3]
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 /// A color neither this Figure nor A's purple Ball occupies.
@@ -402,7 +402,7 @@ fn garlands_ruby_slippers_wins_on_an_effectless_meld_and_executes_any_other() {
     let slippers = l.artifact("A084", board(A, Color::Purple));
     let eight = l.add(
         with_effect(
-            base_card("B001").unwrap(),
+            Card::from_code("B001").unwrap(),
             Color::Red,
             8,
             vec![build::draw(1)],

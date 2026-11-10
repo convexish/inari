@@ -4,11 +4,11 @@ mod common;
 use common::*;
 
 fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(unseen_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn city(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(city_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn blank(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
@@ -138,7 +138,10 @@ fn blackmailed_padlock_scores_at_least_one_card_then_may_stop() {
 #[test]
 fn robocar_repeats_after_melding_a_city() {
     let mut f = Fixture::default();
-    let robocar = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
+    let robocar = f.add(
+        Card::from_code("E111").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     let athens = city(&mut f, "C001", Zone::Hand(A));
     let other = blank(&mut f, Color::Blue, 1, Zone::Hand(A));
     let mut game = Game::new(f.position(), echoes_cities()).unwrap();
@@ -319,7 +322,7 @@ fn a_promoted_free_dogma_can_be_endorsed() {
     blank(&mut f, Color::Blue, 1, Zone::Board(A, Color::Blue));
     let melded = blank(&mut f, Color::Blue, 1, Zone::Hand(A));
     let payment = blank(&mut f, Color::Green, 1, Zone::Hand(A));
-    let writing = f.add(base_card("B012").unwrap(), Zone::Forecast(A));
+    let writing = f.add(Card::from_code("B012").unwrap(), Zone::Forecast(A));
     let twos: Vec<_> = (0..3)
         .map(|_| blank(&mut f, Color::Yellow, 2, Zone::Deck(Deck::base(2))))
         .collect();
@@ -406,7 +409,7 @@ fn spanish_inquisition_returns_the_hand_card_before_the_score_card() {
 #[test]
 fn pressure_cooker_keeps_its_order_and_back_choices_with_several_backs() {
     let mut f = Fixture::default();
-    let cooker = f.add(echoes_card("E048").unwrap(), Zone::Hand(A));
+    let cooker = f.add(Card::from_code("E048").unwrap(), Zone::Hand(A));
     let two = blank(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
     f.cards[usize::from(two.0)].symbols[0] = Symbol::Bonus(2);
     let five = blank(&mut f, Color::Blue, 1, Zone::Board(A, Color::Blue));

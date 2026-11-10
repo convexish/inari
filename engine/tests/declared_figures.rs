@@ -33,7 +33,7 @@ fn deck(f: &mut Fixture, age: u8, count: usize) -> Vec<CardId> {
 
 /// The Figure on top of its own color on that player's board.
 fn put(f: &mut Fixture, figure: Figure, player: Player) -> CardId {
-    let color = figure_card(figure.code()).unwrap().color;
+    let color = Card::from_code(figure.code()).unwrap().color;
     f.figure(figure, Zone::Board(player, color))
 }
 
@@ -631,7 +631,7 @@ fn newton_then_ericsson(newton_to_opponent: bool) -> (bool, usize) {
     let mut f = Fixture::default();
     put(&mut f, Figure::IsaacNewton, A);
     let ericsson = put(&mut f, Figure::JohnEricsson, B);
-    let color = figure_card(Figure::JohnEricsson.code()).unwrap().color;
+    let color = Card::from_code(Figure::JohnEricsson.code()).unwrap().color;
     let one = card(&mut f, color, 1, Zone::Deck(Deck::base(1)), &[]);
     for age in 2..=11 {
         deck(&mut f, age, 2);
@@ -818,7 +818,10 @@ fn napoleon_melds_instead_tucks_red_or_blue_and_scores_a_five_or_six() {
 /// the batch and scoring `score_pick` when Napoleon offers it.
 fn translation_with_napoleon(f: &mut Fixture, score_pick: CardId) -> (Game, Vec<Event>) {
     put(f, Figure::NapoleonBonaparte, A);
-    let translation = f.add(base_card("B033").unwrap(), Zone::Board(A, Color::Blue));
+    let translation = f.add(
+        Card::from_code("B033").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     let mut game = Game::new(std::mem::take(f).position(), Expansions::FIGURES).unwrap();
     game.self_execute(translation, Context::new(A)).unwrap();
     let (status, events) = run(&mut game, |_, menu| {
@@ -1033,7 +1036,7 @@ fn franklin_takes_an_opposing_top_figure_of_the_melded_color() {
     let mut f = Fixture::default();
     put(&mut f, Figure::BenjaminFranklin, A);
     let theirs = put(&mut f, Figure::Gilgamesh, B);
-    let color = figure_card(Figure::Gilgamesh.code()).unwrap().color;
+    let color = Card::from_code(Figure::Gilgamesh.code()).unwrap().color;
     let melded = card(&mut f, color, 1, Zone::Hand(A), &[]);
     let mut game = new(f);
     let op = meld_op(&game, melded, A);
@@ -1556,7 +1559,7 @@ fn verstappen_samples_worlds_while_escapism_self_executes_its_revealed_card() {
     // karma's operand looked hidden once it lay in the junk).
     let mut f = Fixture::default();
     put(&mut f, Figure::MaxVerstappen, A);
-    let escapism = base_card("B114").unwrap();
+    let escapism = Card::from_code("B114").unwrap();
     let color = escapism.color;
     let escapism = f.add(escapism, Zone::Board(A, color));
     let revealed = f.tech(Color::Red, 2, Zone::Hand(A), vec![build::draw(1)]);
@@ -1607,7 +1610,7 @@ fn candles_draw_reactions_can_be_searched_by_the_demander() {
     let mut f = Fixture::default();
     put(&mut f, Figure::MarieCurie, A);
     put(&mut f, Figure::RodSerling, B);
-    let candles = echoes_card("E002").unwrap();
+    let candles = Card::from_code("E002").unwrap();
     let color = candles.color;
     let candles = f.add(candles, Zone::Board(B, color));
     card(&mut f, Color::Purple, 5, Zone::Hand(A), &[Icon::Concept]);
@@ -1670,7 +1673,7 @@ fn nightingale_guards_only_score_piles_so_fermi_sweeps_the_junk_freely() {
             // The junk is then B's score pile, which Nightingale guards.
             put(&mut f, Figure::WernherVonBraun, B);
         }
-        let fermi = unseen_card("U093").unwrap();
+        let fermi = Card::from_code("U093").unwrap();
         let color = fermi.color;
         let fermi = f.add(fermi, Zone::Board(A, color));
         let junk = [
@@ -1906,7 +1909,7 @@ fn yuna_kim_wins_on_an_authority_score_and_turns_melds_into_tucks() {
     // A narrated game announces the karma once, before its effects.
     let yuna = game
         .position()
-        .top(A, figure_card(Figure::YunaKim.code()).unwrap().color);
+        .top(A, Card::from_code(Figure::YunaKim.code()).unwrap().color);
     let triggers: Vec<_> = events
         .iter()
         .enumerate()

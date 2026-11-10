@@ -79,13 +79,16 @@ fn splay_batch(base_twos: usize, hawking: bool) -> (Position, CardId) {
         f.tech(color, 2, Zone::Board(A, color), vec![]);
     }
     if hawking {
-        let card = figure_card(Figure::StephenHawking.code()).unwrap();
+        let card = Card::from_code(Figure::StephenHawking.code()).unwrap();
         f.add(card, Zone::Board(B, Color::Blue));
     }
     for _ in 0..base_twos {
         f.tech(Color::Yellow, 2, Zone::Deck(Deck::base(2)), vec![]);
     }
-    f.add(city_card("C016").unwrap(), Zone::Deck(Deck::cities(2)));
+    f.add(
+        Card::from_code("C016").unwrap(),
+        Zone::Deck(Deck::cities(2)),
+    );
     f.tech(Color::Yellow, 4, Zone::Score(B), vec![]);
     let source = f.tech(Color::Purple, 1, Zone::Hand(A), vec![SPLAY_ALL_LEFT]);
     (f.position(), source)
@@ -119,9 +122,9 @@ fn cities_meld_claims_keep_masonry_color_reductions_equivalent() {
         f.tech(color, 1, Zone::Board(A, color), vec![]);
         f.tech(color, 1, Zone::Board(A, color), vec![]);
     }
-    f.add(city_card("C029").unwrap(), Zone::Hand(A));
-    f.add(city_card("C034").unwrap(), Zone::Hand(A));
-    let masonry = f.add(base_card("B006").unwrap(), Zone::Junk);
+    f.add(Card::from_code("C029").unwrap(), Zone::Hand(A));
+    f.add(Card::from_code("C034").unwrap(), Zone::Hand(A));
+    let masonry = f.add(Card::from_code("B006").unwrap(), Zone::Junk);
     let position = f
         .position()
         .with_splay(A, Color::Yellow, Splay::Left)

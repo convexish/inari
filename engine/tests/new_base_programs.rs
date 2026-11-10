@@ -6,7 +6,7 @@ mod common;
 use common::*;
 
 fn printed(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = base_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(player, color))
 }

@@ -13,7 +13,7 @@ fn deck(f: &mut Fixture, color: Color, value: u8) -> CardId {
     tech(f, color, value, Zone::Deck(Deck::base(value)))
 }
 fn echo_source(f: &mut Fixture, code: &str) -> CardId {
-    f.add(echoes_card(code).unwrap(), Zone::Junk)
+    f.add(Card::from_code(code).unwrap(), Zone::Junk)
 }
 fn start(f: Fixture, source: CardId, effect: u16, executor: Player, figures: bool) -> Game {
     let expansions = if figures { EF } else { E };
@@ -109,7 +109,7 @@ fn age4_catalog_clauses_and_operand_sizes_match_contract() {
         ("E042", false, 2, false),
         ("E044", true, 1, true),
     ] {
-        let card = echoes_card(code).unwrap();
+        let card = Card::from_code(code).unwrap();
         assert_eq!(card.echo.is_some(), echo, "{code}");
         assert_eq!(card.effects.len(), dogmas, "{code}");
         assert_eq!(card.effects[0].demand(), demand, "{code}");
@@ -606,7 +606,7 @@ fn barometer_echo_and_bonus_draw_respect_any_board_and_capacity() {
     for full in [false, true] {
         let mut f = Fixture::default();
         let source = echo_source(&mut f, "E038");
-        let printed = figure_card(Figure::NapoleonBonaparte.code()).unwrap();
+        let printed = Card::from_code(Figure::NapoleonBonaparte.code()).unwrap();
         let napoleon = f.add(printed.clone(), Zone::Board(B, printed.color));
         assert_eq!(f.cards[usize::from(napoleon.0)].bonus(), Some(6));
         let drawn = deck(&mut f, Color::Green, 8);
@@ -914,7 +914,7 @@ fn conditional_verification_restores_pending_records_on_query_error() {
 fn barometer_first_reaction_preserves_private_remainder_and_failed_returns_do_not_prove_blue() {
     for replace_blue in [false, true] {
         let mut f = Fixture::default();
-        let mut printed = echoes_card("E038").unwrap();
+        let mut printed = Card::from_code("E038").unwrap();
         printed.effects[1]
             .instructions
             .push(crate::program::build::choose(
@@ -925,7 +925,7 @@ fn barometer_first_reaction_preserves_private_remainder_and_failed_returns_do_no
         let red = tech(&mut f, Color::Red, 1, Zone::Forecast(A));
         let blue = tech(&mut f, Color::Blue, 1, Zone::Forecast(A));
         let green = tech(&mut f, Color::Green, 1, Zone::Forecast(A));
-        let maxwell = figure_card(Figure::JamesClerkMaxwell.code()).unwrap();
+        let maxwell = Card::from_code(Figure::JamesClerkMaxwell.code()).unwrap();
         f.add(maxwell.clone(), Zone::Board(B, maxwell.color));
         let extra = [
             deck(&mut f, Color::Purple, 8),
@@ -1159,7 +1159,7 @@ fn age4_batch_shortcuts_match_every_unrestricted_path_with_reacting_figures() {
                 } else {
                     Figure::JamesClerkMaxwell
                 };
-                let printed = figure_card(figure.code()).unwrap();
+                let printed = Card::from_code(figure.code()).unwrap();
                 f.add(printed.clone(), Zone::Board(B, printed.color));
                 if figure == Figure::AlfredNobel {
                     deck(&mut f, Color::Purple, 7);
@@ -1274,7 +1274,7 @@ fn conditional_single_choice_remaps_caller_references_before_future_first() {
             return_(HAND).verify_when(&SAME),
         ],
     );
-    let maxwell = figure_card(Figure::JamesClerkMaxwell.code()).unwrap();
+    let maxwell = Card::from_code(Figure::JamesClerkMaxwell.code()).unwrap();
     f.add(maxwell.clone(), Zone::Board(B, maxwell.color));
     deck(&mut f, Color::Purple, 8);
     let mut game = start(f, source, 0, A, true);
@@ -1367,7 +1367,7 @@ fn globe_live_returns_include_first_draws_without_disclosing_extra_faces() {
     let source = echo_source(&mut f, "E041");
     let originals: [CardId; 3] = [Color::Blue, Color::Green, Color::Yellow]
         .map(|color| tech(&mut f, color, 1, Zone::Hand(A)));
-    let maxwell = figure_card(Figure::JamesClerkMaxwell.code()).unwrap();
+    let maxwell = Card::from_code(Figure::JamesClerkMaxwell.code()).unwrap();
     f.add(maxwell.clone(), Zone::Board(A, maxwell.color));
     for _ in 0..6 {
         deck(&mut f, Color::Purple, 8);
@@ -1423,7 +1423,7 @@ fn clock_junks_even_when_nightingale_replaces_a_score_transfer() {
     let hand = tech(&mut f, Color::Blue, 1, Zone::Hand(B));
     let score = tech(&mut f, Color::Red, 1, Zone::Score(B));
     let achievement = tech(&mut f, Color::Yellow, 1, Zone::AvailableAchievements);
-    let nightingale = figure_card(Figure::Nightingale.code()).unwrap();
+    let nightingale = Card::from_code(Figure::Nightingale.code()).unwrap();
     f.add(nightingale.clone(), Zone::Board(B, nightingale.color));
     let mut game = start(f, source, 0, B, true);
     finish(&mut game, |menu| {
@@ -1515,7 +1515,7 @@ fn conditional_private_queries_stop_foreign_samples_unless_a_witness_test_then_r
             let red = tech(&mut f, Color::Red, 1, Zone::Hand(A));
             deck(&mut f, Color::Green, 1);
             tech(&mut f, Color::Red, 3, Zone::Board(A, Color::Red));
-            let kalashnikov = figure_card(Figure::Kalashnikov.code()).unwrap();
+            let kalashnikov = Card::from_code(Figure::Kalashnikov.code()).unwrap();
             f.add(kalashnikov.clone(), Zone::Board(B, kalashnikov.color));
             let mut body = Vec::new();
             if public_witness {
@@ -1802,7 +1802,7 @@ fn pencil_reaction_fixture(
         .map(|colors: [Color; 3]| colors.map(|color| tech(&mut f, color, 1, Zone::Hand(A))))
         .unwrap();
     let packet = [Color::Red, Color::Green, Color::Yellow].map(|color| deck(&mut f, color, 2));
-    let figure = figure_card(Figure::JamesClerkMaxwell.code()).unwrap();
+    let figure = Card::from_code(Figure::JamesClerkMaxwell.code()).unwrap();
     f.add(figure.clone(), Zone::Board(A, figure.color));
     // Three initial return reactions occur before the reward packet exists.
     // The fourth draw is the new private information affecting its survivor.

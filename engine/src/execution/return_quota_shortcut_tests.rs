@@ -115,7 +115,7 @@ fn barcode_returns_each_bonus_value_group_in_one_order() {
     bonus(&mut f, B, Color::Blue, 2);
     bonus(&mut f, B, Color::Green, 3);
     score_pile(&mut f);
-    let barcode = f.add(echoes_card("E101").unwrap(), Zone::Hand(A));
+    let barcode = f.add(Card::from_code("E101").unwrap(), Zone::Hand(A));
     let position = f.position();
     let (reduced, manual, distinct) = compare(position.clone(), Expansions::ECHOES, barcode);
     assert!(reduced < manual, "{reduced} {manual}");
@@ -136,7 +136,7 @@ fn toilet_returns_one_card_of_each_demander_bonus_value_in_one_order() {
     bonus(&mut f, A, Color::Blue, 2);
     bonus(&mut f, A, Color::Green, 3);
     score_pile(&mut f);
-    let toilet = f.add(echoes_card("E045").unwrap(), Zone::Hand(A));
+    let toilet = f.add(Card::from_code("E045").unwrap(), Zone::Hand(A));
     let position = f.position();
     let (reduced, manual, distinct) = compare(position.clone(), Expansions::ECHOES, toilet);
     assert!(reduced < manual, "{reduced} {manual}");
@@ -162,11 +162,11 @@ fn a_figure_watching_returns_keeps_every_order() {
             f.tech(Color::Yellow, 8, Zone::Deck(Deck::base(8)), vec![]);
         }
         if let Some(owner) = owner {
-            let card = figure_card(Figure::JamesClerkMaxwell.code()).unwrap();
+            let card = Card::from_code(Figure::JamesClerkMaxwell.code()).unwrap();
             let color = card.color;
             f.add(card, Zone::Board(owner, color));
         }
-        let barcode = f.add(echoes_card("E101").unwrap(), Zone::Hand(A));
+        let barcode = f.add(Card::from_code("E101").unwrap(), Zone::Hand(A));
         let (reduced, manual, _) = compare(f.position(), Expansions::FIGURES, barcode);
         if owner.is_some() {
             assert_eq!(reduced, manual, "Maxwell on {owner:?}");
@@ -201,7 +201,7 @@ fn toilet_also_returns_a_card_a_karma_scores_mid_demand() {
     f.figure(Figure::PeterTheGreat, Zone::Board(B, Color::Red));
     let green = f.tech(Color::Green, 2, Zone::Board(B, Color::Green), vec![]);
     let three = f.tech(Color::Purple, 3, Zone::Score(B), vec![]);
-    let toilet = f.add(echoes_card("E045").unwrap(), Zone::Hand(A));
+    let toilet = f.add(Card::from_code("E045").unwrap(), Zone::Hand(A));
     let (game, _) = run_demand(f.position(), toilet, |_| 0);
     assert_eq!(game.position.locate(three), Some(Zone::Deck(Deck::base(3))));
     assert_eq!(game.position.locate(green), Some(Zone::Deck(Deck::base(2))));
@@ -217,7 +217,7 @@ fn barcode_attempts_a_card_again_for_each_bonus() {
     bonus(&mut f, B, Color::Green, 6);
     f.figure(Figure::NapoleonBonaparte, Zone::Board(B, Color::Red));
     let six = f.tech(Color::Purple, 6, Zone::Score(B), vec![]);
-    let barcode = f.add(echoes_card("E101").unwrap(), Zone::Hand(A));
+    let barcode = f.add(Card::from_code("E101").unwrap(), Zone::Hand(A));
     let (_, events) = run_demand(f.position(), barcode, |decision| {
         decision
             .options
@@ -266,7 +266,7 @@ fn calculator_orders_its_two_scores_only_when_both_must_go() {
             f.tech(Color::Purple, age, Zone::Deck(Deck::base(age)), vec![]);
         }
         f.tech(Color::Blue, 9, Zone::Board(A, Color::Blue), vec![]);
-        let calculator = f.add(echoes_card("E092").unwrap(), Zone::Hand(A));
+        let calculator = f.add(Card::from_code("E092").unwrap(), Zone::Hand(A));
         let mut reduced = Game::seeded(f.position(), Expansions::ECHOES, 41).unwrap();
         reduced
             .start(

@@ -249,13 +249,13 @@ fn blind_batch_excludes_names_acquired_publicly_after_retaining_private_referenc
 #[test]
 fn shen_reveals_each_hidden_replacement_operand_only_when_its_color_is_read() {
     let mut f = Fixture::default();
-    let card = echoes_card("E068").unwrap();
+    let card = Card::from_code("E068").unwrap();
     let color = card.color;
     let source = f.add(card, Zone::Board(A, color));
     f.figure(Figure::ShenKuo, Zone::Board(A, Color::Green));
     f.figure(Figure::SunshuAo, Zone::Board(A, Color::Yellow));
     {
-        let card = figure_card(Figure::CaiLun.code()).unwrap();
+        let card = Card::from_code(Figure::CaiLun.code()).unwrap();
         let color = card.color;
         f.add(card, Zone::Board(B, color));
     }
@@ -384,7 +384,7 @@ fn shen_reveals_each_hidden_replacement_operand_only_when_its_color_is_read() {
 #[test]
 fn refused_forecast_batch_samples_its_anonymous_attempts_as_distinct_cards() {
     let mut f = Fixture::default();
-    let mut card = echoes_card("E032").unwrap();
+    let mut card = Card::from_code("E032").unwrap();
     card.effects = vec![card.effects[1].clone()];
     card.echo = None;
     f.add(card, Zone::Forecast(A));
@@ -652,9 +652,12 @@ fn reached_karma_proof_restores_last_chosen_and_boxed_registers_before_resuming(
 fn catherine_verification_events_do_not_depend_on_a_trackers_prior_public_inference() {
     let mut f = Fixture::default();
     f.figure(Figure::CatherineTheGreat, Zone::Board(B, Color::Purple));
-    let incoming = f.add(base_card("B011").unwrap(), Zone::Hand(A));
-    let top = f.add(base_card("B012").unwrap(), Zone::Board(A, Color::Blue));
-    f.add(base_card("B010").unwrap(), Zone::Deck(Deck::base(1)));
+    let incoming = f.add(Card::from_code("B011").unwrap(), Zone::Hand(A));
+    let top = f.add(
+        Card::from_code("B012").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
+    f.add(Card::from_code("B010").unwrap(), Zone::Deck(Deck::base(1)));
     let plain = Game::seeded(f.position(), BOTH, 31).unwrap();
     let mut variants = [plain.clone(), plain.with_tracking().unwrap()];
     let mut traces = Vec::new();
@@ -757,7 +760,7 @@ fn combustion_transfers_wernhers_junk_the_victim_sees_but_the_demander_cannot() 
 
     for tracked in [false, true] {
         let mut f = Fixture::default();
-        let source = f.add(base_card("B066").unwrap(), Zone::Board(A, Color::Red));
+        let source = f.add(Card::from_code("B066").unwrap(), Zone::Board(A, Color::Red));
         f.figure(Figure::WernherVonBraun, Zone::Board(B, Color::Blue));
         f.figure(Figure::AlfredNobel, Zone::Board(A, Color::Green));
         for color in [Color::Yellow, Color::Purple] {

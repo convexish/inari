@@ -4,7 +4,7 @@ use age03_mechanics_tests::oracle;
 use shortcuts::common::*;
 const BOTH: Expansions = Expansions::ECHOES.union(Expansions::FIGURES);
 fn card(f: &mut Fixture, code: &str) -> CardId {
-    let c = echoes_card(code).unwrap();
+    let c = Card::from_code(code).unwrap();
     let color = c.color;
     f.add(c, Zone::Board(A, color))
 }
@@ -12,7 +12,7 @@ fn tech(f: &mut Fixture, age: u8, color: Color, zone: Zone) -> CardId {
     f.tech(color, age, zone, vec![])
 }
 fn figure(f: &mut Fixture, which: Figure, owner: Player) {
-    let c = figure_card(which.code()).unwrap();
+    let c = Card::from_code(which.code()).unwrap();
     let color = c.color;
     f.add(c, Zone::Board(owner, color));
 }
@@ -157,7 +157,7 @@ fn typewriter_return_order_keeps_same_deck_orders_and_maxwell_arrivals_live() {
 fn telegraph_foreseen_splay_order_matches_all_paths_with_machiavelli() {
     for reacting in [false, true] {
         let mut f = Fixture::default();
-        let mut source = echoes_card("E071").unwrap();
+        let mut source = Card::from_code("E071").unwrap();
         source.effects = vec![source.effects[2].clone()];
         let source = f.add(source, Zone::Forecast(A));
         let driver = tech(&mut f, 7, Color::Yellow, Zone::Hand(A));

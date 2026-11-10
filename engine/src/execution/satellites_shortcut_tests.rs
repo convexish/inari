@@ -2,7 +2,7 @@ use super::common::*;
 use super::*;
 
 fn native_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = base_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(player, color))
 }
@@ -24,7 +24,7 @@ fn fixture(ages: &[u8]) -> (Fixture, CardId, Vec<CardId>) {
             let cards: Vec<_> = BASE_METADATA
                 .iter()
                 .filter(|m| m.value == *age)
-                .filter_map(|m| base_card(m.code).ok())
+                .filter_map(|m| Card::from_code(m.code).ok())
                 .collect();
             f.add(cards[index % cards.len()].clone(), Zone::Hand(A))
         })
@@ -330,7 +330,7 @@ fn relevant_return_and_hand_membership_hooks_fall_back_but_independent_hooks_do_
         (Figure::NelsonMandela, false),
     ] {
         let (mut f, card, hand) = fixture(&[1, 2, 4]);
-        let native = figure_card(figure.code()).unwrap();
+        let native = Card::from_code(figure.code()).unwrap();
         let color = native.color;
         f.add(native, Zone::Board(A, color));
         let position = f.position();
@@ -363,7 +363,7 @@ fn relevant_return_and_hand_membership_hooks_fall_back_but_independent_hooks_do_
 #[test]
 fn machiavelli_runs_after_the_reduced_returns_and_before_the_real_splay() {
     let (mut f, card, hand) = fixture(&[1, 2, 4]);
-    let machiavelli = figure_card(Figure::NiccoloMachiavelli.code()).unwrap();
+    let machiavelli = Card::from_code(Figure::NiccoloMachiavelli.code()).unwrap();
     let color = machiavelli.color;
     f.add(machiavelli, Zone::Board(A, color));
     purple_stack(&mut f, B);
@@ -433,10 +433,10 @@ fn machiavelli_runs_after_the_reduced_returns_and_before_the_real_splay() {
 fn meiji_timing_and_newly_exposed_hazards_are_rechecked_at_resumption() {
     for regular_actions in [0, 2] {
         let (mut f, card, hand) = fixture(&[2, 4]);
-        let native = figure_card(Figure::EmperorMeiji.code()).unwrap();
+        let native = Card::from_code(Figure::EmperorMeiji.code()).unwrap();
         let color = native.color;
         f.add(native, Zone::Board(A, color));
-        let borrowed = f.add(base_card("B001").unwrap(), Zone::Hand(B));
+        let borrowed = f.add(Card::from_code("B001").unwrap(), Zone::Hand(B));
         let mut position = f.position();
         position.regular_actions_started = regular_actions;
         let mut game = Game::new(position.clone(), Expansions::FIGURES).unwrap();
@@ -466,12 +466,12 @@ fn meiji_timing_and_newly_exposed_hazards_are_rechecked_at_resumption() {
     }
     for figure in [Figure::Homer, Figure::EmperorMeiji] {
         let (mut f, card, hand) = fixture(&[1, 1, 2, 4]);
-        let native = figure_card(figure.code()).unwrap();
+        let native = Card::from_code(figure.code()).unwrap();
         let color = native.color;
         f.add(native, Zone::Board(A, color));
         // Synthetic cover is an explicit guard-boundary witness, not a rule program.
         let cover = f.tech(color, 8, Zone::Board(A, color), vec![]);
-        let borrowed = f.add(base_card("B001").unwrap(), Zone::Hand(B));
+        let borrowed = f.add(Card::from_code("B001").unwrap(), Zone::Hand(B));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         start(&mut game, card, Context::new(A));
         let mut events = Vec::new();
@@ -496,10 +496,10 @@ fn meiji_timing_and_newly_exposed_hazards_are_rechecked_at_resumption() {
 fn live_regular_action_timing_can_enable_or_disable_membership_between_returns() {
     for initially_live in [false, true] {
         let (mut f, card, hand) = fixture(&[1, 1, 2, 4]);
-        let native = figure_card(Figure::EmperorMeiji.code()).unwrap();
+        let native = Card::from_code(Figure::EmperorMeiji.code()).unwrap();
         let color = native.color;
         f.add(native, Zone::Board(A, color));
-        let borrowed = f.add(base_card("B012").unwrap(), Zone::Hand(B));
+        let borrowed = f.add(Card::from_code("B012").unwrap(), Zone::Hand(B));
         let mut position = f.position();
         position.regular_actions_started = if initially_live { 0 } else { 2 };
         let mut game = Game::new(position, Expansions::FIGURES).unwrap();
@@ -534,7 +534,7 @@ fn live_regular_action_timing_can_enable_or_disable_membership_between_returns()
 #[test]
 fn homer_replaces_a_return_without_skipping_remaining_returns_or_later_splay() {
     let (mut f, card, hand) = fixture(&[2, 4]);
-    let homer = figure_card(Figure::Homer.code()).unwrap();
+    let homer = Card::from_code(Figure::Homer.code()).unwrap();
     let color = homer.color;
     f.add(homer, Zone::Board(A, color));
     let returned = f.figure(Figure::Archimedes, Zone::Hand(A));

@@ -461,7 +461,7 @@ fn leeuwenhoek_no_payment_or_inactive_source_leaves_only_the_original_draw() {
 #[test]
 fn native_archery_junks_cai_lun_himself_and_immediately_removes_other_aliases() {
     let mut f = Fixture::default();
-    let definition = base_card("B001").unwrap();
+    let definition = Card::from_code("B001").unwrap();
     let color = definition.color;
     let source = f.add(definition, Zone::Board(A, color));
     let cai = f.figure(Figure::CaiLun, Zone::Board(A, Color::Yellow));

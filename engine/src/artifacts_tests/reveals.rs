@@ -18,12 +18,12 @@ fn board(player: Player, color: Color) -> Zone {
 
 /// A printed Artifact as that player's top of its own color.
 fn top(l: &mut Layout, code: &str, player: Player) -> CardId {
-    let color = artifacts_card(code).unwrap().color;
+    let color = Card::from_code(code).unwrap().color;
     l.artifact(code, Zone::Board(player, color))
 }
 
 fn sharing_icons(code: &str) -> [Icon; 3] {
-    [artifacts_card(code).unwrap().featured.unwrap(); 3]
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 fn revealed(events: &[Event]) -> Vec<CardId> {
@@ -168,8 +168,10 @@ fn shroud_of_turin_selects_from_von_brauns_junk_without_a_proof_reveal() {
     let shroud = top(&mut l, "A035", A);
     l.figure(Figure::WernherVonBraun, A);
     let occupied = [
-        artifacts_card("A035").unwrap().color,
-        figure_card(Figure::WernherVonBraun.code()).unwrap().color,
+        Card::from_code("A035").unwrap().color,
+        Card::from_code(Figure::WernherVonBraun.code())
+            .unwrap()
+            .color,
     ];
     let color = Color::ALL
         .into_iter()

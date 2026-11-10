@@ -4,7 +4,7 @@ mod common;
 use common::*;
 
 fn native(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = base_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(player, color))
 }
@@ -119,7 +119,7 @@ fn calendar_reads_meiji_logical_hand_before_deciding_to_draw() {
 #[test]
 fn calendar_reads_michelangelo_logical_score_without_double_counting() {
     let mut f = Fixture::default();
-    let source = f.add(base_card("B022").unwrap(), Zone::Hand(A));
+    let source = f.add(Card::from_code("B022").unwrap(), Zone::Hand(A));
     f.figure(Figure::Michelangelo, Zone::Board(A, Color::Yellow));
     f.tech(Color::Red, 1, Zone::Score(A), vec![]);
     let second = f.tech(Color::Red, 5, Zone::Deck(Deck::base(5)), vec![]);

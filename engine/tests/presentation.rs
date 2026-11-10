@@ -36,12 +36,12 @@ fn every_catalog_branch_has_explicit_wording() {
         }
     };
     for metadata in BASE_METADATA {
-        for effect in base_card(metadata.code).unwrap().effects {
+        for effect in Card::from_code(metadata.code).unwrap().effects {
             inspect(&effect.instructions);
         }
     }
     for figure in FIGURE_NAMES {
-        let card = figure_card(figure.code).unwrap();
+        let card = Card::from_code(figure.code).unwrap();
         for effect in card.effects {
             inspect(&effect.instructions);
         }
@@ -73,7 +73,7 @@ fn base_branch_wording_preserves_indices_and_optional_decline() {
         ),
     ] {
         let mut f = Fixture::default();
-        let card = base_card(code).unwrap();
+        let card = Card::from_code(code).unwrap();
         let zone = Zone::Board(A, card.color);
         let source = f.add(card, zone);
         let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
@@ -105,7 +105,7 @@ fn base_branch_wording_preserves_indices_and_optional_decline() {
 fn newtons_native_draw_action_reports_karma_source_and_destination_wording() {
     for branch in 0..2 {
         let mut f = Fixture::default();
-        let card = figure_card(Figure::IsaacNewton.code()).unwrap();
+        let card = Card::from_code(Figure::IsaacNewton.code()).unwrap();
         let color = card.color;
         let newton = f.add(card, Zone::Board(A, color));
         let drawn = f.tech(Color::Yellow, 1, Zone::Deck(Deck::base(1)), vec![]);
@@ -262,7 +262,7 @@ fn opening_and_action_end_fading_do_not_inherit_a_card_source() {
 
     let mut f = Fixture::default();
     for figure in [Figure::IsaacNewton, Figure::Gilgamesh] {
-        let card = figure_card(figure.code()).unwrap();
+        let card = Card::from_code(figure.code()).unwrap();
         let color = card.color;
         f.add(card, Zone::Board(A, color));
     }

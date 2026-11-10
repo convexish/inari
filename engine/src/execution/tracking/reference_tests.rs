@@ -3,7 +3,7 @@ use super::*;
 /// A retained reference predates its reveal, so the non-owner must name it
 /// through the pick's public support, not a PUBLIC bit on the reference.
 fn retained_hand_pick(owner: Player, revealed: bool) -> (Game, HeldCard) {
-    let mut source = base_card("B012").unwrap();
+    let mut source = Card::from_code("B012").unwrap();
     source.effects[0].instructions = vec![
         build::choose(Who::Executor, Choice::Value(ValueChoices::Boxed(&[1, 2]))),
         build::choose(Who::Opponent, Choice::Value(ValueChoices::Boxed(&[1, 2]))),
@@ -14,10 +14,10 @@ fn retained_hand_pick(owner: Player, revealed: bool) -> (Game, HeldCard) {
     let position = Position::new(
         vec![
             source,
-            base_card("B001").unwrap(),
-            base_card("B002").unwrap(),
-            base_card("B003").unwrap(),
-            base_card("B004").unwrap(),
+            Card::from_code("B001").unwrap(),
+            Card::from_code("B002").unwrap(),
+            Card::from_code("B003").unwrap(),
+            Card::from_code("B004").unwrap(),
         ],
         &[
             (CardId(0), board),
@@ -188,7 +188,7 @@ fn sampled_trackers_clear_retired_pick_support_before_reusing_its_id() {
 /// A running public program retains a returned hand card, then the source
 /// itself returns and that deck shuffles before the next real choice.
 fn returned_register(bulk: bool) -> Game {
-    let mut source = base_card("B001").unwrap();
+    let mut source = Card::from_code("B001").unwrap();
     let source_color = source.color;
     source.effects = vec![Effect {
         kind: EffectKind::NonDemand,
@@ -221,8 +221,8 @@ fn returned_register(bulk: bool) -> Game {
     let position = Position::new(
         vec![
             source,
-            base_card("B002").unwrap(),
-            base_card("B003").unwrap(),
+            Card::from_code("B002").unwrap(),
+            Card::from_code("B003").unwrap(),
         ],
         &[(CardId(0), board), (CardId(1), hand), (CardId(2), deck)],
         Player::One,
@@ -368,9 +368,9 @@ fn a_draw_after_first_does_not_inherit_the_previous_deck_tops_identity() {
     let deck = Zone::Deck(Deck::base(1));
     let position = Position::new(
         vec![
-            base_card("B001").unwrap(),
-            base_card("B002").unwrap(),
-            base_card("B003").unwrap(),
+            Card::from_code("B001").unwrap(),
+            Card::from_code("B002").unwrap(),
+            Card::from_code("B003").unwrap(),
         ],
         &[(CardId(0), deck), (CardId(1), deck), (CardId(2), deck)],
         Player::One,
@@ -553,13 +553,13 @@ fn visited_cards_are_named_references_and_metadata_is_not_a_loop_witness() {
 
 #[test]
 fn an_entered_reaction_cannot_discard_its_already_consumed_front() {
-    let emma = figure_card(Figure::EmmaWatson.code()).unwrap();
-    let incoming = base_card("B001").unwrap();
+    let emma = Card::from_code(Figure::EmmaWatson.code()).unwrap();
+    let incoming = Card::from_code("B001").unwrap();
     let color = incoming.color;
-    let mut top = base_card("B002").unwrap();
+    let mut top = Card::from_code("B002").unwrap();
     top.color = color; // explicit scenario: Emma has a card of this color to return
     let position = Position::new(
-        vec![emma, incoming, top, base_card("B003").unwrap()],
+        vec![emma, incoming, top, Card::from_code("B003").unwrap()],
         &[
             (CardId(0), Zone::Board(Player::One, Color::Purple)),
             (CardId(1), Zone::Hand(Player::Two)),
@@ -618,15 +618,15 @@ fn a_draw_karma_operand_is_the_sampled_deck_top_not_a_tracked_card() {
     // nonempty 4 keeps it real). Its operand is "the card the draw would
     // take": whatever the sampled world has on top, even though setup
     // shuffles hide every deck position.
-    let galileo = figure_card(Figure::GalileoGalilei.code()).unwrap();
+    let galileo = Card::from_code(Figure::GalileoGalilei.code()).unwrap();
     let mut places = vec![(CardId(0), Zone::Board(Player::One, galileo.color))];
     let mut cards = vec![galileo];
     for code in ["B001", "B002", "B003", "B004", "B005"] {
         places.push((CardId(cards.len() as u16), Zone::Deck(Deck::base(1))));
-        cards.push(base_card(code).unwrap());
+        cards.push(Card::from_code(code).unwrap());
     }
     places.push((CardId(cards.len() as u16), Zone::Deck(Deck::base(4))));
-    cards.push(base_card("B036").unwrap());
+    cards.push(Card::from_code("B036").unwrap());
     let position = Position::new(cards, &places, Player::One).unwrap();
     let mut game = Game::new(position, Expansions::FIGURES)
         .unwrap()
@@ -677,7 +677,10 @@ fn a_pick_and_the_result_of_moving_it_stay_one_card() {
     let places: Vec<_> = (0..codes.len())
         .map(|i| (CardId(i as u16), if i < 3 { hand } else { score }))
         .collect();
-    let cards = codes.iter().map(|code| base_card(code).unwrap()).collect();
+    let cards = codes
+        .iter()
+        .map(|code| Card::from_code(code).unwrap())
+        .collect();
     let position = Position::new(cards, &places, Player::One).unwrap();
     let mut game = Game::new(position, Expansions::BASE)
         .unwrap()
@@ -742,7 +745,10 @@ fn pending_meld_then_hidden_departure(returned: CardId, shown: Option<CardId>) -
     let places: Vec<_> = (0..codes.len())
         .map(|i| (CardId(i as u16), if i < 4 { hand } else { deck }))
         .collect();
-    let cards: Vec<_> = codes.iter().map(|code| base_card(code).unwrap()).collect();
+    let cards: Vec<_> = codes
+        .iter()
+        .map(|code| Card::from_code(code).unwrap())
+        .collect();
     let color = cards[0].color;
     let position = Position::new(cards, &places, Player::Two).unwrap();
     let mut game = Game::new(position, Expansions::FIGURES)
@@ -893,7 +899,10 @@ fn references_sharing_a_pick_stay_one_card_when_one_is_known() {
     let hand = Zone::Hand(Player::Two);
     let deck = Zone::Deck(Deck::base(1));
     let position = Position::new(
-        vec![base_card("B001").unwrap(), base_card("B002").unwrap()],
+        vec![
+            Card::from_code("B001").unwrap(),
+            Card::from_code("B002").unwrap(),
+        ],
         &[(CardId(0), hand), (CardId(1), deck)],
         Player::Two,
     )
@@ -978,7 +987,7 @@ fn a_sampled_world_can_be_sampled_again_by_either_observer() {
     let position = Position::new(
         ["B001", "B002", "B003"]
             .into_iter()
-            .map(|code| base_card(code).unwrap())
+            .map(|code| Card::from_code(code).unwrap())
             .collect(),
         &[(CardId(0), deck), (CardId(1), deck), (CardId(2), deck)],
         Player::One,

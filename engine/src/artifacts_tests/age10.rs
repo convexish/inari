@@ -22,7 +22,7 @@ fn board(player: Player, color: Color) -> Zone {
 }
 
 fn sharing_icons(code: &str) -> [Icon; 3] {
-    [artifacts_card(code).unwrap().featured.unwrap(); 3]
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 fn any(game: &mut Game) -> (Status, Vec<Event>) {

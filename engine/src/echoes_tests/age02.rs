@@ -5,12 +5,12 @@ use shortcuts::common::*;
 const BOTH: Expansions = Expansions::ECHOES.union(Expansions::FIGURES);
 
 fn source(f: &mut Fixture, code: &str, owner: Player) -> CardId {
-    let card = echoes_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color))
 }
 fn figure(f: &mut Fixture, figure: Figure, owner: Player) -> CardId {
-    let card = figure_card(figure.code()).unwrap();
+    let card = Card::from_code(figure.code()).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color))
 }
@@ -651,7 +651,7 @@ fn chaturanga_foreseen_counts_colors_after_its_meld_and_ordinary_effect_is_empty
     for foreseen in [false, true] {
         let mut f = Fixture::default();
         let card = f.add(
-            echoes_card("E025").unwrap(),
+            Card::from_code("E025").unwrap(),
             if foreseen {
                 Zone::Forecast(A)
             } else {

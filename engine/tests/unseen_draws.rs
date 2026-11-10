@@ -75,7 +75,7 @@ fn the_first_draw_of_each_player_each_turn_is_unseen() {
 fn echoes_has_priority_and_fallbacks_do_not_retry_replacement() {
     let mut f = Fixture::default();
     f.tech(Color::Blue, 5, Zone::Board(A, Color::Blue), vec![]);
-    let e2 = f.add(echoes_card("E016").unwrap(), Zone::Deck(echoes(2)));
+    let e2 = f.add(Card::from_code("E016").unwrap(), Zone::Deck(echoes(2)));
     let u2 = f.tech(Color::Red, 2, Zone::Deck(unseen(2)), vec![]);
     f.cards[usize::from(u2.0)].set = CardSet::Unseen;
     let b2 = [

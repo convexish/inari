@@ -40,11 +40,20 @@ fn medicine_junks_one_native_back_sample_and_preserves_rod_instead() {
     for tracked in [false, true] {
         for rod in [false, true] {
             let mut f = Fixture::default();
-            let source = f.add(base_card("B029").unwrap(), Zone::Board(A, Color::Yellow));
+            let source = f.add(
+                Card::from_code("B029").unwrap(),
+                Zone::Board(A, Color::Yellow),
+            );
             let base = ["B026", "B027"]
-                .map(|code| f.add(base_card(code).unwrap(), Zone::AvailableAchievements));
-            let echo = f.add(echoes_card("E031").unwrap(), Zone::AvailableAchievements);
-            let four = f.add(base_card("B036").unwrap(), Zone::AvailableAchievements);
+                .map(|code| f.add(Card::from_code(code).unwrap(), Zone::AvailableAchievements));
+            let echo = f.add(
+                Card::from_code("E031").unwrap(),
+                Zone::AvailableAchievements,
+            );
+            let four = f.add(
+                Card::from_code("B036").unwrap(),
+                Zone::AvailableAchievements,
+            );
             if rod {
                 f.figure(Figure::RodSerling, Zone::Board(B, Color::Purple));
             }

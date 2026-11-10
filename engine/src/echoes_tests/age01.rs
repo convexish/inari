@@ -13,7 +13,7 @@ fn draw_card(f: &mut Fixture, color: Color, age: u8) -> CardId {
     tech(f, color, age, Zone::Deck(Deck::base(age)))
 }
 fn source(f: &mut Fixture, code: &str) -> CardId {
-    let card = echoes_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     let other = Color::ALL.into_iter().find(|c| *c != color).unwrap();
     tech(f, other, 1, Zone::Board(A, other));
@@ -157,7 +157,7 @@ fn age_one_catalog_has_every_printed_clause_and_retains_layout_budgets() {
     ];
     for (i, &(echo, count, demand)) in expected.iter().enumerate() {
         let code = format!("E{:03}", i + 1);
-        let card = echoes_card(&code).unwrap();
+        let card = Card::from_code(&code).unwrap();
         assert_eq!(card.echo.is_some(), echo, "{code}");
         assert_eq!(card.effects.len(), count, "{code}");
         assert_eq!(card.effects[0].demand(), demand, "{code}");
@@ -185,7 +185,7 @@ fn candles_echo_uses_effective_points_and_allows_a_tie() {
     }
     let mut f = Fixture::default();
     let card = source(&mut f, "E002");
-    let napoleon = figure_card(Figure::NapoleonBonaparte.code()).unwrap();
+    let napoleon = Card::from_code(Figure::NapoleonBonaparte.code()).unwrap();
     f.add(napoleon.clone(), Zone::Board(A, napoleon.color));
     tech(&mut f, Color::Blue, 1, Zone::Score(A));
     tech(&mut f, Color::Blue, 6, Zone::Score(B));
@@ -252,7 +252,7 @@ fn candles_demand_offers_either_icon_and_reveals_only_necessary_evidence() {
 fn plumbing_echo_scores_the_exact_blue_bottom_including_a_singleton() {
     for count in 0..=3 {
         let mut f = Fixture::default();
-        let card = f.add(echoes_card("E003").unwrap(), Zone::Board(A, Color::Red));
+        let card = f.add(Card::from_code("E003").unwrap(), Zone::Board(A, Color::Red));
         let blue: Vec<_> = (0..count)
             .map(|i| tech(&mut f, Color::Blue, i + 1, Zone::Board(A, Color::Blue)))
             .collect();
@@ -319,7 +319,7 @@ fn chopsticks_requires_real_junking_then_checks_the_highest_before_eligibility()
         let high = tech(&mut f, Color::Red, highest, Zone::Junk);
         let swept = deck.then(|| draw_card(&mut f, Color::Purple, 1));
         let echo_deck = f.add(
-            echoes_card("E005").unwrap(),
+            Card::from_code("E005").unwrap(),
             Zone::Deck(Deck {
                 set: CardSet::Echoes,
                 age: 1,
@@ -502,7 +502,7 @@ fn comb_reveals_five_original_draws_before_returns_and_excludes_karma_draws() {
         .map(|c| draw_card(&mut f, c, 1))
         .collect();
         let extra = if figure {
-            let printed = figure_card(Figure::MarieCurie.code()).unwrap();
+            let printed = Card::from_code(Figure::MarieCurie.code()).unwrap();
             f.add(printed.clone(), Zone::Board(A, printed.color));
             Some(draw_card(&mut f, Color::Blue, 9))
         } else {
@@ -547,7 +547,7 @@ fn comb_reveals_five_original_draws_before_returns_and_excludes_karma_draws() {
 #[test]
 fn comb_foreseen_returns_both_boards_at_every_depth_after_the_draw_packet() {
     let mut f = Fixture::default();
-    let comb = f.add(echoes_card("E007").unwrap(), Zone::Forecast(A));
+    let comb = f.add(Card::from_code("E007").unwrap(), Zone::Forecast(A));
     let promotion = tech(&mut f, Color::Yellow, 2, Zone::Hand(A));
     let red: Vec<_> = [A, A, B]
         .into_iter()
@@ -591,7 +591,7 @@ fn umbrella_echo_is_optional_and_does_not_promote_forecast() {
         let mut f = Fixture::default();
         let card = source(&mut f, "E009");
         let melded = tech(&mut f, Color::Blue, 4, Zone::Hand(A));
-        let forecast = f.add(echoes_card("E001").unwrap(), Zone::Forecast(A));
+        let forecast = f.add(Card::from_code("E001").unwrap(), Zone::Forecast(A));
         let mut game = start(f, card, Card::ECHO, E);
         let mut events = vec![];
         let m = menu(&mut game, &mut events);
@@ -741,7 +741,10 @@ fn puppet_uses_score_card_values_and_native_private_back_choices() {
     let base: Vec<_> = (0..2)
         .map(|_| tech(&mut f, Color::Blue, 2, Zone::AvailableAchievements))
         .collect();
-    let echo = f.add(echoes_card("E016").unwrap(), Zone::AvailableAchievements);
+    let echo = f.add(
+        Card::from_code("E016").unwrap(),
+        Zone::AvailableAchievements,
+    );
     let wrong = tech(&mut f, Color::Green, 3, Zone::AvailableAchievements);
     let mut game = start(f, card, 0, E);
     let mut events = vec![];
@@ -863,7 +866,7 @@ fn value_membership_is_back_only_but_tracks_nested_operand_front_reads() {
 }
 
 fn figure(f: &mut Fixture, which: Figure, player: Player) -> CardId {
-    let printed = figure_card(which.code()).unwrap();
+    let printed = Card::from_code(which.code()).unwrap();
     let color = printed.color;
     f.add(printed, Zone::Board(player, color))
 }
@@ -1080,7 +1083,7 @@ fn comb_packet_return_oracle_preserves_every_path_and_maxwell_draws() {
 fn comb_foreseen_board_return_oracle_preserves_every_path_and_maxwell_draws() {
     for reacting in [false, true] {
         let mut f = Fixture::default();
-        f.add(echoes_card("E007").unwrap(), Zone::Forecast(A));
+        f.add(Card::from_code("E007").unwrap(), Zone::Forecast(A));
         let promotion = tech(&mut f, Color::Yellow, 2, Zone::Hand(A));
         for (player, age) in [(A, 2), (A, 3), (B, 4)] {
             tech(&mut f, Color::Red, age, Zone::Board(player, Color::Red));
@@ -1236,7 +1239,10 @@ fn soap_and_umbrella_count_original_successes_after_napoleon_replaces_a_move() {
 #[test]
 fn perfume_repeat_recomputes_echoes_routing_after_the_first_tuck() {
     let mut f = Fixture::default();
-    let card = f.add(echoes_card("E011").unwrap(), Zone::Board(A, Color::Blue));
+    let card = f.add(
+        Card::from_code("E011").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     let repeated = tech(
         &mut f,
         Color::Green,
@@ -1279,7 +1285,10 @@ fn puppet_uses_logical_score_membership_and_keeps_the_chosen_reference_through_s
     for _ in 0..3 {
         tech(&mut f, Color::Green, 2, Zone::AvailableAchievements);
     }
-    f.add(echoes_card("E016").unwrap(), Zone::AvailableAchievements);
+    f.add(
+        Card::from_code("E016").unwrap(),
+        Zone::AvailableAchievements,
+    );
     let mut game = start(f, card, 0, EF);
     let mut events = vec![];
     assert!(game.position.cards(Zone::Score(A)).is_empty());
@@ -1407,7 +1416,7 @@ fn chopsticks_junk_achievement_ties_stay_blind_through_hedys_first_splay() {
     for _ in 0..2 {
         tech(&mut f, Color::Blue, 2, Zone::Junk);
     }
-    let echo = f.add(echoes_card("E016").unwrap(), Zone::Junk);
+    let echo = f.add(Card::from_code("E016").unwrap(), Zone::Junk);
     draw_card(&mut f, Color::Purple, 1);
     let mut game = start(f, card, 0, EF);
     let mut events = vec![];
@@ -1478,7 +1487,7 @@ fn chopsticks_junk_achievement_ties_stay_blind_through_hedys_first_splay() {
 #[test]
 fn comb_foreseen_return_oracle_retains_orders_that_expose_a_covered_maxwell() {
     let mut f = Fixture::default();
-    let comb = f.add(echoes_card("E007").unwrap(), Zone::Forecast(A));
+    let comb = f.add(Card::from_code("E007").unwrap(), Zone::Forecast(A));
     let promotion = tech(&mut f, Color::Yellow, 2, Zone::Hand(A));
     let maxwell = figure(&mut f, Figure::JamesClerkMaxwell, B);
     tech(&mut f, Color::Blue, 9, Zone::Board(B, Color::Blue));

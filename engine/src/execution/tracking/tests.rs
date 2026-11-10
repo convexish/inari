@@ -27,7 +27,10 @@ pub(super) fn pause(game: &mut Game) {
 
 #[test]
 fn known_meld_reference_survives_shuffle_without_pinning_its_deck_position() {
-    let cards = vec![base_card("B001").unwrap(), base_card("B002").unwrap()];
+    let cards = vec![
+        Card::from_code("B001").unwrap(),
+        Card::from_code("B002").unwrap(),
+    ];
     let color = cards[0].color;
     let hand = Zone::Hand(Player::One);
     let deck = Zone::Deck(Deck::base(1));
@@ -116,9 +119,9 @@ fn known_meld_reference_survives_shuffle_without_pinning_its_deck_position() {
 #[test]
 fn a_hidden_register_follows_its_pick_without_pinning_identity() {
     let cards = vec![
-        base_card("B001").unwrap(),
-        base_card("B002").unwrap(),
-        base_card("B003").unwrap(),
+        Card::from_code("B001").unwrap(),
+        Card::from_code("B002").unwrap(),
+        Card::from_code("B003").unwrap(),
     ];
     let color = cards[0].color;
     let deck = Zone::Deck(Deck::base(1));

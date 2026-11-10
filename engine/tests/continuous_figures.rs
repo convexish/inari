@@ -4,7 +4,7 @@ mod common;
 use common::*;
 
 fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn finish(game: &mut Game, events: &mut Vec<Event>) -> Status {
@@ -126,7 +126,7 @@ fn machiavelli_virtual_achievements_compose_with_nobel_without_claim_cost_or_pol
 fn catherine_each_uses_basic_concepts_independently_of_maxwell_and_disappears_on_removal() {
     let mut f = Fixture::default();
     let catherine = f.figure(Figure::CatherineTheGreat, Zone::Board(A, Color::Purple));
-    let maxwell = figure_card(Figure::JamesClerkMaxwell.code()).unwrap();
+    let maxwell = Card::from_code(Figure::JamesClerkMaxwell.code()).unwrap();
     let color = maxwell.color;
     f.add(maxwell, Zone::Board(A, color));
     base(&mut f, "B001", Zone::Hand(A));
@@ -309,7 +309,7 @@ fn brin_admits_every_top_base_color_but_never_figures_or_buried_cards() {
     let sources: Vec<_> = ["B001", "B004", "B007", "B012", "B014"]
         .into_iter()
         .map(|code| {
-            let card = base_card(code).unwrap();
+            let card = Card::from_code(code).unwrap();
             let color = card.color;
             f.add(card, Zone::Board(B, color))
         })
@@ -379,7 +379,10 @@ fn brin_foreign_oars_keeps_the_activator_as_demander_and_does_not_reward_demands
 fn brin_does_not_splay_for_own_dogma_and_foreign_permission_disappears_under_cover() {
     let mut f = Fixture::default();
     f.figure(Figure::SergeyBrin, Zone::Board(A, Color::Green));
-    f.add(base_card("B010").unwrap(), Zone::Board(A, Color::Blue));
+    f.add(
+        Card::from_code("B010").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     let writing = f.writing(Zone::Board(A, Color::Blue));
     let foreign = f.sailing(Zone::Board(B, Color::Green));
     let cover = f.sailing(Zone::Hand(A));

@@ -4,13 +4,13 @@ mod common;
 use common::*;
 
 fn native(f: &mut Fixture, figure: Figure, owner: Player) -> CardId {
-    let card = figure_card(figure.code()).unwrap();
+    let card = Card::from_code(figure.code()).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color))
 }
 
 fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn draw(value: u8) -> Instruction {

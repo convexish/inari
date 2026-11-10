@@ -64,7 +64,7 @@ fn on_board(f: &mut Fixture, card: Card, player: Player) -> CardId {
 }
 
 fn yamato() -> Card {
-    artifacts_card("A077").unwrap()
+    Card::from_code("A077").unwrap()
 }
 
 fn base_deck(value: u8) -> Zone {
@@ -293,7 +293,7 @@ fn a_museum_yamato_is_seizable_at_its_face_value_eleven() {
 fn a_city_icon_precedes_the_dig_and_the_dig_precedes_promotion() {
     let mut f = Fixture::default();
     blank(&mut f, Color::Blue, 3, Zone::Board(A, Color::Blue));
-    let city = printed(&mut f, city_card("C022").unwrap(), Zone::Hand(A));
+    let city = printed(&mut f, Card::from_code("C022").unwrap(), Zone::Hand(A));
     let promoted = blank(&mut f, Color::Blue, 1, Zone::Forecast(A));
     blank(&mut f, Color::Yellow, 3, base_deck(3));
     let plus = blank(&mut f, Color::Yellow, 3, base_deck(3));
@@ -438,7 +438,7 @@ fn an_endorsed_compel_repeats_against_the_sharer() {
         A,
     );
     // Babylon: a Concept City of value 1, so a 1 in hand pays.
-    on_board(&mut f, city_card("C007").unwrap(), A);
+    on_board(&mut f, Card::from_code("C007").unwrap(), A);
     let payment = blank(&mut f, Color::Yellow, 1, Zone::Hand(A));
     // Four Concept: as many as A's source and Babylon.
     icons(
@@ -473,12 +473,12 @@ fn an_endorsed_compel_repeats_against_the_sharer() {
 #[test]
 fn crusader_rabbit_counts_a_compel_top_as_a_demand_effect() {
     let mut f = Fixture::default();
-    let mut rabbit = artifacts_card("A086").unwrap();
+    let mut rabbit = Card::from_code("A086").unwrap();
     rabbit.effects.truncate(1);
     let rabbit = on_board(&mut f, rabbit, A);
     let bottom = blank(&mut f, Color::Red, 1, Zone::Board(B, Color::Red));
     let middle = blank(&mut f, Color::Red, 2, Zone::Board(B, Color::Red));
-    let hunley = on_board(&mut f, artifacts_card("A066").unwrap(), B);
+    let hunley = on_board(&mut f, Card::from_code("A066").unwrap(), B);
     icons(
         &mut f,
         Color::Blue,
@@ -509,10 +509,10 @@ fn crusader_rabbit_counts_a_compel_top_as_a_demand_effect() {
 fn treaty_of_kadesh_counts_compel_tops_as_demand_effects() {
     // The compel: B returns its compel top, not its plain one.
     let mut f = Fixture::default();
-    let mut treaty = artifacts_card("A010").unwrap();
+    let mut treaty = Card::from_code("A010").unwrap();
     treaty.effects.truncate(1);
     let treaty = on_board(&mut f, treaty, A);
-    let hunley = on_board(&mut f, artifacts_card("A066").unwrap(), B);
+    let hunley = on_board(&mut f, Card::from_code("A066").unwrap(), B);
     icons(
         &mut f,
         Color::Green,
@@ -536,10 +536,10 @@ fn treaty_of_kadesh_counts_compel_tops_as_demand_effects() {
 
     // The non-demand: A scores its own red compel top.
     let mut f = Fixture::default();
-    let mut treaty = artifacts_card("A010").unwrap();
+    let mut treaty = Card::from_code("A010").unwrap();
     treaty.effects.remove(0);
     let treaty = on_board(&mut f, treaty, A);
-    let hunley = on_board(&mut f, artifacts_card("A066").unwrap(), A);
+    let hunley = on_board(&mut f, Card::from_code("A066").unwrap(), A);
     let mut game = new_game(f, Expansions::ARTIFACTS);
     dogma(&mut game, treaty);
     let (status, events) = no_decisions(&mut game);
@@ -619,7 +619,7 @@ fn the_turn_reset_precedes_the_showcase() {
         ),
         B,
     );
-    on_board(&mut f, city_card("C007").unwrap(), B);
+    on_board(&mut f, Card::from_code("C007").unwrap(), B);
     blank(&mut f, Color::Yellow, 1, Zone::Hand(B));
     // A: seven Concept against B's four, so A shares and B cannot.
     icons(
@@ -629,7 +629,7 @@ fn the_turn_reset_precedes_the_showcase() {
         4,
         Zone::Board(A, Color::Blue),
     );
-    on_board(&mut f, city_card("C001").unwrap(), A);
+    on_board(&mut f, Card::from_code("C001").unwrap(), A);
     blank(&mut f, Color::Yellow, 1, Zone::Hand(A));
     let shown = printed(
         &mut f,
@@ -711,7 +711,7 @@ fn the_turn_reset_precedes_the_showcase() {
 #[test]
 fn a_showcased_martian_internet_ends_the_game_before_rotation() {
     let mut f = Fixture::default();
-    let martian = printed(&mut f, artifacts_card("A113").unwrap(), Zone::Display(A));
+    let martian = printed(&mut f, Card::from_code("A113").unwrap(), Zone::Display(A));
     blank(&mut f, Color::Red, 5, Zone::Score(A));
     let mut game = new_game(f, Expansions::ARTIFACTS);
     game.begin_turn(A).unwrap();
@@ -739,7 +739,7 @@ fn a_showcased_martian_internet_ends_the_game_before_rotation() {
 fn hunley_reads_a_bottom_yamato_as_odd_eleven() {
     for yamato_bottom in [true, false] {
         let mut f = Fixture::default();
-        let hunley = on_board(&mut f, artifacts_card("A066").unwrap(), A);
+        let hunley = on_board(&mut f, Card::from_code("A066").unwrap(), A);
         let bottom = if yamato_bottom {
             printed(&mut f, yamato(), Zone::Board(B, Color::Red))
         } else {
@@ -773,7 +773,7 @@ fn hunley_reads_a_bottom_yamato_as_odd_eleven() {
 #[test]
 fn jumbo_kingdom_scores_a_junked_yamato_as_eight_and_repeats() {
     let mut f = Fixture::default();
-    let mut jumbo = artifacts_card("A114").unwrap();
+    let mut jumbo = Card::from_code("A114").unwrap();
     jumbo.effects.remove(0);
     let jumbo = on_board(&mut f, jumbo, A);
     let yamato = printed(&mut f, yamato(), Zone::Junk);
@@ -814,7 +814,7 @@ fn jumbo_kingdom_scores_a_junked_yamato_as_eight_and_repeats() {
 #[test]
 fn moylough_belt_shrine_junks_the_eleven_deck_for_a_transferred_yamato() {
     let mut f = Fixture::default();
-    let shrine = on_board(&mut f, artifacts_card("A028").unwrap(), A);
+    let shrine = on_board(&mut f, Card::from_code("A028").unwrap(), A);
     icons(
         &mut f,
         Color::Blue,
@@ -882,7 +882,7 @@ fn a_board_yamato_counts_eleven_for_the_echoes_draw_rule() {
 /// 11, through that self-executed child.
 fn blackmail(executed: Card, in_score: bool) -> (Fixture, [CardId; 4]) {
     let mut f = Fixture::default();
-    let blackmail = on_board(&mut f, unseen_card("U040").unwrap(), A);
+    let blackmail = on_board(&mut f, Card::from_code("U040").unwrap(), A);
     let pile = if in_score {
         Zone::Score(B)
     } else {
@@ -930,7 +930,7 @@ fn blackmail_choices(
 #[test]
 fn holy_grail_under_blackmail_claims_at_a_revealed_yamatos_eleven() {
     let (mut f, [blackmail, yamato, grail, melded]) =
-        blackmail(artifacts_card("A018").unwrap(), false);
+        blackmail(Card::from_code("A018").unwrap(), false);
     let eight = blank(&mut f, Color::Green, 8, Zone::AvailableAchievements);
     let eleven = blank(&mut f, Color::Green, 11, Zone::AvailableAchievements);
     let mut game = new_game(f, artifacts_with(Expansions::UNSEEN));
@@ -952,7 +952,8 @@ fn holy_grail_under_blackmail_claims_at_a_revealed_yamatos_eleven() {
 #[test]
 fn sliced_bread_under_blackmail_draws_below_a_revealed_yamatos_eleven() {
     let expansions = Expansions::UNSEEN.union(Expansions::ECHOES);
-    let (mut f, [blackmail, yamato, bread, melded]) = blackmail(echoes_card("E081").unwrap(), true);
+    let (mut f, [blackmail, yamato, bread, melded]) =
+        blackmail(Card::from_code("E081").unwrap(), true);
     for _ in 0..2 {
         blank(&mut f, Color::Yellow, 8, base_deck(8));
         blank(&mut f, Color::Yellow, 7, base_deck(7));
@@ -977,7 +978,8 @@ fn sliced_bread_under_blackmail_draws_below_a_revealed_yamatos_eleven() {
 /// it alone (old `joy_buzzer_scores_revealed_yamato_as_eleven`).
 #[test]
 fn joy_buzzer_under_blackmail_scores_a_revealed_yamato_as_eleven() {
-    let (f, [blackmail, yamato, buzzer, melded]) = blackmail(unseen_card("U084").unwrap(), false);
+    let (f, [blackmail, yamato, buzzer, melded]) =
+        blackmail(Card::from_code("U084").unwrap(), false);
     let mut game = new_game(f, artifacts_with(Expansions::UNSEEN));
     dogma(&mut game, blackmail);
     let mut offered = Vec::new();
@@ -1002,14 +1004,14 @@ fn joy_buzzer_under_blackmail_scores_a_revealed_yamato_as_eleven() {
 #[test]
 fn ruby_slippers_wins_on_melding_an_age_eight_city() {
     let cities: Vec<Card> = (1..=150)
-        .filter_map(|n| city_card(&format!("C{n:03}")).ok())
+        .filter_map(|n| Card::from_code(&format!("C{n:03}")).ok())
         .filter(|city| city.value == 8)
         .collect();
     assert!(!cities.is_empty());
     for city in cities {
         let code = city.code;
         let mut f = Fixture::default();
-        let slippers = on_board(&mut f, artifacts_card("A084").unwrap(), A);
+        let slippers = on_board(&mut f, Card::from_code("A084").unwrap(), A);
         let city = printed(&mut f, city, Zone::Hand(A));
         let mut game = new_game(f, artifacts_with(Expansions::CITIES));
         dogma(&mut game, slippers);
@@ -1028,7 +1030,7 @@ fn ruby_slippers_wins_on_melding_an_age_eight_city() {
 fn the_big_bang_repeats_on_a_reveal_alone() {
     for hand in [true, false] {
         let mut f = Fixture::default();
-        let bang = on_board(&mut f, artifacts_card("A094").unwrap(), A);
+        let bang = on_board(&mut f, Card::from_code("A094").unwrap(), A);
         on_board(
             &mut f,
             card(
@@ -1067,7 +1069,7 @@ fn the_big_bang_repeats_on_a_reveal_alone() {
 #[test]
 fn wheres_waldo_wins_for_a_sharer() {
     let mut f = Fixture::default();
-    let waldo = on_board(&mut f, artifacts_card("A099").unwrap(), A);
+    let waldo = on_board(&mut f, Card::from_code("A099").unwrap(), A);
     icons(
         &mut f,
         Color::Blue,
@@ -1085,7 +1087,7 @@ fn wheres_waldo_wins_for_a_sharer() {
 #[test]
 fn dolly_the_sheep_keeps_the_available_museums() {
     let mut f = Fixture::default();
-    let mut dolly = artifacts_card("A098").unwrap();
+    let mut dolly = Card::from_code("A098").unwrap();
     dolly.effects.remove(0);
     let dolly = on_board(&mut f, dolly, A);
     let standard = blank(&mut f, Color::Green, 3, Zone::AvailableAchievements);
@@ -1113,7 +1115,7 @@ fn dolly_the_sheep_keeps_the_available_museums() {
 fn world_cup_final_ball_returns_neither_a_claimed_museum_nor_a_special() {
     for standard in [false, true] {
         let mut f = Fixture::default();
-        let mut ball = artifacts_card("A085").unwrap();
+        let mut ball = Card::from_code("A085").unwrap();
         ball.effects.truncate(1);
         let ball = on_board(&mut f, ball, A);
         icons(

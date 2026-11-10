@@ -22,7 +22,7 @@ fn board(player: Player, color: Color) -> Zone {
 
 /// Three of the card's featured icon: enough for B to share any Artifact.
 fn sharing_icons(code: &str) -> [Icon; 3] {
-    [artifacts_card(code).unwrap().featured.unwrap(); 3]
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 fn with_effect(mut card: Card, instructions: Vec<Instruction>) -> Card {
@@ -257,7 +257,7 @@ fn seikilos_epitaph_melds_the_bottom_of_the_drawn_color_and_self_executes_it() {
     let mut l = Layout::default();
     let epitaph = l.artifact("A022", board(A, Color::Blue));
     let bottom = l.add(
-        with_effect(base_card("B001").unwrap(), vec![build::draw(1)]),
+        with_effect(Card::from_code("B001").unwrap(), vec![build::draw(1)]),
         board(A, Color::Red),
     );
     l.tech(Color::Red, 2, board(A, Color::Red), &[]);
@@ -406,7 +406,10 @@ fn dead_sea_scrolls_still_chooses_the_set_among_same_value_achievements() {
     }
     l.tech(Color::Red, 2, board(B, Color::Red), &[]);
     l.tech(Color::Green, 2, Zone::AvailableAchievements, &[]);
-    let echo = l.add(echoes_card("E016").unwrap(), Zone::AvailableAchievements);
+    let echo = l.add(
+        Card::from_code("E016").unwrap(),
+        Zone::AvailableAchievements,
+    );
     let mut game = l.game_with(Expansions::ARTIFACTS.union(Expansions::ECHOES));
     dogma(&mut game, scrolls);
     let mut asked = Vec::new();
@@ -496,7 +499,7 @@ fn cyrus_cylinder_splays_any_board_left_and_self_executes_another_purple_top() {
     let cylinder = l.artifact("A025", board(A, Color::Purple));
     l.tech(Color::Red, 1, board(B, Color::Red), &[]);
     l.tech(Color::Red, 2, board(B, Color::Red), &[]);
-    let mut purple = with_effect(base_card("B001").unwrap(), vec![build::draw(1)]);
+    let mut purple = with_effect(Card::from_code("B001").unwrap(), vec![build::draw(1)]);
     purple.color = Color::Purple;
     let b_purple = l.add(purple, board(B, Color::Purple));
     let one = l.tech(Color::Yellow, 1, base_deck(1), &[]);
@@ -542,7 +545,7 @@ fn choosing_base_from_any_set_is_never_redirected_to_echoes() {
     let first = l.tech(Color::Red, 2, base_deck(2), &[]);
     let second = l.tech(Color::Green, 2, base_deck(2), &[]);
     let echo = l.echo("E016");
-    let echo_deck = Zone::Deck(echoes_card("E016").unwrap().origin_deck());
+    let echo_deck = Zone::Deck(Card::from_code("E016").unwrap().origin_deck());
     let mut game = l.game_with(Expansions::ARTIFACTS.union(Expansions::ECHOES));
     dogma(&mut game, stone);
     let (status, events) = play(&mut game, |decision| {
@@ -564,7 +567,7 @@ fn choosing_base_from_any_set_is_never_redirected_to_echoes() {
     let returned = l.tech(Color::Purple, 1, HAND_A, &[]);
     let base = l.tech(Color::Green, 3, base_deck(3), &[]);
     let echo = l.echo("E026");
-    let echo_deck = Zone::Deck(echoes_card("E026").unwrap().origin_deck());
+    let echo_deck = Zone::Deck(Card::from_code("E026").unwrap().origin_deck());
     let mut game = l.game_with(Expansions::ARTIFACTS.union(Expansions::ECHOES));
     dogma(&mut game, papyrus);
     let (status, events) = play(&mut game, |decision| {

@@ -6,7 +6,7 @@ use shortcuts::common::*;
 const BOTH: Expansions = Expansions::ECHOES.union(Expansions::FIGURES);
 
 fn printed(f: &mut Fixture, code: &str, owner: Player) -> CardId {
-    let card = echoes_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color))
 }
@@ -17,7 +17,7 @@ fn icon(f: &mut Fixture, card: CardId, icon: Icon) {
     f.cards[usize::from(card.0)].symbols[0] = Symbol::Icon(icon);
 }
 fn figure(f: &mut Fixture, figure: Figure, owner: Player) {
-    let card = figure_card(figure.code()).unwrap();
+    let card = Card::from_code(figure.code()).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color));
 }
@@ -220,7 +220,7 @@ fn homing_pigeons_return_oracle_keeps_quota_subsets_same_deck_order_and_maxwell(
 fn homing_pigeons_foreseen_block_oracle_preserves_optional_splay_and_shens_replacement() {
     for reacting in [false, true] {
         let mut f = Fixture::default();
-        let mut source = echoes_card("E031").unwrap();
+        let mut source = Card::from_code("E031").unwrap();
         // Isolate the actual non-demand effect while native promotion supplies
         // foreseen. The sharer keeps Shen active on their own green pile; the
         // source's owner's green promotion would otherwise cover him.

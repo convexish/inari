@@ -8,7 +8,7 @@ fn fission_reveals_only_its_original_draw_before_testing_red() {
     for tracked in [false, true] {
         for color in [Color::Red, Color::Blue] {
             let mut f = Fixture::default();
-            let source = f.add(base_card("B087").unwrap(), Zone::Board(A, Color::Red));
+            let source = f.add(Card::from_code("B087").unwrap(), Zone::Board(A, Color::Red));
             f.tech(Color::Purple, 10, Zone::Deck(Deck::base(10)), vec![]);
             let unrelated = f.tech(Color::Green, 10, Zone::Hand(B), vec![]);
             let drawn = f.tech(color, 10, Zone::Deck(Deck::base(10)), vec![]);

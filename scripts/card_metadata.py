@@ -5,6 +5,7 @@
 
 `data/README.md` describes the schema every set shares. Each slot becomes
 one `Symbol`; where `image_slot` names the image, other empty slots are blank.
+Every set fills the same `CardMetadata` row; only Cities print six slots.
 """
 
 import argparse
@@ -63,7 +64,7 @@ def symbols(card: dict, slots: int) -> list[str]:
 
 
 def featured(card: dict) -> str:
-    icons = {effect["featured_icon"] for effect in card["effects"]}
+    icons = {effect["featured_icon"] for effect in card.get("effects", [])}
     assert len(icons) <= 1, card["code"]
     return f"Some(Icon::{variant(icons.pop())})" if icons else "None"
 
@@ -73,26 +74,26 @@ def table(name: str) -> str:
     cards = json.loads((ROOT / f"data/{name}.json").read_text(encoding="utf-8"))
     codes = [card["code"] for card in cards]
     assert len(cards) == count and codes == sorted(set(codes)), name
-    # A City has six slots and no dogma, so no set or featured icon to state.
-    city = slots == 6
-    row = "CityMetadata" if city else "CardMetadata"
+    six = slots == len(SLOTS)
     body = "".join(
-        f"{row} {{"
+        "CardMetadata {"
         f"code: {json.dumps(card['code'])},"
         f"title: {json.dumps(card['title'], ensure_ascii=False)},"
         f"color: Color::{variant(card['color'])},"
         f"value: {card['age']},"
-        + ("" if city else f"set: CardSet::{card_set},")
-        + f"symbols: [{','.join(symbols(card, slots))}],"
-        + ("" if city else f"featured: {featured(card)},")
-        + "},"
+        f"set: CardSet::{card_set},"
+        + ("symbols: [{}]," if six else "symbols: four_slots([{}]),").format(",".join(symbols(card, slots)))
+        + f"featured: {featured(card)},"
+        "},"
         for card in cards
     )
+    imports = ["CardSet", "Color", "Symbol"]
+    imports += [name for name in ("CityIcon", "Icon", "four_slots") if f"{name}::" in body or f"{name}(" in body]
     source = (
         f"// Generated from data/{name}.json by scripts/card_metadata.py; do not edit by hand.\n"
-        f"use super::{row};\n"
-        f"use crate::model::{{{'CityIcon' if city else 'CardSet'}, Color, Icon, Symbol}};\n\n"
-        f"pub const {name.upper()}_METADATA: [{row}; {count}] = [{body}];\n"
+        "use super::CardMetadata;\n"
+        f"use crate::model::{{{', '.join(sorted(imports, key=str.lower))}}};\n\n"
+        f"pub const {name.upper()}_METADATA: [CardMetadata; {count}] = [{body}];\n"
     )
     return subprocess.run(
         ["rustfmt", "--edition", "2024"], input=source, capture_output=True, text=True, check=True

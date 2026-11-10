@@ -4,7 +4,7 @@ mod common;
 use common::*;
 
 fn printed(f: &mut Fixture, code: &str) -> CardId {
-    let card = base_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let zone = Zone::Board(A, card.color);
     f.add(card, zone)
 }
@@ -1037,7 +1037,7 @@ fn chemistry_still_returns_a_score_card_after_its_score_is_replaced() {
 #[test]
 fn education_retains_its_invocation_after_returning_the_source_card_itself() {
     let mut f = Fixture::default();
-    let source = f.add(base_card("B034").unwrap(), Zone::Score(A));
+    let source = f.add(Card::from_code("B034").unwrap(), Zone::Score(A));
     let drawn = f.tech(Color::Red, 2, Zone::Deck(Deck::base(2)), vec![]);
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     game.self_execute(source, Context::new(A)).unwrap();
@@ -1058,7 +1058,7 @@ fn education_retains_its_invocation_after_returning_the_source_card_itself() {
 #[test]
 fn computed_highest_top_is_zero_without_a_physical_top() {
     let mut f = Fixture::default();
-    let source = f.add(base_card("B052").unwrap(), Zone::Junk);
+    let source = f.add(Card::from_code("B052").unwrap(), Zone::Junk);
     let drawn = f.tech(Color::Red, 1, Zone::Deck(Deck::base(1)), vec![]);
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     game.self_execute(source, Context::new(A)).unwrap();

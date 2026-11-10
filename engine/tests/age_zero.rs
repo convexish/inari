@@ -15,12 +15,12 @@ fn card(f: &mut Fixture, color: Color, value: u8, zone: Zone, icons: &[Icon]) ->
 }
 
 fn zero(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(age_zero_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 /// The printed card on top of its own color on that player's board.
 fn top(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let color = age_zero_card(code).unwrap().color;
+    let color = Card::from_code(code).unwrap().color;
     zero(f, code, Zone::Board(player, color))
 }
 

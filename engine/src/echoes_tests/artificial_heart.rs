@@ -6,7 +6,7 @@ const BOTH: Expansions = Expansions::ECHOES.union(Expansions::FIGURES);
 
 fn heart(f: &mut Fixture, owner: Player, foreseen: bool) -> CardId {
     f.add(
-        echoes_card("E102").unwrap(),
+        Card::from_code("E102").unwrap(),
         if foreseen {
             Zone::Forecast(owner)
         } else {
@@ -387,7 +387,7 @@ fn artificial_heart_standard_supply_excludes_every_figure_board_alias() {
         for supply in [false, true] {
             let mut f = Fixture::default();
             let source = heart(&mut f, A, false);
-            let definition = figure_card(figure.code()).unwrap();
+            let definition = Card::from_code(figure.code()).unwrap();
             let color = definition.color;
             f.add(definition, Zone::Board(A, color));
             let alias = card(&mut f, 1, Zone::Board(A, Color::Purple));
@@ -599,7 +599,7 @@ fn packet_claim_fixture_evidence(
     use crate::program::build::*;
     let mut f = Fixture::default();
     f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), Vec::new());
-    let mut source = echoes_card("E102").unwrap();
+    let mut source = Card::from_code("E102").unwrap();
     source.effects[0].instructions = vec![
         draw(1),
         reveal(LAST).keep(CLAIM_PACKET),
@@ -638,13 +638,13 @@ fn packet_claim_fixture_evidence(
         f.tech(Color::Red, 1, Zone::Board(A, Color::Red), Vec::new());
     }
     for code in ["B001", "B002"] {
-        f.add(base_card(code).unwrap(), Zone::AvailableAchievements);
+        f.add(Card::from_code(code).unwrap(), Zone::AvailableAchievements);
     }
-    f.add(base_card("B003").unwrap(), Zone::Deck(Deck::base(1)));
-    let revealed =
-        ["B004", "B005"].map(|code| f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(1))));
+    f.add(Card::from_code("B003").unwrap(), Zone::Deck(Deck::base(1)));
+    let revealed = ["B004", "B005"]
+        .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(1))));
     if private {
-        let figure = figure_card(Figure::ZhangHeng.code()).unwrap();
+        let figure = Card::from_code(Figure::ZhangHeng.code()).unwrap();
         f.add(figure.clone(), Zone::Board(B, figure.color));
     }
     let mut position = f.position();
@@ -911,9 +911,9 @@ fn checked_claim_verification_reveals_only_admitted_cards_before_first() {
     for forced in [false, true] {
         for admitted in [false, true] {
             let mut f = Fixture::default();
-            let selected = f.add(base_card("B001").unwrap(), Zone::Score(A));
-            f.add(base_card("B002").unwrap(), Zone::Score(A));
-            f.add(base_card("B003").unwrap(), Zone::Score(A));
+            let selected = f.add(Card::from_code("B001").unwrap(), Zone::Score(A));
+            f.add(Card::from_code("B002").unwrap(), Zone::Score(A));
+            f.add(Card::from_code("B003").unwrap(), Zone::Score(A));
             let instructions = if forced {
                 vec![
                     bind(filtered(&SCORE, &[Filter::Has(Test::Code("B001"))])),

@@ -74,7 +74,7 @@ fn touchscreen_with(piles: &[(Color, usize)]) -> (Fixture, CardId) {
             }
         }
     }
-    let screen = f.add(echoes_card("E113").unwrap(), Zone::Hand(A));
+    let screen = f.add(Card::from_code("E113").unwrap(), Zone::Hand(A));
     (f, screen)
 }
 
@@ -84,7 +84,7 @@ fn touchscreen() -> (Fixture, CardId) {
 }
 
 fn figure_on(f: &mut Fixture, player: Player, figure: Figure) {
-    let color = figure_card(figure.code()).unwrap().color;
+    let color = Card::from_code(figure.code()).unwrap().color;
     f.figure(figure, Zone::Board(player, color));
 }
 
@@ -155,7 +155,10 @@ fn with_cities_the_order_is_one_only_when_city_draws_cannot_exhaust() {
     // draw nothing; Base [1]s for every pass prove no draw can exhaust.
     let cities = Expansions::CITIES;
     let (mut f, screen) = touchscreen();
-    f.add(city_card("C007").unwrap(), Zone::Deck(Deck::cities(1)));
+    f.add(
+        Card::from_code("C007").unwrap(),
+        Zone::Deck(Deck::cities(1)),
+    );
     for _ in 0..3 {
         f.tech(Color::Yellow, 1, Zone::Deck(Deck::base(1)), vec![]);
     }

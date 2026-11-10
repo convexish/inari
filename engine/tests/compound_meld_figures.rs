@@ -6,7 +6,7 @@ use common::*;
 const FIGURES: [Figure; 3] = [Figure::Sneferu, Figure::SuSong, Figure::SejongTheGreat];
 
 fn native(f: &mut Fixture, figure: Figure, owner: Player) -> CardId {
-    let card = figure_card(figure.code()).unwrap();
+    let card = Card::from_code(figure.code()).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color))
 }

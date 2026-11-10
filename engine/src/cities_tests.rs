@@ -25,7 +25,7 @@ impl Layout {
 
     /// A City on top of (or, added first, under) a player's pile.
     fn city(&mut self, code: &str, player: Player) -> CardId {
-        let card = city_card(code).unwrap();
+        let card = Card::from_code(code).unwrap();
         let zone = Zone::Board(player, card.color);
         self.add(card, zone)
     }
@@ -128,7 +128,7 @@ fn catalog_matches_the_audited_census() {
 fn cities_have_reserved_identities_and_backs_and_no_dogma() {
     let mut seen = std::collections::BTreeSet::new();
     for metadata in &CITIES_METADATA {
-        let card = city_card(metadata.code).unwrap();
+        let card = Card::from_code(metadata.code).unwrap();
         let id = card.stable_id().unwrap().0;
         assert!((230..345).contains(&id) && seen.insert(id), "{}", card.code);
         assert_eq!(card.origin_deck(), Deck::cities(card.value));
@@ -136,9 +136,12 @@ fn cities_have_reserved_identities_and_backs_and_no_dogma() {
         assert!(card.featured.is_none() && card.effects.is_empty());
     }
     assert_eq!(seen.len(), 115);
-    assert_eq!(city_card("C116"), Err(Error::InvalidSetup("unknown City")));
+    assert_eq!(
+        Card::from_code("C116"),
+        Err(Error::InvalidSetup("unknown card"))
+    );
     // Milan, Lisbon and Bangalore keep their printed icon order.
-    let symbols = |code| city_card(code).unwrap().symbols;
+    let symbols = |code| Card::from_code(code).unwrap().symbols;
     assert_eq!(symbols("C036")[2], Symbol::City(CityIcon::Uplift));
     assert_eq!(symbols("C036")[4], Symbol::City(CityIcon::Plus));
     assert_eq!(symbols("C039")[2], Symbol::City(CityIcon::Plus));
@@ -181,7 +184,7 @@ fn covered_slots_follow_the_six_position_geometry() {
         }
     }
     // Four-position cards neither have nor count the City positions.
-    let base = base_card("B001").unwrap();
+    let base = Card::from_code("B001").unwrap();
     assert_eq!(base.printed().len(), 4);
     assert_eq!(base.symbols[4..], [Symbol::Blank; 2]);
 }
@@ -189,7 +192,7 @@ fn covered_slots_follow_the_six_position_geometry() {
 #[test]
 fn search_icons_count_as_their_printed_standard_icon() {
     // Mecca: Health top-left and bottom-right, Search(Health) top-center.
-    let mecca = city_card("C035").unwrap();
+    let mecca = Card::from_code("C035").unwrap();
     assert_eq!(mecca.printed_icon_count(Icon::Health), 3);
     assert_eq!(mecca.printed_icon_count(Icon::Prosperity), 1);
 
@@ -328,7 +331,7 @@ fn polhem_multiplies_by_the_rules_count_including_fountains() {
     let both = Expansions::FIGURES.union(Expansions::CITIES);
     let scores = [Expansions::FIGURES, both].map(|expansions| {
         let mut layout = Layout::default();
-        let polhem = figure_card(Figure::ChristopherPolhem.code()).unwrap();
+        let polhem = Card::from_code(Figure::ChristopherPolhem.code()).unwrap();
         assert_ne!(polhem.color, Color::Red);
         let zone = Zone::Board(A, polhem.color);
         layout.add(polhem, zone);
@@ -368,7 +371,7 @@ fn cities_tokens_join_the_roster_without_standing_requirements() {
 
 #[test]
 fn cities_decks_hold_their_own_backs_and_need_the_cities_rules() {
-    let card = city_card("C035").unwrap();
+    let card = Card::from_code("C035").unwrap();
     let deck = Deck::cities(3);
     let position = Position::new(vec![card.clone()], &[(CardId(0), Zone::Deck(deck))], A).unwrap();
     assert_eq!(position.cards(Zone::Deck(deck)), [CardId(0)]);
@@ -407,7 +410,7 @@ fn shortcut_guards_include_city_consequences() {
         ]
         .map(|expansions| {
             let mut layout = Layout::default();
-            let card = figure_card(figure.code()).unwrap();
+            let card = Card::from_code(figure.code()).unwrap();
             let zone = Zone::Board(A, card.color);
             layout.add(card, zone);
             layout

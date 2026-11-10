@@ -6,7 +6,7 @@ mod common;
 use common::*;
 
 fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(unseen_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {

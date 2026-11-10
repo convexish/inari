@@ -37,7 +37,7 @@ fn hands() -> Game {
             2..=3 => Zone::Hand(B),
             _ => Zone::Deck(Deck::base(1)),
         };
-        f.add(base_card(code).unwrap(), zone);
+        f.add(Card::from_code(code).unwrap(), zone);
     }
     Game::new(f.position(), Expansions::BASE)
         .unwrap()
@@ -73,7 +73,7 @@ fn a_publicly_revealed_next_draw_survives_opponent_reconstruction() {
     let deck = Zone::Deck(Deck::base(1));
     let cards: Vec<_> = ["B001", "B002", "B003", "B004", "B005"]
         .into_iter()
-        .map(|code| f.add(base_card(code).unwrap(), deck))
+        .map(|code| f.add(Card::from_code(code).unwrap(), deck))
         .collect();
     let top = cards[4];
     let mut game = Game::new(f.position(), Expansions::BASE)

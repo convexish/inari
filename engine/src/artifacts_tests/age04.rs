@@ -14,7 +14,7 @@ fn board(player: Player, color: Color) -> Zone {
 }
 
 fn sharing_icons(code: &str) -> [Icon; 3] {
-    [artifacts_card(code).unwrap().featured.unwrap(); 3]
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 fn pick_value(decision: &Decision, value: u8) -> Option<usize> {
@@ -269,7 +269,7 @@ fn petition_of_right_takes_one_scored_card_per_authority_color_and_junks_by_auth
         board(A, Color::Red),
         &[Icon::Authority, Icon::Authority],
     );
-    let authority = 2 + artifacts_card("A042")
+    let authority = 2 + Card::from_code("A042")
         .unwrap()
         .printed_icon_count(Icon::Authority) as u8;
     let ach = l.tech(Color::Green, authority, Zone::AvailableAchievements, &[]);

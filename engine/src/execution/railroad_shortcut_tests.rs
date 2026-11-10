@@ -3,7 +3,10 @@ use super::*;
 
 fn fixture(ages: &[u8]) -> (Fixture, CardId, Vec<CardId>) {
     let mut f = Fixture::default();
-    let railroad = f.add(base_card("B075").unwrap(), Zone::Board(A, Color::Purple));
+    let railroad = f.add(
+        Card::from_code("B075").unwrap(),
+        Zone::Board(A, Color::Purple),
+    );
     let hand = ages
         .iter()
         .map(|&age| f.tech(Color::Red, age, Zone::Hand(A), vec![]))
@@ -294,7 +297,10 @@ fn canonical_events_rng_and_clones_match_at_every_return_boundary() {
 fn splay_program_retains_karma_suppression() {
     for suppressed in [false, true] {
         let mut f = Fixture::default();
-        let card = f.add(base_card("B025").unwrap(), Zone::Board(A, Color::Purple));
+        let card = f.add(
+            Card::from_code("B025").unwrap(),
+            Zone::Board(A, Color::Purple),
+        );
         f.figure(Figure::ShenKuo, Zone::Board(A, Color::Green));
         f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
         f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);
@@ -360,7 +366,7 @@ fn printed_branch_rechecks_the_live_board_at_its_program_boundary() {
         for initially_splayed in [false, true] {
             let mut f = Fixture::default();
             f.tech(color, 1, Zone::Board(A, color), vec![]);
-            let card = f.add(base_card(code).unwrap(), Zone::Board(A, color));
+            let card = f.add(Card::from_code(code).unwrap(), Zone::Board(A, color));
             f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
             f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);
             let mut game = Game::new(f.position(), Expansions::BASE).unwrap();

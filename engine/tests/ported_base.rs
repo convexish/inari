@@ -5,7 +5,7 @@ use common::*;
 
 /// Place a printed card on its own color's pile.
 fn printed(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = base_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(player, color))
 }
@@ -216,10 +216,10 @@ fn a_sharers_publications_special_toggle_earns_the_share_draw() {
 fn sanitation_victim_names_the_set_of_a_mixed_lowest_hand_tie() {
     for take_echoes in [false, true] {
         let mut f = Fixture::default();
-        let sanitation = f.add(base_card("B069").unwrap(), Zone::Junk);
+        let sanitation = f.add(Card::from_code("B069").unwrap(), Zone::Junk);
         let given = f.tech(Color::Red, 5, Zone::Hand(B), vec![]);
         let base_low = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
-        let echoes_low = f.add(echoes_card("E001").unwrap(), Zone::Hand(A));
+        let echoes_low = f.add(Card::from_code("E001").unwrap(), Zone::Hand(A));
         let higher = f.tech(Color::Green, 2, Zone::Hand(A), vec![]);
         let mut game = Game::new(f.position(), Expansions::ECHOES).unwrap();
         effect(&mut game, sanitation, 0, B, A);
@@ -273,7 +273,7 @@ fn rocketry_names_the_set_of_a_mixed_set_score_back() {
         let mut f = Fixture::default();
         let rocketry = printed(&mut f, "B083", A);
         let base_one = f.tech(Color::Red, 1, Zone::Score(B), vec![]);
-        let echoes_one = f.add(echoes_card("E001").unwrap(), Zone::Score(B));
+        let echoes_one = f.add(Card::from_code("E001").unwrap(), Zone::Score(B));
         let mut game = Game::new(f.position(), Expansions::ECHOES).unwrap();
         effect(&mut game, rocketry, 0, A, A);
         let mut events = Vec::new();
@@ -386,7 +386,7 @@ fn blackmailed_moves_at_least_one(
 fn blackmailed(code: &str, deck: &[u8]) -> (Game, CardId) {
     let mut f = Fixture::default();
     let blackmail = printed_unseen(&mut f, "U040", A);
-    let card = f.add(base_card(code).unwrap(), Zone::Hand(B));
+    let card = f.add(Card::from_code(code).unwrap(), Zone::Hand(B));
     for (value, color) in [(1, Color::Red), (2, Color::Green)] {
         let id = f.tech(color, value, Zone::Hand(B), vec![]);
         icons(&mut f, id, Icon::Authority, 1);
@@ -400,7 +400,7 @@ fn blackmailed(code: &str, deck: &[u8]) -> (Game, CardId) {
 }
 
 fn printed_unseen(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = unseen_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(player, color))
 }

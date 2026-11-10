@@ -145,7 +145,10 @@ fn scissors_echo_scores_the_bottom_yellow_and_second_dogma_scores_only_top_paper
     for owner in [A, B] {
         for covered in [false, true] {
             let mut layout = Layout::default();
-            let paper = layout.add(base_card("B031").unwrap(), Zone::Board(owner, Color::Green));
+            let paper = layout.add(
+                Card::from_code("B031").unwrap(),
+                Zone::Board(owner, Color::Green),
+            );
             if covered {
                 layout.pile(owner, Color::Green, 1, [Symbol::Blank; 4]);
             }

@@ -3,12 +3,12 @@ mod common;
 use common::*;
 
 fn native(f: &mut Fixture, code: &str, owner: Player) -> CardId {
-    let card = base_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color))
 }
 fn figure(f: &mut Fixture, code: &str, owner: Player) -> CardId {
-    let card = figure_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color))
 }
@@ -123,9 +123,9 @@ fn optics_retains_the_original_draws_printed_icon_after_a_replaced_meld() {
     let mut f = Fixture::default();
     let source = native(&mut f, "B027", A);
     figure(&mut f, "F033", A);
-    let original = f.add(base_card("B031").unwrap(), Zone::Deck(Deck::base(3)));
-    let reward = f.add(base_card("B040").unwrap(), Zone::Deck(Deck::base(4)));
-    let replacement = f.add(base_card("B037").unwrap(), Zone::Deck(Deck::base(4)));
+    let original = f.add(Card::from_code("B031").unwrap(), Zone::Deck(Deck::base(3)));
+    let reward = f.add(Card::from_code("B040").unwrap(), Zone::Deck(Deck::base(4)));
+    let replacement = f.add(Card::from_code("B037").unwrap(), Zone::Deck(Deck::base(4)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     game.self_execute(source, Context::new(A)).unwrap();
     let mut events = Vec::new();

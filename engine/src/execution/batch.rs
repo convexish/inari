@@ -230,7 +230,7 @@ mod tests {
     fn fixture() -> (Game, [Target; 4], MoveAll) {
         let mut f = Fixture::default();
         let targets = ["B001", "B002", "B003", "B004"].map(|code| Target {
-            card: f.add(base_card(code).unwrap(), Zone::Hand(A)),
+            card: f.add(Card::from_code(code).unwrap(), Zone::Hand(A)),
             physical: Zone::Hand(A),
             logical: LogicalZone::Physical(Zone::Hand(A)),
         });

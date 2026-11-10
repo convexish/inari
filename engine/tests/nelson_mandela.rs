@@ -4,7 +4,7 @@ mod common;
 use common::*;
 
 fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn finish(game: &mut Game, events: &mut Vec<Event>) -> Status {

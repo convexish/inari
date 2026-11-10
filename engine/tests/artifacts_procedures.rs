@@ -407,7 +407,7 @@ fn a_showcase_offers_a_free_dogma_then_rotates_into_a_museum() {
 #[test]
 fn showcases_without_a_dogma_or_without_a_card_left_only_rotate_what_remains() {
     let mut f = Fixture::default();
-    let yamato = f.add(artifacts_card("A077").unwrap(), Zone::Display(B));
+    let yamato = f.add(Card::from_code("A077").unwrap(), Zone::Display(B));
     let mut game = Game::new(f.position(), artifacts()).unwrap();
     game.begin_turn(B).unwrap();
     let (status, events) = no_decisions(&mut game);
@@ -594,7 +594,7 @@ fn a_showcase_dogma_survives_a_figure_reissuing_the_dogma_action() {
         Zone::Display(A),
         vec![non_demand(vec![build::draw(1)])],
     );
-    let kepler = figure_card(Figure::JohannesKepler.code()).unwrap();
+    let kepler = Card::from_code(Figure::JohannesKepler.code()).unwrap();
     let color = kepler.color;
     f.add(kepler, Zone::Board(A, color));
     let one = blank(&mut f, Color::Red, 1, Zone::Deck(Deck::base(1)));
@@ -640,7 +640,7 @@ fn museum_check_returns_one_deck_at_a_time_unless_a_figure_watches_returns() {
         let mut expansions = artifacts();
         if maxwell {
             // Maxwell draws an [8] before each of these returns.
-            let card = figure_card(Figure::JamesClerkMaxwell.code()).unwrap();
+            let card = Card::from_code(Figure::JamesClerkMaxwell.code()).unwrap();
             let color = card.color;
             f.add(card, Zone::Board(B, color));
             for _ in 0..6 {

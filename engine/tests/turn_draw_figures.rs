@@ -53,7 +53,7 @@ fn first_draw_requires_the_real_own_first_regular_action_not_fixture_or_free_tim
     for figure in [Figure::Shennong, Figure::FuXi] {
         for mode in 0..8 {
             let mut f = Fixture::default();
-            let color = figure_card(figure.code()).unwrap().color;
+            let color = Card::from_code(figure.code()).unwrap().color;
             f.figure(figure, Zone::Board(A, color));
             let code = source(
                 &mut f,
@@ -535,7 +535,7 @@ fn native_any_two_decree_permissions_are_live_and_require_two_figures() {
         for covered in [false, true] {
             for count in 1..=2 {
                 let mut f = Fixture::default();
-                let color = figure_card(figure.code()).unwrap().color;
+                let color = Card::from_code(figure.code()).unwrap().color;
                 f.figure(figure, Zone::Board(A, color));
                 if covered {
                     f.tech(color, 1, Zone::Board(A, color), vec![]);
@@ -582,7 +582,7 @@ fn draw_hazards_restore_oars_choices_but_leave_tools_return_reduction_intact() {
         Figure::JohnEricsson,
     ] {
         let mut f = Fixture::default();
-        let color = figure_card(figure.code()).unwrap().color;
+        let color = Card::from_code(figure.code()).unwrap().color;
         f.figure(figure, Zone::Board(B, color));
         let oars = f.oars(Zone::Board(A, Color::Red));
         let hand: Vec<_> = [4, 2]
@@ -649,7 +649,7 @@ fn draw_hazards_restore_oars_choices_but_leave_tools_return_reduction_intact() {
 fn source_covering_during_first_action_removes_the_draw_hook_immediately() {
     for figure in [Figure::Shennong, Figure::FuXi] {
         let mut f = Fixture::default();
-        let color = figure_card(figure.code()).unwrap().color;
+        let color = Card::from_code(figure.code()).unwrap().color;
         f.figure(figure, Zone::Board(A, color));
         let cover = f.tech(color, 1, Zone::Hand(A), vec![]);
         let code = source(
@@ -724,7 +724,7 @@ fn ericsson_does_not_react_to_own_draws_or_while_covered() {
 fn ordinary_first_draw_action_runs_compound_first_before_the_original_draw() {
     for figure in [Figure::Shennong, Figure::FuXi] {
         let mut f = Fixture::default();
-        let color = figure_card(figure.code()).unwrap().color;
+        let color = Card::from_code(figure.code()).unwrap().color;
         f.figure(figure, Zone::Board(A, color));
         f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
         let original = f.tech(Color::Blue, 1, Zone::Deck(Deck::base(1)), vec![]);

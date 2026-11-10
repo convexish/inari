@@ -2,7 +2,7 @@ use super::common::*;
 use super::*;
 
 fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn fixture(code: &str, extra: bool) -> (Position, CardId) {
@@ -28,7 +28,7 @@ fn fixture(code: &str, extra: bool) -> (Position, CardId) {
         _ => unreachable!(),
     };
     for draw in supply {
-        let card = base_card(draw).unwrap();
+        let card = Card::from_code(draw).unwrap();
         let deck = card.origin_deck();
         f.add(card, Zone::Deck(deck));
     }
@@ -248,7 +248,7 @@ fn active_return_hazards_and_future_tuck_figures_fail_closed() {
         ] {
             let (position, source) = fixture(code, false);
             let mut cards = position.catalog.to_vec();
-            let native = figure_card(figure.code()).unwrap();
+            let native = Card::from_code(figure.code()).unwrap();
             let color = native.color;
             let id = CardId(cards.len() as u16);
             cards.push(native);

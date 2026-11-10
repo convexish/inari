@@ -4,17 +4,17 @@ mod common;
 use common::*;
 
 fn card(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn board(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let definition = base_card(code).unwrap();
+    let definition = Card::from_code(code).unwrap();
     let color = definition.color;
     f.add(definition, Zone::Board(player, color))
 }
 
 fn figure(f: &mut Fixture, value: Figure, player: Player) -> CardId {
-    let definition = figure_card(value.code()).unwrap();
+    let definition = Card::from_code(value.code()).unwrap();
     let color = definition.color;
     f.add(definition, Zone::Board(player, color))
 }

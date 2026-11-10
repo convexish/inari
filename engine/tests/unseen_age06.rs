@@ -6,7 +6,7 @@ mod common;
 use common::*;
 
 fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(unseen_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
@@ -385,7 +385,9 @@ fn sabotage_reveals_the_whole_score_pile_including_von_brauns_junk() {
     // revealed as the proof, junk included.
     let mut f = Fixture::default();
     let card = unseen(&mut f, "U059", Zone::Board(A, Color::Yellow));
-    let von_braun = figure_card(Figure::WernherVonBraun.code()).unwrap().color;
+    let von_braun = Card::from_code(Figure::WernherVonBraun.code())
+        .unwrap()
+        .color;
     f.figure(Figure::WernherVonBraun, Zone::Board(B, von_braun));
     let red_hand = f.tech(Color::Red, 2, Zone::Hand(B), vec![]);
     let red_top = f.tech(Color::Red, 4, Zone::Board(B, Color::Red), vec![]);

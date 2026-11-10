@@ -9,7 +9,7 @@ mod common;
 use common::*;
 
 fn unseen_on_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = unseen_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let zone = Zone::Board(player, card.color);
     f.add(card, zone)
 }
@@ -151,7 +151,7 @@ fn polytheism_memory_is_per_executor_under_sharing() {
 fn polytheism_memory_survives_the_endorsed_repeat() {
     let mut f = Fixture::default();
     let polytheism = unseen_on_board(&mut f, "U014", A);
-    let babylon = city_card("C007").unwrap();
+    let babylon = Card::from_code("C007").unwrap();
     let babylon_color = babylon.color;
     f.add(babylon, Zone::Board(A, babylon_color));
     let payment = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);

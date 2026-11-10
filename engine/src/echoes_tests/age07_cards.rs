@@ -7,12 +7,12 @@ fn tech(f: &mut Fixture, color: Color, age: u8, zone: Zone) -> CardId {
     f.tech(color, age, zone, vec![])
 }
 fn printed(f: &mut Fixture, code: &str, owner: Player) -> CardId {
-    let card = echoes_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color))
 }
 fn figure(f: &mut Fixture, which: Figure, owner: Player) -> CardId {
-    let card = figure_card(which.code()).unwrap();
+    let card = Card::from_code(which.code()).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color))
 }
@@ -117,7 +117,7 @@ fn echoes_on(f: &mut Fixture, color: Color, owner: Player, n: usize, slot: usize
         .collect()
 }
 fn promote_effect(f: &mut Fixture, code: &str, effect: usize, echo: bool) -> (CardId, CardId) {
-    let mut source = echoes_card(code).unwrap();
+    let mut source = Card::from_code(code).unwrap();
     source.effects = vec![source.effects[effect].clone()];
     if !echo {
         source.echo = None;
@@ -1004,7 +1004,7 @@ fn telegraph_foreseen_splays_only_its_initially_splayed_colors_up() {
 fn photography_echo_melds_forecast_without_promotion_and_demand_keeps_highest_ties() {
     let mut f = Fixture::default();
     let source = printed(&mut f, "E072", A);
-    let forecast = f.add(echoes_card("E001").unwrap(), Zone::Forecast(A));
+    let forecast = f.add(Card::from_code("E001").unwrap(), Zone::Forecast(A));
     let untouched = deck(&mut f, CardSet::Base, 1, Color::Yellow);
     let red = tech(&mut f, Color::Green, 9, Zone::Board(A, Color::Green));
     let purple = tech(&mut f, Color::Purple, 9, Zone::Board(A, Color::Purple));
@@ -1320,16 +1320,16 @@ fn ice_cream_chosen_optional_sweep_claims_only_the_highest_eligible_junk() {
 }
 
 fn instrument(f: &mut Fixture, code: &str, owner: Player) -> CardId {
-    if let Ok(card) = echoes_card(code) {
+    if let Ok(card) = Card::from_code(code) {
         let color = card.color;
         return f.add(card, Zone::Board(owner, color));
     }
-    let meta = crate::catalog::echoes_metadata(code).unwrap();
+    let meta = crate::catalog::card_metadata(code).unwrap();
     let id = tech(f, meta.color, meta.value, Zone::Board(owner, meta.color));
     let card = &mut f.cards[usize::from(id.0)];
     card.code = meta.code;
     card.set = CardSet::Echoes;
-    card.symbols[..4].copy_from_slice(&meta.symbols);
+    card.symbols = meta.symbols;
     id
 }
 

@@ -14,7 +14,7 @@ fn board(player: Player, color: Color) -> Zone {
 }
 
 fn sharing_icons(code: &str) -> [Icon; 3] {
-    [artifacts_card(code).unwrap().featured.unwrap(); 3]
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 fn with_effect(mut card: Card, color: Color, instructions: Vec<Instruction>) -> Card {
@@ -250,7 +250,11 @@ fn yata_no_kagami_splays_the_revealed_color_and_self_executes_a_matching_top_any
     l.tech(Color::Red, 1, board(A, Color::Red), &[]);
     l.tech(Color::Red, 2, board(A, Color::Red), &[]);
     let b_red = l.add(
-        with_effect(base_card("B001").unwrap(), Color::Red, vec![build::draw(1)]),
+        with_effect(
+            Card::from_code("B001").unwrap(),
+            Color::Red,
+            vec![build::draw(1)],
+        ),
         board(B, Color::Red),
     );
     let one = l.tech(Color::Yellow, 1, base_deck(1), &[]);

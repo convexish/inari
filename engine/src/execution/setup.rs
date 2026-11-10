@@ -16,39 +16,20 @@ struct Catalog {
 /// Appending a set preserves every physical ID of the corresponding mode
 /// without it. Shuffle order is independent of this storage order.
 fn catalog_cards(expansions: Expansions) -> Result<Vec<Card>, Error> {
-    let base = BASE_METADATA
-        .iter()
-        .map(|metadata| base_card(metadata.code));
-    let figures = FIGURES_METADATA
-        .iter()
-        .map(|metadata| figure_card(metadata.code))
-        .chain(
-            AGE_ZERO_METADATA
-                .iter()
-                .map(|metadata| age_zero_card(metadata.code)),
-        )
-        .filter(|_| expansions.figures());
-    let cities = CITIES_METADATA
-        .iter()
-        .map(|metadata| city_card(metadata.code))
-        .filter(|_| expansions.cities());
-    let echoes = ECHOES_METADATA
-        .iter()
-        .filter(|_| expansions.echoes())
-        .map(|metadata| echoes_card(metadata.code));
-    let artifacts = ARTIFACTS_METADATA
-        .iter()
-        .filter(|_| expansions.artifacts())
-        .map(|metadata| artifacts_card(metadata.code));
-    let unseen = UNSEEN_METADATA
-        .iter()
-        .filter(|_| expansions.unseen())
-        .map(|metadata| unseen_card(metadata.code));
-    base.chain(figures)
-        .chain(cities)
-        .chain(echoes)
-        .chain(artifacts)
-        .chain(unseen)
+    let tables: [(&[CardMetadata], bool); 7] = [
+        (&BASE_METADATA, true),
+        (&FIGURES_METADATA, expansions.figures()),
+        (&AGE_ZERO_METADATA, expansions.figures()),
+        (&CITIES_METADATA, expansions.cities()),
+        (&ECHOES_METADATA, expansions.echoes()),
+        (&ARTIFACTS_METADATA, expansions.artifacts()),
+        (&UNSEEN_METADATA, expansions.unseen()),
+    ];
+    tables
+        .into_iter()
+        .filter(|&(_, enabled)| enabled)
+        .flat_map(|(table, _)| table)
+        .map(|metadata| Card::from_code(metadata.code))
         .collect()
 }
 

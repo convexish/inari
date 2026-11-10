@@ -18,7 +18,7 @@ fn run(game: &mut Game, request: Operation, player: Player) -> Status {
 }
 
 fn native(f: &mut Fixture, figure: Figure, player: Player) -> CardId {
-    let card = figure_card(figure.code()).unwrap();
+    let card = Card::from_code(figure.code()).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(player, color))
 }
@@ -40,7 +40,7 @@ fn cabral_world_availability_and_own_monotheism_control_replacement() {
             if mono != 0 {
                 let owner = if mono == 2 { B } else { A };
                 f.add(
-                    base_card("B024").unwrap(),
+                    Card::from_code("B024").unwrap(),
                     Zone::Board(owner, Color::Purple),
                 );
                 if mono == 3 {
@@ -360,10 +360,10 @@ fn any_two_native_figures_grant_only_the_printed_decree() {
         f.figure(Figure::Shennong, Zone::Hand(A));
         if decree == Decree::Trade {
             for code in ["B050", "B052", "B054"] {
-                f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(5)));
+                f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(5)));
             }
         } else if decree == Decree::Advancement {
-            f.add(base_card("B090").unwrap(), Zone::Deck(Deck::base(9)));
+            f.add(Card::from_code("B090").unwrap(), Zone::Deck(Deck::base(9)));
         }
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         game.begin_opening_turn(A).unwrap();
@@ -457,7 +457,10 @@ fn native_stem_cells_reduces_unrelated_figures_but_keeps_pele_score_choices() {
         Figure::ShigeruMiyamoto,
     ] {
         let mut f = Fixture::default();
-        let source = f.add(base_card("B099").unwrap(), Zone::Board(B, Color::Yellow));
+        let source = f.add(
+            Card::from_code("B099").unwrap(),
+            Zone::Board(B, Color::Yellow),
+        );
         native(&mut f, figure, A);
         for age in [1, 2, 4] {
             f.tech(Color::Red, age, Zone::Hand(A), vec![]);

@@ -5,7 +5,7 @@ use shortcuts::common::*;
 const BOTH: Expansions = Expansions::ECHOES.union(Expansions::FIGURES);
 
 fn card(f: &mut Fixture, code: &str, zone: Option<Zone>) -> CardId {
-    let printed = echoes_card(code).unwrap();
+    let printed = Card::from_code(code).unwrap();
     let color = printed.color;
     f.add(printed, zone.unwrap_or(Zone::Board(A, color)))
 }
@@ -13,7 +13,7 @@ fn tech(f: &mut Fixture, color: Color, age: u8, zone: Zone) -> CardId {
     f.tech(color, age, zone, Vec::new())
 }
 fn figure(f: &mut Fixture, figure: Figure, owner: Player) -> CardId {
-    let printed = figure_card(figure.code()).unwrap();
+    let printed = Card::from_code(figure.code()).unwrap();
     let color = printed.color;
     f.add(printed, Zone::Board(owner, color))
 }

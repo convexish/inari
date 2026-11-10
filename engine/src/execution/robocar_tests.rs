@@ -35,7 +35,10 @@ fn start(
 fn robocar_back_menu_samples_identical_backs_with_native_rng() {
     for seed in 0..12 {
         let mut f = Fixture::default();
-        let source = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
+        let source = f.add(
+            Card::from_code("E111").unwrap(),
+            Zone::Board(A, Color::Green),
+        );
         let same = [
             f.tech(Color::Yellow, 1, Zone::Hand(A), vec![]),
             f.tech(Color::Blue, 1, Zone::Hand(A), vec![]),
@@ -96,12 +99,15 @@ fn robocar_back_menu_samples_identical_backs_with_native_rng() {
 #[test]
 fn robocar_meld_stays_private_through_a_first_karma_choice() {
     let mut f = Fixture::default();
-    let source = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
+    let source = f.add(
+        Card::from_code("E111").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     let hand = [
-        f.add(base_card("B001").unwrap(), Zone::Hand(A)),
-        f.add(base_card("B002").unwrap(), Zone::Hand(A)),
+        f.add(Card::from_code("B001").unwrap(), Zone::Hand(A)),
+        f.add(Card::from_code("B002").unwrap(), Zone::Hand(A)),
     ];
-    let figure = figure_card("F087").unwrap();
+    let figure = Card::from_code("F087").unwrap();
     f.add(figure.clone(), Zone::Board(B, figure.color));
     let victim = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     f.cards[usize::from(victim.0)].symbols[0] = Symbol::Icon(Icon::Industry);
@@ -153,7 +159,10 @@ fn robocar_meld_stays_private_through_a_first_karma_choice() {
 fn robocar_self_executes_and_repeats_only_after_a_performed_meld_on_its_turn() {
     for own_turn in [false, true] {
         let mut f = Fixture::default();
-        let source = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
+        let source = f.add(
+            Card::from_code("E111").unwrap(),
+            Zone::Board(A, Color::Green),
+        );
         let picked = f.tech(Color::Blue, 1, Zone::Hand(A), vec![build::draw(2)]);
         let drawn = f.tech(Color::Yellow, 2, Zone::Deck(Deck::base(2)), vec![]);
         let mut game = start(f.position(), Expansions::ECHOES, source, 4, own_turn);
@@ -176,8 +185,11 @@ fn robocar_self_executes_and_repeats_only_after_a_performed_meld_on_its_turn() {
         assert!(game.position.check_conservation());
     }
     let mut f = Fixture::default();
-    let source = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
-    let figure = figure_card(Figure::SejongTheGreat.code()).unwrap();
+    let source = f.add(
+        Card::from_code("E111").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
+    let figure = Card::from_code(Figure::SejongTheGreat.code()).unwrap();
     f.add(figure.clone(), Zone::Board(A, figure.color));
     f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let picked = f.tech(Color::Blue, 1, Zone::Hand(A), vec![build::draw(3)]);
@@ -202,7 +214,10 @@ fn robocar_self_executes_and_repeats_only_after_a_performed_meld_on_its_turn() {
 #[test]
 fn robocar_ark_loop_draws_at_persistent_work_cap_with_clone_resume() {
     let mut f = Fixture::default();
-    let source = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
+    let source = f.add(
+        Card::from_code("E111").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     // Ark's first clause has an empty hand. Its second clause transfers
     // itself from a board back to hand; Robocar then selects it again.
     let ark = f.tech(
@@ -255,12 +270,18 @@ fn robocar_catherine_sanitation_loop_draws_once_both_decks_are_empty() {
     // was the loop's only decision; with both decks empty none remains.
     for nonempty_seven in [false, true] {
         let mut f = Fixture::default();
-        let source = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
+        let source = f.add(
+            Card::from_code("E111").unwrap(),
+            Zone::Board(A, Color::Green),
+        );
         f.figure(Figure::CatherineTheGreat, Zone::Board(A, Color::Purple));
-        let sanitation = f.add(base_card("B069").unwrap(), Zone::Board(A, Color::Yellow));
+        let sanitation = f.add(
+            Card::from_code("B069").unwrap(),
+            Zone::Board(A, Color::Yellow),
+        );
         let greta = f.figure(Figure::GretaThunberg, Zone::Hand(A));
-        let seven =
-            nonempty_seven.then(|| f.add(base_card("B068").unwrap(), Zone::Deck(Deck::base(7))));
+        let seven = nonempty_seven
+            .then(|| f.add(Card::from_code("B068").unwrap(), Zone::Deck(Deck::base(7))));
         let mut game = start(f.position(), ECHOES_FIGURES, source, 0, true);
         if nonempty_seven {
             // A nonempty deck is a real choice; junking it ends the choices.
@@ -293,7 +314,10 @@ fn robocar_catherine_sanitation_loop_draws_once_both_decks_are_empty() {
 #[test]
 fn a_real_robocar_choice_resets_automatic_work() {
     let mut f = Fixture::default();
-    let source = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
+    let source = f.add(
+        Card::from_code("E111").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     f.tech(Color::Yellow, 1, Zone::Hand(A), vec![]);
     f.tech(Color::Blue, 2, Zone::Hand(A), vec![]);
     let mut game = start(f.position(), Expansions::ECHOES, source, 0, true);
@@ -315,7 +339,10 @@ fn a_real_robocar_choice_resets_automatic_work() {
 fn robocar_singleton_sampling_keeps_the_stream_for_the_following_blind_pick() {
     for seed in 0..8 {
         let mut f = Fixture::default();
-        let source = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
+        let source = f.add(
+            Card::from_code("E111").unwrap(),
+            Zone::Board(A, Color::Green),
+        );
         let first = f.tech(
             Color::Blue,
             1,
@@ -352,18 +379,21 @@ fn queen_victoria_groups_opposing_score_backs_and_keeps_the_pick_private() {
     for tracked in [false, true] {
         let mut f = Fixture::default();
         let queen = f.figure(Figure::QueenVictoria, Zone::Board(A, Color::Purple));
-        let own = f.add(figure_card("F003").unwrap(), Zone::Score(A));
+        let own = f.add(Card::from_code("F003").unwrap(), Zone::Score(A));
         // Put the larger back first so physical order cannot sort the menu.
-        f.add(figure_card("F016").unwrap(), Zone::Score(B));
+        f.add(Card::from_code("F016").unwrap(), Zone::Score(B));
         for code in ["F001", "F002"] {
-            f.add(figure_card(code).unwrap(), Zone::Score(B));
+            f.add(Card::from_code(code).unwrap(), Zone::Score(B));
         }
-        f.add(base_card("B002").unwrap(), Zone::Score(B));
+        f.add(Card::from_code("B002").unwrap(), Zone::Score(B));
         // Unknown deck cards keep singleton score backs from naming a face.
         for (code, age) in [("F004", 1), ("F017", 2)] {
-            f.add(figure_card(code).unwrap(), Zone::Deck(Deck::figures(age)));
+            f.add(
+                Card::from_code(code).unwrap(),
+                Zone::Deck(Deck::figures(age)),
+            );
         }
-        let scored = f.add(base_card("B001").unwrap(), Zone::Hand(A));
+        let scored = f.add(Card::from_code("B001").unwrap(), Zone::Hand(A));
         let mut game = Game::seeded(f.position(), Expansions::FIGURES, 73).unwrap();
         if tracked {
             game = game.with_tracking().unwrap();
@@ -516,11 +546,11 @@ fn queen_victoria_forced_singleton_advances_the_next_blind_pick_stream() {
         for seed in 0..8 {
             let mut f = Fixture::default();
             f.figure(Figure::QueenVictoria, Zone::Board(A, Color::Purple));
-            let singleton = f.add(figure_card("F001").unwrap(), Zone::Score(B));
+            let singleton = f.add(Card::from_code("F001").unwrap(), Zone::Score(B));
             let later = ["F002", "F003"]
-                .map(|code| f.add(figure_card(code).unwrap(), Zone::Deck(Deck::figures(1))));
+                .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::figures(1))));
             let originals =
-                ["B001", "B002"].map(|code| f.add(base_card(code).unwrap(), Zone::Hand(A)));
+                ["B001", "B002"].map(|code| f.add(Card::from_code(code).unwrap(), Zone::Hand(A)));
             let mut game = Game::seeded(f.position(), Expansions::FIGURES, seed).unwrap();
             if tracked {
                 game = game.with_tracking().unwrap();

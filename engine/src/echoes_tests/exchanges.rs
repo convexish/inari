@@ -18,14 +18,17 @@ fn card(f: &mut Fixture, set: CardSet, value: u8, color: Color, zone: Zone) -> C
 }
 
 fn telescope(f: &mut Fixture) -> CardId {
-    f.add(echoes_card("E043").unwrap(), Zone::Board(A, Color::Blue))
+    f.add(
+        Card::from_code("E043").unwrap(),
+        Zone::Board(A, Color::Blue),
+    )
 }
 
 /// Telescope exchanging with every available achievement, Figure board
 /// aliases included. Printed Telescope says "standard"; this variant keeps
 /// the alias exchange machinery covered.
 fn alias_telescope(f: &mut Fixture) -> CardId {
-    let mut card = echoes_card("E043").unwrap();
+    let mut card = Card::from_code("E043").unwrap();
     for effect in &mut card.effects {
         for instruction in &mut effect.instructions {
             if let Instruction::Exchange(step) = instruction {

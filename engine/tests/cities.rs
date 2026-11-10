@@ -4,11 +4,11 @@ mod common;
 use common::*;
 
 fn city(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(city_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn city_on_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = city_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let zone = Zone::Board(player, card.color);
     f.add(card, zone)
 }
@@ -370,7 +370,7 @@ fn an_owned_token_is_not_claimed_again() {
 
 #[test]
 fn meiji_borrowed_hands_count_for_glory_and_the_held_city_check() {
-    let meiji = || figure_card(Figure::EmperorMeiji.code()).unwrap();
+    let meiji = || Card::from_code(Figure::EmperorMeiji.code()).unwrap();
     // The executor junks a Flag City from the opponent's hand through Meiji.
     let mut f = Fixture::default();
     let card = meiji();
@@ -407,7 +407,7 @@ fn meiji_borrowed_hands_count_for_glory_and_the_held_city_check() {
 #[test]
 fn a_replaced_meld_earns_nothing() {
     let mut f = Fixture::default();
-    let card = figure_card(Figure::YunaKim.code()).unwrap();
+    let card = Card::from_code(Figure::YunaKim.code()).unwrap();
     let zone = Zone::Board(B, card.color);
     f.add(card, zone);
     pile(&mut f, A, Color::Red, &[1, 1]);
@@ -439,7 +439,7 @@ fn a_replaced_meld_earns_nothing() {
 /// Hedy Lamarr on A's board, a red pile splayed left and Delhi in hand.
 fn hedy_meld(base_nine: usize) -> (Game, CardId) {
     let mut f = Fixture::default();
-    let hedy = figure_card(Figure::HedyLamarr.code()).unwrap();
+    let hedy = Card::from_code(Figure::HedyLamarr.code()).unwrap();
     assert_eq!(hedy.color, Color::Green);
     f.add(hedy, Zone::Board(A, Color::Green));
     pile(&mut f, A, Color::Red, &[1, 1]);
@@ -673,7 +673,10 @@ fn self_executing_a_city_inside_a_self_execution_earns_no_chain() {
     // of that value. Self-execute the junked card." The junked City has no dogma
     // effects: it executes nothing and the keyword earns no Chain.
     let mut f = Fixture::default();
-    let escapism = f.add(base_card("B114").unwrap(), Zone::Board(A, Color::Purple));
+    let escapism = f.add(
+        Card::from_code("B114").unwrap(),
+        Zone::Board(A, Color::Purple),
+    );
     city(&mut f, "C086", Zone::Hand(A));
     for _ in 0..3 {
         blank(&mut f, Color::Green, 9, Zone::Deck(Deck::base(9)));

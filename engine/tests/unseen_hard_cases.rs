@@ -7,7 +7,7 @@ mod common;
 use common::*;
 
 fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(unseen_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
@@ -171,8 +171,11 @@ fn blackmailed_self_service_earns_its_victim_chain_for_its_own_keyword() {
         f.tech(Color::Red, 1, Zone::Deck(Deck::base(1)), vec![]);
     }
     let blackmail = unseen(&mut f, "U040", Zone::Board(A, Color::Green));
-    f.add(base_card("B101").unwrap(), Zone::Hand(B));
-    f.add(base_card("B005").unwrap(), Zone::Board(B, Color::Yellow));
+    f.add(Card::from_code("B101").unwrap(), Zone::Hand(B));
+    f.add(
+        Card::from_code("B005").unwrap(),
+        Zone::Board(B, Color::Yellow),
+    );
     f.tech(Color::Blue, 1, Zone::Achievements(A), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     let mut context = Context::new(B);

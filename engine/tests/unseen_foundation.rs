@@ -24,7 +24,7 @@ fn printed_catalog_matches_the_publisher_decks_and_reserved_identities() {
             .count();
         assert_eq!(image, 1, "{} has one image slot", metadata.code);
         assert!(
-            metadata.symbols.iter().all(|&s| s != Symbol::Blank),
+            metadata.symbols[..4].iter().all(|&s| s != Symbol::Blank),
             "{} has no blank position",
             metadata.code
         );
@@ -40,27 +40,27 @@ fn printed_catalog_matches_the_publisher_decks_and_reserved_identities() {
     assert!((2..=11).all(|age| per_age[&age] == 10));
     assert!(per_color.values().all(|&count| count == 23));
     assert_eq!(title("U001"), Some("ASSASSINATION"));
-    let assassination = unseen_metadata("U001").unwrap();
+    let assassination = card_metadata("U001").unwrap();
     assert_eq!(assassination.featured, Some(Icon::Prosperity));
     assert_eq!(
         assassination.symbols,
-        [
+        four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Authority),
-        ]
+        ])
     );
 }
 
 #[test]
 fn every_card_is_authored_and_only_unseen_rules_include_the_set() {
     assert_eq!(
-        unseen_card("U999").unwrap_err(),
-        Error::InvalidSetup("unknown Unseen card")
+        Card::from_code("U999").unwrap_err(),
+        Error::InvalidSetup("unknown card")
     );
     for metadata in &UNSEEN_METADATA {
-        assert!(unseen_card(metadata.code).is_ok(), "{}", metadata.code);
+        assert!(Card::from_code(metadata.code).is_ok(), "{}", metadata.code);
     }
     // A rules profile without Unseen never includes its cards.
     assert!(!Expansions::BASE.includes(CardSet::Unseen));

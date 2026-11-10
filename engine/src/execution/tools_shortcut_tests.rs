@@ -466,17 +466,17 @@ fn continuous_figures_preserve_tools_return_reduction_and_real_catherine_meld_fi
     ] {
         let mut f = Fixture::default();
         let tools = f.tools(Zone::Board(A, Color::Blue));
-        let card = figure_card(figure.code()).unwrap();
+        let card = Card::from_code(figure.code()).unwrap();
         let color = card.color;
         let top = f.add(card, Zone::Board(A, color));
-        let reward = f.add(base_card("B031").unwrap(), Zone::Deck(Deck::base(3)));
+        let reward = f.add(Card::from_code("B031").unwrap(), Zone::Deck(Deck::base(3)));
         let old_green = if color == Color::Green {
             top
         } else {
             f.sailing(Zone::Board(A, Color::Green))
         };
         for code in ["B001", "B021", "B042"] {
-            f.add(base_card(code).unwrap(), Zone::Hand(A));
+            f.add(Card::from_code(code).unwrap(), Zone::Hand(A));
         }
         let position = f.position();
         let mut reduced = Game::seeded(position.clone(), Expansions::FIGURES, 42).unwrap();

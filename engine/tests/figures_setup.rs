@@ -88,7 +88,10 @@ fn a_mandatory_loop_that_repeats_the_whole_game_state_is_a_draw() {
     // green top, so two green cards cycle between the [6] and [11] decks.
     let mut f = Fixture::default();
     f.figure(Figure::EmmaWatson, Zone::Board(A, Color::Purple));
-    let astronomy = f.add(base_card("B054").unwrap(), Zone::Board(B, Color::Purple));
+    let astronomy = f.add(
+        Card::from_code("B054").unwrap(),
+        Zone::Board(B, Color::Purple),
+    );
     f.tech(Color::Green, 6, Zone::Board(B, Color::Green), vec![]);
     f.tech(Color::Green, 11, Zone::Deck(Deck::base(11)), vec![]);
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();

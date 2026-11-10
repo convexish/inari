@@ -100,7 +100,7 @@ fn pick_known(menu: &Decision, card: CardId) -> Option<usize> {
 fn foreseen_linguistics_junks_after_a_same_value_base_fallback() {
     for echoes_two in [false, true] {
         let mut f = Fixture::default();
-        let linguistics = f.add(echoes_card("E023").unwrap(), Zone::Junk);
+        let linguistics = f.add(Card::from_code("E023").unwrap(), Zone::Junk);
         let bonus = tech(&mut f, Color::Red, 1, Zone::Board(B, Color::Red));
         symbols(
             &mut f,
@@ -225,7 +225,7 @@ fn a_special_reached_by_the_promotion_meld_waits_for_the_promoted_dogma() {
 #[test]
 fn foreseen_ice_skates_junks_only_the_base_one_and_two_decks() {
     let mut f = Fixture::default();
-    let skates = f.add(echoes_card("E008").unwrap(), Zone::Junk);
+    let skates = f.add(Card::from_code("E008").unwrap(), Zone::Junk);
     let base = [1, 1, 2].map(|value| in_deck(&mut f, CardSet::Base, Color::Red, value));
     let echoes = [1, 2].map(|value| in_deck(&mut f, CardSet::Echoes, Color::Red, value));
     let mut game = promote(f, skates, 0);
@@ -250,7 +250,7 @@ fn foreseen_ice_skates_junks_only_the_base_one_and_two_decks() {
 fn liquid_fire_with_no_bonus_draws_a_one() {
     for red in [false, true] {
         let mut f = Fixture::default();
-        let fire = f.add(echoes_card("E026").unwrap(), Zone::Junk);
+        let fire = f.add(Card::from_code("E026").unwrap(), Zone::Junk);
         let held = tech(&mut f, Color::Purple, 6, Zone::Hand(B));
         let color = if red { Color::Red } else { Color::Yellow };
         let one = tech(&mut f, color, 1, Zone::Deck(Deck::base(1)));
@@ -271,7 +271,7 @@ fn liquid_fire_with_no_bonus_draws_a_one() {
 #[test]
 fn foreseen_pressure_cooker_melds_the_whole_hand() {
     let mut f = Fixture::default();
-    let cooker = f.add(echoes_card("E048").unwrap(), Zone::Junk);
+    let cooker = f.add(Card::from_code("E048").unwrap(), Zone::Junk);
     let reds = [
         tech(&mut f, Color::Red, 3, Zone::Hand(A)),
         tech(&mut f, Color::Red, 2, Zone::Hand(A)),
@@ -294,7 +294,7 @@ fn foreseen_pressure_cooker_melds_the_whole_hand() {
 /// card the draw should take.
 fn pressure_cooker(covered_bonus: bool, two_in_deck: bool) -> (Game, [CardId; 2], CardId) {
     let mut f = Fixture::default();
-    let cooker = f.add(echoes_card("E048").unwrap(), Zone::Junk);
+    let cooker = f.add(Card::from_code("E048").unwrap(), Zone::Junk);
     if covered_bonus {
         // An aslant splay shows the covered card's bonus 3, but the red top
         // card has none.
@@ -368,7 +368,7 @@ fn pressure_cooker_junks_at_the_bonus_value_after_its_draw_skips_an_age() {
 fn toilet_returns_a_hand_card_and_draws_one_of_its_value() {
     for accept in [true, false] {
         let mut f = Fixture::default();
-        let toilet = f.add(echoes_card("E045").unwrap(), Zone::Junk);
+        let toilet = f.add(Card::from_code("E045").unwrap(), Zone::Junk);
         let returned = tech(&mut f, Color::Red, 3, Zone::Hand(A));
         let three = tech(&mut f, Color::Blue, 3, Zone::Deck(Deck::base(3)));
         tech(&mut f, Color::Green, 4, Zone::Deck(Deck::base(4)));
@@ -397,7 +397,7 @@ fn toilet_returns_a_hand_card_and_draws_one_of_its_value() {
 #[test]
 fn kobukson_echo_may_choose_a_pile_already_splayed_left() {
     let mut f = Fixture::default();
-    let kobukson = f.add(echoes_card("E036").unwrap(), Zone::Junk);
+    let kobukson = f.add(Card::from_code("E036").unwrap(), Zone::Junk);
     for _ in 0..2 {
         tech(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
         tech(&mut f, Color::Blue, 1, Zone::Board(B, Color::Blue));
@@ -424,7 +424,10 @@ fn kobukson_echo_may_choose_a_pile_already_splayed_left() {
 /// Blackmail on A's board: "Self-execute a card revealed due to this effect
 /// of my choice, replacing 'may' with 'must'!"
 fn blackmail(f: &mut Fixture) -> CardId {
-    f.add(unseen_card("U040").unwrap(), Zone::Board(A, Color::Green))
+    f.add(
+        Card::from_code("U040").unwrap(),
+        Zone::Board(A, Color::Green),
+    )
 }
 
 /// A demands Blackmail of B, who melds and self-executes the card A picks.
@@ -494,7 +497,7 @@ fn moves_at_least_one(
 fn soap_tucks_at_least_one_card_under_blackmail() {
     let mut f = Fixture::default();
     let blackmail = blackmail(&mut f);
-    let soap = f.add(echoes_card("E006").unwrap(), Zone::Hand(B));
+    let soap = f.add(Card::from_code("E006").unwrap(), Zone::Hand(B));
     tech(&mut f, Color::Red, 1, Zone::Hand(B));
     tech(&mut f, Color::Red, 2, Zone::Hand(B));
     let mut game = blackmailed(f, blackmail);
@@ -511,7 +514,7 @@ fn soap_tucks_at_least_one_card_under_blackmail() {
 fn lever_returns_at_least_one_card_under_blackmail() {
     let mut f = Fixture::default();
     let blackmail = blackmail(&mut f);
-    let lever = f.add(echoes_card("E022").unwrap(), Zone::Hand(B));
+    let lever = f.add(Card::from_code("E022").unwrap(), Zone::Hand(B));
     tech(&mut f, Color::Red, 5, Zone::Hand(B));
     tech(&mut f, Color::Green, 6, Zone::Hand(B));
     // Lever's echo draws two [2] first: four cards in hand.
@@ -531,7 +534,7 @@ fn lever_returns_at_least_one_card_under_blackmail() {
 fn sandpaper_returns_at_least_one_card_under_blackmail() {
     let mut f = Fixture::default();
     let blackmail = blackmail(&mut f);
-    let sandpaper = f.add(echoes_card("E029").unwrap(), Zone::Hand(B));
+    let sandpaper = f.add(Card::from_code("E029").unwrap(), Zone::Hand(B));
     tech(&mut f, Color::Red, 5, Zone::Hand(B));
     tech(&mut f, Color::Green, 6, Zone::Hand(B));
     tech(&mut f, Color::Blue, 3, Zone::Deck(Deck::base(3)));
@@ -553,7 +556,7 @@ fn sandpaper_returns_at_least_one_card_under_blackmail() {
 fn scissors_chooses_at_least_one_card_under_blackmail() {
     let mut f = Fixture::default();
     let blackmail = blackmail(&mut f);
-    let scissors = f.add(echoes_card("E021").unwrap(), Zone::Hand(B));
+    let scissors = f.add(Card::from_code("E021").unwrap(), Zone::Hand(B));
     let red = tech(&mut f, Color::Red, 1, Zone::Hand(B));
     let blue = tech(&mut f, Color::Blue, 1, Zone::Hand(B));
     let mut game = blackmailed(f, blackmail);

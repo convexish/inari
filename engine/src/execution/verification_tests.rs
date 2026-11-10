@@ -104,7 +104,7 @@ fn oars_failure_proof_adds_only_reveals_to_seeded_games_without_changing_actions
 }
 
 fn start(mut f: Fixture, code: &str, effect: u16, specials: &[Special], tracked: bool) -> Game {
-    let source = f.add(echoes_card(code).unwrap(), Zone::Junk);
+    let source = f.add(Card::from_code(code).unwrap(), Zone::Junk);
     let mut game = Game::seeded(
         f.position(),
         Expansions::ECHOES
@@ -187,7 +187,7 @@ fn bandage_public_verification_allows_the_other_player_to_search() {
                 Zone::Board(A, Color::Blue),
                 Icon::Efficiency,
             );
-            let mut source = echoes_card("E076").unwrap();
+            let mut source = Card::from_code("E076").unwrap();
             let program = if echo {
                 &mut source.echo.as_mut().unwrap().instructions
             } else {
@@ -391,8 +391,8 @@ fn empty_selection_proof_stays_private_until_complete_and_records_no_move() {
 #[test]
 fn verification_admission_precedes_reveal_and_preserves_layout_budgets() {
     let mut f = Fixture::default();
-    let selected = f.add(base_card("B001").unwrap(), Zone::Hand(A));
-    f.add(base_card("B002").unwrap(), Zone::Hand(A));
+    let selected = f.add(Card::from_code("B001").unwrap(), Zone::Hand(A));
+    f.add(Card::from_code("B002").unwrap(), Zone::Hand(A));
     for _ in 0..5 {
         f.tech(Color::Yellow, 1, Zone::Forecast(A), vec![]);
     }
@@ -440,7 +440,7 @@ fn digital_pet_live_returns_and_final_proof_include_cards_added_by_peter_the_gre
     for color in [Color::Red, Color::Green] {
         let mut f = Fixture::default();
         let incoming = f.tech(Color::Green, 4, Zone::Board(A, Color::Green), vec![]);
-        let figure = figure_card(Figure::PeterTheGreat.code()).unwrap();
+        let figure = Card::from_code(Figure::PeterTheGreat.code()).unwrap();
         let figure_color = figure.color;
         f.add(figure, Zone::Board(A, figure_color));
         let original = f.tech(color, 2, Zone::Score(A), vec![]);
@@ -469,7 +469,7 @@ fn digital_pet_live_returns_and_final_proof_include_cards_added_by_peter_the_gre
 #[test]
 fn algocracy_freezes_the_leader_and_recorded_packet_before_transfer_reactions() {
     let mut f = Fixture::default();
-    let figure = figure_card(Figure::AlfredNobel.code()).unwrap();
+    let figure = Card::from_code(Figure::AlfredNobel.code()).unwrap();
     let figure_color = figure.color;
     f.add(figure, Zone::Board(B, figure_color));
     let leader = icon(
@@ -578,7 +578,7 @@ fn parachute_foreseen_junks_covered_cards_on_both_boards() {
             .collect();
         let buried = f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);
         let parachute = f.add(
-            echoes_card("E077").unwrap(),
+            Card::from_code("E077").unwrap(),
             if promoted {
                 Zone::Forecast(A)
             } else {
@@ -701,7 +701,7 @@ fn oracle_fixture(code: &str, reacting: bool) -> Game {
         } else {
             Figure::AlfredNobel
         };
-        let figure = figure_card(figure.code()).unwrap();
+        let figure = Card::from_code(figure.code()).unwrap();
         let color = figure.color;
         f.add(figure, Zone::Board(B, color));
         for _ in 0..3 {
@@ -745,7 +745,7 @@ fn verification_card_shortcuts_match_every_manual_path_with_reacting_figures() {
 #[test]
 fn mixed_junk_quota_keeps_alias_order_when_junking_cai_lun_can_remove_other_targets() {
     let mut f = Fixture::default();
-    let figure = figure_card(Figure::CaiLun.code()).unwrap();
+    let figure = Card::from_code(Figure::CaiLun.code()).unwrap();
     let color = figure.color;
     let cai = f.add(figure, Zone::Board(A, color));
     let other_color = Color::ALL.into_iter().find(|&c| c != color).unwrap();
@@ -810,14 +810,14 @@ fn mixed_junk_quota_keeps_alias_order_when_junking_cai_lun_can_remove_other_targ
 #[test]
 fn bandage_verification_witness_allows_search_before_first_reactions() {
     let mut f = Fixture::default();
-    let mut selected = base_card("B001").unwrap();
+    let mut selected = Card::from_code("B001").unwrap();
     selected.symbols[0] = Symbol::Icon(Icon::Efficiency);
     let selected = f.add(selected, Zone::Score(A));
-    let mut other = base_card("B002").unwrap();
+    let mut other = Card::from_code("B002").unwrap();
     other.symbols[0] = Symbol::Icon(Icon::Efficiency);
     f.add(other, Zone::Score(A));
     for (figure, owner) in [(Figure::JamesClerkMaxwell, B), (Figure::PeterTheGreat, A)] {
-        let card = figure_card(figure.code()).unwrap();
+        let card = Card::from_code(figure.code()).unwrap();
         let color = card.color;
         f.add(card, Zone::Board(owner, color));
     }
@@ -925,7 +925,7 @@ fn bandage_verifies_only_uninspectable_logical_score_members_before_choosing() {
         let junk_other = icon(&mut f, Color::Yellow, 2, Zone::Junk, Icon::Efficiency);
         let private = icon(&mut f, Color::Purple, 2, Zone::Hand(B), Icon::Efficiency);
         if wernher {
-            let figure = figure_card(Figure::WernherVonBraun.code()).unwrap();
+            let figure = Card::from_code(Figure::WernherVonBraun.code()).unwrap();
             let color = figure.color;
             f.add(figure, Zone::Board(A, color));
         }
@@ -992,10 +992,10 @@ fn bandage_verifies_only_uninspectable_logical_score_members_before_choosing() {
 #[test]
 fn digital_pet_retains_both_same_deck_orders_for_revealed_score_aliases() {
     let mut f = Fixture::default();
-    let first = f.add(base_card("B001").unwrap(), Zone::Junk);
-    let second = f.add(base_card("B002").unwrap(), Zone::Junk);
+    let first = f.add(Card::from_code("B001").unwrap(), Zone::Junk);
+    let second = f.add(Card::from_code("B002").unwrap(), Zone::Junk);
     let own = f.tech(Color::Red, 3, Zone::Score(A), vec![]);
-    let figure = figure_card(Figure::WernherVonBraun.code()).unwrap();
+    let figure = Card::from_code(Figure::WernherVonBraun.code()).unwrap();
     let color = figure.color;
     f.add(figure, Zone::Board(A, color));
     f.tech(Color::Red, 11, Zone::Deck(Deck::base(11)), vec![]);
@@ -1064,15 +1064,15 @@ fn digital_pet_retains_both_same_deck_orders_for_revealed_score_aliases() {
 fn digital_pet_new_junk_preserves_order_choices_among_already_revealed_members() {
     for incoming_color in [Color::Red, Color::Green] {
         let mut f = Fixture::default();
-        let first = f.add(base_card("B001").unwrap(), Zone::Junk);
-        let second = f.add(base_card("B002").unwrap(), Zone::Junk);
+        let first = f.add(Card::from_code("B001").unwrap(), Zone::Junk);
+        let second = f.add(Card::from_code("B002").unwrap(), Zone::Junk);
         let initial = f.tech(Color::Red, 3, Zone::Score(A), vec![]);
         let incoming = f.tech(incoming_color, 1, Zone::Deck(Deck::base(1)), vec![]);
-        let figure = figure_card(Figure::WernherVonBraun.code()).unwrap();
+        let figure = Card::from_code(Figure::WernherVonBraun.code()).unwrap();
         let color = figure.color;
         f.add(figure, Zone::Board(A, color));
         f.tech(Color::Red, 11, Zone::Deck(Deck::base(11)), vec![]);
-        let reactor = figure_card(Figure::JamesClerkMaxwell.code()).unwrap();
+        let reactor = Card::from_code(Figure::JamesClerkMaxwell.code()).unwrap();
         let reactor_color = reactor.color;
         f.add(reactor, Zone::Board(B, reactor_color));
         for _ in 0..5 {
@@ -1163,8 +1163,11 @@ fn digital_pet_new_junk_preserves_order_choices_among_already_revealed_members()
 fn verified_batch_strengthens_anonymous_retained_reference_without_recapturing_it() {
     for tracked in [false, true] {
         let mut f = Fixture::default();
-        let selected = f.add(base_card("B001").unwrap(), Zone::AvailableAchievements);
-        f.add(base_card("B002").unwrap(), Zone::Junk);
+        let selected = f.add(
+            Card::from_code("B001").unwrap(),
+            Zone::AvailableAchievements,
+        );
+        f.add(Card::from_code("B002").unwrap(), Zone::Junk);
         let source = f.tech(
             Color::Blue,
             2,
@@ -1275,10 +1278,10 @@ fn verified_batch_strengthens_anonymous_retained_reference_without_recapturing_i
 fn verified_per_value_returns_reveal_only_the_admitted_quota_selection() {
     for (quota, per_color) in [(false, false), (true, false), (true, true)] {
         let mut f = Fixture::default();
-        let first = f.add(base_card("B001").unwrap(), Zone::Junk);
-        let second = f.add(base_card("B002").unwrap(), Zone::Junk);
+        let first = f.add(Card::from_code("B001").unwrap(), Zone::Junk);
+        let second = f.add(Card::from_code("B002").unwrap(), Zone::Junk);
         let excluded = f.tech(Color::Red, 2, Zone::Junk, vec![]);
-        let figure = figure_card(Figure::WernherVonBraun.code()).unwrap();
+        let figure = Card::from_code(Figure::WernherVonBraun.code()).unwrap();
         let color = figure.color;
         f.add(figure, Zone::Board(A, color));
         if quota {

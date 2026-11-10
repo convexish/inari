@@ -34,12 +34,12 @@ impl Layout {
 
     /// A printed Artifact.
     fn artifact(&mut self, code: &str, zone: Zone) -> CardId {
-        self.add(artifacts_card(code).unwrap(), zone)
+        self.add(Card::from_code(code).unwrap(), zone)
     }
 
     /// A printed Base card.
     fn base(&mut self, code: &str, zone: Zone) -> CardId {
-        self.add(base_card(code).unwrap(), zone)
+        self.add(Card::from_code(code).unwrap(), zone)
     }
 
     /// A blank Base card with these icons in its first positions.
@@ -75,14 +75,14 @@ impl Layout {
 
     /// A printed Figure as that player's top card of its own color.
     fn figure(&mut self, figure: Figure, player: Player) -> CardId {
-        let card = figure_card(figure.code()).unwrap();
+        let card = Card::from_code(figure.code()).unwrap();
         let zone = Zone::Board(player, card.color);
         self.add(card, zone)
     }
 
     /// A printed Echoes card in its own deck.
     fn echo(&mut self, code: &str) -> CardId {
-        let card = echoes_card(code).unwrap();
+        let card = Card::from_code(code).unwrap();
         let zone = Zone::Deck(card.origin_deck());
         self.add(card, zone)
     }

@@ -4,11 +4,11 @@ use crate::execution::shortcuts::common::*;
 fn start(f: Fixture, code: &str, figure: Option<Figure>) -> Game {
     let mut f = f;
     if let Some(figure) = figure {
-        let card = figure_card(figure.code()).unwrap();
+        let card = Card::from_code(figure.code()).unwrap();
         let color = card.color;
         f.add(card, Zone::Board(A, color));
     }
-    let source = f.add(echoes_card(code).unwrap(), Zone::Junk);
+    let source = f.add(Card::from_code(code).unwrap(), Zone::Junk);
     let mut game = Game::seeded(
         f.position(),
         Expansions::ECHOES.union(Expansions::FIGURES),
@@ -240,7 +240,7 @@ fn hidden_group_selection_and_frozen_block_order_use_only_backs_and_native_sampl
     let first = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let second = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
     f.tech(Color::Yellow, 2, Zone::Hand(A), vec![]);
-    let source = f.add(echoes_card("E021").unwrap(), Zone::Junk);
+    let source = f.add(Card::from_code("E021").unwrap(), Zone::Junk);
     let mut game = Game::seeded(f.position(), Expansions::ECHOES, 17)
         .unwrap()
         .with_tracking()
@@ -325,15 +325,15 @@ fn hidden_group_selection_and_frozen_block_order_use_only_backs_and_native_sampl
 fn tracked_scissors(controller: Player, figure: bool, reverse: bool, batch: bool) -> Game {
     let mut f = Fixture::default();
     for code in ["B001", "B002", "B003"] {
-        f.add(base_card(code).unwrap(), Zone::Hand(A));
+        f.add(Card::from_code(code).unwrap(), Zone::Hand(A));
     }
     f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);
     if figure {
-        let card = figure_card(Figure::Kalashnikov.code()).unwrap();
+        let card = Card::from_code(Figure::Kalashnikov.code()).unwrap();
         let color = card.color;
         f.add(card, Zone::Board(B, color));
     }
-    let mut scissors = echoes_card("E021").unwrap();
+    let mut scissors = Card::from_code("E021").unwrap();
     if batch {
         // The same one-item work expressed as a generic slot-filtered batch
         // exercises the reference lookup with MoveAll above its program.

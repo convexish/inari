@@ -3,13 +3,13 @@ mod common;
 use common::*;
 
 fn native(f: &mut Fixture, code: &str, owner: Player) -> CardId {
-    let card = base_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let zone = Zone::Board(owner, card.color);
     f.add(card, zone)
 }
 
 fn native_figure(f: &mut Fixture, figure: Figure, owner: Player) -> CardId {
-    let card = figure_card(figure.code()).unwrap();
+    let card = Card::from_code(figure.code()).unwrap();
     let zone = Zone::Board(owner, card.color);
     f.add(card, zone)
 }
@@ -56,8 +56,8 @@ fn native_computers_robotics_internet_awards_only_the_nested_chain_before_child_
     let first = f.tech(Color::Blue, 11, Zone::Deck(Deck::base(11)), vec![]);
     let scored = f.tech(Color::Yellow, 11, Zone::Deck(Deck::base(11)), vec![]);
     let chain = f.tech(Color::Purple, 11, Zone::Deck(Deck::base(11)), vec![]);
-    let internet = f.add(base_card("B105").unwrap(), Zone::Deck(Deck::base(10)));
-    let robotics = f.add(base_card("B097").unwrap(), Zone::Deck(Deck::base(10)));
+    let internet = f.add(Card::from_code("B105").unwrap(), Zone::Deck(Deck::base(10)));
+    let robotics = f.add(Card::from_code("B097").unwrap(), Zone::Deck(Deck::base(10)));
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     game.take_action(
         Action::Dogma {
@@ -112,7 +112,7 @@ fn super_execution_ignores_sharing_icons_and_owns_its_preceding_demand_summary()
     let payment = native(&mut f, "B001", B);
     native(&mut f, "B024", B);
     native(&mut f, "B052", B);
-    let reward = f.add(base_card("B021").unwrap(), Zone::Deck(Deck::base(2)));
+    let reward = f.add(Card::from_code("B021").unwrap(), Zone::Deck(Deck::base(2)));
     let position = f.position();
     assert!(
         position

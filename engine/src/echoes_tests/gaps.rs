@@ -11,7 +11,7 @@ fn flute_filters_public_sets_reveals_its_explicit_draw_and_splays() {
     let source = layout.add(card("E014"), Zone::Board(A, Color::Purple));
     let base = in_hand(&mut layout, A, Color::Red, 1);
     let echo = layout.add(card("E001"), Zone::Hand(A));
-    let figure = layout.add(figure_card("F006").unwrap(), Zone::Hand(A));
+    let figure = layout.add(Card::from_code("F006").unwrap(), Zone::Hand(A));
     let mut menus = Vec::new();
     let game = run_effect(layout, expansions, source, 0, |menu| {
         menus.push(cards::offered(menu));
@@ -83,7 +83,7 @@ fn crossbow_transfers_expansion_hand_card_and_gives_any_hand_card_to_opponent_bo
     let mut layout = Layout::default();
     let source = layout.add(card("E016"), Zone::Board(B, Color::Red));
     let base = in_hand(&mut layout, A, Color::Green, 2);
-    let expansion = layout.add(figure_card("F006").unwrap(), Zone::Hand(A));
+    let expansion = layout.add(Card::from_code("F006").unwrap(), Zone::Hand(A));
     let mut game = Game::new(layout.position(expansions), expansions).unwrap();
     let mut context = Context::new(A);
     context.demander = B;
@@ -169,7 +169,7 @@ fn watermill_keeps_known_deck_positions_through_napoleons_replacement() {
         Zone::Hand(A),
     );
     layout.add(card("E019"), Zone::Forecast(A));
-    let napoleon = layout.add(figure_card("F056").unwrap(), Zone::Hand(A));
+    let napoleon = layout.add(Card::from_code("F056").unwrap(), Zone::Hand(A));
     deck_card(&mut layout, CardSet::Base, Color::Blue, 2);
     let first = deck_card(&mut layout, CardSet::Base, Color::Green, 6);
     let returned: Vec<_> = [Color::Yellow, Color::Blue, Color::Red]
@@ -310,7 +310,7 @@ fn dentures_keeps_the_last_original_tuck_when_a_later_copy_is_replaced() {
         ),
         Zone::Board(A, Color::Green),
     );
-    let napoleon = layout.add(figure_card("F056").unwrap(), Zone::Hand(A));
+    let napoleon = layout.add(Card::from_code("F056").unwrap(), Zone::Hand(A));
     let red: Vec<_> = (1..=3)
         .map(|age| top(&mut layout, A, Color::Red, age))
         .collect();

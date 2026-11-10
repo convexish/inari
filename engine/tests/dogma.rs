@@ -620,15 +620,15 @@ fn auspice_is_not_offered_for_a_dogma_karma_that_cannot_fire_or_use_the_icon() {
     // icon and of Avatar.
     let offers = |figure: Figure, watcher: Option<Figure>, second_action: bool| {
         let mut f = Fixture::default();
-        let color = figure_card(figure.code()).unwrap().color;
+        let color = Card::from_code(figure.code()).unwrap().color;
         f.figure(figure, Zone::Board(A, color));
         if let Some(watcher) = watcher {
-            let color = figure_card(watcher.code()).unwrap().color;
+            let color = Card::from_code(watcher.code()).unwrap().color;
             f.figure(watcher, Zone::Board(B, color));
         }
         let free = Color::ALL.into_iter().find(|&free| free != color).unwrap();
         // Auspice needs a top Figure printing the featured icon.
-        let featured = figure_card(figure.code())
+        let featured = Card::from_code(figure.code())
             .unwrap()
             .symbols
             .iter()

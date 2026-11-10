@@ -3,7 +3,7 @@ use super::*;
 
 fn fixture(code: &str, values: &[u8]) -> (Fixture, CardId) {
     let mut f = Fixture::default();
-    let source = base_card(code).unwrap();
+    let source = Card::from_code(code).unwrap();
     let color = source.color;
     let source = f.add(source, Zone::Board(A, color));
     let zone = if matches!(code, "B047" | "B100") {
@@ -117,7 +117,7 @@ fn explosives_keeps_one_order_into_the_demanders_hand() {
     exercise(Expansions::BASE);
     exercise(Expansions::FIGURES);
     let (mut f, source) = fixture("B067", &[1, 1]);
-    f.add(figure_card("F005").unwrap(), Zone::Hand(B));
+    f.add(Card::from_code("F005").unwrap(), Zone::Hand(B));
     compare_classes(Expansions::FIGURES, f, source, 1, 6);
 }
 
@@ -187,7 +187,7 @@ fn canonical_semantic_operations_rng_and_every_boundary_clone_match_the_manual_s
 fn relevant_live_hooks_restore_choices_but_suppression_does_not_disable_each_membership() {
     for suppressed in [false, true] {
         let (mut f, source) = fixture("B100", &[1, 2, 3]);
-        let figure = figure_card("F069").unwrap();
+        let figure = Card::from_code("F069").unwrap();
         let color = figure.color;
         f.add(figure, Zone::Board(B, color));
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
@@ -207,7 +207,7 @@ fn relevant_live_hooks_restore_choices_but_suppression_does_not_disable_each_mem
         assert_eq!(menu.options.len(), if suppressed { 2 } else { 3 });
     }
     let (mut f, source) = fixture("B068", &[1, 2, 3]);
-    let figure = figure_card("F074").unwrap();
+    let figure = Card::from_code("F074").unwrap();
     let color = figure.color;
     f.add(figure, Zone::Board(B, color));
     f.tech(Color::Green, 4, Zone::Hand(A), vec![]);

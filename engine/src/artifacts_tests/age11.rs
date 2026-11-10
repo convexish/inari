@@ -15,7 +15,7 @@ fn board(player: Player, color: Color) -> Zone {
 }
 
 fn sharing_icons(code: &str) -> [Icon; 3] {
-    [artifacts_card(code).unwrap().featured.unwrap(); 3]
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 /// A synthetic Base card with one non-demand effect.
@@ -219,7 +219,7 @@ fn greenland_returns_qualifying_tops_until_none_remain() {
     let mut l = Layout::default();
     let greenland = l.artifact("A110", board(A, Color::Green));
     let b_under = l.tech(Color::Blue, 1, board(B, Color::Blue), &[Icon::Efficiency]);
-    let featured = artifacts_card("A110").unwrap().featured.unwrap();
+    let featured = Card::from_code("A110").unwrap().featured.unwrap();
     let b_top = l.tech(
         Color::Blue,
         2,

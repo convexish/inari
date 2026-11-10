@@ -2,7 +2,7 @@ use super::*;
 use common::*;
 
 fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 fn start(game: &mut Game, source: CardId, effect: u16, boxed: BoxedValues, suppressed: bool) {
     let mut context = Context::new(A);
@@ -111,7 +111,7 @@ fn machinery_uses_each_sides_original_extrema_and_has_separate_followups() {
     finish(&mut game, &mut Vec::new());
     assert_eq!(game.position.cards(Zone::Hand(A)), &[high]);
     assert_eq!(game.position.cards(Zone::Hand(B)), &[low, own]);
-    let card = base_card("B028").unwrap();
+    let card = Card::from_code("B028").unwrap();
     assert_eq!(card.effects.len(), 3);
     assert_eq!(
         card.effects[1].instructions,

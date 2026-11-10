@@ -2214,7 +2214,7 @@ mod tests {
 
     #[test]
     fn oars_impossible_transfer_lists_the_revealed_hand_in_the_app_log() {
-        let cards = ["B003", "B001", "B006", "B004"].map(|code| n::base_card(code).unwrap());
+        let cards = ["B003", "B001", "B006", "B004"].map(|code| n::Card::from_code(code).unwrap());
         let mut game = Game::new(
             n::Position::new(
                 cards.to_vec(),
@@ -2264,7 +2264,10 @@ mod tests {
     #[test]
     fn propaganda_and_ninja_log_the_demanded_color() {
         for (code, color) in [("U024", n::Color::Purple), ("U036", n::Color::Red)] {
-            let cards = vec![n::unseen_card(code).unwrap(), n::base_card("B001").unwrap()];
+            let cards = vec![
+                n::Card::from_code(code).unwrap(),
+                n::Card::from_code("B001").unwrap(),
+            ];
             let mut game = Game::new(
                 n::Position::new(
                     cards,
@@ -2308,10 +2311,10 @@ mod tests {
     #[test]
     fn blackmail_menus_name_the_cards_this_action_revealed() {
         let cards = vec![
-            n::unseen_card("U040").unwrap(),
-            n::base_card("B001").unwrap(),
-            n::base_card("B002").unwrap(),
-            n::base_card("B003").unwrap(),
+            n::Card::from_code("U040").unwrap(),
+            n::Card::from_code("B001").unwrap(),
+            n::Card::from_code("B002").unwrap(),
+            n::Card::from_code("B003").unwrap(),
         ];
         let mut game = Game::new(
             n::Position::new(
@@ -2374,11 +2377,11 @@ mod tests {
     #[test]
     fn blackmail_names_revealed_cards_after_bear_grylls_junks_them() {
         let mut cards = vec![
-            n::unseen_card("U040").unwrap(),
-            n::figure_card("F110").unwrap(),
-            n::base_card("B001").unwrap(),
+            n::Card::from_code("U040").unwrap(),
+            n::Card::from_code("F110").unwrap(),
+            n::Card::from_code("B001").unwrap(),
         ];
-        cards.extend(["Z001", "Z002"].map(|code| n::age_zero_card(code).unwrap()));
+        cards.extend(["Z001", "Z002"].map(|code| n::Card::from_code(code).unwrap()));
         let mut game = Game::new(
             n::Position::new(
                 cards,
@@ -2453,11 +2456,11 @@ mod tests {
     #[test]
     fn forecast_promotion_names_owner_choices_and_hides_them_from_other_seat() {
         let cards = vec![
-            n::base_card("B020").unwrap(),
-            n::echoes_card("E013").unwrap(),
-            n::echoes_card("E001").unwrap(),
-            n::echoes_card("E002").unwrap(),
-            n::base_card("B003").unwrap(),
+            n::Card::from_code("B020").unwrap(),
+            n::Card::from_code("E013").unwrap(),
+            n::Card::from_code("E001").unwrap(),
+            n::Card::from_code("E002").unwrap(),
+            n::Card::from_code("B003").unwrap(),
         ];
         let mut game = Game::new(
             n::Position::new(
@@ -2557,13 +2560,13 @@ mod tests {
             for tracked in [false, true] {
                 let deck = Zone::Deck(n::Deck::base(4));
                 let cards = vec![
-                    n::city_card("C040").unwrap(), // Calicut: Search for Health.
-                    n::base_card("B040").unwrap(), // Existing green pile.
-                    n::base_card("B039").unwrap(), // Perspective: outside the packet.
-                    n::base_card("B036").unwrap(), // Colonialism: return.
-                    n::base_card("B037").unwrap(), // Gunpowder: return.
-                    n::base_card("B038").unwrap(), // Anatomy: take into hand.
-                    n::base_card("B041").unwrap(), // Navigation: return.
+                    n::Card::from_code("C040").unwrap(), // Calicut: Search for Health.
+                    n::Card::from_code("B040").unwrap(), // Existing green pile.
+                    n::Card::from_code("B039").unwrap(), // Perspective: outside the packet.
+                    n::Card::from_code("B036").unwrap(), // Colonialism: return.
+                    n::Card::from_code("B037").unwrap(), // Gunpowder: return.
+                    n::Card::from_code("B038").unwrap(), // Anatomy: take into hand.
+                    n::Card::from_code("B041").unwrap(), // Navigation: return.
                 ];
                 let placements = [
                     (CardId(0), Zone::Hand(Player::One)),
@@ -2660,10 +2663,10 @@ mod tests {
 
     fn fixture() -> Game {
         let cards = vec![
-            n::base_card("B006").unwrap(),
-            n::base_card("B019").unwrap(),
-            n::figure_card("F001").unwrap(),
-            n::base_card("B012").unwrap(),
+            n::Card::from_code("B006").unwrap(),
+            n::Card::from_code("B019").unwrap(),
+            n::Card::from_code("F001").unwrap(),
+            n::Card::from_code("B012").unwrap(),
         ];
         let placements = [
             (CardId(0), Zone::Hand(Player::One)),
@@ -3334,8 +3337,8 @@ mod tests {
             player_view(&game, Player::One, 0).bonus_score
         );
         let cards = vec![
-            n::figure_card("F001").unwrap(),
-            n::figure_card("F002").unwrap(),
+            n::Card::from_code("F001").unwrap(),
+            n::Card::from_code("F002").unwrap(),
         ];
         let placements = [
             (CardId(0), Zone::Board(Player::One, n::Color::Red)),
@@ -3368,8 +3371,8 @@ mod tests {
             [face_of(&bonuses, CardId(0)), face_of(&bonuses, CardId(1))]
         );
         let cards = vec![
-            n::figure_card("F002").unwrap(),
-            n::base_card("B002").unwrap(),
+            n::Card::from_code("F002").unwrap(),
+            n::Card::from_code("B002").unwrap(),
         ];
         let placements = [
             (CardId(0), Zone::Board(Player::One, cards[0].color)),
@@ -3401,11 +3404,11 @@ mod tests {
         // and meld a [3]. / You may return a [3] from your hand. If you do,
         // draw three [1]." Declining the first question must visibly move
         // on to the second, which asks for a card the same way.
-        let tools = n::base_card("B011").unwrap();
+        let tools = n::Card::from_code("B011").unwrap();
         let color = tools.color;
         let mut cards = vec![tools];
-        cards.extend(["B001", "B002", "B003"].map(|code| n::base_card(code).unwrap()));
-        cards.push(n::base_card("B031").unwrap()); // an age-3 card for the hand
+        cards.extend(["B001", "B002", "B003"].map(|code| n::Card::from_code(code).unwrap()));
+        cards.push(n::Card::from_code("B031").unwrap()); // an age-3 card for the hand
         let mut game = Game::new(
             n::Position::new(
                 cards,
@@ -3453,9 +3456,9 @@ mod tests {
 
     #[test]
     fn native_newton_prompt_names_the_source_and_both_board_destinations() {
-        let newton = n::figure_card("F052").unwrap();
+        let newton = n::Card::from_code("F052").unwrap();
         let color = newton.color;
-        let cards = vec![newton, n::base_card("B004").unwrap()];
+        let cards = vec![newton, n::Card::from_code("B004").unwrap()];
         let mut game = Game::new(
             n::Position::new(
                 cards,
@@ -3494,7 +3497,7 @@ mod tests {
         // source, ask the printed branches, then win. Executing a hand card
         // exposes its text at the table, so both seats keep its name and
         // wording after it leaves for the deck.
-        let mut card = n::base_card("B018").unwrap();
+        let mut card = n::Card::from_code("B018").unwrap();
         card.effects[0].instructions.insert(
             0,
             n::program::build::return_(n::Selector::Reg(n::Reg::Source)),
@@ -3600,8 +3603,8 @@ mod tests {
     fn held_specials_decrees_and_virtual_achievements_use_native_counts() {
         // Mandela supplies a virtual achievement per two basic Avatars.
         let cards = vec![
-            n::figure_card("F086").unwrap(), // Mandela, red
-            n::figure_card("F005").unwrap(), // Shennong, yellow
+            n::Card::from_code("F086").unwrap(), // Mandela, red
+            n::Card::from_code("F005").unwrap(), // Shennong, yellow
         ];
         let placements = [
             (CardId(0), Zone::Board(Player::One, cards[0].color)),

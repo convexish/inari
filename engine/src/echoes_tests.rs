@@ -15,7 +15,7 @@ const B: Player = Player::Two;
 
 /// A metadata-only Echoes card for isolated representation scenarios.
 fn echoes(code: &str) -> Card {
-    let metadata = echoes_metadata(code).unwrap();
+    let metadata = card_metadata(code).unwrap();
     Card {
         code: metadata.code,
         set: CardSet::Echoes,
@@ -23,7 +23,7 @@ fn echoes(code: &str) -> Card {
         value: metadata.value,
         figure: None,
         echo: None,
-        symbols: four_slots(metadata.symbols),
+        symbols: metadata.symbols,
         featured: metadata.featured,
         effects: Vec::new(),
     }
@@ -76,7 +76,7 @@ impl Layout {
     }
 
     fn figure(&mut self, figure: Figure, player: Player) -> CardId {
-        let card = figure_card(figure.code()).unwrap();
+        let card = Card::from_code(figure.code()).unwrap();
         let zone = Zone::Board(player, card.color);
         self.add(card, zone)
     }
@@ -143,19 +143,19 @@ fn catalog_matches_the_audited_census() {
 
 #[test]
 fn printed_layouts_keep_spatial_order() {
-    let bangle = echoes_metadata("E001").unwrap();
+    let bangle = card_metadata("E001").unwrap();
     assert_eq!(
         bangle.symbols,
-        [
+        four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Authority),
             Symbol::Echo,
             Symbol::Bonus(1),
-        ]
+        ])
     );
     assert_eq!(bangle.featured, Some(Icon::Authority));
-    // Ruler's source entry omits bonuses: it has none.
-    let ruler = echoes_metadata("E012").unwrap();
+    // Ruler prints no bonus.
+    let ruler = card_metadata("E012").unwrap();
     assert!(!ruler.symbols.iter().any(|s| matches!(s, Symbol::Bonus(_))));
     assert!(ruler.symbols.contains(&Symbol::Echo));
 }
@@ -533,7 +533,7 @@ fn explicit_set_draws_are_never_redirected() {
     in_deck(&mut layout, CardSet::Base, 3);
     in_deck(&mut layout, CardSet::Echoes, 3);
     let figure = layout.add(
-        figure_card(Figure::TranHuangDao.code()).unwrap(),
+        Card::from_code(Figure::TranHuangDao.code()).unwrap(),
         Zone::Deck(Deck::figures(3)),
     );
     assert_eq!(drawn(layout, both, 3, Some(CardSet::Figures)), figure);
@@ -1170,7 +1170,7 @@ fn a_promoted_figure_takes_no_dogma_action() {
             Zone::Hand(A),
         );
         let promoted = if figure {
-            figure_card(Figure::TranHuangDao.code()).unwrap()
+            Card::from_code(Figure::TranHuangDao.code()).unwrap()
         } else {
             dogma_card(Color::Red, 3, vec![Vec::new()])
         };
@@ -1193,7 +1193,7 @@ fn a_promoted_battleship_yamato_takes_no_dogma_action() {
         dogma_card(Color::Purple, 9, vec![Vec::new()]),
         Zone::Hand(A),
     );
-    let yamato = layout.add(artifacts_card("A077").unwrap(), Zone::Forecast(A));
+    let yamato = layout.add(Card::from_code("A077").unwrap(), Zone::Forecast(A));
     let (game, _) = meld_action(layout, both, melded);
     let position = game.position();
     assert_eq!(position.top(A, Color::Red), Some(yamato));
@@ -1292,7 +1292,7 @@ fn a_replaced_free_dogma_is_not_foreseen() {
 
 /// The colors other than `figure`'s, so cards melded there never cover it.
 fn other_colors(figure: Figure) -> Vec<Color> {
-    let own = figure_card(figure.code()).unwrap().color;
+    let own = Card::from_code(figure.code()).unwrap().color;
     Color::ALL
         .into_iter()
         .filter(|&color| color != own)

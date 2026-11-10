@@ -6,7 +6,7 @@ mod common;
 use common::*;
 
 fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(unseen_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn icons(f: &mut Fixture, card: CardId, icons: &[Icon]) {
@@ -552,7 +552,10 @@ fn polytheism_melds_cards_with_no_icon_already_melded_this_action() {
 fn symbology_counts_each_city_icon_kind_as_an_icon_type() {
     let mut f = Fixture::default();
     let card = unseen(&mut f, "U015", Zone::Board(B, Color::Purple));
-    f.add(city_card("C039").unwrap(), Zone::Board(A, Color::Yellow));
+    f.add(
+        Card::from_code("C039").unwrap(),
+        Zone::Board(A, Color::Yellow),
+    );
     let two = f.tech(Color::Red, 2, Zone::Deck(Deck::base(2)), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN.union(Expansions::CITIES)).unwrap();
     effect(&mut game, card, 0, A, A);

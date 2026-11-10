@@ -25,11 +25,11 @@ fn fixture(instructions: Vec<Instruction>, swapped: bool) -> (Game, CardId, [Car
 }
 fn fixture_effects(effects: Vec<Effect>, swapped: bool) -> (Game, CardId, [CardId; 2]) {
     let mut f = Fixture::default();
-    let mut source = base_card("B012").unwrap();
+    let mut source = Card::from_code("B012").unwrap();
     source.effects = effects;
     let source = f.add(source, Zone::Board(A, Color::Blue));
-    let hidden =
-        ["B002", "B004"].map(|code| f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(1))));
+    let hidden = ["B002", "B004"]
+        .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(1))));
     f.placements
         .iter_mut()
         .find(|(card, _)| *card == hidden[usize::from(swapped)])
@@ -230,7 +230,7 @@ fn public_replacement_and_repeat_clear_scalar_provenance_without_touching_kept_s
 fn private_count_stays_hidden_through_an_opposing_first_program() {
     fn make(swapped: bool) -> Game {
         let mut f = Fixture::default();
-        let mut source = base_card("B012").unwrap();
+        let mut source = Card::from_code("B012").unwrap();
         source.effects = vec![Effect {
             kind: EffectKind::NonDemand,
             instructions: vec![
@@ -239,20 +239,20 @@ fn private_count_stays_hidden_through_an_opposing_first_program() {
         }];
         source.symbols = [Symbol::Icon(Icon::Concept); SLOTS];
         let source = f.add(source, Zone::Board(A, Color::Blue));
-        let hidden =
-            ["B002", "B004"].map(|code| f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(1))));
+        let hidden = ["B002", "B004"]
+            .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(1))));
         f.placements
             .iter_mut()
             .find(|(card, _)| *card == hidden[usize::from(swapped)])
             .unwrap()
             .1 = Zone::Hand(A);
-        let figure = figure_card(Figure::WernherVonBraun.code()).unwrap();
+        let figure = Card::from_code(Figure::WernherVonBraun.code()).unwrap();
         f.add(figure.clone(), Zone::Board(B, figure.color));
         for code in ["F001", "F002", "F003"] {
-            f.add(figure_card(code).unwrap(), Zone::Deck(Deck::figures(1)));
+            f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::figures(1)));
         }
         for (code, age) in [("B086", 9), ("B102", 10)] {
-            f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(age)));
+            f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(age)));
         }
         let mut game = Game::seeded(f.position(), Expansions::FIGURES, 19)
             .unwrap()
@@ -333,7 +333,7 @@ fn private_count_stays_hidden_through_an_opposing_first_program() {
 fn pending_keep_and_add_preserve_committed_order_origins_and_scope() {
     for append in [false, true] {
         let mut f = Fixture::default();
-        let mut source = base_card("B012").unwrap();
+        let mut source = Card::from_code("B012").unwrap();
         // A public target leaves its original board, then waits at a native
         // choice before committing a new packet into the same slot.
         let move_one = transfer(
@@ -352,7 +352,7 @@ fn pending_keep_and_add_preserve_committed_order_origins_and_scope() {
         }];
         source.symbols = [Symbol::Icon(Icon::Concept); SLOTS];
         let source = f.add(source, Zone::Board(A, Color::Blue));
-        let moved = f.add(base_card("B002").unwrap(), Zone::Board(B, Color::Red));
+        let moved = f.add(Card::from_code("B002").unwrap(), Zone::Board(B, Color::Red));
         let mut game = Game::seeded(f.position(), Expansions::BASE, 5)
             .unwrap()
             .with_tracking()
@@ -571,19 +571,19 @@ fn forecast_beliefs_are_nonvacuous_and_promotion_search_uses_native_choices() {
     use crate::search::SearchConfig;
     use crate::session::Step;
     let mut f = Fixture::default();
-    let soap = f.add(echoes_card("E006").unwrap(), Zone::Forecast(A));
-    let comb = f.add(echoes_card("E007").unwrap(), Zone::Forecast(A));
-    let foreign = f.add(echoes_card("E008").unwrap(), Zone::Forecast(B));
+    let soap = f.add(Card::from_code("E006").unwrap(), Zone::Forecast(A));
+    let comb = f.add(Card::from_code("E007").unwrap(), Zone::Forecast(A));
+    let foreign = f.add(Card::from_code("E008").unwrap(), Zone::Forecast(B));
     f.add(
-        echoes_card("E009").unwrap(),
+        Card::from_code("E009").unwrap(),
         Zone::Deck(Deck {
             set: CardSet::Echoes,
             age: 1,
         }),
     );
-    let action = f.add(base_card("B011").unwrap(), Zone::Hand(A));
+    let action = f.add(Card::from_code("B011").unwrap(), Zone::Hand(A));
     for code in ["B001", "B002", "B004"] {
-        f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(1)));
+        f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(1)));
     }
     let mut game = Game::seeded(f.position(), Expansions::ECHOES, 51)
         .unwrap()
@@ -685,14 +685,17 @@ fn robocar_search_keeps_opposing_hand_and_forecast_fronts_private() {
     use crate::search::SearchConfig;
     use crate::session::Step;
     let mut f = Fixture::default();
-    let source = f.add(echoes_card("E111").unwrap(), Zone::Board(A, Color::Green));
+    let source = f.add(
+        Card::from_code("E111").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     for code in ["B001", "B002", "B004"] {
-        f.add(base_card(code).unwrap(), Zone::Hand(A));
+        f.add(Card::from_code(code).unwrap(), Zone::Hand(A));
     }
-    f.add(base_card("B017").unwrap(), Zone::Hand(A));
-    let forecast = f.add(echoes_card("E001").unwrap(), Zone::Forecast(A));
+    f.add(Card::from_code("B017").unwrap(), Zone::Hand(A));
+    let forecast = f.add(Card::from_code("E001").unwrap(), Zone::Forecast(A));
     f.add(
-        echoes_card("E002").unwrap(),
+        Card::from_code("E002").unwrap(),
         Zone::Deck(Deck {
             set: CardSet::Echoes,
             age: 1,
@@ -756,16 +759,25 @@ fn robocar_search_keeps_opposing_hand_and_forecast_fronts_private() {
 #[test]
 fn checked_claim_operand_stays_anonymous_in_context_through_real_first_reactions() {
     let mut f = Fixture::default();
-    let heart = f.add(echoes_card("E102").unwrap(), Zone::Board(A, Color::Blue));
+    let heart = f.add(
+        Card::from_code("E102").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     f.figure(Figure::HedyLamarr, Zone::Board(A, Color::Green));
     f.figure(Figure::ZhangHeng, Zone::Board(A, Color::Blue));
     for code in ["B087", "B092", "B101"] {
-        f.add(base_card(code).unwrap(), Zone::Score(A));
+        f.add(Card::from_code(code).unwrap(), Zone::Score(A));
     }
-    let first = f.add(base_card("B001").unwrap(), Zone::AvailableAchievements);
-    f.add(base_card("B017").unwrap(), Zone::AvailableAchievements);
-    f.add(base_card("B004").unwrap(), Zone::Deck(Deck::base(1)));
-    f.add(base_card("B018").unwrap(), Zone::Deck(Deck::base(2)));
+    let first = f.add(
+        Card::from_code("B001").unwrap(),
+        Zone::AvailableAchievements,
+    );
+    f.add(
+        Card::from_code("B017").unwrap(),
+        Zone::AvailableAchievements,
+    );
+    f.add(Card::from_code("B004").unwrap(), Zone::Deck(Deck::base(1)));
+    f.add(Card::from_code("B018").unwrap(), Zone::Deck(Deck::base(2)));
     let mut game = Game::seeded(
         f.position(),
         Expansions::ECHOES.union(Expansions::FIGURES),
@@ -815,14 +827,17 @@ fn checked_claim_operand_stays_anonymous_in_context_through_real_first_reactions
 #[test]
 fn telescope_projects_exchange_counts_and_selected_backs_without_incoming_faces() {
     let mut f = Fixture::default();
-    let source = f.add(echoes_card("E043").unwrap(), Zone::Board(A, Color::Blue));
-    let outgoing =
-        ["E001", "E002", "E003"].map(|code| f.add(echoes_card(code).unwrap(), Zone::Forecast(A)));
+    let source = f.add(
+        Card::from_code("E043").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
+    let outgoing = ["E001", "E002", "E003"]
+        .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Forecast(A)));
     for code in ["B001", "B017", "B026"] {
-        f.add(base_card(code).unwrap(), Zone::AvailableAchievements);
+        f.add(Card::from_code(code).unwrap(), Zone::AvailableAchievements);
     }
     for (code, age) in [("B004", 1), ("B018", 2), ("B027", 3)] {
-        f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(age)));
+        f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(age)));
     }
     let mut game = Game::seeded(f.position(), Expansions::ECHOES, 3)
         .unwrap()
@@ -948,7 +963,7 @@ fn private_requested_age_retains_exactness_but_performed_count_is_public() {
         let mut games = Vec::new();
         for swapped in [false, true] {
             let mut f = Fixture::default();
-            let mut source = base_card("B012").unwrap();
+            let mut source = Card::from_code("B012").unwrap();
             let mut instructions = vec![
                 draw_age(REQUEST),
                 Instruction::Bind(Binding::Value(EFFECT, Expr::Done)),
@@ -965,14 +980,14 @@ fn private_requested_age_retains_exactness_but_performed_count_is_public() {
             let source = f.add(source, Zone::Board(A, Color::Blue));
             // No Base age-one supply: both private requested ages resolve to
             // exactly the same public age-two draw, but only one is exact.
-            let hidden =
-                ["B002", "B004"].map(|code| f.add(base_card(code).unwrap(), Zone::Forecast(A)));
+            let hidden = ["B002", "B004"]
+                .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Forecast(A)));
             f.placements
                 .iter_mut()
                 .find(|(card, _)| *card == hidden[usize::from(swapped)])
                 .unwrap()
                 .1 = Zone::Hand(A);
-            let drawn = f.add(base_card("B017").unwrap(), Zone::Deck(Deck::base(2)));
+            let drawn = f.add(Card::from_code("B017").unwrap(), Zone::Deck(Deck::base(2)));
             let mut game = Game::seeded(f.position(), Expansions::ECHOES, 31)
                 .unwrap()
                 .with_tracking()
@@ -1036,7 +1051,7 @@ fn finite_and_per_value_quotas_stay_private_at_real_transfer_reactions() {
         let mut games = Vec::new();
         for swapped in [false, true] {
             let mut f = Fixture::default();
-            let mut source = base_card("B012").unwrap();
+            let mut source = Card::from_code("B012").unwrap();
             let movement = transfer(Selector::Reg(Reg::Source), Destination::Hand(Who::Opponent));
             source.effects = vec![Effect {
                 kind: EffectKind::NonDemand,
@@ -1047,9 +1062,9 @@ fn finite_and_per_value_quotas_stay_private_at_real_transfer_reactions() {
                 }],
             }];
             let source = f.add(source, Zone::Board(A, Color::Blue));
-            f.add(base_card("B001").unwrap(), Zone::Hand(A));
+            f.add(Card::from_code("B001").unwrap(), Zone::Hand(A));
             let hidden = ["B002", "B004"]
-                .map(|code| f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(1))));
+                .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(1))));
             f.placements
                 .iter_mut()
                 .find(|(card, _)| *card == hidden[usize::from(swapped)])
@@ -1102,7 +1117,7 @@ fn pending_special_and_exchange_counts_hide_foreign_private_queries() {
         let mut games = Vec::new();
         for swapped in [false, true] {
             let mut f = Fixture::default();
-            let mut source = base_card("B012").unwrap();
+            let mut source = Card::from_code("B012").unwrap();
             let instruction = if exchange {
                 Instruction::Exchange(ExchangeStep {
                     left: HAND,
@@ -1122,14 +1137,14 @@ fn pending_special_and_exchange_counts_hide_foreign_private_queries() {
             }];
             let source = f.add(source, Zone::Board(A, Color::Blue));
             let hidden = ["B002", "B004"]
-                .map(|code| f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(1))));
+                .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(1))));
             f.placements
                 .iter_mut()
                 .find(|(card, _)| *card == hidden[usize::from(swapped)])
                 .unwrap()
                 .1 = Zone::Hand(A);
             for code in ["B017", "B026", "B038"] {
-                f.add(base_card(code).unwrap(), Zone::AvailableAchievements);
+                f.add(Card::from_code(code).unwrap(), Zone::AvailableAchievements);
             }
             let mut game = Game::seeded(f.position(), Expansions::BASE, 8)
                 .unwrap()
@@ -1162,22 +1177,22 @@ fn refused_private_sweep_hides_failed_count_without_revealing_any_card() {
     let mut games = Vec::new();
     for swapped in [false, true] {
         let mut f = Fixture::default();
-        let mut source = base_card("B012").unwrap();
+        let mut source = Card::from_code("B012").unwrap();
         source.effects = vec![Effect {
             kind: EffectKind::NonDemand,
             instructions: vec![foreshadow(PRIVATE).all().verify(), STOP],
         }];
         source.symbols = [Symbol::Icon(Icon::Concept); SLOTS];
         let source = f.add(source, Zone::Board(A, Color::Blue));
-        let hidden =
-            ["B002", "B004"].map(|code| f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(1))));
+        let hidden = ["B002", "B004"]
+            .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(1))));
         f.placements
             .iter_mut()
             .find(|(card, _)| *card == hidden[usize::from(swapped)])
             .unwrap()
             .1 = Zone::Hand(A);
         for code in ["E001", "E002", "E003", "E004", "E005"] {
-            f.add(echoes_card(code).unwrap(), Zone::Forecast(A));
+            f.add(Card::from_code(code).unwrap(), Zone::Forecast(A));
         }
         let mut game = Game::seeded(f.position(), Expansions::ECHOES, 0)
             .unwrap()
@@ -1226,7 +1241,7 @@ fn shared_barometer_public_witness_allows_search_and_keeps_other_returns_private
     let mut games = Vec::new();
     for swapped in [false, true] {
         let mut f = Fixture::default();
-        let mut source = echoes_card("E038").unwrap();
+        let mut source = Card::from_code("E038").unwrap();
         // Isolate the printed second dogma while retaining the ordinary shared
         // scheduler. A public blue witness suffices; the other return is private.
         source.effects = vec![source.effects[1].clone()];
@@ -1235,19 +1250,19 @@ fn shared_barometer_public_witness_allows_search_and_keeps_other_returns_private
         source.featured = Some(Icon::Concept);
         let color = source.color;
         let source = f.add(source, Zone::Board(A, color));
-        let mut share = base_card("B012").unwrap();
+        let mut share = Card::from_code("B012").unwrap();
         share.symbols = [Symbol::Icon(Icon::Concept); SLOTS];
         f.add(share, Zone::Board(B, Color::Blue));
-        let blue = f.add(base_card("B011").unwrap(), Zone::Forecast(B));
-        let hidden =
-            ["B002", "B004"].map(|code| f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(1))));
+        let blue = f.add(Card::from_code("B011").unwrap(), Zone::Forecast(B));
+        let hidden = ["B002", "B004"]
+            .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(1))));
         f.placements
             .iter_mut()
             .find(|(card, _)| *card == hidden[usize::from(swapped)])
             .unwrap()
             .1 = Zone::Forecast(B);
         for code in ["E001", "E002"] {
-            f.add(echoes_card(code).unwrap(), Zone::Forecast(A));
+            f.add(Card::from_code(code).unwrap(), Zone::Forecast(A));
         }
         let mut game = Game::seeded(f.position(), Expansions::ECHOES, 3)
             .unwrap()
@@ -1312,7 +1327,7 @@ fn hidden_direct_effect_source_remains_private_after_its_action_record_producer_
     for swapped in [false, true] {
         let mut f = Fixture::default();
         let cards = ["B011", "B012"].map(|code| {
-            let mut card = base_card(code).unwrap();
+            let mut card = Card::from_code(code).unwrap();
             card.effects = vec![Effect {
                 kind: EffectKind::NonDemand,
                 instructions: vec![
@@ -1322,7 +1337,7 @@ fn hidden_direct_effect_source_remains_private_after_its_action_record_producer_
             }];
             f.add(card, Zone::Forecast(A))
         });
-        let mut public = base_card("B015").unwrap();
+        let mut public = Card::from_code("B015").unwrap();
         public.effects = vec![Effect {
             kind: EffectKind::NonDemand,
             instructions: vec![STOP],
@@ -1413,7 +1428,7 @@ fn hidden_per_color_and_group_progress_stays_opaque_before_reveal() {
         let mut games = Vec::new();
         for selected in [0, 1] {
             let mut f = Fixture::default();
-            let mut source = base_card("B012").unwrap();
+            let mut source = Card::from_code("B012").unwrap();
             let instruction = if group {
                 return_(HAND).group(2, GroupConstraint::SameValueDifferentColors)
             } else {
@@ -1424,9 +1439,9 @@ fn hidden_per_color_and_group_progress_stays_opaque_before_reveal() {
                 instructions: vec![instruction],
             }];
             let source = f.add(source, Zone::Board(A, Color::Blue));
-            let hand =
-                ["B002", "B011", "B009"].map(|code| f.add(base_card(code).unwrap(), Zone::Hand(A)));
-            let figure = figure_card("F087").unwrap();
+            let hand = ["B002", "B011", "B009"]
+                .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Hand(A)));
+            let figure = Card::from_code("F087").unwrap();
             let color = figure.color;
             f.add(figure, Zone::Board(B, color));
             let victim = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
@@ -1503,7 +1518,7 @@ fn anonymous_retained_refs_do_not_gain_front_or_alias_proof_from_current_locatio
         let mut games = Vec::new();
         for original in 0..2 {
             let mut f = Fixture::default();
-            let mut source = base_card("B012").unwrap();
+            let mut source = Card::from_code("B012").unwrap();
             let mut instructions = vec![choose(Who::Executor, Choice::Card(&HAND)).keep(EFFECT)];
             if case == 2 {
                 instructions.push(choose(Who::Executor, Choice::Card(&HAND)).add(EFFECT));
@@ -1524,7 +1539,8 @@ fn anonymous_retained_refs_do_not_gain_front_or_alias_proof_from_current_locatio
                 instructions,
             }];
             let source = f.add(source, Zone::Board(A, Color::Blue));
-            let hand = ["B002", "B004"].map(|code| f.add(base_card(code).unwrap(), Zone::Hand(A)));
+            let hand =
+                ["B002", "B004"].map(|code| f.add(Card::from_code(code).unwrap(), Zone::Hand(A)));
             let mut game = Game::seeded(f.position(), Expansions::BASE, 2)
                 .unwrap()
                 .with_tracking()
@@ -1596,7 +1612,7 @@ fn location_queries_on_anonymous_retained_refs_need_their_naming() {
         let mut games = Vec::new();
         for original in 0..2 {
             let mut f = Fixture::default();
-            let mut source = base_card("B012").unwrap();
+            let mut source = Card::from_code("B012").unwrap();
             let mut instructions = vec![
                 choose(Who::Executor, Choice::Card(&HAND)).keep(EFFECT),
                 meld(HAND),
@@ -1623,8 +1639,9 @@ fn location_queries_on_anonymous_retained_refs_need_their_naming() {
             }];
             let source = f.add(source, Zone::Board(A, Color::Blue));
             // A red card for the melded red card to cover.
-            f.add(base_card("B001").unwrap(), Zone::Board(A, Color::Red));
-            let hand = ["B002", "B004"].map(|code| f.add(base_card(code).unwrap(), Zone::Hand(A)));
+            f.add(Card::from_code("B001").unwrap(), Zone::Board(A, Color::Red));
+            let hand =
+                ["B002", "B004"].map(|code| f.add(Card::from_code(code).unwrap(), Zone::Hand(A)));
             let mut game = Game::seeded(f.position(), Expansions::BASE, 2)
                 .unwrap()
                 .with_tracking()
@@ -1679,7 +1696,7 @@ fn identity_narrowed_and_union_counts_need_known_membership() {
         let mut games = Vec::new();
         for original in 0..2 {
             let mut f = Fixture::default();
-            let mut source = base_card("B012").unwrap();
+            let mut source = Card::from_code("B012").unwrap();
             source.effects = vec![Effect {
                 kind: EffectKind::NonDemand,
                 instructions: vec![
@@ -1693,7 +1710,8 @@ fn identity_narrowed_and_union_counts_need_known_membership() {
                 ],
             }];
             let source = f.add(source, Zone::Board(A, Color::Blue));
-            let hand = ["B002", "B004"].map(|code| f.add(base_card(code).unwrap(), Zone::Hand(A)));
+            let hand =
+                ["B002", "B004"].map(|code| f.add(Card::from_code(code).unwrap(), Zone::Hand(A)));
             let mut game = Game::seeded(f.position(), Expansions::BASE, 2)
                 .unwrap()
                 .with_tracking()
@@ -1766,7 +1784,7 @@ fn narrowed_verdicts_need_named_fronts_places_and_whole_aliases() {
         let mut games = Vec::new();
         for original in 0..2 {
             let mut f = Fixture::default();
-            let mut source = base_card("B012").unwrap();
+            let mut source = Card::from_code("B012").unwrap();
             let mut instructions = vec![choose(Who::Executor, Choice::Card(&HAND)).keep(EFFECT)];
             let counted = match case {
                 0 => &RED_KEPT,
@@ -1794,7 +1812,7 @@ fn narrowed_verdicts_need_named_fronts_places_and_whole_aliases() {
             } else {
                 ["B002", "B004"]
             };
-            let hand = codes.map(|code| f.add(base_card(code).unwrap(), Zone::Hand(A)));
+            let hand = codes.map(|code| f.add(Card::from_code(code).unwrap(), Zone::Hand(A)));
             let expansions = if case == 2 {
                 Expansions::FIGURES
             } else {
@@ -1854,7 +1872,7 @@ fn identity_conditions_require_the_tested_anonymous_reference_to_be_named() {
         let mut games = Vec::new();
         for selected in 0..2 {
             let mut f = Fixture::default();
-            let mut source = base_card("B012").unwrap();
+            let mut source = Card::from_code("B012").unwrap();
             let condition = Box::leak(Box::new(Cond::Card(
                 Reg::Bound,
                 Filter::Has(if in_slot {
@@ -1874,7 +1892,8 @@ fn identity_conditions_require_the_tested_anonymous_reference_to_be_named() {
                 ],
             }];
             let source = f.add(source, Zone::Board(A, Color::Blue));
-            let hand = ["B002", "B004"].map(|code| f.add(base_card(code).unwrap(), Zone::Hand(A)));
+            let hand =
+                ["B002", "B004"].map(|code| f.add(Card::from_code(code).unwrap(), Zone::Hand(A)));
             let mut game = Game::seeded(f.position(), Expansions::BASE, 8)
                 .unwrap()
                 .with_tracking()
@@ -1913,7 +1932,7 @@ fn identity_conditions_require_the_tested_anonymous_reference_to_be_named() {
 #[test]
 fn tracker_named_retired_memory_source_samples_without_explicit_evidence() {
     let mut f = Fixture::default();
-    let mut public = base_card("B015").unwrap();
+    let mut public = Card::from_code("B015").unwrap();
     public.effects = vec![Effect {
         kind: EffectKind::NonDemand,
         instructions: vec![choose(
@@ -1923,7 +1942,7 @@ fn tracker_named_retired_memory_source_samples_without_explicit_evidence() {
     }];
     let color = public.color;
     let public = f.add(public, Zone::Board(A, color));
-    let hidden = ["B011", "B012"].map(|code| f.add(base_card(code).unwrap(), Zone::Score(B)));
+    let hidden = ["B011", "B012"].map(|code| f.add(Card::from_code(code).unwrap(), Zone::Score(B)));
     let mut game = Game::seeded(f.position(), Expansions::BASE, 5)
         .unwrap()
         .with_tracking()
@@ -1982,7 +2001,7 @@ fn tracker_named_retired_memory_source_samples_without_explicit_evidence() {
 #[test]
 fn named_retired_memory_source_pins_older_anonymous_alias_through_sampling() {
     let mut f = Fixture::default();
-    let mut public = base_card("B015").unwrap();
+    let mut public = Card::from_code("B015").unwrap();
     public.effects = vec![Effect {
         kind: EffectKind::NonDemand,
         instructions: vec![choose(
@@ -1992,7 +2011,7 @@ fn named_retired_memory_source_pins_older_anonymous_alias_through_sampling() {
     }];
     let color = public.color;
     let public = f.add(public, Zone::Board(A, color));
-    let hidden = ["B011", "B012"].map(|code| f.add(base_card(code).unwrap(), Zone::Score(B)));
+    let hidden = ["B011", "B012"].map(|code| f.add(Card::from_code(code).unwrap(), Zone::Score(B)));
     let mut game = Game::seeded(f.position(), Expansions::BASE, 5)
         .unwrap()
         .with_tracking()

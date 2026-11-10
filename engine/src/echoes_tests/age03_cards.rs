@@ -5,7 +5,7 @@ use shortcuts::common::*;
 const BOTH: Expansions = Expansions::ECHOES.union(Expansions::FIGURES);
 
 fn card(f: &mut Fixture, code: &str, zone: Option<Zone>) -> CardId {
-    let printed = echoes_card(code).unwrap();
+    let printed = Card::from_code(code).unwrap();
     let color = printed.color;
     f.add(printed, zone.unwrap_or(Zone::Board(A, color)))
 }
@@ -13,7 +13,7 @@ fn tech(f: &mut Fixture, color: Color, age: u8, zone: Zone) -> CardId {
     f.tech(color, age, zone, Vec::new())
 }
 fn figure(f: &mut Fixture, figure: Figure, owner: Player) -> CardId {
-    let printed = figure_card(figure.code()).unwrap();
+    let printed = Card::from_code(figure.code()).unwrap();
     let color = printed.color;
     f.add(printed, Zone::Board(owner, color))
 }
@@ -617,7 +617,7 @@ fn almanac_returns_only_a_bonus_and_uses_printed_bonus_including_a_figure() {
             let source = card(&mut f, "E032", None);
             let bonus = if napoleon {
                 f.add(
-                    figure_card(Figure::NapoleonBonaparte.code()).unwrap(),
+                    Card::from_code(Figure::NapoleonBonaparte.code()).unwrap(),
                     Zone::Forecast(A),
                 )
             } else {

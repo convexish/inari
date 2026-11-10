@@ -18,7 +18,7 @@ fn base_deck(age: u8) -> Zone {
 }
 
 fn sharing_icons(code: &str) -> [Icon; 3] {
-    [artifacts_card(code).unwrap().featured.unwrap(); 3]
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 /// A Base card with this code (its alphabetical rank) and dogma.

@@ -77,7 +77,7 @@ fn icon(f: &mut Fixture, card: CardId, icon: Icon) {
 fn machinery_proves_its_authority_score_and_its_failure() {
     // Success: the scored card is shown; the other stays private.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, base_card("B028").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("B028").unwrap(), A);
     let crown = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     icon(&mut f, crown, Icon::Authority);
     let plain = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
@@ -91,7 +91,7 @@ fn machinery_proves_its_authority_score_and_its_failure() {
 
     // Failure: the hand proves there is no Authority card.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, base_card("B028").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("B028").unwrap(), A);
     let one = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
     let two = f.tech(Color::Green, 2, Zone::Hand(A), vec![]);
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
@@ -105,7 +105,7 @@ fn machinery_proves_its_authority_score_and_its_failure() {
 #[test]
 fn feudalism_reveals_the_victims_hand_when_nothing_qualifies() {
     let mut f = Fixture::default();
-    let card = on_board(&mut f, base_card("B035").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("B035").unwrap(), A);
     let one = f.tech(Color::Blue, 1, Zone::Hand(B), vec![]);
     let two = f.tech(Color::Green, 2, Zone::Hand(B), vec![]);
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
@@ -120,7 +120,7 @@ fn feudalism_reveals_the_victims_hand_when_nothing_qualifies() {
 fn clothing_proves_an_impossible_meld_unless_the_board_already_does() {
     // Hand colors all on the board: the hand is the proof.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, base_card("B007").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("B007").unwrap(), A);
     f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let red = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let green = f.tech(Color::Green, 2, Zone::Hand(A), vec![]);
@@ -132,7 +132,7 @@ fn clothing_proves_an_impossible_meld_unless_the_board_already_does() {
 
     // All five colors on the board prove it publicly: nothing is revealed.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, base_card("B007").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("B007").unwrap(), A);
     for color in [Color::Red, Color::Blue, Color::Yellow, Color::Purple] {
         f.tech(color, 1, Zone::Board(A, color), vec![]);
     }
@@ -148,7 +148,7 @@ fn clothing_proves_an_impossible_meld_unless_the_board_already_does() {
 fn ninja_and_triad_reveal_the_card_whose_color_decides_the_rest() {
     // Ninja: the demanded color's card is shown as it is returned.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, unseen_card("U036").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("U036").unwrap(), A);
     let red = f.tech(Color::Red, 2, Zone::Hand(B), vec![]);
     f.tech(Color::Red, 3, Zone::Board(B, Color::Red), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -159,7 +159,7 @@ fn ninja_and_triad_reveal_the_card_whose_color_decides_the_rest() {
 
     // Triad: the returned card's color picks the splay.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, unseen_card("U065").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("U065").unwrap(), A);
     let returned = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
     f.tech(Color::Green, 1, Zone::Hand(A), vec![]);
@@ -173,7 +173,7 @@ fn ninja_and_triad_reveal_the_card_whose_color_decides_the_rest() {
 #[test]
 fn quackery_returns_nothing_without_two_cards() {
     let mut f = Fixture::default();
-    let card = on_board(&mut f, unseen_card("U042").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("U042").unwrap(), A);
     let only = f.tech(Color::Red, 3, Zone::Hand(A), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     effect(&mut game, card, 1, A, A);
@@ -186,7 +186,7 @@ fn quackery_returns_nothing_without_two_cards() {
 fn myth_and_handshake_prove_what_stayed_in_hand() {
     // Myth: no same-color pair among two cards shows the hand.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, unseen_card("U013").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("U013").unwrap(), A);
     let red = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let blue = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -197,7 +197,7 @@ fn myth_and_handshake_prove_what_stayed_in_hand() {
 
     // Myth with one card proves nothing.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, unseen_card("U013").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("U013").unwrap(), A);
     f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
     effect(&mut game, card, 0, A, A);
@@ -207,7 +207,7 @@ fn myth_and_handshake_prove_what_stayed_in_hand() {
 
     // Handshake: the cards left in the victim's hand are shown.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, unseen_card("U004").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("U004").unwrap(), A);
     f.tech(Color::Red, 1, Zone::Hand(B), vec![]);
     f.tech(Color::Blue, 1, Zone::Hand(B), vec![]);
     let kept = f.tech(Color::Green, 1, Zone::Hand(B), vec![]);
@@ -223,7 +223,7 @@ fn myth_and_handshake_prove_what_stayed_in_hand() {
 fn value_only_and_board_proven_failures_reveal_nothing() {
     // Sunglasses' echo with no splayed color: the board is the proof.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, echoes_card("E035").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("E035").unwrap(), A);
     f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     f.tech(Color::Blue, 2, Zone::Hand(A), vec![]);
     let mut game = Game::new(f.position(), Expansions::ECHOES).unwrap();
@@ -234,7 +234,7 @@ fn value_only_and_board_proven_failures_reveal_nothing() {
 
     // Velcro Shoes: card backs prove there is no [9].
     let mut f = Fixture::default();
-    let card = on_board(&mut f, artifacts_card("A087").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("A087").unwrap(), A);
     f.tech(Color::Green, 8, Zone::Hand(B), vec![]);
     f.tech(Color::Yellow, 7, Zone::Score(B), vec![]);
     let mut game = Game::new(f.position(), Expansions::ARTIFACTS).unwrap();
@@ -248,7 +248,7 @@ fn value_only_and_board_proven_failures_reveal_nothing() {
 #[test]
 fn colt_paterson_reveals_the_drawn_seven() {
     let mut f = Fixture::default();
-    let card = on_board(&mut f, artifacts_card("A068").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("A068").unwrap(), A);
     f.tech(Color::Red, 1, Zone::Hand(B), vec![]);
     let seven = f.tech(Color::Blue, 7, Zone::Deck(Deck::base(7)), vec![]);
     let mut game = Game::new(f.position(), Expansions::ARTIFACTS).unwrap();
@@ -268,12 +268,7 @@ fn draws_of_a_missing_value_draw_a_zero() {
         ("E094", Card::ECHO, Expansions::ECHOES),
     ] {
         let mut f = Fixture::default();
-        let printed = if code.starts_with('U') {
-            unseen_card(code).unwrap()
-        } else {
-            echoes_card(code).unwrap()
-        };
-        let card = on_board(&mut f, printed, A);
+        let card = on_board(&mut f, Card::from_code(code).unwrap(), A);
         let one = f.tech(Color::Red, 1, Zone::Deck(Deck::base(1)), vec![]);
         let mut game = Game::new(f.position(), set).unwrap();
         effect(&mut game, card, index, A, A);
@@ -294,7 +289,7 @@ fn top_card_of_each_color_moves_one_card_per_color() {
     // Metaverse: three splayed piles score three tops and survive, even
     // when lower cards lie beneath.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, unseen_card("U115").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("U115").unwrap(), A);
     for v in [1, 3, 5] {
         f.tech(Color::Red, v, Zone::Board(A, Color::Red), vec![]);
     }
@@ -317,7 +312,7 @@ fn top_card_of_each_color_moves_one_card_per_color() {
 
     // Hunt-Lenox Globe: a higher card beneath is not returned too.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, artifacts_card("A041").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("A041").unwrap(), A);
     let r5 = f.tech(Color::Red, 5, Zone::Board(A, Color::Red), vec![]);
     f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);
     f.tech(Color::Yellow, 4, Zone::Board(A, Color::Yellow), vec![]);
@@ -336,7 +331,7 @@ fn iron_curtain_unsplays_every_color_before_safeguarding() {
     // Two secrets, red and blue splayed up (capacity 2). Unsplaying both
     // first restores capacity 5, so both safeguards succeed.
     let mut f = Fixture::default();
-    let card = on_board(&mut f, unseen_card("U086").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("U086").unwrap(), A);
     f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     for v in [1, 2] {
         f.tech(Color::Blue, v, Zone::Board(A, Color::Blue), vec![]);
@@ -363,7 +358,7 @@ fn iron_curtain_unsplays_every_color_before_safeguarding() {
 #[test]
 fn red_herring_treats_unsplayed_as_no_direction() {
     let mut f = Fixture::default();
-    let card = on_board(&mut f, unseen_card("U056").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("U056").unwrap(), A);
     f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
     f.tech(Color::Blue, 6, Zone::Deck(Deck::base(6)), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -376,7 +371,7 @@ fn red_herring_treats_unsplayed_as_no_direction() {
 #[test]
 fn along_the_river_stops_after_a_yellow_tuck() {
     let mut f = Fixture::default();
-    let card = on_board(&mut f, artifacts_card("A029").unwrap(), A);
+    let card = on_board(&mut f, Card::from_code("A029").unwrap(), A);
     let red = f.tech(Color::Red, 4, Zone::Deck(Deck::base(4)), vec![]);
     let yellow = f.tech(Color::Yellow, 4, Zone::Deck(Deck::base(4)), vec![]);
     let mut game = Game::new(f.position(), Expansions::ARTIFACTS).unwrap();
@@ -393,7 +388,9 @@ fn along_the_river_stops_after_a_yellow_tuck() {
 #[test]
 fn vermeer_scores_a_color_present_on_the_board() {
     let mut f = Fixture::default();
-    let vermeer = figure_card(Figure::JohannesVermeer.code()).unwrap().color;
+    let vermeer = Card::from_code(Figure::JohannesVermeer.code())
+        .unwrap()
+        .color;
     f.figure(Figure::JohannesVermeer, Zone::Board(A, vermeer));
     let red = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
     let melded = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
@@ -418,7 +415,7 @@ fn glory_reveals_a_city_junked_from_hand() {
         Zone::Board(A, Color::Red),
         vec![build::verb(Verb::Junk, build::HAND).to(Destination::Junk)],
     );
-    let city = f.add(city_card("C001").unwrap(), Zone::Hand(A));
+    let city = f.add(Card::from_code("C001").unwrap(), Zone::Hand(A));
     let mut game = Game::new(f.position(), Expansions::CITIES).unwrap();
     effect(&mut game, junker, 0, A, A);
     let mut events = Vec::new();
@@ -429,7 +426,7 @@ fn glory_reveals_a_city_junked_from_hand() {
 
 #[test]
 fn dubai_draws_one_city_plus_eleven() {
-    let card = city_card("C099").unwrap();
+    let card = Card::from_code("C099").unwrap();
     let pluses = card
         .symbols
         .iter()
@@ -443,8 +440,8 @@ fn dubai_draws_one_city_plus_eleven() {
 #[test]
 fn placebo_repeats_at_least_once_under_blackmail_then_may_stop() {
     let mut f = Fixture::default();
-    let blackmail = on_board(&mut f, unseen_card("U040").unwrap(), A);
-    let placebo = f.add(unseen_card("U062").unwrap(), Zone::Hand(B));
+    let blackmail = on_board(&mut f, Card::from_code("U040").unwrap(), A);
+    let placebo = f.add(Card::from_code("U062").unwrap(), Zone::Hand(B));
     f.tech(Color::Red, 1, Zone::Board(B, Color::Red), vec![]);
     f.tech(Color::Red, 2, Zone::Board(B, Color::Red), vec![]);
     let red_top = f.tech(Color::Red, 3, Zone::Board(B, Color::Red), vec![]);
@@ -489,8 +486,8 @@ fn placebo_repeats_at_least_once_under_blackmail_then_may_stop() {
 #[test]
 fn blackmailed_sunglasses_may_choose_the_alternative_that_splays_nothing() {
     let mut f = Fixture::default();
-    let blackmail = on_board(&mut f, unseen_card("U040").unwrap(), A);
-    f.add(echoes_card("E035").unwrap(), Zone::Hand(B));
+    let blackmail = on_board(&mut f, Card::from_code("U040").unwrap(), A);
+    f.add(Card::from_code("E035").unwrap(), Zone::Hand(B));
     f.tech(Color::Purple, 1, Zone::Board(B, Color::Purple), vec![]);
     f.tech(Color::Purple, 2, Zone::Board(B, Color::Purple), vec![]);
     f.tech(Color::Red, 1, Zone::Board(B, Color::Red), vec![]);
@@ -536,8 +533,8 @@ fn blackmailed_sunglasses_may_choose_the_alternative_that_splays_nothing() {
 #[test]
 fn red_envelope_scores_two_under_blackmail_with_two_in_hand() {
     let mut f = Fixture::default();
-    let blackmail = on_board(&mut f, unseen_card("U040").unwrap(), A);
-    let envelope = f.add(unseen_card("U027").unwrap(), Zone::Hand(B));
+    let blackmail = on_board(&mut f, Card::from_code("U040").unwrap(), A);
+    let envelope = f.add(Card::from_code("U027").unwrap(), Zone::Hand(B));
     f.tech(Color::Blue, 1, Zone::Hand(B), vec![]);
     f.tech(Color::Green, 2, Zone::Hand(B), vec![]);
     let mut game = Game::new(f.position(), Expansions::UNSEEN).unwrap();
@@ -566,8 +563,8 @@ fn red_envelope_scores_two_under_blackmail_with_two_in_hand() {
 #[test]
 fn freemasons_tucks_one_of_each_color_under_blackmail() {
     let mut f = Fixture::default();
-    let blackmail = on_board(&mut f, unseen_card("U040").unwrap(), A);
-    let freemasons = f.add(unseen_card("U028").unwrap(), Zone::Hand(B));
+    let blackmail = on_board(&mut f, Card::from_code("U040").unwrap(), A);
+    let freemasons = f.add(Card::from_code("U028").unwrap(), Zone::Hand(B));
     let red = f.tech(Color::Red, 1, Zone::Hand(B), vec![]);
     f.tech(Color::Red, 2, Zone::Hand(B), vec![]);
     let blue = f.tech(Color::Blue, 1, Zone::Hand(B), vec![]);
@@ -601,8 +598,8 @@ fn freemasons_tucks_one_of_each_color_under_blackmail() {
 #[test]
 fn currency_returns_at_least_one_card_under_blackmail() {
     let mut f = Fixture::default();
-    let blackmail = on_board(&mut f, unseen_card("U040").unwrap(), A);
-    let currency = f.add(base_card("B020").unwrap(), Zone::Hand(B));
+    let blackmail = on_board(&mut f, Card::from_code("U040").unwrap(), A);
+    let currency = f.add(Card::from_code("B020").unwrap(), Zone::Hand(B));
     f.tech(Color::Red, 1, Zone::Hand(B), vec![]);
     f.tech(Color::Blue, 3, Zone::Hand(B), vec![]);
     for _ in 0..3 {
@@ -696,8 +693,8 @@ fn blackmailed_moves_at_least_one(
 #[test]
 fn reformation_tucks_at_least_one_card_under_blackmail() {
     let mut f = Fixture::default();
-    let blackmail = on_board(&mut f, unseen_card("U040").unwrap(), A);
-    let reformation = f.add(base_card("B045").unwrap(), Zone::Hand(B));
+    let blackmail = on_board(&mut f, Card::from_code("U040").unwrap(), A);
+    let reformation = f.add(Card::from_code("B045").unwrap(), Zone::Hand(B));
     f.tech(Color::Green, 1, Zone::Hand(B), vec![]);
     f.tech(Color::Yellow, 1, Zone::Hand(B), vec![]);
     for color in [Color::Red, Color::Blue] {
@@ -721,8 +718,8 @@ fn reformation_tucks_at_least_one_card_under_blackmail() {
 #[test]
 fn puzzle_cube_scores_at_least_one_card_under_blackmail() {
     let mut f = Fixture::default();
-    let blackmail = on_board(&mut f, unseen_card("U040").unwrap(), A);
-    let cube = f.add(echoes_card("E104").unwrap(), Zone::Hand(B));
+    let blackmail = on_board(&mut f, Card::from_code("U040").unwrap(), A);
+    let cube = f.add(Card::from_code("E104").unwrap(), Zone::Hand(B));
     f.tech(Color::Purple, 1, Zone::Board(B, Color::Purple), vec![]);
     f.tech(Color::Purple, 2, Zone::Board(B, Color::Purple), vec![]);
     f.tech(Color::Red, 1, Zone::Board(B, Color::Red), vec![]);
@@ -778,8 +775,12 @@ fn melds(events: &[Event], card: CardId) -> usize {
 #[test]
 fn translation_melds_a_card_scored_while_it_melds_all() {
     let mut f = Fixture::default();
-    let translation = on_board(&mut f, base_card("B033").unwrap(), A);
-    on_board(&mut f, figure_card(Figure::NikolaTesla.code()).unwrap(), A);
+    let translation = on_board(&mut f, Card::from_code("B033").unwrap(), A);
+    on_board(
+        &mut f,
+        Card::from_code(Figure::NikolaTesla.code()).unwrap(),
+        A,
+    );
     let scored = f.tech(Color::Yellow, 5, Zone::Score(A), vec![]);
     let taken = f.tech(Color::Green, 2, Zone::Board(B, Color::Green), vec![]);
     f.tech(Color::Red, 9, Zone::Deck(Deck::base(9)), vec![]);
@@ -800,10 +801,10 @@ fn translation_melds_a_card_scored_while_it_melds_all() {
 #[test]
 fn translation_melds_each_card_once_when_one_is_scored_back() {
     let mut f = Fixture::default();
-    let translation = on_board(&mut f, base_card("B033").unwrap(), A);
+    let translation = on_board(&mut f, Card::from_code("B033").unwrap(), A);
     on_board(
         &mut f,
-        figure_card(Figure::NapoleonBonaparte.code()).unwrap(),
+        Card::from_code(Figure::NapoleonBonaparte.code()).unwrap(),
         A,
     );
     let five = f.tech(Color::Yellow, 5, Zone::Score(A), vec![]);
@@ -821,7 +822,7 @@ fn translation_melds_each_card_once_when_one_is_scored_back() {
 fn yuna_kim_reveals_the_scored_card_before_testing_its_color() {
     for (top_authority, wins) in [(true, true), (false, false)] {
         let mut f = Fixture::default();
-        let yuna = figure_card(Figure::YunaKim.code()).unwrap().color;
+        let yuna = Card::from_code(Figure::YunaKim.code()).unwrap().color;
         f.figure(Figure::YunaKim, Zone::Board(A, yuna));
         let top = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
         if top_authority {
@@ -871,7 +872,7 @@ fn city(f: &mut Fixture, color: Color, player: Player) -> CardId {
 fn pride_and_prejudice_compares_visible_cards_not_symbols() {
     for drawn_color in [Color::Blue, Color::Red] {
         let mut f = Fixture::default();
-        let pride = f.add(artifacts_card("A059").unwrap(), Zone::Hand(A));
+        let pride = f.add(Card::from_code("A059").unwrap(), Zone::Hand(A));
         city(&mut f, Color::Red, A);
         f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
         f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);

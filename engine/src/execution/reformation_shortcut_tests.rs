@@ -12,7 +12,10 @@ fn fixture(colors: &[Color], quota: usize) -> (Fixture, CardId, Vec<CardId>) {
             f.tech(color, 1, Zone::Board(A, color), vec![]);
         }
     }
-    let source = f.add(base_card("B045").unwrap(), Zone::Board(A, Color::Purple));
+    let source = f.add(
+        Card::from_code("B045").unwrap(),
+        Zone::Board(A, Color::Purple),
+    );
     let hand = colors
         .iter()
         .enumerate()

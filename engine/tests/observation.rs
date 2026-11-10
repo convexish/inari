@@ -161,7 +161,7 @@ fn privacy_samples(expansions: Expansions) {
 #[test]
 fn a_shared_priest_king_leaves_the_owner_able_to_sample() {
     let mut f = Fixture::default();
-    let priest_card = artifacts_card("A007").unwrap();
+    let priest_card = Card::from_code("A007").unwrap();
     let featured = priest_card.featured.unwrap();
     let priest = f.add(priest_card.clone(), Zone::Board(A, priest_card.color));
     let b_top = f.tech(Color::Green, 2, Zone::Board(B, Color::Green), vec![]);
@@ -512,9 +512,9 @@ fn unseen_games_fill_their_reserved_layout() {
     // Three printed secrets, two of one back: the only age-3 card is known
     // in slot 0; the two age-1 candidates share slots 1 and 2, weight 1 each.
     let mut f = Fixture::default();
-    let old = f.add(base_card("B031").unwrap(), Zone::Safe(A));
-    let blue = f.add(base_card("B011").unwrap(), Zone::Safe(A));
-    let green = f.add(base_card("B012").unwrap(), Zone::Safe(A));
+    let old = f.add(Card::from_code("B031").unwrap(), Zone::Safe(A));
+    let blue = f.add(Card::from_code("B011").unwrap(), Zone::Safe(A));
+    let green = f.add(Card::from_code("B012").unwrap(), Zone::Safe(A));
     let code = f.tech(
         Color::Purple,
         1,
@@ -693,8 +693,14 @@ fn cities_games_fill_their_reserved_layout() {
 
     // An endorsed Dogma: Writing with Babylon and two value-1 cards to pay.
     let mut f = Fixture::default();
-    let writing = f.add(base_card("B012").unwrap(), Zone::Board(A, Color::Blue));
-    let babylon = f.add(city_card("C007").unwrap(), Zone::Board(A, Color::Green));
+    let writing = f.add(
+        Card::from_code("B012").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
+    let babylon = f.add(
+        Card::from_code("C007").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     for _ in 0..2 {
@@ -766,8 +772,8 @@ fn artifacts_games_fill_their_reserved_layout() {
     // A displayed and a stored Artifact are public to both viewers, each
     // under the viewer-relative display and Museum groups.
     let mut f = Fixture::default();
-    let shown = f.add(artifacts_card("A001").unwrap(), Zone::Display(A));
-    let stored = f.add(artifacts_card("A016").unwrap(), Zone::Museum(B));
+    let shown = f.add(Card::from_code("A001").unwrap(), Zone::Display(A));
+    let stored = f.add(Card::from_code("A016").unwrap(), Zone::Museum(B));
     let game = Game::new(f.position(), Expansions::ARTIFACTS)
         .unwrap()
         .with_tracking()

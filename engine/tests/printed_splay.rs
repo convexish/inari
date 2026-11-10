@@ -53,7 +53,10 @@ fn finish(game: &mut Game, events: &mut Vec<Event>) -> Status {
 #[test]
 fn philosophy_offers_only_nonempty_nonsingleton_non_noop_colors_then_separate_scoring() {
     let mut f = Fixture::default();
-    let card = f.add(base_card("B025").unwrap(), Zone::Board(A, Color::Purple));
+    let card = f.add(
+        Card::from_code("B025").unwrap(),
+        Zone::Board(A, Color::Purple),
+    );
     pile(&mut f, A, Color::Red, 2);
     pile(&mut f, A, Color::Blue, 2);
     pile(&mut f, A, Color::Green, 1);
@@ -98,7 +101,7 @@ fn metric_and_flight_check_before_their_later_splay_not_retroactively() {
     ] {
         let mut f = Fixture::default();
         pile(&mut f, A, key, 1);
-        let card = f.add(base_card(code).unwrap(), Zone::Board(A, key));
+        let card = f.add(Card::from_code(code).unwrap(), Zone::Board(A, key));
         pile(&mut f, A, Color::Blue, 2);
         let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
         game.self_execute(card, Context::new(A)).unwrap();
@@ -144,7 +147,10 @@ fn metric_and_flight_check_before_their_later_splay_not_retroactively() {
 #[test]
 fn railroad_current_direction_filter_is_right_only_and_optional() {
     let mut f = Fixture::default();
-    let card = f.add(base_card("B075").unwrap(), Zone::Board(A, Color::Purple));
+    let card = f.add(
+        Card::from_code("B075").unwrap(),
+        Zone::Board(A, Color::Purple),
+    );
     for color in [Color::Red, Color::Blue, Color::Green, Color::Yellow] {
         pile(&mut f, A, color, 2);
     }
@@ -184,7 +190,10 @@ fn railroad_current_direction_filter_is_right_only_and_optional() {
 fn atomic_theory_draw_and_meld_remain_separate_and_match_with_and_without_figures() {
     let mut f = Fixture::default();
     pile(&mut f, A, Color::Blue, 1);
-    let card = f.add(base_card("B062").unwrap(), Zone::Board(A, Color::Blue));
+    let card = f.add(
+        Card::from_code("B062").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     let drawn = f.tech(Color::Red, 7, Zone::Deck(Deck::base(7)), vec![]);
     let position = f.position();
     let mut base = Game::new(position.clone(), Expansions::BASE).unwrap();
@@ -214,7 +223,10 @@ fn atomic_theory_draw_and_meld_remain_separate_and_match_with_and_without_figure
 fn emancipation_demand_transfers_to_demander_then_draws_only_on_success() {
     for has_hand in [false, true] {
         let mut f = Fixture::default();
-        let card = f.add(base_card("B065").unwrap(), Zone::Board(A, Color::Purple));
+        let card = f.add(
+            Card::from_code("B065").unwrap(),
+            Zone::Board(A, Color::Purple),
+        );
         let hand = has_hand.then(|| f.tech(Color::Blue, 3, Zone::Hand(B), vec![]));
         let drawn = f.tech(Color::Green, 6, Zone::Deck(Deck::base(6)), vec![]);
         let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
@@ -239,7 +251,10 @@ fn emancipation_demand_transfers_to_demander_then_draws_only_on_success() {
 fn emancipation_red_or_purple_is_one_color_not_both() {
     let mut f = Fixture::default();
     pile(&mut f, A, Color::Purple, 1);
-    let card = f.add(base_card("B065").unwrap(), Zone::Board(A, Color::Purple));
+    let card = f.add(
+        Card::from_code("B065").unwrap(),
+        Zone::Board(A, Color::Purple),
+    );
     pile(&mut f, A, Color::Red, 2);
     pile(&mut f, A, Color::Blue, 2);
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
@@ -274,7 +289,10 @@ fn emancipation_red_or_purple_is_one_color_not_both() {
 fn railroad_has_separate_return_draw_and_splay_effects_and_three_is_not_boxed() {
     for boosted in [false, true] {
         let mut f = Fixture::default();
-        let card = f.add(base_card("B075").unwrap(), Zone::Board(A, Color::Purple));
+        let card = f.add(
+            Card::from_code("B075").unwrap(),
+            Zone::Board(A, Color::Purple),
+        );
         if boosted {
             f.figure(Figure::Archimedes, Zone::Board(A, Color::Blue));
         }
@@ -316,7 +334,10 @@ fn railroad_has_separate_return_draw_and_splay_effects_and_three_is_not_boxed() 
 #[test]
 fn internet_scores_one_then_draws_and_melds_each_of_two_sequentially() {
     let mut f = Fixture::default();
-    let card = f.add(base_card("B105").unwrap(), Zone::Board(A, Color::Purple));
+    let card = f.add(
+        Card::from_code("B105").unwrap(),
+        Zone::Board(A, Color::Purple),
+    );
     pile(&mut f, A, Color::Green, 2);
     let draws: Vec<_> = (0..3)
         .map(|_| f.tech(Color::Red, 10, Zone::Deck(Deck::base(10)), vec![]))
@@ -362,7 +383,10 @@ fn internet_scores_one_then_draws_and_melds_each_of_two_sequentially() {
 #[test]
 fn shared_philosophy_splays_each_executors_board_and_scores_their_own_hand() {
     let mut f = Fixture::default();
-    let card = f.add(base_card("B025").unwrap(), Zone::Board(A, Color::Purple));
+    let card = f.add(
+        Card::from_code("B025").unwrap(),
+        Zone::Board(A, Color::Purple),
+    );
     pile(&mut f, A, Color::Red, 2);
     pile(&mut f, B, Color::Blue, 1);
     let opposing = f.tech(Color::Blue, 1, Zone::Board(B, Color::Blue), vec![]);

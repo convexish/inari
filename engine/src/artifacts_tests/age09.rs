@@ -15,7 +15,7 @@ fn board(player: Player, color: Color) -> Zone {
 }
 
 fn sharing_icons(code: &str) -> [Icon; 3] {
-    [artifacts_card(code).unwrap().featured.unwrap(); 3]
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 fn with_effect(mut card: Card, color: Color, value: u8, instructions: Vec<Instruction>) -> Card {
@@ -43,9 +43,9 @@ fn crusader_rabbit_takes_the_two_bottoms_of_each_demand_color_and_scores_a_deman
     let b1 = l.tech(Color::Blue, 1, board(B, Color::Blue), &[]);
     let b2 = l.tech(Color::Blue, 2, board(B, Color::Blue), &[]);
     let b3 = l.tech(Color::Blue, 3, board(B, Color::Blue), &[]);
-    let mut oars = base_card("B003").unwrap();
+    let mut oars = Card::from_code("B003").unwrap();
     oars.color = Color::Blue;
-    oars.symbols = [Symbol::Icon(artifacts_card("A086").unwrap().featured.unwrap()); SLOTS];
+    oars.symbols = [Symbol::Icon(Card::from_code("A086").unwrap().featured.unwrap()); SLOTS];
     let demand_top = l.add(oars, board(B, Color::Blue));
     l.tech(Color::Green, 1, board(B, Color::Green), &[]);
     let mut game = l.game();
@@ -68,13 +68,13 @@ fn crusader_rabbit_takes_the_two_bottoms_of_each_demand_color_and_scores_a_deman
     let mut l = Layout::default();
     let rabbit = l.artifact("A086", board(A, Color::Red));
     l.cards[usize::from(rabbit.0)].effects.remove(0);
-    let own_demand = l.add(base_card("B003").unwrap(), board(A, Color::Red));
+    let own_demand = l.add(Card::from_code("B003").unwrap(), board(A, Color::Red));
     let _ = (rabbit, HAND_B, own_demand);
     let mut l = Layout::default();
-    l.add(base_card("B003").unwrap(), board(A, Color::Red));
+    l.add(Card::from_code("B003").unwrap(), board(A, Color::Red));
     let rabbit = l.artifact("A086", board(A, Color::Red));
     l.cards[usize::from(rabbit.0)].effects.remove(0);
-    let own_demand = l.add(base_card("B003").unwrap(), board(A, Color::Blue));
+    let own_demand = l.add(Card::from_code("B003").unwrap(), board(A, Color::Blue));
     l.cards[usize::from(own_demand.0)].color = Color::Blue;
     let ten = l.tech(Color::Blue, 10, base_deck(10), &[]);
     let mut game = l.game();
@@ -152,7 +152,7 @@ fn rock_around_the_clock_scores_a_nine_per_efficiency_top_and_junks_by_score_siz
     // Two Efficiency tops (Rock itself counts if it prints one): that many
     // scores, then the deck of that value is junked.
     let efficiency_tops = 2 + usize::from(
-        artifacts_card("A088")
+        Card::from_code("A088")
             .unwrap()
             .printed_icon_count(Icon::Efficiency)
             > 0,
@@ -327,7 +327,7 @@ fn yeagers_bell_x1a_melds_executes_and_repeats_on_efficiency() {
     let mut l = Layout::default();
     let yeager = l.artifact("A092", board(A, Color::Blue));
     let mut plain = with_effect(
-        base_card("B001").unwrap(),
+        Card::from_code("B001").unwrap(),
         Color::Green,
         9,
         vec![build::draw(1)],
@@ -335,7 +335,7 @@ fn yeagers_bell_x1a_melds_executes_and_repeats_on_efficiency() {
     plain.symbols = [Symbol::Blank; SLOTS];
     let plain = l.add(plain, base_deck(9));
     let mut efficient = with_effect(
-        base_card("B001").unwrap(),
+        Card::from_code("B001").unwrap(),
         Color::Red,
         9,
         vec![build::draw(1)],
@@ -394,7 +394,7 @@ fn the_big_bang_repeats_while_the_blue_top_changes_something() {
     let big_bang = l.artifact("A094", board(A, Color::Purple));
     let blue = l.add(
         with_effect(
-            base_card("B001").unwrap(),
+            Card::from_code("B001").unwrap(),
             Color::Blue,
             3,
             vec![build::draw(1)],

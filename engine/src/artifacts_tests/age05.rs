@@ -14,7 +14,7 @@ fn board(player: Player, color: Color) -> Zone {
 }
 
 fn sharing_icons(code: &str) -> [Icon; 3] {
-    [artifacts_card(code).unwrap().featured.unwrap(); 3]
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 fn with_effect(mut card: Card, color: Color, instructions: Vec<Instruction>) -> Card {
@@ -40,7 +40,7 @@ fn galley_whydah_counts_visible_cards_not_symbols() {
     let mut l = Layout::default();
     let galley = l.artifact("A046", board(A, Color::Red));
     l.add(
-        crate::catalog::city_card("C066").unwrap(),
+        crate::Card::from_code("C066").unwrap(),
         board(B, Color::Red),
     );
     l.tech(
@@ -169,7 +169,7 @@ fn ship_of_the_line_sussex_scores_a_color_with_an_empty_score_pile_or_returns_th
 fn gujin_tushu_jicheng_super_executes_an_opposing_top_on_your_turn() {
     let mut l = Layout::default();
     let gujin = l.artifact("A048", board(A, Color::Yellow));
-    let mut oars = base_card("B003").unwrap();
+    let mut oars = Card::from_code("B003").unwrap();
     oars.color = Color::Red;
     l.add(oars, board(B, Color::Red));
     let prosperity = l.tech(Color::Green, 1, Zone::Hand(B), &[Icon::Prosperity]);
@@ -192,7 +192,7 @@ fn the_daily_courant_returns_a_six_then_melds_and_executes_at_the_matching_top_v
     l.tech(Color::Red, 2, board(A, Color::Red), &[]);
     let six = l.tech(Color::Red, 6, base_deck(6), &[]);
     let mut two_card = with_effect(
-        base_card("B001").unwrap(),
+        Card::from_code("B001").unwrap(),
         Color::Green,
         vec![build::draw(1)],
     );

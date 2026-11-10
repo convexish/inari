@@ -23,10 +23,10 @@ fn finish(game: &mut Game, events: &mut Vec<Event>) -> Status {
 #[test]
 fn fission_junks_displayed_and_stored_artifacts_their_museums_and_secrets() {
     let mut f = Fixture::default();
-    let fission = f.add(base_card("B087").unwrap(), Zone::Board(A, Color::Red));
-    let display_a = f.add(artifacts_card("A001").unwrap(), Zone::Display(A));
-    let display_b = f.add(artifacts_card("A002").unwrap(), Zone::Display(B));
-    let museum = f.add(artifacts_card("A003").unwrap(), Zone::Museum(B));
+    let fission = f.add(Card::from_code("B087").unwrap(), Zone::Board(A, Color::Red));
+    let display_a = f.add(Card::from_code("A001").unwrap(), Zone::Display(A));
+    let display_b = f.add(Card::from_code("A002").unwrap(), Zone::Display(B));
+    let museum = f.add(Card::from_code("A003").unwrap(), Zone::Museum(B));
     let secret = f.tech(Color::Blue, 2, Zone::Safe(A), vec![]);
     let achievement = f.tech(Color::Green, 1, Zone::Achievements(B), vec![]);
     f.tech(Color::Red, 10, Zone::Deck(Deck::base(10)), vec![]);
@@ -68,8 +68,8 @@ fn fission_junks_displayed_and_stored_artifacts_their_museums_and_secrets() {
 #[test]
 fn elimination_junks_claimed_museums() {
     let mut f = Fixture::default();
-    let stored = f.add(artifacts_card("A001").unwrap(), Zone::Museum(A));
-    let theirs = f.add(artifacts_card("A002").unwrap(), Zone::Museum(B));
+    let stored = f.add(Card::from_code("A001").unwrap(), Zone::Museum(A));
+    let theirs = f.add(Card::from_code("A002").unwrap(), Zone::Museum(B));
     let mut game = Game::new(f.position(), Expansions::ARTIFACTS).unwrap();
     let mut events = Vec::new();
     // A Museum Check's award counts as claimed from the award on.
@@ -100,7 +100,7 @@ fn elimination_junks_claimed_museums() {
 fn tiger_reveals_the_card_that_prevents_exchange() {
     let mut f = Fixture::default();
     let tiger = f.add(
-        artifacts_card("A109").unwrap(),
+        Card::from_code("A109").unwrap(),
         Zone::Board(A, Color::Yellow),
     );
     let red = f.tech(Color::Red, 2, Zone::Score(A), vec![]);
@@ -147,7 +147,7 @@ fn tiger_reveals_the_card_that_prevents_exchange() {
 fn tiger_exchanges_a_junk_card_counted_as_score_under_von_braun() {
     let mut f = Fixture::default();
     let tiger = f.add(
-        artifacts_card("A109").unwrap(),
+        Card::from_code("A109").unwrap(),
         Zone::Board(A, Color::Yellow),
     );
     f.figure(Figure::WernherVonBraun, Zone::Board(A, Color::Blue));

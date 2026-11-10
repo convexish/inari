@@ -12,7 +12,7 @@ fn draw_card(f: &mut Fixture, color: Color, age: u8) -> CardId {
     tech(f, color, age, Zone::Deck(Deck::base(age)))
 }
 fn source(f: &mut Fixture, code: &str) -> CardId {
-    let card = echoes_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     let other = if color == Color::Purple {
         Color::Blue
@@ -130,7 +130,7 @@ fn reveals(events: &[Event]) -> Vec<CardId> {
 }
 
 fn figure(f: &mut Fixture, which: Figure, player: Player) -> CardId {
-    let printed = figure_card(which.code()).unwrap();
+    let printed = Card::from_code(which.code()).unwrap();
     let color = printed.color;
     f.add(printed, Zone::Board(player, color))
 }
@@ -275,7 +275,7 @@ fn age_nine_catalog_has_every_printed_clause_and_stays_within_layout_budgets() {
         (94, true, 2, false),
         (95, false, 2, true),
     ] {
-        let c = echoes_card(&format!("E{code:03}")).unwrap();
+        let c = Card::from_code(&format!("E{code:03}")).unwrap();
         assert_eq!(
             (c.echo.is_some(), c.effects.len(), c.effects[0].demand()),
             (echo, clauses, demand)
@@ -434,7 +434,7 @@ fn helicopter_optional_decline_and_absent_other_tops_do_no_extra_work() {
     assert_eq!(game.position.locate(matching), Some(Zone::Hand(A)));
     assert!(reveals(&events).is_empty());
     let mut f = Fixture::default();
-    let card = f.add(echoes_card("E086").unwrap(), Zone::Board(A, Color::Red));
+    let card = f.add(Card::from_code("E086").unwrap(), Zone::Board(A, Color::Red));
     let hand = tech(&mut f, Color::Yellow, 1, Zone::Hand(A));
     let mut game = start(f, card, 0, E);
     let mut events = vec![];
@@ -649,7 +649,7 @@ fn email_foreseen_adds_eleven_after_nine_and_does_not_mark_its_self_execution_fo
     use crate::program::build;
     for full in [false, true] {
         let mut f = Fixture::default();
-        f.add(echoes_card("E091").unwrap(), Zone::Forecast(A));
+        f.add(Card::from_code("E091").unwrap(), Zone::Forecast(A));
         if full {
             for _ in 0..4 {
                 tech(&mut f, Color::Purple, 11, Zone::Forecast(A));
@@ -924,7 +924,7 @@ fn laser_draws_foreshadow_then_meld_in_printed_order_and_adds_only_foreseen_elev
     for (foreseen, full) in [(false, false), (false, true), (true, false)] {
         let mut f = Fixture::default();
         let card = f.add(
-            echoes_card("E093").unwrap(),
+            Card::from_code("E093").unwrap(),
             if foreseen {
                 Zone::Forecast(A)
             } else {
@@ -984,7 +984,10 @@ fn rock_demands_a_transfer_before_proposing_the_demanders_win() {
         let mut f = Fixture::default();
         let card = source(&mut f, "E095");
         let bottom = if scissors {
-            f.add(echoes_card("E021").unwrap(), Zone::Board(A, Color::Green))
+            f.add(
+                Card::from_code("E021").unwrap(),
+                Zone::Board(A, Color::Green),
+            )
         } else {
             tech(&mut f, Color::Green, 2, Zone::Board(A, Color::Green))
         };
@@ -1021,7 +1024,10 @@ fn rocks_named_demander_win_runs_jackies_real_first_instead_of_eliminating_the_v
     let card = source(&mut f, "E095");
     figure(&mut f, Figure::JackieChan, A);
     let scored = figure(&mut f, Figure::NapoleonBonaparte, B);
-    f.add(echoes_card("E021").unwrap(), Zone::Board(A, Color::Green));
+    f.add(
+        Card::from_code("E021").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     let transferred = tech(&mut f, Color::Green, 4, Zone::Board(A, Color::Green));
     let mut game = start(f, card, 0, EF);
     let mut events = vec![];
@@ -1046,7 +1052,10 @@ fn rock_checks_the_live_green_paper_even_when_the_optional_score_is_declined() {
         let mut f = Fixture::default();
         let card = source(&mut f, "E095");
         let bottom = if paper {
-            f.add(base_card("B031").unwrap(), Zone::Board(A, Color::Green))
+            f.add(
+                Card::from_code("B031").unwrap(),
+                Zone::Board(A, Color::Green),
+            )
         } else {
             tech(&mut f, Color::Green, 3, Zone::Board(A, Color::Green))
         };
@@ -1076,7 +1085,10 @@ fn rock_live_win_checks_survive_replacements_of_the_preceding_transfer_or_score(
     let mut f = Fixture::default();
     let card = source(&mut f, "E095");
     figure(&mut f, Figure::YiSunSin, A);
-    let scissors = f.add(echoes_card("E021").unwrap(), Zone::Board(A, Color::Green));
+    let scissors = f.add(
+        Card::from_code("E021").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     let tucked = tech(&mut f, Color::Green, 3, Zone::Board(A, Color::Green));
     draw_card(&mut f, Color::Yellow, 4);
     let alternative = tech(&mut f, Color::Blue, 5, Zone::Board(B, Color::Blue));
@@ -1099,7 +1111,10 @@ fn rock_live_win_checks_survive_replacements_of_the_preceding_transfer_or_score(
     let mut f = Fixture::default();
     let card = source(&mut f, "E095");
     let napoleon = figure(&mut f, Figure::NapoleonBonaparte, A);
-    let paper = f.add(base_card("B031").unwrap(), Zone::Board(A, Color::Green));
+    let paper = f.add(
+        Card::from_code("B031").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     let mut game = start(f, card, 1, EF);
     let mut events = vec![];
     let m = menu(&mut game, &mut events);

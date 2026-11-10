@@ -173,7 +173,7 @@ fn tran_resolved_three_keeps_both_public_red_choices_and_original_draw_on_clones
         let tran = f.figure(Figure::TranHuangDao, Zone::Board(A, Color::Red));
         // Shen Kuo would replace scoring a Base card outside karma.
         f.figure(Figure::ShenKuo, Zone::Board(A, Color::Green));
-        let opponent = f.add(base_card("B001").unwrap(), Zone::Board(B, Color::Red));
+        let opponent = f.add(Card::from_code("B001").unwrap(), Zone::Board(B, Color::Red));
         let reward = f.tech(Color::Green, 3, Zone::Deck(Deck::base(3)), vec![]);
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         let mut context = Context::new(A);
@@ -234,7 +234,7 @@ fn tran_filters_printed_top_red_values_and_does_not_intercept_a_resolved_four() 
     for resolved in [3, 4] {
         let mut f = Fixture::default();
         let tran = f.figure(Figure::TranHuangDao, Zone::Board(A, Color::Red));
-        let buried = f.add(base_card("B001").unwrap(), Zone::Board(B, Color::Red));
+        let buried = f.add(Card::from_code("B001").unwrap(), Zone::Board(B, Color::Red));
         f.tech(Color::Red, 4, Zone::Board(B, Color::Red), vec![]);
         let reward = f.tech(
             Color::Green,
@@ -518,7 +518,7 @@ fn opponent_and_covered_sources_do_not_intercept_draws() {
     for figure in [Figure::TranHuangDao, Figure::MarieCurie] {
         for covered in [false, true] {
             let mut f = Fixture::default();
-            let color = figure_card(figure.code()).unwrap().color;
+            let color = Card::from_code(figure.code()).unwrap().color;
             let owner = if covered { A } else { B };
             f.figure(figure, Zone::Board(owner, color));
             if covered {
@@ -591,7 +591,7 @@ fn native_oars_keeps_genuine_transfer_choices_for_both_draw_hazards() {
     for figure in [Figure::TranHuangDao, Figure::MarieCurie] {
         let mut f = Fixture::default();
         let oars = f.oars(Zone::Board(A, Color::Red));
-        let color = figure_card(figure.code()).unwrap().color;
+        let color = Card::from_code(figure.code()).unwrap().color;
         f.figure(figure, Zone::Board(B, color));
         let high = f.tech(Color::Green, 7, Zone::Hand(B), vec![]);
         let low = f.tech(Color::Yellow, 2, Zone::Hand(B), vec![]);
@@ -636,7 +636,7 @@ fn native_tools_keeps_its_reduced_payment_and_ordinary_figure_children() {
     for figure in [Figure::TranHuangDao, Figure::MarieCurie] {
         let mut f = Fixture::default();
         let tools = f.tools_first(Zone::Board(B, Color::Blue));
-        let color = figure_card(figure.code()).unwrap().color;
+        let color = Card::from_code(figure.code()).unwrap().color;
         let source = f.figure(figure, Zone::Board(A, color));
         let hand: Vec<_> = [7, 1, 2]
             .into_iter()

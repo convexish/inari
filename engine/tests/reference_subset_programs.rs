@@ -3,13 +3,13 @@ mod common;
 use common::*;
 
 fn native(f: &mut Fixture, code: &str, owner: Player) -> CardId {
-    let card = base_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color))
 }
 
 fn figure(f: &mut Fixture, kind: Figure, owner: Player) -> CardId {
-    let card = figure_card(kind.code()).unwrap();
+    let card = Card::from_code(kind.code()).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(owner, color))
 }
@@ -71,8 +71,8 @@ fn colonialism_checks_the_original_draw_then_repeats_only_its_own_effect() {
     fn exercise(expansions: Expansions) {
         let mut f = Fixture::default();
         let source = native(&mut f, "B036", A);
-        let last = f.add(base_card("B026").unwrap(), Zone::Deck(Deck::base(3)));
-        let first = f.add(base_card("B030").unwrap(), Zone::Deck(Deck::base(3)));
+        let last = f.add(Card::from_code("B026").unwrap(), Zone::Deck(Deck::base(3)));
+        let first = f.add(Card::from_code("B030").unwrap(), Zone::Deck(Deck::base(3)));
         let bottom = f.tech(Color::Yellow, 5, Zone::Deck(Deck::base(5)), vec![]);
         let top = f.tech(Color::Blue, 5, Zone::Deck(Deck::base(5)), vec![]);
         let mut game = Game::new(f.position(), expansions).unwrap();
@@ -200,8 +200,8 @@ fn explosives_does_not_let_an_attempted_borrowed_highest_hide_the_next_eligible_
     let mut f = Fixture::default();
     let source = native(&mut f, "B067", A);
     figure(&mut f, Figure::EmperorMeiji, B);
-    let borrowed = f.add(base_card("B024").unwrap(), Zone::Hand(A));
-    let owned = f.add(base_card("B012").unwrap(), Zone::Hand(B));
+    let borrowed = f.add(Card::from_code("B024").unwrap(), Zone::Hand(A));
+    let owned = f.add(Card::from_code("B012").unwrap(), Zone::Hand(B));
     let mut position = f.position();
     position.begin_turn(B);
     let mut game = Game::new(position, Expansions::FIGURES).unwrap();
@@ -265,7 +265,7 @@ fn specialization_transfers_only_one_current_top_and_retains_the_revealed_card()
     fn exercise(expansions: Expansions) {
         let mut f = Fixture::default();
         let source = native(&mut f, "B095", A);
-        let revealed = f.add(base_card("B012").unwrap(), Zone::Hand(A));
+        let revealed = f.add(Card::from_code("B012").unwrap(), Zone::Hand(A));
         let covered = f.tech(Color::Blue, 3, Zone::Board(B, Color::Blue), vec![]);
         let top = f.tech(Color::Blue, 4, Zone::Board(B, Color::Blue), vec![]);
         let other = f.tech(Color::Green, 5, Zone::Board(B, Color::Green), vec![]);
@@ -323,14 +323,14 @@ fn escapism_returns_the_retained_value_draws_three_and_executes_the_junked_nativ
     fn exercise(expansions: Expansions) {
         let mut f = Fixture::default();
         let source = native(&mut f, "B114", A);
-        let writing = f.add(base_card("B012").unwrap(), Zone::Hand(A));
-        let returned = f.add(base_card("B015").unwrap(), Zone::Hand(A));
+        let writing = f.add(Card::from_code("B012").unwrap(), Zone::Hand(A));
+        let returned = f.add(Card::from_code("B015").unwrap(), Zone::Hand(A));
         let deck: Vec<_> = ["B002", "B004", "B005"]
             .into_iter()
-            .map(|code| f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(1))))
+            .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(1))))
             .collect();
-        let reward = f.add(base_card("B022").unwrap(), Zone::Deck(Deck::base(2)));
-        let chain = f.add(base_card("B115").unwrap(), Zone::Deck(Deck::base(11)));
+        let reward = f.add(Card::from_code("B022").unwrap(), Zone::Deck(Deck::base(2)));
+        let chain = f.add(Card::from_code("B115").unwrap(), Zone::Deck(Deck::base(11)));
         let mut game = Game::new(f.position(), expansions).unwrap();
         game.self_execute(source, Context::new(A)).unwrap();
         let mut events = Vec::new();
@@ -356,9 +356,9 @@ fn escapism_does_not_borrow_homers_replacement_for_the_junked_card_reference() {
     let mut f = Fixture::default();
     let source = native(&mut f, "B114", B);
     figure(&mut f, Figure::Homer, A);
-    let chosen = f.add(figure_card("F005").unwrap(), Zone::Hand(A));
-    let retained = f.add(base_card("B012").unwrap(), Zone::Hand(A));
-    let supply = f.add(base_card("B015").unwrap(), Zone::Deck(Deck::base(1)));
+    let chosen = f.add(Card::from_code("F005").unwrap(), Zone::Hand(A));
+    let retained = f.add(Card::from_code("B012").unwrap(), Zone::Hand(A));
+    let supply = f.add(Card::from_code("B015").unwrap(), Zone::Deck(Deck::base(1)));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
     start(&mut game, source, 0, A, A);
     let mut events = Vec::new();
@@ -379,7 +379,7 @@ fn a_transfer_to_the_same_physical_area_is_inapplicable_before_would_reactions()
     let mut f = Fixture::default();
     figure(&mut f, Figure::EmperorMeiji, B);
     figure(&mut f, Figure::YiSunSin, A);
-    let card = f.add(base_card("B024").unwrap(), Zone::Hand(A));
+    let card = f.add(Card::from_code("B024").unwrap(), Zone::Hand(A));
     let mut position = f.position();
     position.begin_turn(B);
     let before = position.clone();

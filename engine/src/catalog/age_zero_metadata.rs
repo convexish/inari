@@ -1,6 +1,6 @@
 // Generated from data/age_zero.json by scripts/card_metadata.py; do not edit by hand.
 use super::CardMetadata;
-use crate::model::{CardSet, Color, Icon, Symbol};
+use crate::model::{CardSet, Color, Icon, Symbol, four_slots};
 
 pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
     CardMetadata {
@@ -9,12 +9,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Yellow,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Food),
             Symbol::Icon(Icon::Health),
             Symbol::Image,
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: Some(Icon::Health),
     },
     CardMetadata {
@@ -23,12 +23,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Yellow,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: Some(Icon::Authority),
     },
     CardMetadata {
@@ -37,12 +37,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Yellow,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Food),
             Symbol::Icon(Icon::Food),
-        ],
+        ]),
         featured: Some(Icon::Food),
     },
     CardMetadata {
@@ -51,12 +51,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Green,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Food),
             Symbol::Image,
             Symbol::Icon(Icon::Food),
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: Some(Icon::Food),
     },
     CardMetadata {
@@ -65,12 +65,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Green,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Health),
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Food),
-        ],
+        ]),
         featured: Some(Icon::Health),
     },
     CardMetadata {
@@ -79,12 +79,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Green,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Food),
             Symbol::Icon(Icon::Food),
             Symbol::Image,
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: Some(Icon::Food),
     },
     CardMetadata {
@@ -93,12 +93,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Red,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Food),
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Food),
             Symbol::Image,
-        ],
+        ]),
         featured: Some(Icon::Food),
     },
     CardMetadata {
@@ -107,12 +107,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Red,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: Some(Icon::Authority),
     },
     CardMetadata {
@@ -121,12 +121,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Red,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Food),
             Symbol::Icon(Icon::Food),
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: Some(Icon::Food),
     },
     CardMetadata {
@@ -135,12 +135,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Purple,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: Some(Icon::Health),
     },
     CardMetadata {
@@ -149,12 +149,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Purple,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: Some(Icon::Prosperity),
     },
     CardMetadata {
@@ -163,12 +163,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Purple,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Food),
-        ],
+        ]),
         featured: Some(Icon::Prosperity),
     },
     CardMetadata {
@@ -177,12 +177,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Blue,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Food),
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: Some(Icon::Prosperity),
     },
     CardMetadata {
@@ -191,12 +191,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Blue,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Health),
             Symbol::Image,
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: Some(Icon::Health),
     },
     CardMetadata {
@@ -205,12 +205,12 @@ pub const AGE_ZERO_METADATA: [CardMetadata; 15] = [
         color: Color::Blue,
         value: 0,
         set: CardSet::Base,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Health),
             Symbol::Image,
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
-        ],
+        ]),
         featured: Some(Icon::Concept),
     },
 ];

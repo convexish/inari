@@ -27,7 +27,10 @@ fn start(position: Position, expansions: Expansions, card: CardId, own_turn: boo
 }
 
 fn deepfake(f: &mut Fixture) -> CardId {
-    f.add(echoes_card("E114").unwrap(), Zone::Board(A, Color::Purple))
+    f.add(
+        Card::from_code("E114").unwrap(),
+        Zone::Board(A, Color::Purple),
+    )
 }
 
 fn selection(menu: &Decision, wanted: CardId) -> usize {
@@ -188,7 +191,7 @@ fn deepfake_replaced_transfer_keeps_no_origin_but_still_super_executes() {
         Zone::Board(A, Color::Green),
         vec![build::draw(1)],
     );
-    let yi = figure_card(Figure::YiSunSin.code()).unwrap();
+    let yi = Card::from_code(Figure::YiSunSin.code()).unwrap();
     f.add(yi.clone(), Zone::Board(B, yi.color));
     let drawn = f.tech(Color::Blue, 1, Zone::Deck(Deck::base(1)), vec![]);
     let tucked = f.tech(Color::Yellow, 4, Zone::Deck(Deck::base(4)), vec![]);

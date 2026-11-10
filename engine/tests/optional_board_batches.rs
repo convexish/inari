@@ -4,7 +4,7 @@ mod common;
 use common::*;
 
 fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn invoke(game: &mut Game, card: CardId, effect: usize) {
@@ -161,7 +161,7 @@ fn world(expansions: Expansions) {
         let mut f = Fixture::default();
         let source = base(&mut f, "B033", Zone::Junk);
         for code in tops {
-            let card = base_card(code).unwrap();
+            let card = Card::from_code(code).unwrap();
             let color = card.color;
             f.add(card, Zone::Board(A, color));
         }

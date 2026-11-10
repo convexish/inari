@@ -54,18 +54,18 @@ impl Fixture {
 
     /// Native printed B004 program; placement remains fixture-specific.
     pub fn agriculture(&mut self, zone: Zone) -> CardId {
-        self.add(base_card("B004").unwrap(), zone)
+        self.add(Card::from_code("B004").unwrap(), zone)
     }
 
     /// Printed B003 and its phase-local shortcut declaration. The second
     /// effect reads this execution's preceding demand, not its last draw.
     pub fn oars(&mut self, zone: Zone) -> CardId {
-        self.add(base_card("B003").unwrap(), zone)
+        self.add(Card::from_code("B003").unwrap(), zone)
     }
 
     /// B011's first printed effect, isolated for the return-order proof.
     pub fn tools_first(&mut self, zone: Zone) -> CardId {
-        let mut card = base_card("B011").unwrap();
+        let mut card = Card::from_code("B011").unwrap();
         card.effects.truncate(1);
         self.add(card, zone)
     }
@@ -73,44 +73,44 @@ impl Fixture {
     /// Complete printed B011 program. Its second payment is a genuine optional
     /// single-card choice, with no order reduction to apply.
     pub fn tools(&mut self, zone: Zone) -> CardId {
-        self.add(base_card("B011").unwrap(), zone)
+        self.add(Card::from_code("B011").unwrap(), zone)
     }
 
     /// B088 Ecology, transcribed from data/base.json. Its return and score
     /// are genuine single-card choices; only the whole-deck sweep is reduced.
     pub fn ecology(&mut self, zone: Zone) -> CardId {
-        self.add(base_card("B088").unwrap(), zone)
+        self.add(Card::from_code("B088").unwrap(), zone)
     }
 
     /// B010 Pottery: the computed age uses successful original returns, not
     /// attempted selections, printed returned ages or reaction movements.
     pub fn pottery(&mut self, zone: Zone) -> CardId {
-        self.add(base_card("B010").unwrap(), zone)
+        self.add(Card::from_code("B010").unwrap(), zone)
     }
 
     /// B002 from data/base.json; repeat depends on the revealed icon, not
     /// whether the following score survived a replacement.
     pub fn metalworking(&mut self, zone: Zone) -> CardId {
-        self.add(base_card("B002").unwrap(), zone)
+        self.add(Card::from_code("B002").unwrap(), zone)
     }
 
     /// B012 Writing, including the printed featured icon and spatial symbols.
     pub fn writing(&mut self, zone: Zone) -> CardId {
-        self.add(base_card("B012").unwrap(), zone)
+        self.add(Card::from_code("B012").unwrap(), zone)
     }
 
     /// Printed B008: draw and meld are separate semantic operations.
     pub fn sailing(&mut self, zone: Zone) -> CardId {
-        self.add(base_card("B008").unwrap(), zone)
+        self.add(Card::from_code("B008").unwrap(), zone)
     }
 
     /// Printed B042: the draw box changes with the invocation; meld uses its result.
     pub fn experimentation(&mut self, zone: Zone) -> CardId {
-        self.add(base_card("B042").unwrap(), zone)
+        self.add(Card::from_code("B042").unwrap(), zone)
     }
 
     pub fn figure(&mut self, figure: Figure, zone: Zone) -> CardId {
-        self.add(figure_card(figure.code()).unwrap(), zone)
+        self.add(Card::from_code(figure.code()).unwrap(), zone)
     }
 
     pub fn add(&mut self, card: Card, zone: Zone) -> CardId {

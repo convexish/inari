@@ -147,7 +147,10 @@ fn sunglasses_source_alias_oracle_keeps_destinations_and_reacting_shen_kuo() {
     for purple in [Splay::None, Splay::Right] {
         let mut f = Fixture::default();
         pile(&mut f, A, Color::Purple);
-        let source = f.add(echoes_card("E035").unwrap(), Zone::Board(A, Color::Purple));
+        let source = f.add(
+            Card::from_code("E035").unwrap(),
+            Zone::Board(A, Color::Purple),
+        );
         for color in [Color::Green, Color::Yellow, Color::Blue] {
             pile(&mut f, A, color);
         }
@@ -402,7 +405,7 @@ fn splay_targets_keep_board_owners_and_noops_without_firing_karma() {
 fn forecast_game(opponent: bool, existing: usize, hedy: bool) -> (Game, Vec<CardId>) {
     let mut f = Fixture::default();
     let (code, index) = if opponent { ("E032", 1) } else { ("E029", 2) };
-    let mut source = echoes_card(code).unwrap();
+    let mut source = Card::from_code(code).unwrap();
     source.echo = None;
     source.effects = vec![source.effects[index].clone()];
     f.add(source, Zone::Forecast(A));

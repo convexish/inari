@@ -1,6 +1,6 @@
 // Generated from data/figures.json by scripts/card_metadata.py; do not edit by hand.
 use super::CardMetadata;
-use crate::model::{CardSet, Color, Icon, Symbol};
+use crate::model::{CardSet, Color, Icon, Symbol, four_slots};
 
 pub const FIGURES_METADATA: [CardMetadata; 115] = [
     CardMetadata {
@@ -9,12 +9,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Bonus(2),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -23,12 +23,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Bonus(1),
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -37,12 +37,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -51,12 +51,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Bonus(1),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -65,12 +65,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -79,12 +79,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -93,12 +93,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(1),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -107,12 +107,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -121,12 +121,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(1),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -135,12 +135,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -149,12 +149,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Authority),
             Symbol::Image,
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -163,12 +163,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -177,12 +177,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -191,12 +191,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -205,12 +205,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 1,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(2),
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -219,12 +219,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 2,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Authority),
             Symbol::Image,
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -233,12 +233,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 2,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(2),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -247,12 +247,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 2,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(2),
             Symbol::Image,
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -261,12 +261,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 2,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -275,12 +275,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 2,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -289,12 +289,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 2,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Authority),
             Symbol::Image,
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -303,12 +303,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 2,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -317,12 +317,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 2,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(2),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -331,12 +331,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 2,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(3),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -345,12 +345,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 2,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -359,12 +359,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 3,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -373,12 +373,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 3,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(3),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Authority),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -387,12 +387,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 3,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Health),
             Symbol::Image,
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -401,12 +401,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 3,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -415,12 +415,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 3,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -429,12 +429,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 3,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Bonus(3),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -443,12 +443,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 3,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -457,12 +457,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 3,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(3),
             Symbol::Image,
             Symbol::Icon(Icon::Concept),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -471,12 +471,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 3,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
             Symbol::Bonus(4),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -485,12 +485,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 3,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -499,12 +499,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 4,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Industry),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -513,12 +513,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 4,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(4),
             Symbol::Image,
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -527,12 +527,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 4,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(5),
             Symbol::Image,
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -541,12 +541,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 4,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -555,12 +555,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 4,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -569,12 +569,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 4,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(4),
             Symbol::Icon(Icon::Health),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -583,12 +583,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 4,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -597,12 +597,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 4,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -611,12 +611,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 4,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -625,12 +625,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 4,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(4),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Concept),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -639,12 +639,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 5,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -653,12 +653,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 5,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(5),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -667,12 +667,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 5,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
             Symbol::Icon(Icon::Concept),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -681,12 +681,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 5,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -695,12 +695,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 5,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Bonus(5),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -709,12 +709,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 5,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
             Symbol::Bonus(6),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -723,12 +723,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 5,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -737,12 +737,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 5,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -751,12 +751,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 5,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -765,12 +765,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 5,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(5),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -779,12 +779,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 6,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Bonus(6),
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -793,12 +793,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 6,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Industry),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Industry),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -807,12 +807,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 6,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Industry),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -821,12 +821,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 6,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -835,12 +835,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 6,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -849,12 +849,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 6,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(6),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -863,12 +863,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 6,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -877,12 +877,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 6,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Bonus(6),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -891,12 +891,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 6,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -905,12 +905,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 6,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(7),
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -919,12 +919,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 7,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -933,12 +933,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 7,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -947,12 +947,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 7,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -961,12 +961,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 7,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(7),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -975,12 +975,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 7,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(7),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Industry),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -989,12 +989,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 7,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1003,12 +1003,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 7,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(8),
             Symbol::Image,
             Symbol::Icon(Icon::Concept),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1017,12 +1017,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 7,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(7),
             Symbol::Icon(Icon::Efficiency),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1031,12 +1031,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 7,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1045,12 +1045,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 7,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1059,12 +1059,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 8,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Industry),
             Symbol::Image,
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1073,12 +1073,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 8,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1087,12 +1087,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 8,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Health),
             Symbol::Image,
             Symbol::Bonus(8),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1101,12 +1101,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 8,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(8),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1115,12 +1115,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 8,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1129,12 +1129,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 8,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Efficiency),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1143,12 +1143,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 8,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Industry),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1157,12 +1157,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 8,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(8),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1171,12 +1171,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 8,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1185,12 +1185,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 8,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Bonus(9),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1199,12 +1199,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 9,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1213,12 +1213,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 9,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1227,12 +1227,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 9,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(9),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Industry),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1241,12 +1241,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 9,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1255,12 +1255,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 9,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Efficiency),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1269,12 +1269,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 9,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1283,12 +1283,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 9,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
             Symbol::Bonus(9),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1297,12 +1297,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 9,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1311,12 +1311,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 9,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Bonus(10),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1325,12 +1325,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 9,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(9),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1339,12 +1339,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 10,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1353,12 +1353,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 10,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1367,12 +1367,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 10,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1381,12 +1381,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 10,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Bonus(10),
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1395,12 +1395,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 10,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Icon(Icon::Prosperity),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1409,12 +1409,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 10,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1423,12 +1423,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 10,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
             Symbol::Icon(Icon::Concept),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1437,12 +1437,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 10,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(11),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1451,12 +1451,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 10,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Industry),
             Symbol::Image,
             Symbol::Bonus(10),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1465,12 +1465,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 10,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(10),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1479,12 +1479,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 11,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Bonus(12),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Efficiency),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1493,12 +1493,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Red,
         value: 11,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1507,12 +1507,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 11,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Health),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1521,12 +1521,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Yellow,
         value: 11,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Prosperity),
             Symbol::Bonus(11),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1535,12 +1535,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 11,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1549,12 +1549,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Green,
         value: 11,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Concept),
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Concept),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1563,12 +1563,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 11,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1577,12 +1577,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Blue,
         value: 11,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Efficiency),
             Symbol::Image,
             Symbol::Icon(Icon::Efficiency),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1591,12 +1591,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 11,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Image,
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Avatar),
-        ],
+        ]),
         featured: None,
     },
     CardMetadata {
@@ -1605,12 +1605,12 @@ pub const FIGURES_METADATA: [CardMetadata; 115] = [
         color: Color::Purple,
         value: 11,
         set: CardSet::Figures,
-        symbols: [
+        symbols: four_slots([
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Avatar),
             Symbol::Image,
             Symbol::Bonus(11),
-        ],
+        ]),
         featured: None,
     },
 ];

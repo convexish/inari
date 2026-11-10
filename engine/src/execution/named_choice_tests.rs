@@ -30,7 +30,7 @@ enum Case {
 
 fn fixture(case: Case, tracked: bool) -> (Game, [CardId; 2], [CardId; 2], Option<CardId>) {
     let mut f = Fixture::default();
-    let mut source = base_card("B090").unwrap();
+    let mut source = Card::from_code("B090").unwrap();
     let mixed = !matches!(case, Case::Collaboration);
     if matches!(case, Case::Packet | Case::PacketBeforeReveal) {
         source.effects[0].instructions = vec![
@@ -60,15 +60,15 @@ fn fixture(case: Case, tracked: bool) -> (Game, [CardId; 2], [CardId; 2], Option
         ];
     }
     let source = f.add(source, Zone::Board(A, Color::Green));
-    let hidden = ["B088", "B094"].map(|code| f.add(base_card(code).unwrap(), Zone::Hand(B)));
+    let hidden = ["B088", "B094"].map(|code| f.add(Card::from_code(code).unwrap(), Zone::Hand(B)));
     for code in ["B087", "B093"] {
-        f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(9)));
+        f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(9)));
     }
-    let revealed =
-        ["B086", "B092"].map(|code| f.add(base_card(code).unwrap(), Zone::Deck(Deck::base(9))));
+    let revealed = ["B086", "B092"]
+        .map(|code| f.add(Card::from_code(code).unwrap(), Zone::Deck(Deck::base(9))));
     let victim = if mixed {
         f.figure(Figure::Kalashnikov, Zone::Board(A, Color::Red));
-        let mut card = base_card("B001").unwrap();
+        let mut card = Card::from_code("B001").unwrap();
         card.symbols[0] = Symbol::Icon(Icon::Industry);
         Some(f.add(card, Zone::Board(B, Color::Red)))
     } else {

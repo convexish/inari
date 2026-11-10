@@ -4,11 +4,11 @@ mod common;
 use common::*;
 
 fn unseen(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(unseen_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn unseen_on_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = unseen_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let zone = Zone::Board(player, card.color);
     f.add(card, zone)
 }
@@ -679,7 +679,7 @@ fn a_keyword_inside_a_super_executed_demand_in_the_copy_earns_no_chain() {
 fn a_replacement_reactions_movement_inside_the_copy_counts_as_activity() {
     let mut f = Fixture::default();
     let tele = teleprompter(&mut f);
-    let sejong = figure_card(Figure::SejongTheGreat.code()).unwrap();
+    let sejong = Card::from_code(Figure::SejongTheGreat.code()).unwrap();
     let sejong_color = sejong.color;
     f.add(sejong, Zone::Board(A, sejong_color));
     let red = f.tech(Color::Red, 2, Zone::Board(A, Color::Red), vec![]);

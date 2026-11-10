@@ -3,7 +3,10 @@ use crate::*;
 
 fn fixture(ages: &[u8]) -> (Fixture, CardId, Vec<CardId>) {
     let mut f = Fixture::default();
-    let source = f.add(base_card("B099").unwrap(), Zone::Board(A, Color::Yellow));
+    let source = f.add(
+        Card::from_code("B099").unwrap(),
+        Zone::Board(A, Color::Yellow),
+    );
     let hand = ages
         .iter()
         .map(|&age| f.tech(Color::Red, age, Zone::Hand(A), vec![]))

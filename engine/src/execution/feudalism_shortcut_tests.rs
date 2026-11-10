@@ -3,8 +3,11 @@ use super::*;
 
 fn fixture() -> (Position, CardId) {
     let mut f = Fixture::default();
-    let source = f.add(base_card("B035").unwrap(), Zone::Board(A, Color::Purple));
-    f.add(base_card("B001").unwrap(), Zone::Hand(B));
+    let source = f.add(
+        Card::from_code("B035").unwrap(),
+        Zone::Board(A, Color::Purple),
+    );
+    f.add(Card::from_code("B001").unwrap(), Zone::Hand(B));
     (f.position(), source)
 }
 
@@ -199,8 +202,11 @@ fn live_supply_is_requeried_and_public_token_proof_is_independent_of_controller(
 #[test]
 fn unrelated_native_junk_and_claim_figures_do_not_block_supply_token_reduction() {
     let mut f = Fixture::default();
-    let source = f.add(base_card("B035").unwrap(), Zone::Board(A, Color::Purple));
-    f.add(base_card("B001").unwrap(), Zone::Hand(B));
+    let source = f.add(
+        Card::from_code("B035").unwrap(),
+        Zone::Board(A, Color::Purple),
+    );
+    f.add(Card::from_code("B001").unwrap(), Zone::Hand(B));
     f.figure(Figure::Homer, Zone::Board(B, Color::Purple));
     f.figure(Figure::HedyLamarr, Zone::Board(A, Color::Green));
     let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();

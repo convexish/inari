@@ -9,12 +9,15 @@ use common::*;
 #[test]
 fn lily_hevesh_can_reveal_a_city_deck() {
     let mut f = Fixture::default();
-    let lily = figure_card(Figure::LilyHevesh.code()).unwrap();
+    let lily = Card::from_code(Figure::LilyHevesh.code()).unwrap();
     let color = lily.color;
     f.add(lily, Zone::Board(A, color));
     f.tech(Color::Blue, 1, Zone::Deck(Deck::base(1)), vec![]);
     f.tech(Color::Blue, 2, Zone::Deck(Deck::base(2)), vec![]);
-    f.add(city_card("C004").unwrap(), Zone::Deck(Deck::cities(1)));
+    f.add(
+        Card::from_code("C004").unwrap(),
+        Zone::Deck(Deck::cities(1)),
+    );
     let mut game = Game::new(f.position(), Expansions::FIGURES.union(Expansions::CITIES)).unwrap();
     game.take_action(Action::Draw, ActionKind::Regular).unwrap();
     let mut events = Vec::new();
@@ -44,7 +47,10 @@ fn lily_draws_a_revealed_city_then_splays_without_another_city_draw() {
     f.figure(Figure::LilyHevesh, Zone::Board(A, Color::Purple));
     f.tech(Color::Blue, 1, Zone::Deck(Deck::base(1)), vec![]);
     f.tech(Color::Blue, 2, Zone::Deck(Deck::base(2)), vec![]);
-    let city = f.add(city_card("C004").unwrap(), Zone::Deck(Deck::cities(1)));
+    let city = f.add(
+        Card::from_code("C004").unwrap(),
+        Zone::Deck(Deck::cities(1)),
+    );
     let mut game = Game::new(f.position(), Expansions::FIGURES.union(Expansions::CITIES))
         .unwrap()
         .with_tracking()
@@ -106,7 +112,10 @@ fn lily_can_win_with_a_city_as_the_fifth_revealed_color() {
         let age = i as u8 + 1;
         f.tech(color, age, Zone::Deck(Deck::base(age)), vec![]);
     }
-    let city = f.add(city_card("C024").unwrap(), Zone::Deck(Deck::cities(2)));
+    let city = f.add(
+        Card::from_code("C024").unwrap(),
+        Zone::Deck(Deck::cities(2)),
+    );
     let mut game = Game::new(f.position(), Expansions::FIGURES.union(Expansions::CITIES))
         .unwrap()
         .with_tracking()
@@ -148,14 +157,17 @@ fn john_harrison_offers_every_enabled_set() {
             .union(Expansions::ARTIFACTS),
     ] {
         let mut f = Fixture::default();
-        let harrison = figure_card(Figure::JohnHarrison.code()).unwrap();
+        let harrison = Card::from_code(Figure::JohnHarrison.code()).unwrap();
         let color = harrison.color;
         f.add(harrison, Zone::Board(A, color));
         f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
         f.tech(Color::Blue, 1, Zone::Deck(Deck::base(1)), vec![]);
         f.figure(Figure::Shennong, Zone::Deck(Deck::figures(1)));
         if expansions.cities() {
-            f.add(city_card("C004").unwrap(), Zone::Deck(Deck::cities(1)));
+            f.add(
+                Card::from_code("C004").unwrap(),
+                Zone::Deck(Deck::cities(1)),
+            );
         }
         let mut game = Game::new(f.position(), expansions).unwrap();
         game.take_action(Action::Draw, ActionKind::Regular).unwrap();
@@ -189,7 +201,7 @@ fn invalid_dogma_requests_leave_every_supported_mode_unchanged() {
         Expansions::FIGURES.union(Expansions::CITIES),
     ] {
         let mut f = Fixture::default();
-        let hand_card = f.add(base_card("B009").unwrap(), Zone::Hand(A));
+        let hand_card = f.add(Card::from_code("B009").unwrap(), Zone::Hand(A));
         let mut game = Game::new(f.position(), expansions)
             .unwrap()
             .with_tracking()
@@ -246,7 +258,10 @@ fn harrison_draw(cities: bool, set: CardSet, empty_city_deck: bool, age_zero: bo
     let base = f.tech(Color::Blue, age, Zone::Deck(Deck::base(age)), vec![]);
     let figure = f.figure(Figure::Shennong, Zone::Deck(Deck::figures(1)));
     let city = if cities && !empty_city_deck {
-        Some(f.add(city_card("C004").unwrap(), Zone::Deck(Deck::cities(1))))
+        Some(f.add(
+            Card::from_code("C004").unwrap(),
+            Zone::Deck(Deck::cities(1)),
+        ))
     } else {
         None
     };
@@ -345,11 +360,17 @@ fn sun_tzu_uses_auspice(endorse: bool, auspice: bool) {
         four_slots([Symbol::Icon(Icon::Authority); 4]);
     // Damascus qualifies an Authority Dogma for endorsement; Sun Tzu
     // qualifies it for Auspice. Both players have one Avatar, so B shares.
-    f.add(city_card("C004").unwrap(), Zone::Board(A, Color::Yellow));
-    let source = f.add(base_card("B009").unwrap(), Zone::Board(A, Color::Green));
+    f.add(
+        Card::from_code("C004").unwrap(),
+        Zone::Board(A, Color::Yellow),
+    );
+    let source = f.add(
+        Card::from_code("B009").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     let payment = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
     let avatar = f.figure(Figure::Shennong, Zone::Hand(A));
-    let authority = f.add(base_card("B006").unwrap(), Zone::Hand(A));
+    let authority = f.add(Card::from_code("B006").unwrap(), Zone::Hand(A));
     for _ in 0..8 {
         f.tech(Color::Blue, 1, Zone::Deck(Deck::base(1)), vec![]);
     }

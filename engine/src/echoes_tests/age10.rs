@@ -5,7 +5,7 @@ use shortcuts::common::*;
 const BOTH: Expansions = Expansions::ECHOES.union(Expansions::FIGURES);
 
 fn card(f: &mut Fixture, code: &str, zone: Option<Zone>) -> CardId {
-    let printed = echoes_card(code).unwrap();
+    let printed = Card::from_code(code).unwrap();
     let color = printed.color;
     f.add(printed, zone.unwrap_or(Zone::Board(A, color)))
 }
@@ -13,7 +13,7 @@ fn tech(f: &mut Fixture, color: Color, age: u8, zone: Zone) -> CardId {
     f.tech(color, age, zone, Vec::new())
 }
 fn figure(f: &mut Fixture, figure: Figure, owner: Player) -> CardId {
-    let printed = figure_card(figure.code()).unwrap();
+    let printed = Card::from_code(figure.code()).unwrap();
     let color = printed.color;
     f.add(printed, Zone::Board(owner, color))
 }
@@ -414,7 +414,7 @@ fn gps_native_foreseen_draws_all_three_before_forecast_admission_and_keeps_capac
     for foreseen in [false, true] {
         for occupied in [0, 4, 5] {
             let mut f = Fixture::default();
-            let mut printed = echoes_card("E100").unwrap();
+            let mut printed = Card::from_code("E100").unwrap();
             let color = printed.color;
             printed.effects = vec![printed.effects[2].clone()];
             let source = f.add(
@@ -476,7 +476,7 @@ fn age_ten_catalog_has_every_printed_clause() {
         ("E100", 3, false),
         ("E104", 2, true),
     ] {
-        let card = echoes_card(code).unwrap();
+        let card = Card::from_code(code).unwrap();
         assert_eq!(card.effects.len(), dogmas, "{code}");
         assert_eq!(card.echo.is_some(), echo, "{code}");
         assert!(
@@ -489,7 +489,7 @@ fn age_ten_catalog_has_every_printed_clause() {
 #[test]
 fn camcorder_foreseen_melds_nines_and_keeps_the_other_cards_without_drawing() {
     let mut f = Fixture::default();
-    let mut printed = echoes_card("E096").unwrap();
+    let mut printed = Card::from_code("E096").unwrap();
     printed.effects = vec![printed.effects[1].clone()];
     let source = f.add(printed, Zone::Forecast(A));
     let driver = tech(&mut f, Color::Purple, 10, Zone::Hand(A));
@@ -583,7 +583,10 @@ fn mp3_each_same_value_claim_pays_its_increased_cost_and_excludes_board_aliases(
     let mut f = Fixture::default();
     let source = card(&mut f, "E099", Some(Zone::Junk));
     figure(&mut f, Figure::CaiLun, A);
-    let writing = f.add(base_card("B012").unwrap(), Zone::Board(A, Color::Blue));
+    let writing = f.add(
+        Card::from_code("B012").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     tech(&mut f, Color::Purple, 10, Zone::Board(A, Color::Purple));
     tech(&mut f, Color::Green, 10, Zone::Score(A));
     tech(&mut f, Color::Red, 8, Zone::Hand(A));
@@ -631,7 +634,7 @@ fn gps_yellow_splay_is_optional_and_does_not_splay_other_colors() {
 #[test]
 fn gps_foreseen_foreshadows_only_its_original_draw_packet_after_curie() {
     let mut f = Fixture::default();
-    let mut printed = echoes_card("E100").unwrap();
+    let mut printed = Card::from_code("E100").unwrap();
     printed.effects = vec![printed.effects[2].clone()];
     let source = f.add(printed, Zone::Forecast(A));
     let driver = tech(&mut f, Color::Red, 10, Zone::Hand(A));
@@ -1103,7 +1106,7 @@ fn gps_forecast_return_oracle_keeps_deck_order_and_peters_actual_first() {
 fn gps_draw_packet_oracle_reduces_only_when_all_remaining_cards_fit() {
     for occupied in [0, 3, 4] {
         let mut f = Fixture::default();
-        let mut printed = echoes_card("E100").unwrap();
+        let mut printed = Card::from_code("E100").unwrap();
         printed.effects = vec![printed.effects[2].clone()];
         f.add(printed, Zone::Forecast(A));
         let driver = tech(&mut f, Color::Red, 10, Zone::Hand(A));

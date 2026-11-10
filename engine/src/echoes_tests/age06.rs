@@ -5,7 +5,7 @@ use shortcuts::common::*;
 const BOTH: Expansions = Expansions::ECHOES.union(Expansions::FIGURES);
 
 fn card(f: &mut Fixture, code: &str, zone: Option<Zone>) -> CardId {
-    let printed = echoes_card(code).unwrap();
+    let printed = Card::from_code(code).unwrap();
     let color = printed.color;
     f.add(printed, zone.unwrap_or(Zone::Board(A, color)))
 }
@@ -13,7 +13,7 @@ fn tech(f: &mut Fixture, color: Color, age: u8, zone: Zone) -> CardId {
     f.tech(color, age, zone, Vec::new())
 }
 fn figure(f: &mut Fixture, figure: Figure, owner: Player) -> CardId {
-    let printed = figure_card(figure.code()).unwrap();
+    let printed = Card::from_code(figure.code()).unwrap();
     let color = printed.color;
     f.add(printed, Zone::Board(owner, color))
 }
@@ -386,7 +386,7 @@ fn bifocals_foreseen_uses_lowest_physical_standard_or_zero_and_still_draws_at_ca
     for foreseen in [false, true] {
         for present in [false, true] {
             let mut f = Fixture::default();
-            let mut printed = echoes_card("E062").unwrap();
+            let mut printed = Card::from_code("E062").unwrap();
             printed.echo = None;
             printed.effects.truncate(1);
             let source = f.add(
@@ -1167,7 +1167,10 @@ fn kaleidoscope_available_alias_oracle_keeps_cai_luns_disappearing_membership() 
     let source = card(&mut f, "E065", Some(Zone::Forecast(A)));
     let driver = tech(&mut f, Color::Red, 6, Zone::Hand(A));
     deck(&mut f, CardSet::Base, 7, Color::Green);
-    let writing = f.add(base_card("B012").unwrap(), Zone::Board(A, Color::Blue));
+    let writing = f.add(
+        Card::from_code("B012").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     let cai = figure(&mut f, Figure::CaiLun, A);
     let middle = tech(&mut f, Color::Red, 3, Zone::AvailableAchievements);
     let mut game = Game::new(f.position(), BOTH)

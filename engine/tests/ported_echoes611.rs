@@ -6,12 +6,12 @@ use common::*;
 const ECHOES: Expansions = Expansions::ECHOES;
 
 fn echoes(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(echoes_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 /// A printed Echoes card on top of its color's pile.
 fn on_board(f: &mut Fixture, code: &str, player: Player) -> CardId {
-    let card = echoes_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     f.add(card, Zone::Board(player, color))
 }
@@ -28,7 +28,7 @@ fn deck(f: &mut Fixture, color: Color, value: u8) -> CardId {
 
 /// Blackmail (U040) on A's board, demanding of B.
 fn add_blackmail(f: &mut Fixture) -> CardId {
-    let card = unseen_card("U040").unwrap();
+    let card = Card::from_code("U040").unwrap();
     let color = card.color;
     f.add(card, Zone::Board(A, color))
 }
@@ -77,7 +77,7 @@ fn meld_action(game: &mut Game, driver: CardId) {
 /// A card whose own effect is only `effect` of the printed card: no echo
 /// and no other effects interfere with the scenario.
 fn only_effect(code: &str, effect: usize) -> Card {
-    let mut card = echoes_card(code).unwrap();
+    let mut card = Card::from_code(code).unwrap();
     card.echo = None;
     card.effects = vec![card.effects[effect].clone()];
     card

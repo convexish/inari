@@ -4,9 +4,7 @@
 //! Complete game catalogs require the corresponding authored programs;
 //! missing declarations fail explicitly rather than substituting stubs.
 
-use crate::model::{
-    Card, CardSet, Color, Effect, EffectKind, Error, Icon, SLOTS, Symbol, four_slots,
-};
+use crate::model::{Card, CardSet, Color, Effect, EffectKind, Error, Figure, Icon, SLOTS, Symbol};
 use crate::program::Instruction;
 
 mod age_zero;
@@ -25,7 +23,7 @@ mod echoes_metadata;
 pub use echoes_metadata::ECHOES_METADATA;
 mod figures;
 mod figures_metadata;
-pub use figures::{FIGURE_NAMES, FigureName, figure_card, figure_metadata};
+pub use figures::{FIGURE_NAMES, FigureName};
 pub use figures_metadata::FIGURES_METADATA;
 #[cfg(test)]
 mod proof_lint_tests;
@@ -54,6 +52,8 @@ const fn demand<const N: usize>(programs: [Program; N]) -> [(EffectKind, Program
     out
 }
 
+/// One printed card. Only Cities print the last two of the six positions,
+/// and only cards with dogma effects have a featured icon.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct CardMetadata {
     pub code: &'static str,
@@ -61,68 +61,31 @@ pub struct CardMetadata {
     pub color: Color,
     pub value: u8,
     pub set: CardSet,
-    pub symbols: [Symbol; 4],
+    pub symbols: [Symbol; SLOTS],
     pub featured: Option<Icon>,
 }
 
-/// A City: six printed positions, no featured icon and no dogma effects.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct CityMetadata {
-    pub code: &'static str,
-    pub title: &'static str,
-    pub color: Color,
-    pub value: u8,
-    pub symbols: [Symbol; SLOTS],
-}
-
-pub fn city_metadata(code: &str) -> Option<&'static CityMetadata> {
-    CITIES_METADATA
+/// A printed card's metadata by publisher code, from any set or Age 0.
+pub fn card_metadata(code: &str) -> Option<&'static CardMetadata> {
+    let table: &'static [CardMetadata] = match code.as_bytes().first()? {
+        b'B' => &BASE_METADATA,
+        b'E' => &ECHOES_METADATA,
+        b'C' => &CITIES_METADATA,
+        b'U' => &UNSEEN_METADATA,
+        b'A' => &ARTIFACTS_METADATA,
+        b'F' => &FIGURES_METADATA,
+        b'Z' => &AGE_ZERO_METADATA,
+        _ => return None,
+    };
+    table
         .binary_search_by_key(&code, |metadata| metadata.code)
         .ok()
-        .map(|index| &CITIES_METADATA[index])
+        .map(|index| &table[index])
 }
 
-/// A City card. Its icons are rules, not effects: it can never be a Dogma
-/// source, and executing it runs nothing.
-pub fn city_card(code: &str) -> Result<Card, Error> {
-    let metadata = city_metadata(code).ok_or(Error::InvalidSetup("unknown City"))?;
-    Ok(Card {
-        code: metadata.code,
-        set: CardSet::Cities,
-        color: metadata.color,
-        value: metadata.value,
-        figure: None,
-        echo: None,
-        symbols: metadata.symbols,
-        featured: None,
-        effects: Vec::new(),
-    })
-}
-
-/// Printed Echoes metadata, separate from the required authored programs.
-pub fn echoes_metadata(code: &str) -> Option<&'static CardMetadata> {
-    ECHOES_METADATA
-        .binary_search_by_key(&code, |metadata| metadata.code)
-        .ok()
-        .map(|index| &ECHOES_METADATA[index])
-}
-
-/// A printed card's title by publisher code, from any set's metadata.
+/// A printed card's title by publisher code.
 pub fn title(code: &str) -> Option<&'static str> {
-    let prefix = code.chars().next()?;
-    match prefix {
-        'B' => base_metadata(code).map(|m| m.title),
-        'E' => echoes_metadata(code).map(|m| m.title),
-        'C' => city_metadata(code).map(|m| m.title),
-        'A' => artifacts_metadata(code).map(|m| m.title),
-        'U' => unseen_metadata(code).map(|m| m.title),
-        'F' => figure_metadata(code).map(|m| m.title),
-        'Z' => AGE_ZERO_METADATA
-            .iter()
-            .find(|m| m.code == code)
-            .map(|m| m.title),
-        _ => None,
-    }
+    card_metadata(code).map(|metadata| metadata.title)
 }
 
 /// Alphabetical order of two cards' titles (Basur Hoyuk Tokens): lowercase
@@ -162,100 +125,56 @@ pub fn title_order(left: &str, right: &str) -> std::cmp::Ordering {
     }
 }
 
-pub fn artifacts_metadata(code: &str) -> Option<&'static CardMetadata> {
-    ARTIFACTS_METADATA
-        .binary_search_by_key(&code, |metadata| metadata.code)
-        .ok()
-        .map(|index| &ARTIFACTS_METADATA[index])
-}
-
-pub fn unseen_metadata(code: &str) -> Option<&'static CardMetadata> {
-    UNSEEN_METADATA
-        .binary_search_by_key(&code, |metadata| metadata.code)
-        .ok()
-        .map(|index| &UNSEEN_METADATA[index])
-}
-
-pub fn base_metadata(code: &str) -> Option<&'static CardMetadata> {
-    BASE_METADATA
-        .binary_search_by_key(&code, |metadata| metadata.code)
-        .ok()
-        .map(|index| &BASE_METADATA[index])
-}
-
-/// Construct a complete authored program, or explicitly reject its absence.
-pub fn base_card(code: &str) -> Result<Card, Error> {
-    let metadata = base_metadata(code).ok_or(Error::InvalidSetup("unknown Base card"))?;
-    let effects = base::effects(code).ok_or(Error::Unsupported("Base program not authored"))?;
-    Ok(programmed(metadata, effects))
-}
-
-/// An authored Echoes card: its echo effect and dogma effects.
-pub fn echoes_card(code: &str) -> Result<Card, Error> {
-    let metadata = echoes_metadata(code).ok_or(Error::InvalidSetup("unknown Echoes card"))?;
-    let programs =
-        echoes::programs(code).ok_or(Error::Unsupported("Echoes program not authored"))?;
-    Ok(Card {
-        set: CardSet::Echoes,
-        echo: programs.echo.map(|program| {
-            Box::new(Effect {
-                kind: EffectKind::NonDemand,
-                instructions: program.to_vec(),
-            })
-        }),
-        ..programmed(metadata, programs.dogmas)
-    })
-}
-
-/// An authored Artifact: its compels and non-demand effects.
-pub fn artifacts_card(code: &str) -> Result<Card, Error> {
-    let metadata = artifacts_metadata(code).ok_or(Error::InvalidSetup("unknown Artifacts card"))?;
-    let effects =
-        artifacts::effects(code).ok_or(Error::Unsupported("Artifacts program not authored"))?;
-    Ok(Card {
-        set: CardSet::Artifacts,
-        ..programmed(metadata, effects)
-    })
-}
-
-/// An authored Unseen card: its demands and non-demand effects.
-pub fn unseen_card(code: &str) -> Result<Card, Error> {
-    let metadata = unseen_metadata(code).ok_or(Error::InvalidSetup("unknown Unseen card"))?;
-    let effects = unseen::effects(code).ok_or(Error::Unsupported("Unseen program not authored"))?;
-    Ok(Card {
-        set: CardSet::Unseen,
-        ..programmed(metadata, effects)
-    })
-}
-
-/// An Age 0 card (Base set, value 0), dormant until Bear Grylls.
-pub fn age_zero_card(code: &str) -> Result<Card, Error> {
-    let metadata = AGE_ZERO_METADATA
-        .iter()
-        .find(|metadata| metadata.code == code)
-        .ok_or(Error::InvalidSetup("unknown Age 0 card"))?;
-    let effects =
-        age_zero::effects(code).ok_or(Error::Unsupported("Age 0 program not authored"))?;
-    Ok(programmed(metadata, effects))
-}
-
-fn programmed(metadata: &'static CardMetadata, effects: &'static [(EffectKind, Program)]) -> Card {
-    Card {
-        code: metadata.code,
-        set: CardSet::Base,
-        color: metadata.color,
-        value: metadata.value,
-        figure: None,
-        echo: None,
-        symbols: four_slots(metadata.symbols),
-        featured: metadata.featured,
-        effects: effects
-            .iter()
-            .map(|&(kind, program)| Effect {
-                kind,
-                instructions: program.to_vec(),
-            })
-            .collect(),
+impl Card {
+    /// A printed card of any set, with its authored programs.
+    ///
+    /// A City's icons are rules, not effects: it can never be a Dogma source,
+    /// and executing it runs nothing. A Figure's karma lives in its
+    /// declaration, not in Dogma effects. Age 0 cards are Base cards of
+    /// value 0. A card without an authored program is an error, never a stub.
+    pub fn from_code(code: &str) -> Result<Self, Error> {
+        let metadata = card_metadata(code).ok_or(Error::InvalidSetup("unknown card"))?;
+        let unauthored = Error::Unsupported("card program not authored");
+        let (mut echo, mut figure) = (None, None);
+        let effects: &[(EffectKind, Program)] = match metadata.set {
+            CardSet::Base if code.starts_with('Z') => age_zero::effects(code).ok_or(unauthored)?,
+            CardSet::Base => base::effects(code).ok_or(unauthored)?,
+            CardSet::Echoes => {
+                let programs = echoes::programs(code).ok_or(unauthored)?;
+                echo = programs.echo;
+                programs.dogmas
+            }
+            CardSet::Cities => &[],
+            CardSet::Unseen => unseen::effects(code).ok_or(unauthored)?,
+            CardSet::Artifacts => artifacts::effects(code).ok_or(unauthored)?,
+            CardSet::Figures => {
+                figure = Some(
+                    Figure::ALL
+                        .into_iter()
+                        .find(|figure| figure.code() == code)
+                        .ok_or(unauthored)?,
+                );
+                &[]
+            }
+        };
+        let effect = |kind, program: Program| Effect {
+            kind,
+            instructions: program.to_vec(),
+        };
+        Ok(Self {
+            code: metadata.code,
+            set: metadata.set,
+            color: metadata.color,
+            value: metadata.value,
+            figure,
+            echo: echo.map(|program| Box::new(effect(EffectKind::NonDemand, program))),
+            symbols: metadata.symbols,
+            featured: metadata.featured,
+            effects: effects
+                .iter()
+                .map(|&(kind, program)| effect(kind, program))
+                .collect(),
+        })
     }
 }
 

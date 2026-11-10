@@ -4,7 +4,7 @@ mod common;
 use common::*;
 
 fn city(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(city_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn blank(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
@@ -12,7 +12,7 @@ fn blank(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
 }
 
 fn figure(f: &mut Fixture, figure: Figure, player: Player) -> CardId {
-    let card = figure_card(figure.code()).unwrap();
+    let card = Card::from_code(figure.code()).unwrap();
     let zone = Zone::Board(player, card.color);
     f.add(card, zone)
 }
@@ -345,7 +345,7 @@ fn zhang_heng_scoring_dublin_on_its_claim_skips_its_icons() {
 fn a_melded_figures_when_follows_the_new_color_city_draw() {
     let mut f = Fixture::default();
     let tigernmas = figure(&mut f, Figure::Tigernmas, B);
-    let alexander = figure_card(Figure::AlexanderTheGreat.code()).unwrap();
+    let alexander = Card::from_code(Figure::AlexanderTheGreat.code()).unwrap();
     let alexander = f.add(alexander, Zone::Hand(A));
     blank(&mut f, Color::Yellow, 2, Zone::Deck(Deck::base(2)));
     let drawn = city(&mut f, "C016", Zone::Deck(Deck::cities(2)));
@@ -387,8 +387,14 @@ fn a_junk_icon_offers_one_achievement_per_back_and_junks_the_chosen_set() {
     let mut f = Fixture::default();
     blank(&mut f, Color::Red, 1, Zone::Board(A, Color::Red));
     let sparta = city(&mut f, "C016", Zone::Hand(A));
-    let base = f.add(base_card("B016").unwrap(), Zone::AvailableAchievements);
-    let echoes = f.add(echoes_card("E016").unwrap(), Zone::AvailableAchievements);
+    let base = f.add(
+        Card::from_code("B016").unwrap(),
+        Zone::AvailableAchievements,
+    );
+    let echoes = f.add(
+        Card::from_code("E016").unwrap(),
+        Zone::AvailableAchievements,
+    );
     let cities_two = city(&mut f, "C017", Zone::AvailableAchievements);
     let mut game = Game::new(f.position(), cities().union(Expansions::ECHOES)).unwrap();
     meld_action(&mut game, sparta);

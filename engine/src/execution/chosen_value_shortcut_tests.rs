@@ -2,7 +2,7 @@ use super::common::*;
 use super::*;
 
 fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 fn fixture(expansions: Expansions, code: &str) -> (Position, CardId) {
     let mut f = Fixture::default();
@@ -365,7 +365,7 @@ fn live_membership_and_movement_dependencies_restore_ordinary_menus() {
             let card = CardId(index as u16);
             f.placements.push((card, position.locate(card).unwrap()));
         }
-        let definition = figure_card(figure.code()).unwrap();
+        let definition = Card::from_code(figure.code()).unwrap();
         let color = definition.color;
         f.add(definition, Zone::Board(A, color));
         let mut reduced = Game::new(f.position(), Expansions::FIGURES).unwrap();

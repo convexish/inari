@@ -93,22 +93,22 @@ fn programs() -> Vec<(String, &'static [Instruction])> {
         }
     };
     for m in BASE_METADATA {
-        card(base_card(m.code).unwrap());
+        card(Card::from_code(m.code).unwrap());
     }
     for m in ECHOES_METADATA {
-        card(echoes_card(m.code).unwrap());
+        card(Card::from_code(m.code).unwrap());
     }
     for m in ARTIFACTS_METADATA {
-        card(artifacts_card(m.code).unwrap());
+        card(Card::from_code(m.code).unwrap());
     }
     for m in UNSEEN_METADATA {
-        card(unseen_card(m.code).unwrap());
+        card(Card::from_code(m.code).unwrap());
     }
     for m in FIGURES_METADATA {
-        card(figure_card(m.code).unwrap());
+        card(Card::from_code(m.code).unwrap());
     }
     for m in AGE_ZERO_METADATA {
-        card(age_zero_card(m.code).unwrap());
+        card(Card::from_code(m.code).unwrap());
     }
     all
 }

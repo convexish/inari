@@ -6,7 +6,7 @@ const B: Player = Player::Two;
 
 fn fixture(expansions: Expansions, matching: bool) -> Game {
     let cards = ["B003", "B001", "B006", "B007", "B002", "B004", "B009"]
-        .map(|code| base_card(code).unwrap());
+        .map(|code| Card::from_code(code).unwrap());
     let placements = [
         (CardId(0), Zone::Board(A, Color::Red)),
         (CardId(1), Zone::Hand(B)),

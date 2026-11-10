@@ -1,13 +1,14 @@
 // Generated from data/cities.json by scripts/card_metadata.py; do not edit by hand.
-use super::CityMetadata;
-use crate::model::{CityIcon, Color, Icon, Symbol};
+use super::CardMetadata;
+use crate::model::{CardSet, CityIcon, Color, Icon, Symbol};
 
-pub const CITIES_METADATA: [CityMetadata; 115] = [
-    CityMetadata {
+pub const CITIES_METADATA: [CardMetadata; 115] = [
+    CardMetadata {
         code: "C001",
         title: "ATHENS",
         color: Color::Red,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
@@ -16,12 +17,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C002",
         title: "CHANG' AN",
         color: Color::Red,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
@@ -30,12 +33,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C003",
         title: "THEBES",
         color: Color::Red,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
@@ -44,12 +49,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Concept),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C004",
         title: "DAMASCUS",
         color: Color::Yellow,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
@@ -58,12 +65,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Authority),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C005",
         title: "LINZI",
         color: Color::Yellow,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Prosperity),
@@ -72,12 +81,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Authority),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C006",
         title: "URUK",
         color: Color::Yellow,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Prosperity),
@@ -86,12 +97,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Authority),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C007",
         title: "BABYLON",
         color: Color::Green,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
@@ -100,12 +113,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Uplift),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C008",
         title: "JERUSALEM",
         color: Color::Green,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Concept),
@@ -114,12 +129,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Authority),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C009",
         title: "MEMPHIS",
         color: Color::Green,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Health),
@@ -128,12 +145,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Authority),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C010",
         title: "ATLANTIS",
         color: Color::Blue,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
@@ -142,12 +161,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Authority),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C011",
         title: "TROY",
         color: Color::Blue,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
@@ -156,12 +177,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Junk),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C012",
         title: "YIN",
         color: Color::Blue,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Health),
@@ -170,12 +193,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Authority),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C013",
         title: "EPHESUS",
         color: Color::Purple,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
@@ -184,12 +209,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C014",
         title: "HATTUSA",
         color: Color::Purple,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
@@ -198,12 +225,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Authority),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C015",
         title: "MOHENJO-DARO",
         color: Color::Purple,
         value: 1,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
@@ -212,12 +241,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C016",
         title: "SPARTA",
         color: Color::Red,
         value: 2,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Industry),
@@ -226,12 +257,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Junk),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C017",
         title: "TIKAL",
         color: Color::Red,
         value: 2,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Health),
@@ -240,12 +273,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Authority),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C018",
         title: "NINEVEH",
         color: Color::Yellow,
         value: 2,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
@@ -254,12 +289,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Health),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C019",
         title: "TEOTIHUACAN",
         color: Color::Yellow,
         value: 2,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
@@ -268,12 +305,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Health),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C020",
         title: "MARSEILLE",
         color: Color::Green,
         value: 2,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Bonus(2),
@@ -282,12 +321,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Prosperity),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C021",
         title: "NANJING",
         color: Color::Green,
         value: 2,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(3),
             Symbol::Icon(Icon::Prosperity),
@@ -296,12 +337,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Authority),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C022",
         title: "ALEXANDRIA",
         color: Color::Blue,
         value: 2,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Bonus(2),
@@ -310,12 +353,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C023",
         title: "CARTHAGE",
         color: Color::Blue,
         value: 2,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Concept),
@@ -324,12 +369,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C024",
         title: "LUOYANG",
         color: Color::Purple,
         value: 2,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
@@ -338,12 +385,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Uplift),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C025",
         title: "ROME",
         color: Color::Purple,
         value: 2,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(2),
             Symbol::Icon(Icon::Concept),
@@ -352,12 +401,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Concept),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C026",
         title: "BARCELONA",
         color: Color::Red,
         value: 3,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(4),
             Symbol::Icon(Icon::Authority),
@@ -366,12 +417,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C027",
         title: "DELHI",
         color: Color::Red,
         value: 3,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Health),
@@ -380,12 +433,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Left),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C028",
         title: "JAKARTA",
         color: Color::Yellow,
         value: 3,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Prosperity),
@@ -394,12 +449,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Junk),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C029",
         title: "KAIFENG",
         color: Color::Yellow,
         value: 3,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Health),
@@ -408,12 +465,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Left),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C030",
         title: "BAGHDAD",
         color: Color::Green,
         value: 3,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
@@ -422,12 +481,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Left),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C031",
         title: "VENICE",
         color: Color::Green,
         value: 3,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Prosperity),
@@ -436,12 +497,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C032",
         title: "CORDOBA",
         color: Color::Blue,
         value: 3,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
@@ -450,12 +513,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Left),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C033",
         title: "HANGZHOU",
         color: Color::Blue,
         value: 3,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
@@ -464,12 +529,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Uplift),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C034",
         title: "CONSTANTINOPLE",
         color: Color::Purple,
         value: 3,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Prosperity),
@@ -478,12 +545,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Left),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C035",
         title: "MECCA",
         color: Color::Purple,
         value: 3,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Bonus(5),
@@ -492,12 +561,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Health),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C036",
         title: "MILAN",
         color: Color::Red,
         value: 4,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
@@ -506,12 +577,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C037",
         title: "TENOCHTITLAN",
         color: Color::Red,
         value: 4,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Authority),
@@ -520,12 +593,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Left),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C038",
         title: "BEIJING",
         color: Color::Yellow,
         value: 4,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Authority),
@@ -534,12 +609,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Left),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C039",
         title: "LISBON",
         color: Color::Yellow,
         value: 4,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
@@ -548,12 +625,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C040",
         title: "CALICUT",
         color: Color::Green,
         value: 4,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(5),
             Symbol::Icon(Icon::Prosperity),
@@ -562,12 +641,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Health),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C041",
         title: "MANILA",
         color: Color::Green,
         value: 4,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Bonus(4),
@@ -576,12 +657,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Left),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C042",
         title: "FRANKFURT",
         color: Color::Blue,
         value: 4,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
@@ -590,12 +673,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C043",
         title: "MADRID",
         color: Color::Blue,
         value: 4,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
@@ -604,12 +689,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Left),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C044",
         title: "FLORENCE",
         color: Color::Purple,
         value: 4,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Concept),
@@ -618,12 +705,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Left),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C045",
         title: "SEVILLE",
         color: Color::Purple,
         value: 4,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Prosperity),
@@ -632,12 +721,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Junk),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C046",
         title: "ALGIERS",
         color: Color::Red,
         value: 5,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Concept),
@@ -646,12 +737,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Flag),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C047",
         title: "ZURICH",
         color: Color::Red,
         value: 5,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
@@ -660,12 +753,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Junk),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C048",
         title: "HOI AN",
         color: Color::Yellow,
         value: 5,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(7),
             Symbol::Icon(Icon::Prosperity),
@@ -674,12 +769,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Prosperity),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C049",
         title: "OSAKA",
         color: Color::Yellow,
         value: 5,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
@@ -688,12 +785,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Search(Icon::Concept),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C050",
         title: "AMSTERDAM",
         color: Color::Green,
         value: 5,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Health),
@@ -702,12 +801,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C051",
         title: "STOCKHOLM",
         color: Color::Green,
         value: 5,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Prosperity),
@@ -716,12 +817,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Flag),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C052",
         title: "BOSTON",
         color: Color::Blue,
         value: 5,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Concept),
@@ -730,12 +833,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C053",
         title: "NAPLES",
         color: Color::Blue,
         value: 5,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
@@ -744,12 +849,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C054",
         title: "GDANSK",
         color: Color::Purple,
         value: 5,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Bonus(5),
@@ -758,12 +865,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Flag),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C055",
         title: "TOKYO",
         color: Color::Purple,
         value: 5,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Authority),
             Symbol::Icon(Icon::Authority),
@@ -772,12 +881,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Flag),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C056",
         title: "PHILADELPHIA",
         color: Color::Red,
         value: 6,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Efficiency),
@@ -786,12 +897,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C057",
         title: "TEHRAN",
         color: Color::Red,
         value: 6,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Prosperity),
@@ -800,12 +913,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Flag),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C058",
         title: "DUBLIN",
         color: Color::Yellow,
         value: 6,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Health),
@@ -814,12 +929,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Junk),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C059",
         title: "PARIS",
         color: Color::Yellow,
         value: 6,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
@@ -828,12 +945,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Flag),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C060",
         title: "BOMBAY",
         color: Color::Green,
         value: 6,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(6),
             Symbol::Icon(Icon::Prosperity),
@@ -842,12 +961,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Right),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C061",
         title: "RIO DE JANEIRO",
         color: Color::Green,
         value: 6,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Bonus(7),
@@ -856,12 +977,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Flag),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C062",
         title: "BERLIN",
         color: Color::Blue,
         value: 6,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
@@ -870,12 +993,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Flag),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C063",
         title: "EDINBURGH",
         color: Color::Blue,
         value: 6,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Industry),
@@ -884,12 +1009,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C064",
         title: "NEW YORK CITY",
         color: Color::Purple,
         value: 6,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Prosperity),
@@ -898,12 +1025,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C065",
         title: "VIENNA",
         color: Color::Purple,
         value: 6,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
@@ -912,12 +1041,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Right),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C066",
         title: "LYON",
         color: Color::Red,
         value: 7,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Industry),
@@ -926,12 +1057,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Flag),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C067",
         title: "MONTREAL",
         color: Color::Red,
         value: 7,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
@@ -940,12 +1073,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Junk),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C068",
         title: "MELBOURNE",
         color: Color::Yellow,
         value: 7,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(7),
             Symbol::Bonus(7),
@@ -954,12 +1089,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(7),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C069",
         title: "ST. PETERSBURG",
         color: Color::Yellow,
         value: 7,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Industry),
@@ -968,12 +1105,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Flag),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C070",
         title: "LONDON",
         color: Color::Green,
         value: 7,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Efficiency),
@@ -982,12 +1121,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Right),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C071",
         title: "TORONTO",
         color: Color::Green,
         value: 7,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(7),
             Symbol::Bonus(7),
@@ -996,12 +1137,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(7),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C072",
         title: "JOHANNESBURG",
         color: Color::Blue,
         value: 7,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(7),
             Symbol::Bonus(7),
@@ -1010,12 +1153,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(7),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C073",
         title: "MUNICH",
         color: Color::Blue,
         value: 7,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Efficiency),
@@ -1024,12 +1169,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Right),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C074",
         title: "SAN FRANCISCO",
         color: Color::Purple,
         value: 7,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Concept),
@@ -1038,12 +1185,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(9),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C075",
         title: "WASHINGTON",
         color: Color::Purple,
         value: 7,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Concept),
@@ -1052,12 +1201,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Flag),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C076",
         title: "KUALA LUMPUR",
         color: Color::Red,
         value: 8,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
@@ -1066,12 +1217,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Fountain),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C077",
         title: "LOS ANGELES",
         color: Color::Red,
         value: 8,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(9),
             Symbol::Icon(Icon::Industry),
@@ -1080,12 +1233,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(9),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C078",
         title: "CHICAGO",
         color: Color::Yellow,
         value: 8,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(8),
             Symbol::Bonus(8),
@@ -1094,12 +1249,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(8),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C079",
         title: "SHANGHAI",
         color: Color::Yellow,
         value: 8,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Prosperity),
@@ -1108,12 +1265,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Fountain),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C080",
         title: "HAMBURG",
         color: Color::Green,
         value: 8,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Efficiency),
@@ -1122,12 +1281,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Junk),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C081",
         title: "SÃO PAULO",
         color: Color::Green,
         value: 8,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(8),
             Symbol::Bonus(8),
@@ -1136,12 +1297,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(8),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C082",
         title: "CHONGQING",
         color: Color::Blue,
         value: 8,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
@@ -1150,12 +1313,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C083",
         title: "KYIV",
         color: Color::Blue,
         value: 8,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Efficiency),
@@ -1164,12 +1329,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C084",
         title: "BUENOS AIRES",
         color: Color::Purple,
         value: 8,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(9),
             Symbol::Icon(Icon::Efficiency),
@@ -1178,12 +1345,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(9),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C085",
         title: "VANCOUVER",
         color: Color::Purple,
         value: 8,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Concept),
@@ -1192,12 +1361,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C086",
         title: "DALLAS",
         color: Color::Red,
         value: 9,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Efficiency),
@@ -1206,12 +1377,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Up),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C087",
         title: "PERTH",
         color: Color::Red,
         value: 9,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(10),
             Symbol::Icon(Icon::Industry),
@@ -1220,12 +1393,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(10),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C088",
         title: "GUADALAJARA",
         color: Color::Yellow,
         value: 9,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Efficiency),
@@ -1234,12 +1409,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Up),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C089",
         title: "MIAMI",
         color: Color::Yellow,
         value: 9,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(9),
             Symbol::Icon(Icon::Prosperity),
@@ -1248,12 +1425,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(9),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C090",
         title: "SANTIAGO",
         color: Color::Green,
         value: 9,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(9),
             Symbol::Bonus(9),
@@ -1262,12 +1441,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(9),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C091",
         title: "SYDNEY",
         color: Color::Green,
         value: 9,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Prosperity),
@@ -1276,12 +1457,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Fountain),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C092",
         title: "HOUSTON",
         color: Color::Blue,
         value: 9,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(10),
             Symbol::Icon(Icon::Efficiency),
@@ -1290,12 +1473,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(10),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C093",
         title: "TAIPEI",
         color: Color::Blue,
         value: 9,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Efficiency),
@@ -1304,12 +1489,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Fountain),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C094",
         title: "HONG KONG",
         color: Color::Purple,
         value: 9,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Efficiency),
@@ -1318,12 +1505,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Up),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C095",
         title: "MOSCOW",
         color: Color::Purple,
         value: 9,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Concept),
@@ -1332,12 +1521,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Fountain),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C096",
         title: "SEOUL",
         color: Color::Red,
         value: 10,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Avatar),
             Symbol::Icon(Icon::Avatar),
@@ -1346,12 +1537,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Unsplay),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C097",
         title: "SINGAPORE",
         color: Color::Red,
         value: 10,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Bonus(10),
@@ -1360,12 +1553,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C098",
         title: "COPENHAGEN",
         color: Color::Yellow,
         value: 10,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Efficiency),
@@ -1374,12 +1569,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Unsplay),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C099",
         title: "DUBAI",
         color: Color::Yellow,
         value: 10,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(10),
             Symbol::Icon(Icon::Prosperity),
@@ -1388,12 +1585,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C100",
         title: "BANGKOK",
         color: Color::Green,
         value: 10,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Efficiency),
             Symbol::Icon(Icon::Prosperity),
@@ -1402,12 +1601,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(11),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C101",
         title: "TEL AVIV",
         color: Color::Green,
         value: 10,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Efficiency),
@@ -1416,12 +1617,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Unsplay),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C102",
         title: "ATLANTA",
         color: Color::Blue,
         value: 10,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(10),
             Symbol::Icon(Icon::Efficiency),
@@ -1430,12 +1633,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Plus),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C103",
         title: "BANGALORE",
         color: Color::Blue,
         value: 10,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Health),
@@ -1444,12 +1649,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Unsplay),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C104",
         title: "BRUSSELS",
         color: Color::Purple,
         value: 10,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Avatar),
@@ -1458,12 +1665,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Junk),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C105",
         title: "LAGOS",
         color: Color::Purple,
         value: 10,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Health),
             Symbol::Icon(Icon::Concept),
@@ -1472,12 +1681,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Unsplay),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C106",
         title: "GUANGZHOU",
         color: Color::Red,
         value: 11,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Industry),
@@ -1486,12 +1697,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Fountain),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C107",
         title: "WARSAW",
         color: Color::Red,
         value: 11,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Efficiency),
             Symbol::Bonus(11),
@@ -1500,12 +1713,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Unsplay),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C108",
         title: "NAIROBI",
         color: Color::Yellow,
         value: 11,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Health),
@@ -1514,12 +1729,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Fountain),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C109",
         title: "SHENZHEN",
         color: Color::Yellow,
         value: 11,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Bonus(11),
             Symbol::Icon(Icon::Efficiency),
@@ -1528,12 +1745,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Unsplay),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C110",
         title: "BEIRUT",
         color: Color::Green,
         value: 11,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Prosperity),
             Symbol::Icon(Icon::Avatar),
@@ -1542,12 +1761,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Unsplay),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C111",
         title: "RIYADH",
         color: Color::Green,
         value: 11,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Efficiency),
             Symbol::Bonus(12),
@@ -1556,12 +1777,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(12),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C112",
         title: "PRAGUE",
         color: Color::Blue,
         value: 11,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Concept),
@@ -1570,12 +1793,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Fountain),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C113",
         title: "SEATTLE",
         color: Color::Blue,
         value: 11,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Industry),
             Symbol::Icon(Icon::Industry),
@@ -1584,12 +1809,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Unsplay),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C114",
         title: "BRISBANE",
         color: Color::Purple,
         value: 11,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Avatar),
             Symbol::Bonus(11),
@@ -1598,12 +1825,14 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::Bonus(11),
             Symbol::Image,
         ],
+        featured: None,
     },
-    CityMetadata {
+    CardMetadata {
         code: "C115",
         title: "LIMA",
         color: Color::Purple,
         value: 11,
+        set: CardSet::Cities,
         symbols: [
             Symbol::Icon(Icon::Concept),
             Symbol::Icon(Icon::Health),
@@ -1612,5 +1841,6 @@ pub const CITIES_METADATA: [CityMetadata; 115] = [
             Symbol::City(CityIcon::Unsplay),
             Symbol::Image,
         ],
+        featured: None,
     },
 ];

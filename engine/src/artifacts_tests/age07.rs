@@ -15,7 +15,7 @@ fn board(player: Player, color: Color) -> Zone {
 }
 
 fn sharing_icons(code: &str) -> [Icon; 3] {
-    [artifacts_card(code).unwrap().featured.unwrap(); 3]
+    [Card::from_code(code).unwrap().featured.unwrap(); 3]
 }
 
 fn with_effect(mut card: Card, color: Color, value: u8, instructions: Vec<Instruction>) -> Card {
@@ -353,7 +353,7 @@ fn roundhay_garden_scene_melds_the_highest_scored_card_scores_two_of_its_value_a
     let roundhay = l.artifact("A074", board(A, Color::Purple));
     let high = l.add(
         with_effect(
-            base_card("B001").unwrap(),
+            Card::from_code("B001").unwrap(),
             Color::Green,
             3,
             vec![build::draw(1)],
@@ -387,7 +387,7 @@ fn communist_manifesto_gives_one_drawn_seven_to_the_opponent_and_executes_the_ot
     let manifesto = l.artifact("A075", board(A, Color::Purple));
     let given = l.add(
         with_effect(
-            base_card("B001").unwrap(),
+            Card::from_code("B001").unwrap(),
             Color::Red,
             7,
             vec![build::draw(1)],
@@ -396,7 +396,7 @@ fn communist_manifesto_gives_one_drawn_seven_to_the_opponent_and_executes_the_ot
     );
     let kept = l.add(
         with_effect(
-            base_card("B001").unwrap(),
+            Card::from_code("B001").unwrap(),
             Color::Green,
             7,
             vec![build::draw(2)],

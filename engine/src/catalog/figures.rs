@@ -2,9 +2,9 @@
 //! A Would clause's program starts with the event's card bound and, for a
 //! Dogma, the featured icon (or for a splay, the color) chosen; in it,
 //! `Demander` names the player whose operation triggered it.
-use super::{CardMetadata, FIGURES_METADATA};
+use super::FIGURES_METADATA;
 use crate::Decree::{self, Advancement, Expansion, Rivalry, Trade, War};
-use crate::model::{Card, Error, Figure};
+use crate::model::Figure;
 use crate::program::build::*;
 
 use Color::{Green, Red, Yellow};
@@ -2398,34 +2398,6 @@ pub static FIGURE_NAMES: [FigureName; 115] = {
     }
     names
 };
-
-pub fn figure_metadata(code: &str) -> Option<&'static CardMetadata> {
-    FIGURES_METADATA
-        .binary_search_by_key(&code, |metadata| metadata.code)
-        .ok()
-        .map(|index| &FIGURES_METADATA[index])
-}
-
-/// Construct a declared Figure; physical metadata alone is insufficient.
-pub fn figure_card(code: &str) -> Result<Card, Error> {
-    let metadata = figure_metadata(code).ok_or(Error::InvalidSetup("unknown Figure card"))?;
-    let figure = Figure::ALL
-        .into_iter()
-        .find(|figure| figure.code() == code)
-        .ok_or(Error::Unsupported("Figure program not authored"))?;
-    Ok(Card {
-        code: metadata.code,
-        set: CardSet::Figures,
-        color: metadata.color,
-        value: metadata.value,
-        figure: Some(figure),
-        echo: None,
-        symbols: crate::four_slots(metadata.symbols),
-        featured: metadata.featured,
-        // Karma lives in the Figure's declaration, not in Dogma effects.
-        effects: Vec::new(),
-    })
-}
 
 #[cfg(test)]
 mod operand_front_tests {

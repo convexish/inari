@@ -218,7 +218,7 @@ fn paired_samples(expansions: Expansions) {
 fn foreseen_bell_returns_stay_private_to_each_hands_owner() {
     for shown in [false, true] {
         let mut f = Fixture::default();
-        let bell = f.add(echoes_card("E013").unwrap(), Zone::Forecast(A));
+        let bell = f.add(Card::from_code("E013").unwrap(), Zone::Forecast(A));
         let melded = f.tech(Color::Red, 2, Zone::Hand(A), vec![]);
         let mine = f.tech(Color::Green, 3, Zone::Hand(A), vec![]);
         let theirs = f.tech(Color::Yellow, 4, Zone::Hand(B), vec![]);
@@ -286,7 +286,10 @@ fn foreseen_bell_returns_stay_private_to_each_hands_owner() {
 #[test]
 fn secretum_secretorum_reveals_every_returned_card() {
     let mut f = Fixture::default();
-    let card = f.add(unseen_card("U033").unwrap(), Zone::Board(A, Color::Blue));
+    let card = f.add(
+        Card::from_code("U033").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     let mut returned: Vec<_> = [Color::Red, Color::Red, Color::Green]
         .into_iter()
         .map(|color| f.tech(color, 1, Zone::Hand(A), vec![]))
@@ -321,7 +324,10 @@ fn secretum_secretorum_reveals_every_returned_card() {
 #[test]
 fn quackery_reveals_both_returned_cards_and_not_the_kept_one() {
     let mut f = Fixture::default();
-    let card = f.add(unseen_card("U042").unwrap(), Zone::Board(A, Color::Blue));
+    let card = f.add(
+        Card::from_code("U042").unwrap(),
+        Zone::Board(A, Color::Blue),
+    );
     let first = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let second = f.tech(Color::Green, 1, Zone::Hand(A), vec![]);
     let kept = f.tech(Color::Yellow, 1, Zone::Hand(A), vec![]);
@@ -508,7 +514,7 @@ fn nested_inspection_grants_each_last_for_their_own_execution() {
 #[test]
 fn cabal_sweeps_by_public_values_without_a_proof_reveal() {
     let mut f = Fixture::default();
-    let card = f.add(unseen_card("U046").unwrap(), Zone::Board(A, Color::Red));
+    let card = f.add(Card::from_code("U046").unwrap(), Zone::Board(A, Color::Red));
     f.tech(Color::Blue, 3, Zone::Safe(A), vec![]);
     let three = f.tech(Color::Green, 3, Zone::Hand(B), vec![]);
     let four = f.tech(Color::Yellow, 4, Zone::Hand(B), vec![]);

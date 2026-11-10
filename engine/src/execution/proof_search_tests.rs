@@ -140,7 +140,7 @@ fn a_public_witness_proves_existence_without_proving_the_exact_count() {
 fn sunglasses_proves_matching_selection_or_absence_before_foreign_search() {
     for matching in [false, true] {
         let mut f = Fixture::default();
-        let mut printed = echoes_card("E035").unwrap();
+        let mut printed = Card::from_code("E035").unwrap();
         printed.echo.as_mut().unwrap().instructions.push(STOP);
         let source = f.add(printed, Zone::Junk);
         for _ in 0..2 {

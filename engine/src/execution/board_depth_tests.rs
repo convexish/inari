@@ -2,7 +2,7 @@ use super::common::*;
 use super::*;
 
 fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 fn invoke(game: &mut Game, card: CardId, effect: u16) {
     game.start(

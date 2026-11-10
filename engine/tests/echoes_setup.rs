@@ -63,13 +63,13 @@ fn complete_echoes_catalog_has_all_printed_programs_and_no_empty_substitutes() {
     let mut dogmas = 0;
     let mut demands = 0;
     for metadata in ECHOES_METADATA {
-        let card = echoes_card(metadata.code)
+        let card = Card::from_code(metadata.code)
             .unwrap_or_else(|error| panic!("{}: {error:?}", metadata.code));
         assert_eq!(card.code, metadata.code);
         assert_eq!(card.color, metadata.color);
         assert_eq!(card.value, metadata.value);
         assert_eq!(card.set, CardSet::Echoes);
-        assert_eq!(card.printed(), metadata.symbols);
+        assert_eq!(card.symbols, metadata.symbols);
         assert_eq!(card.featured, metadata.featured);
         assert_eq!(
             card.echo.is_some(),

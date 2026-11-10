@@ -72,7 +72,7 @@ fn frozen_seed_seven_deal_reserves_and_physical_ids_match_retained_fixture() {
     assert_eq!(position.cards(Zone::Hand(B)), ids(&[3, 7]));
     for (index, metadata) in BASE_METADATA.iter().enumerate() {
         let card = position.card(CardId(index as u16));
-        assert_eq!(card, &base_card(metadata.code).unwrap());
+        assert_eq!(card, &Card::from_code(metadata.code).unwrap());
         assert_eq!(card.value, metadata.value);
         assert!(card.figure.is_none());
     }

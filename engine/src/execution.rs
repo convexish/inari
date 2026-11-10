@@ -5157,7 +5157,7 @@ mod board_permission_tests {
     #[test]
     fn foreign_dogma_context_retains_physical_owner_for_demand_and_shared_invocations() {
         for demand in [false, true] {
-            let mut source = base_card("B012").unwrap();
+            let mut source = Card::from_code("B012").unwrap();
             source.featured = Some(if demand {
                 Icon::Prosperity
             } else {
@@ -5165,7 +5165,7 @@ mod board_permission_tests {
             });
             source.effects[0].kind = EffectKind::from_demand(demand);
             let position = Position::new(
-                vec![figure_card("F020").unwrap(), source],
+                vec![Card::from_code("F020").unwrap(), source],
                 &[
                     (CardId(0), Zone::Board(Player::One, Color::Green)),
                     (CardId(1), Zone::Board(Player::Two, Color::Blue)),

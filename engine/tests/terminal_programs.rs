@@ -3,7 +3,7 @@ use common::*;
 use inno_engine::*;
 
 fn add(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 fn native(f: &mut Fixture, color: Color, value: u8, zone: Zone) -> CardId {
     let code = BASE_METADATA
@@ -123,11 +123,11 @@ fn fission_nested_in_a_meld_action_preserves_the_turn_tail() {
         }
         for (second_action, wins) in [(false, false), (true, false), (false, true)] {
             let mut f = Fixture::default();
-            let sunshu = figure_card("F004").unwrap();
+            let sunshu = Card::from_code("F004").unwrap();
             let color = sunshu.color;
             let sunshu = f.add(sunshu, Zone::Board(A, color));
             let fission = add(&mut f, "B087", Zone::Board(A, Color::Red));
-            let priest = f.add(artifacts_card("A007").unwrap(), Zone::Hand(A));
+            let priest = f.add(Card::from_code("A007").unwrap(), Zone::Hand(A));
             let payment = native(&mut f, Color::Red, 1, Zone::Hand(A));
             let chain = native(&mut f, Color::Blue, 11, Zone::Deck(Deck::base(11)));
             let spare = native(&mut f, Color::Green, 10, Zone::Deck(Deck::base(10)));
@@ -356,7 +356,7 @@ fn space_traffic_eliminates_ownership_without_jackie_victory_reaction() {
     let drawn = native(&mut f, Color::Green, 11, Zone::Deck(Deck::base(11)));
     let jackie = f.figure(
         Figure::JackieChan,
-        Zone::Board(A, figure_card(Figure::JackieChan.code()).unwrap().color),
+        Zone::Board(A, Card::from_code(Figure::JackieChan.code()).unwrap().color),
     );
     let hand = native(&mut f, Color::Red, 1, Zone::Hand(A));
     let achievement = native(&mut f, Color::Yellow, 1, Zone::Achievements(A));

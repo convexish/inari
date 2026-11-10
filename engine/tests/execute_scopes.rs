@@ -49,7 +49,10 @@ fn must_removes_may_but_keeps_quantity_stops() {
         // Tools: "you may return three cards from your hand".
         let mut f = Fixture::default();
         elevens(&mut f, 1);
-        f.add(base_card("B011").unwrap(), Zone::Board(A, Color::Blue));
+        f.add(
+            Card::from_code("B011").unwrap(),
+            Zone::Board(A, Color::Blue),
+        );
         for color in [Color::Red, Color::Green, Color::Yellow] {
             f.tech(color, 1, Zone::Hand(A), vec![]);
         }
@@ -68,7 +71,10 @@ fn must_removes_may_but_keeps_quantity_stops() {
         // quantity stop.
         let mut f = Fixture::default();
         elevens(&mut f, 1);
-        f.add(base_card("B010").unwrap(), Zone::Board(A, Color::Blue));
+        f.add(
+            Card::from_code("B010").unwrap(),
+            Zone::Board(A, Color::Blue),
+        );
         f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
         f.tech(Color::Green, 1, Zone::Hand(A), vec![]);
         let code = caller(
@@ -89,7 +95,7 @@ fn must_removes_may_but_keeps_quantity_stops() {
         // Road Building: "meld one or two" keeps its second-meld stop.
         let mut f = Fixture::default();
         elevens(&mut f, 1);
-        f.add(base_card("B017").unwrap(), Zone::Board(A, Color::Red));
+        f.add(Card::from_code("B017").unwrap(), Zone::Board(A, Color::Red));
         let blue = f.tech(Color::Blue, 1, Zone::Hand(A), vec![]);
         let green = f.tech(Color::Green, 1, Zone::Hand(A), vec![]);
         let code = caller(

@@ -3,7 +3,7 @@ use crate::*;
 
 fn fixture(code: &str) -> (Fixture, CardId, Context, Vec<CardId>) {
     let mut f = Fixture::default();
-    let source_card = base_card(code).unwrap();
+    let source_card = Card::from_code(code).unwrap();
     let source_color = source_card.color;
     let source = f.add(source_card, Zone::Board(A, source_color));
     let actor = if matches!(code, "B026" | "B115") {
@@ -303,7 +303,7 @@ fn independent_draw_and_dogma_clauses_do_not_disable_public_top_reductions() {
                 .find(|(_, zone)| *zone == Zone::Board(A, Color::Blue))
                 .unwrap()
                 .0;
-            f.cards[usize::from(buried.0)] = figure_card("F012").unwrap();
+            f.cards[usize::from(buried.0)] = Card::from_code("F012").unwrap();
         } else {
             f.figure(Figure::HuangDi, Zone::Board(other, Color::Blue));
         }

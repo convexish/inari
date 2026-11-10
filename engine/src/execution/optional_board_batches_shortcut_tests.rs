@@ -2,7 +2,7 @@ use super::common::*;
 use super::*;
 
 fn base(f: &mut Fixture, code: &str, zone: Zone) -> CardId {
-    f.add(base_card(code).unwrap(), zone)
+    f.add(Card::from_code(code).unwrap(), zone)
 }
 
 fn invoke(game: &mut Game, source: CardId, effect: usize, context: Context) {
@@ -211,7 +211,7 @@ fn membership_guards_are_live_even_when_would_is_suppressed() {
         for suppressed in [false, true] {
             let mut f = Fixture::default();
             let source = base(&mut f, code, Zone::Junk);
-            let native = figure_card(figure.code()).unwrap();
+            let native = Card::from_code(figure.code()).unwrap();
             let color = native.color;
             f.add(native, Zone::Board(A, color));
             let own = if code == "B033" {

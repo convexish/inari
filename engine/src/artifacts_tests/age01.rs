@@ -219,7 +219,7 @@ fn dancing_girl_wins_after_its_compel_put_it_on_the_opponents_board() {
 #[test]
 fn dancing_girl_executed_on_the_opponents_board_wins() {
     let mut l = Layout::default();
-    let gujin = artifacts_card("A048").unwrap();
+    let gujin = Card::from_code("A048").unwrap();
     let color = gujin.color;
     let gujin = l.add(gujin, board(A, color));
     let girl = l.artifact("A004", board(B, Color::Yellow));
@@ -244,7 +244,7 @@ fn dancing_girl_executed_on_the_opponents_board_wins() {
 #[test]
 fn dancing_girl_counts_the_board_it_lay_on_when_the_action_began() {
     let mut l = Layout::default();
-    let deepfake = l.add(echoes_card("E114").unwrap(), board(A, Color::Purple));
+    let deepfake = l.add(Card::from_code("E114").unwrap(), board(A, Color::Purple));
     let girl = l.artifact("A004", board(B, Color::Yellow));
     l.tech(Color::Blue, 1, board(B, Color::Blue), &[]);
     let mut game = l.game_with(Expansions::ARTIFACTS.union(Expansions::ECHOES));
@@ -349,7 +349,7 @@ fn priest_king_super_executes_the_matching_top_on_your_turn() {
     // A's turn: the matching top's demand runs against B (super-execution).
     let mut l = Layout::default();
     let priest = l.artifact("A007", board(A, Color::Green));
-    let mut oars = base_card("B003").unwrap();
+    let mut oars = Card::from_code("B003").unwrap();
     oars.color = Color::Blue;
     l.add(oars, board(A, Color::Blue));
     let scored = l.tech(Color::Blue, 2, HAND_A, &[]);
@@ -442,9 +442,9 @@ fn jiskairumoko_necklace_moves_a_matching_achievement_and_junks_that_deck() {
 fn treaty_of_kadesh_returns_one_demand_top_per_color_and_scores_a_non_blue_demand_top() {
     let mut l = Layout::default();
     let treaty = l.artifact("A010", board(A, Color::Blue));
-    let a_demand = l.add(base_card("B003").unwrap(), board(A, Color::Red));
-    let b_oars = l.add(base_card("B003").unwrap(), board(B, Color::Red));
-    let mut blue_demand = base_card("B003").unwrap();
+    let a_demand = l.add(Card::from_code("B003").unwrap(), board(A, Color::Red));
+    let b_oars = l.add(Card::from_code("B003").unwrap(), board(B, Color::Red));
+    let mut blue_demand = Card::from_code("B003").unwrap();
     blue_demand.color = Color::Blue;
     blue_demand.symbols = [Symbol::Icon(Icon::Concept); SLOTS];
     let b_blue_demand = l.add(blue_demand, board(B, Color::Blue));
@@ -508,7 +508,7 @@ fn basur_hoyuk_tokens_returns_the_draw_and_the_score_pile_when_an_earlier_title_
         .find(|m| m.title == "ARCHERY")
         .unwrap()
         .code;
-    assert_eq!(base_card(gunpowder).unwrap().color, Color::Red);
+    assert_eq!(Card::from_code(gunpowder).unwrap().color, Color::Red);
     let mut l = Layout::default();
     let tokens = l.artifact("A012", board(A, Color::Blue));
     l.base(archery, board(A, Color::Red));
@@ -535,7 +535,7 @@ fn basur_hoyuk_tokens_returns_the_draw_and_the_score_pile_when_an_earlier_title_
         .code;
     let mut l = Layout::default();
     let tokens = l.artifact("A012", board(A, Color::Blue));
-    let mut top = base_card(writing).unwrap();
+    let mut top = Card::from_code(writing).unwrap();
     top.color = Color::Red;
     l.add(top, board(A, Color::Red));
     let drawn = l.base(gunpowder, base_deck(4));

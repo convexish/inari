@@ -12,7 +12,7 @@ fn draw_card(f: &mut Fixture, color: Color, age: u8) -> CardId {
     tech(f, color, age, Zone::Deck(Deck::base(age)))
 }
 fn source(f: &mut Fixture, code: &str) -> CardId {
-    let card = echoes_card(code).unwrap();
+    let card = Card::from_code(code).unwrap();
     let color = card.color;
     let other = if color == Color::Purple {
         Color::Blue
@@ -130,7 +130,7 @@ fn reveals(events: &[Event]) -> Vec<CardId> {
 }
 
 fn figure(f: &mut Fixture, which: Figure, player: Player) -> CardId {
-    let printed = figure_card(which.code()).unwrap();
+    let printed = Card::from_code(which.code()).unwrap();
     let color = printed.color;
     f.add(printed, Zone::Board(player, color))
 }
@@ -264,7 +264,7 @@ fn age_five_catalog_has_every_printed_clause() {
         (54, true, 1, false),
         (55, true, 1, false),
     ] {
-        let c = echoes_card(&format!("E{code:03}")).unwrap();
+        let c = Card::from_code(&format!("E{code:03}")).unwrap();
         assert_eq!(
             (c.echo.is_some(), c.effects.len(), c.effects[0].demand()),
             (echo, clauses, demand)
@@ -506,7 +506,7 @@ fn coke_foreseen_scores_one_non_red_top_per_color_and_keeps_exposed_cards() {
     for foreseen in [false, true] {
         let mut f = Fixture::default();
         let card = f.add(
-            echoes_card("E046").unwrap(),
+            Card::from_code("E046").unwrap(),
             if foreseen {
                 Zone::Forecast(A)
             } else {
@@ -542,7 +542,7 @@ fn coke_foreseen_scores_one_non_red_top_per_color_and_keeps_exposed_cards() {
 fn coke_foreseen_score_oracle_preserves_every_path_and_exposed_shen_kuo() {
     for reacting in [false, true] {
         let mut f = Fixture::default();
-        f.add(echoes_card("E046").unwrap(), Zone::Forecast(A));
+        f.add(Card::from_code("E046").unwrap(), Zone::Forecast(A));
         let promotion = tech(&mut f, Color::Red, 6, Zone::Hand(A));
         draw_card(&mut f, Color::Red, 6);
         draw_card(&mut f, Color::Red, 4);
@@ -637,7 +637,7 @@ fn octant_foreseen_suppresses_only_the_victims_followup_and_forecast_capacity_is
     ] {
         let mut f = Fixture::default();
         let card = f.add(
-            echoes_card("E047").unwrap(),
+            Card::from_code("E047").unwrap(),
             if foreseen {
                 Zone::Forecast(A)
             } else {
@@ -926,7 +926,10 @@ fn thermometer_echo_reorders_the_green_bottom_without_losing_splay() {
     for count in 0..=3 {
         for direction in [Splay::Right, Splay::Up] {
             let mut f = Fixture::default();
-            let card = f.add(echoes_card("E053").unwrap(), Zone::Board(A, Color::Blue));
+            let card = f.add(
+                Card::from_code("E053").unwrap(),
+                Zone::Board(A, Color::Blue),
+            );
             let greens: Vec<_> = (0..count)
                 .map(|i| tech(&mut f, Color::Green, i + 1, Zone::Board(A, Color::Green)))
                 .collect();
@@ -985,7 +988,7 @@ fn thermometer_repeats_red_or_purple_only_when_foreseen_and_stops_after_replaced
         for foreseen in [false, true] {
             let mut f = Fixture::default();
             let card = f.add(
-                echoes_card("E053").unwrap(),
+                Card::from_code("E053").unwrap(),
                 if foreseen {
                     Zone::Forecast(A)
                 } else {

@@ -12,7 +12,7 @@ fn deck(f: &mut Fixture, color: Color, value: u8) -> CardId {
     tech(f, color, value, Zone::Deck(Deck::base(value)))
 }
 fn echo_source(f: &mut Fixture, code: &str) -> CardId {
-    f.add(echoes_card(code).unwrap(), Zone::Junk)
+    f.add(Card::from_code(code).unwrap(), Zone::Junk)
 }
 fn start(f: Fixture, source: CardId, effect: u16, executor: Player, figures: bool) -> Game {
     let expansions = if figures { EF } else { E };
@@ -108,7 +108,7 @@ fn age8_catalog_clauses_are_complete() {
         ("E082", false, 1, false),
         ("E085", true, 1, false),
     ] {
-        let card = echoes_card(code).unwrap();
+        let card = Card::from_code(code).unwrap();
         assert_eq!(
             (
                 card.echo.is_some(),
@@ -352,7 +352,7 @@ fn nylon_interleaves_three_tucks_then_repeats_and_clears_old_green() {
 fn nylon_replaced_green_tuck_does_not_repeat_or_count_karma_melds() {
     let mut f = Fixture::default();
     let source = echo_source(&mut f, "E080");
-    let figure = figure_card(Figure::NapoleonBonaparte.code()).unwrap();
+    let figure = Card::from_code(Figure::NapoleonBonaparte.code()).unwrap();
     f.add(figure.clone(), Zone::Board(A, figure.color));
     let spare = deck(&mut f, Color::Yellow, 8);
     for color in [Color::Yellow, Color::Yellow, Color::Green] {
@@ -441,7 +441,7 @@ fn sliced_bread_uses_successful_value_and_draws_zero_when_return_absent_or_repla
         let source = echo_source(&mut f, "E081");
         let original = (mode != 0).then(|| tech(&mut f, Color::Blue, 5, Zone::Score(A)));
         if mode == 2 {
-            let figure = figure_card(Figure::Nightingale.code()).unwrap();
+            let figure = Card::from_code(Figure::Nightingale.code()).unwrap();
             f.add(figure.clone(), Zone::Board(A, figure.color));
         }
         let age = if mode == 1 { 4 } else { 0 };
@@ -565,7 +565,7 @@ fn radio_telescope_keeps_only_original_draws_when_champlain_adds_a_private_card(
     let source = echo_source(&mut f, "E082");
     let concept = tech(&mut f, Color::Yellow, 4, Zone::Board(A, Color::Yellow));
     f.cards[usize::from(concept.0)].symbols[0] = Symbol::Icon(Icon::Concept);
-    let figure = figure_card(Figure::SamuelDeChamplain.code()).unwrap();
+    let figure = Card::from_code(Figure::SamuelDeChamplain.code()).unwrap();
     f.add(figure.clone(), Zone::Board(A, figure.color));
     let extra = deck(&mut f, Color::Red, 6);
     let original = deck(&mut f, Color::Blue, 9);
@@ -593,11 +593,11 @@ fn radio_telescope_wins_for_original_ai_meld_only_after_all_returns() {
             f.cards[usize::from(top.0)].symbols[0] = Symbol::Icon(Icon::Concept);
         }
         if replaced {
-            let figure = figure_card(Figure::NapoleonBonaparte.code()).unwrap();
+            let figure = Card::from_code(Figure::NapoleonBonaparte.code()).unwrap();
             f.add(figure.clone(), Zone::Board(A, figure.color));
         }
         let other = deck(&mut f, Color::Red, 10);
-        let ai = f.add(base_card("B104").unwrap(), Zone::Deck(Deck::base(10)));
+        let ai = f.add(Card::from_code("B104").unwrap(), Zone::Deck(Deck::base(10)));
         let mut game = start(f, source, 0, A, replaced);
         let events = finish(&mut game, |menu| choose_card(menu, ai));
         let status = game.advance(1000, &mut Vec::new()).unwrap();
@@ -626,7 +626,7 @@ fn radio_telescope_wins_for_original_ai_meld_only_after_all_returns() {
 fn radio_telescope_without_concept_draws_or_old_ai_in_hand_does_nothing() {
     let mut f = Fixture::default();
     let source = echo_source(&mut f, "E082");
-    let old = f.add(base_card("B104").unwrap(), Zone::Hand(A));
+    let old = f.add(Card::from_code("B104").unwrap(), Zone::Hand(A));
     let reserve = deck(&mut f, Color::Yellow, 9);
     let mut game = start(f, source, 0, A, false);
     let events = finish(&mut game, |_| panic!("empty original packet"));
@@ -709,7 +709,7 @@ fn television_claim_is_independent_of_replaced_transfer_but_requires_eligibility
     for eligible in [false, true] {
         let mut f = Fixture::default();
         let source = echo_source(&mut f, "E085");
-        let figure = figure_card(Figure::Nightingale.code()).unwrap();
+        let figure = Card::from_code(Figure::Nightingale.code()).unwrap();
         f.add(figure.clone(), Zone::Board(B, figure.color));
         tech(&mut f, Color::Green, 8, Zone::Board(A, Color::Green));
         tech(
@@ -817,7 +817,7 @@ fn age8_return_shortcuts_match_every_path_with_actual_reacting_figures() {
                 }
                 "E082" => {
                     let occupied = if reacting {
-                        let figure = figure_card(Figure::NapoleonBonaparte.code()).unwrap();
+                        let figure = Card::from_code(Figure::NapoleonBonaparte.code()).unwrap();
                         f.add(figure.clone(), Zone::Board(A, figure.color));
                         Some(figure.color)
                     } else {
@@ -838,7 +838,7 @@ fn age8_return_shortcuts_match_every_path_with_actual_reacting_figures() {
                 _ => unreachable!(),
             }
             if reacting && code != "E082" {
-                let figure = figure_card(Figure::JamesClerkMaxwell.code()).unwrap();
+                let figure = Card::from_code(Figure::JamesClerkMaxwell.code()).unwrap();
                 f.add(figure.clone(), Zone::Board(B, figure.color));
                 for _ in 0..2 {
                     deck(&mut f, Color::Purple, 8);
@@ -885,7 +885,7 @@ fn television_mixed_back_choices_keep_the_checked_claim_private_through_first_an
         tech(&mut f, Color::Red, 8, Zone::Board(A, Color::Red));
         tech(&mut f, Color::Purple, 10, Zone::Score(A));
         for figure in [Figure::HedyLamarr, Figure::ZhangHeng] {
-            let printed = figure_card(figure.code()).unwrap();
+            let printed = Card::from_code(figure.code()).unwrap();
             tech(&mut f, printed.color, 1, Zone::Board(A, printed.color));
             f.add(printed.clone(), Zone::Board(A, printed.color));
         }
@@ -1001,7 +1001,7 @@ fn tractor_foreseen_box_adjustment_changes_age_not_seven_count_and_exhaustion_st
     for supply in [3, 8] {
         let mut f = Fixture::default();
         let source = echo_source(&mut f, "E079");
-        let figure = figure_card(Figure::Archimedes.code()).unwrap();
+        let figure = Card::from_code(Figure::Archimedes.code()).unwrap();
         f.add(figure.clone(), Zone::Board(A, figure.color));
         let untouched = deck(&mut f, Color::Red, 7);
         let drawn: Vec<_> = (0..supply).map(|_| deck(&mut f, Color::Green, 8)).collect();
@@ -1032,7 +1032,7 @@ fn tractor_foreseen_box_adjustment_changes_age_not_seven_count_and_exhaustion_st
 fn radio_telescope_freezes_both_color_counts_before_a_first_draw_adds_a_color() {
     let mut f = Fixture::default();
     let source = echo_source(&mut f, "E082");
-    let figure = figure_card(Figure::Rhazes.code()).unwrap();
+    let figure = Card::from_code(Figure::Rhazes.code()).unwrap();
     f.add(figure.clone(), Zone::Board(A, figure.color));
     let new_color = tech(&mut f, Color::Green, 9, Zone::Hand(A));
     for _ in 0..3 {
@@ -1061,7 +1061,7 @@ fn air_conditioner_deck_top_oracle_includes_archimedes_actual_box_reaction() {
         let mut f = Fixture::default();
         let source = echo_source(&mut f, "E078");
         if reacting {
-            let figure = figure_card(Figure::Archimedes.code()).unwrap();
+            let figure = Card::from_code(Figure::Archimedes.code()).unwrap();
             f.add(figure.clone(), Zone::Board(A, figure.color));
         }
         let nines = [deck(&mut f, Color::Red, 9), deck(&mut f, Color::Green, 9)];
@@ -1113,7 +1113,7 @@ fn air_conditioner_deck_top_oracle_includes_archimedes_actual_box_reaction() {
 fn air_conditioner_live_matching_admits_a_new_value_exposed_by_napoleon() {
     let mut f = Fixture::default();
     let source = echo_source(&mut f, "E078");
-    let figure = figure_card(Figure::NapoleonBonaparte.code()).unwrap();
+    let figure = Card::from_code(Figure::NapoleonBonaparte.code()).unwrap();
     let napoleon = f.add(figure.clone(), Zone::Board(B, figure.color));
     tech(&mut f, Color::Blue, 2, Zone::Board(B, Color::Blue));
     tech(&mut f, Color::Yellow, 3, Zone::Board(B, Color::Yellow));

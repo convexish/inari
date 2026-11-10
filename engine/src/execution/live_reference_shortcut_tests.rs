@@ -3,7 +3,7 @@ use super::*;
 
 fn construction(ages: &[u8], figure_in_hand: bool) -> (Fixture, CardId) {
     let mut f = Fixture::default();
-    let source = f.add(base_card("B016").unwrap(), Zone::Board(A, Color::Red));
+    let source = f.add(Card::from_code("B016").unwrap(), Zone::Board(A, Color::Red));
     for &age in ages {
         f.tech(Color::Blue, age, Zone::Hand(B), vec![]);
     }
@@ -15,7 +15,10 @@ fn construction(ages: &[u8], figure_in_hand: bool) -> (Fixture, CardId) {
 }
 fn anatomy() -> (Fixture, CardId) {
     let mut f = Fixture::default();
-    let source = f.add(base_card("B038").unwrap(), Zone::Board(A, Color::Yellow));
+    let source = f.add(
+        Card::from_code("B038").unwrap(),
+        Zone::Board(A, Color::Yellow),
+    );
     f.tech(Color::Blue, 2, Zone::Score(B), vec![]);
     f.tech(Color::Red, 2, Zone::Board(B, Color::Red), vec![]);
     for color in [Color::Purple, Color::Green, Color::Blue] {
@@ -190,7 +193,7 @@ fn canonical_events_rng_and_clones_match_at_every_work_boundary_for_both_phases(
 fn native_transfer_hazards_fall_back_but_unrelated_draw_and_dogma_hooks_do_not() {
     for (code, reduced) in [("F071", 2), ("F012", 1), ("F008", 1)] {
         let (mut f, source) = construction(&[2, 1], false);
-        let figure = figure_card(code).unwrap();
+        let figure = Card::from_code(code).unwrap();
         let color = figure.color;
         f.add(figure, Zone::Board(A, color));
         classes(Expansions::FIGURES, f, source, reduced, 2);
@@ -228,7 +231,7 @@ fn foreign_controllers_keep_unrestricted_identical_hidden_back_menus() {
 fn suppressed_relevant_transfer_hooks_restore_grouping_but_live_each_membership_does_not() {
     for (code, expected) in [("F071", 1), ("F074", 2)] {
         let (mut f, source) = construction(&[2, 1], false);
-        let figure = figure_card(code).unwrap();
+        let figure = Card::from_code(code).unwrap();
         let color = figure.color;
         f.add(
             figure,
@@ -263,7 +266,7 @@ fn suppressed_relevant_transfer_hooks_restore_grouping_but_live_each_membership_
 fn anatomy_deck_junk_ignores_hand_and_score_only_hazards() {
     for code in ["F015", "F069"] {
         let (mut f, source) = anatomy();
-        let figure = figure_card(code).unwrap();
+        let figure = Card::from_code(code).unwrap();
         let color = figure.color;
         f.add(figure, Zone::Board(A, color));
         classes(Expansions::FIGURES, f, source, 1, 6);

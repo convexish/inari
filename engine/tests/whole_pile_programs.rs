@@ -15,7 +15,10 @@ fn finish(game: &mut Game, events: &mut Vec<Event>) -> Status {
 #[test]
 fn bicycle_preserves_optional_decline_and_commits_one_atomic_exchange() {
     let mut f = Fixture::default();
-    let bicycle = f.add(base_card("B070").unwrap(), Zone::Board(A, Color::Green));
+    let bicycle = f.add(
+        Card::from_code("B070").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     let hand = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let score = f.tech(Color::Blue, 2, Zone::Score(A), vec![]);
     let initial = f.position();
@@ -55,7 +58,10 @@ fn bicycle_preserves_optional_decline_and_commits_one_atomic_exchange() {
 fn bicycle_allows_one_empty_side_but_skips_an_entirely_overlapping_exchange() {
     for physical_score in [false, true] {
         let mut f = Fixture::default();
-        let bicycle = f.add(base_card("B070").unwrap(), Zone::Board(A, Color::Green));
+        let bicycle = f.add(
+            Card::from_code("B070").unwrap(),
+            Zone::Board(A, Color::Green),
+        );
         f.figure(Figure::Michelangelo, Zone::Board(A, Color::Yellow));
         f.figure(Figure::YiSunSin, Zone::Board(B, Color::Red));
         let hand = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
@@ -93,7 +99,10 @@ fn bicycle_allows_one_empty_side_but_skips_an_entirely_overlapping_exchange() {
         }
     }
     let mut f = Fixture::default();
-    let bicycle = f.add(base_card("B070").unwrap(), Zone::Board(A, Color::Green));
+    let bicycle = f.add(
+        Card::from_code("B070").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     let score = f.tech(Color::Blue, 2, Zone::Score(A), vec![]);
     let mut game = Game::new(f.position(), Expansions::BASE).unwrap();
     game.self_execute(bicycle, Context::new(A)).unwrap();
@@ -108,7 +117,10 @@ fn bicycle_allows_one_empty_side_but_skips_an_entirely_overlapping_exchange() {
 #[test]
 fn bicycle_moves_borrowed_physical_cards_once_without_exposing_them_in_the_choice() {
     let mut f = Fixture::default();
-    let bicycle = f.add(base_card("B070").unwrap(), Zone::Board(A, Color::Green));
+    let bicycle = f.add(
+        Card::from_code("B070").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     f.figure(Figure::EmperorMeiji, Zone::Board(A, Color::Purple));
     let own = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let borrowed = f.tech(Color::Blue, 2, Zone::Hand(B), vec![]);
@@ -140,7 +152,10 @@ fn bicycle_moves_borrowed_physical_cards_once_without_exposing_them_in_the_choic
 #[test]
 fn bicycle_choice_precedes_yis_single_exchange_replacement() {
     let mut f = Fixture::default();
-    let bicycle = f.add(base_card("B070").unwrap(), Zone::Board(A, Color::Green));
+    let bicycle = f.add(
+        Card::from_code("B070").unwrap(),
+        Zone::Board(A, Color::Green),
+    );
     let yi = f.figure(Figure::YiSunSin, Zone::Board(B, Color::Red));
     let hand = f.tech(Color::Red, 1, Zone::Hand(A), vec![]);
     let score = f.tech(Color::Blue, 2, Zone::Score(A), vec![]);
@@ -175,7 +190,10 @@ fn bicycle_choice_precedes_yis_single_exchange_replacement() {
 fn stem_cells_commits_all_scoring_or_declines_but_always_runs_its_separate_draw() {
     for decline in [false, true] {
         let mut f = Fixture::default();
-        let source = f.add(base_card("B099").unwrap(), Zone::Board(A, Color::Yellow));
+        let source = f.add(
+            Card::from_code("B099").unwrap(),
+            Zone::Board(A, Color::Yellow),
+        );
         let hand: Vec<_> = [1, 2, 4]
             .into_iter()
             .map(|value| f.tech(Color::Red, value, Zone::Hand(A), vec![]))
@@ -230,7 +248,10 @@ fn stem_cells_commits_all_scoring_or_declines_but_always_runs_its_separate_draw(
 #[test]
 fn stem_cells_replaced_scores_are_considered_once_and_do_not_cancel_the_draw() {
     let mut f = Fixture::default();
-    let source = f.add(base_card("B099").unwrap(), Zone::Board(A, Color::Yellow));
+    let source = f.add(
+        Card::from_code("B099").unwrap(),
+        Zone::Board(A, Color::Yellow),
+    );
     f.figure(Figure::ShenKuo, Zone::Board(A, Color::Green));
     let mut hand: Vec<_> = [1, 2, 4]
         .into_iter()

@@ -89,7 +89,7 @@ fn only_ordinary_draws_are_redirected_to_echoes() {
         f.tech(Color::Blue, 5, Zone::Board(A, Color::Blue), vec![]);
         let base = f.tech(Color::Red, 2, Zone::Deck(Deck::base(2)), vec![]);
         let echo = f.add(
-            echoes_card("E016").unwrap(),
+            Card::from_code("E016").unwrap(),
             Zone::Deck(Deck {
                 set: CardSet::Echoes,
                 age: 2,
@@ -107,7 +107,7 @@ fn only_ordinary_draws_are_redirected_to_echoes() {
     let mut f = Fixture::default();
     let base = f.tech(Color::Red, 2, Zone::Deck(Deck::base(2)), vec![]);
     let later = f.add(
-        echoes_card("E026").unwrap(),
+        Card::from_code("E026").unwrap(),
         Zone::Deck(Deck {
             set: CardSet::Echoes,
             age: 3,
