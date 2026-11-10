@@ -2,6 +2,7 @@
 //! non-demand effects, each comment giving the printed text. Cards without
 //! an entry are explicitly unsupported. Rules procedures (dig, showcase,
 //! Museums) are not card effects and live in `execution::artifacts`.
+use super::Program;
 use crate::model::{CardSet, EffectKind};
 use crate::program::build::*;
 
@@ -16,8 +17,6 @@ use Test::{
     TitleBefore, Value as ValueIs, ValueIn,
 };
 use Who::{Demander, Either, Executor, Opponent};
-
-type Program = &'static [Instruction];
 
 const C: EffectKind = EffectKind::Compel;
 const N: EffectKind = EffectKind::NonDemand;

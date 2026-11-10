@@ -1,5 +1,7 @@
 //! Echoes card programs in code order. Each comment describes the printed
 //! text, echo effect first. Complete setup requires every declaration.
+use super::Program;
+use crate::model::EffectKind;
 use crate::program::build::*;
 
 use Color::{Blue, Green, Purple, Red, Yellow};
@@ -18,13 +20,13 @@ use Who::{Demander, Either, Executor, Opponent};
 
 use BonusValues::{Equal, Even, Odd, Repeated};
 
-type Program = &'static [Instruction];
+const D: EffectKind = EffectKind::Demand;
+const N: EffectKind = EffectKind::NonDemand;
 
-/// A card's echo effect (always non-demand) and its dogma effects, each
-/// marked demand or not.
+/// A card's echo effect (always non-demand) and its dogma effects.
 pub(super) struct Programs {
     pub(super) echo: Option<Program>,
-    pub(super) dogmas: &'static [(bool, Program)],
+    pub(super) dogmas: &'static [(EffectKind, Program)],
 }
 
 const FORECAST: Selector = Forecast(Executor);
@@ -99,7 +101,7 @@ const BANGLE: Programs = Programs {
     echo: Some(&[tuck(filtered(&HAND, &[Has(BoxedValues(&[1]))]))]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 choose(
                     Executor,
@@ -115,7 +117,7 @@ const BANGLE: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 if_(&Compare(Count(&FORECAST), Cmp::Equal, Const(0)), 2),
                 draw(3),
@@ -147,7 +149,7 @@ const CANDLES: Programs = Programs {
         draw(3),
     ]),
     dogmas: &[(
-        true,
+        D,
         &[
             reveal_all(filtered(&HAND, &[Lacks(Test::Inspectable(Executor))])).keep(PROOF),
             // The hand proves an empty selection, as Bandage's does, so no
@@ -169,14 +171,14 @@ const PLUMBING: Programs = Programs {
         ColorSet::Only(&[Blue]),
         BoardRegion::Bottom,
     ))]),
-    dogmas: &[(false, &[deck_junk(1)])],
+    dogmas: &[(N, &[deck_junk(1)])],
 };
 
 // Echo: You may draw and foreshadow a [1]. / You may junk all cards in
 // the [1] deck. If you do, achieve the highest card in the junk if eligible.
 const CHOPSTICKS: Programs = Programs {
     echo: Some(&[draw(1).optional(), foreshadow(LAST)]),
-    dogmas: &[(false, junk_then_highest!(Expr::Boxed(1)))],
+    dogmas: &[(N, junk_then_highest!(Expr::Boxed(1)))],
 };
 
 // If you have more [1] in your hand than every opponent, draw and score a
@@ -185,7 +187,7 @@ const NOODLES: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 if_(
                     &Compare(
@@ -203,7 +205,7 @@ const NOODLES: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 draw(1),
                 reveal(LAST),
@@ -222,7 +224,7 @@ const NOODLES: Programs = Programs {
 const SOAP: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             choose(Executor, Choice::Colors(1)),
             tuck(filtered(&HAND, &[Has(ColorIn(ColorSet::Chosen))]))
@@ -251,7 +253,7 @@ const COMB_COLOR: Slot = Slot::effect(2);
 const COMB: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             choose(Executor, Choice::Colors(1)).keep(COMB_COLOR),
             for_each(Domain::Times(Const(5)), Order::Printed, None, 2),
@@ -280,7 +282,7 @@ const COMB: Programs = Programs {
 const UMBRELLA: Programs = Programs {
     echo: Some(&[meld(HAND).optional()]),
     dogmas: &[(
-        false,
+        N,
         &[
             return_(HAND).up_to(None).shortcut(ORIGIN),
             score(HAND)
@@ -316,7 +318,7 @@ const PERFUME: Programs = Programs {
         REPEAT,
     ]),
     dogmas: &[(
-        true,
+        D,
         &[
             transfer(
                 filtered(&TOPS, &[Lacks(Test::ValueIn(&Selector::Tops(Demander)))]),
@@ -337,7 +339,7 @@ const PUPPET_ACHIEVEMENTS: Selector =
 const PUPPET: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             choose(Executor, Choice::Card(&PUPPET_ACHIEVEMENTS)),
             junk(filtered(&PUPPET_ACHIEVEMENTS, &[Has(Is(Reg::Chosen))])),
@@ -351,9 +353,9 @@ const PUPPET: Programs = Programs {
 const ICE_SKATES: Programs = Programs {
     echo: None,
     dogmas: &[
-        (false, &[if_(&Foreseen, 2), deck_junk(1), deck_junk(2)]),
+        (N, &[if_(&Foreseen, 2), deck_junk(1), deck_junk(2)]),
         (
-            false,
+            N,
             &[
                 return_(HAND).up_to(Some(Const(2))).shortcut(ORIGIN),
                 for_each(Domain::Times(Expr::Done), Order::Printed, None, 6),
@@ -376,7 +378,7 @@ const ICE_SKATES: Programs = Programs {
 const RULER: Programs = Programs {
     echo: Some(&[draw(2)]),
     dogmas: &[(
-        false,
+        N,
         &[
             draws(Const(2), 1, Then::Keep)
                 .set(CardSet::Echoes)
@@ -395,12 +397,9 @@ const RULER: Programs = Programs {
 const BELL: Programs = Programs {
     echo: Some(&[score(HAND).optional()]),
     dogmas: &[
+        (N, &[draw(1), foreshadow(LAST), draw(2), foreshadow(LAST)]),
         (
-            false,
-            &[draw(1), foreshadow(LAST), draw(2), foreshadow(LAST)],
-        ),
-        (
-            false,
+            N,
             &[
                 if_(&Foreseen, 1),
                 return_(Selector::Hand(Either)).all().shortcut(ORIGIN_ALL),
@@ -418,7 +417,7 @@ const HORSESHOES: Programs = Programs {
         foreshadow(LAST),
     ]),
     dogmas: &[(
-        true,
+        D,
         &[
             transfer(
                 filtered(
@@ -447,8 +446,8 @@ const TOOTHBRUSH: Programs = Programs {
             .shortcut(Shortcut::ByColor),
     ]),
     dogmas: &[
-        (false, &[splay(&Color::ALL, Splay::Left)]),
-        (false, junk_then_highest!(Expr::Boxed(2))),
+        (N, &[splay(&Color::ALL, Splay::Left)]),
+        (N, junk_then_highest!(Expr::Boxed(2))),
     ],
 };
 
@@ -456,7 +455,7 @@ const GLASSBLOWING: Programs = Programs {
     echo: Some(&[score(filtered(&HAND, &[Lacks(Test::Set(CardSet::Base))]))]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 draw_age(Add(
                     &Max(&filtered(
@@ -469,7 +468,7 @@ const GLASSBLOWING: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 unless_decks_empty!(2, 3),
                 choose(Executor, Choice::Value(ValueChoices::Boxed(&[2, 3]))),
@@ -485,7 +484,7 @@ const CHATURANGA: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 meld(HAND),
                 // This draw is independent: no successful meld means value zero.
@@ -495,7 +494,7 @@ const CHATURANGA: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[if_(&Foreseen, 2), draw_age(Count(&TOPS)), foreshadow(LAST)],
         ),
     ],
@@ -507,7 +506,7 @@ const CHATURANGA: Programs = Programs {
 const LEVER: Programs = Programs {
     echo: Some(&[draws(Const(2), 2, Then::Keep)]),
     dogmas: &[(
-        false,
+        N,
         &[
             return_(HAND)
                 .up_to(None)
@@ -546,7 +545,7 @@ const CHARITABLE_TRUST: Programs = Programs {
         draw_age(Expr::Chosen).add(ECHOED),
     ]),
     dogmas: &[(
-        false,
+        N,
         &[
             meld(filtered(&HAND, &[Has(LAST_ECHOED)]))
                 .optional()
@@ -568,7 +567,7 @@ const CHARITABLE_TRUST: Programs = Programs {
 const PAGODA: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             draw(3).keep(DRAWN),
             foreshadow(DRAWN_IN_HAND),
@@ -605,7 +604,7 @@ const X_RAY: Programs = Programs {
     echo: Some(&[draw(8), tuck(LAST)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 choose(Executor, Choice::Value(ValueChoices::Any))
                     .alias(Alias::NoOpWhen(&NO_HEALTH_COLORS)),
@@ -613,8 +612,8 @@ const X_RAY: Programs = Programs {
                 foreshadow(DRAWN_IN_HAND).up_to(None).shortcut(ORIGIN),
             ],
         ),
-        (false, &[return_(HAND).all().shortcut(ORIGIN_ALL)]),
-        (false, &[splay(&[Yellow], Splay::Up)]),
+        (N, &[return_(HAND).all().shortcut(ORIGIN_ALL)]),
+        (N, &[splay(&[Yellow], Splay::Up)]),
     ],
 };
 
@@ -626,7 +625,7 @@ const CREDIT_CARD: Programs = Programs {
     echo: Some(&[draw(9), foreshadow(LAST)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 transfer(
                     filtered(&TOPS, &[Lacks(Test::Color(Green))]),
@@ -642,7 +641,7 @@ const CREDIT_CARD: Programs = Programs {
                 REPEAT,
             ],
         ),
-        (false, &[splay(&[Green], Splay::Up)]),
+        (N, &[splay(&[Green], Splay::Up)]),
     ],
 };
 
@@ -653,10 +652,10 @@ const CREDIT_CARD: Programs = Programs {
 const CELL_PHONE: Programs = Programs {
     echo: Some(&[draw(11), foreshadow(LAST)]),
     dogmas: &[
-        (false, &[draws(colors_with!(Efficiency), 10, Then::Keep)]),
-        (false, &[splay(&[Green], Splay::Up)]),
+        (N, &[draws(colors_with!(Efficiency), 10, Then::Keep)]),
+        (N, &[splay(&[Green], Splay::Up)]),
         (
-            false,
+            N,
             &[
                 // Each tuck's splay comes before the next choice.
                 for_each(
@@ -682,7 +681,7 @@ const CELL_PHONE: Programs = Programs {
 const ESPORTS: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             for_each(
                 Domain::Cards(&filtered(&TOPS, &[Lacks(Test::Color(Yellow))])),
@@ -722,7 +721,7 @@ macro_rules! pile_between {
 const TOUCHSCREEN: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             // Splays of different piles commute.
             for_each(
@@ -763,20 +762,20 @@ const MORPHINE: Programs = Programs {
     echo: Some(&[score(ODD)]),
     dogmas: &[
         (
-            true,
+            D,
             &[
                 return_(ODD).all().shortcut(ORIGIN_ALL).add(DEMANDED),
                 draw(6),
             ],
         ),
         (
-            false,
+            N,
             &[draw_age(Add(
                 &Max(&Selector::Slot(DEMANDED.of(Opponent))),
                 1,
             ))],
         ),
-        (false, &[splay(&[Red], Splay::Right)]),
+        (N, &[splay(&[Red], Splay::Right)]),
     ],
 };
 
@@ -800,7 +799,7 @@ const STETHOSCOPE: Programs = Programs {
     ]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 draw(7),
                 if_(&Not(&Empty(ECHOED)), 3),
@@ -809,7 +808,7 @@ const STETHOSCOPE: Programs = Programs {
                 draw(9),
             ],
         ),
-        (false, &[splay(&[Yellow], Splay::Right)]),
+        (N, &[splay(&[Yellow], Splay::Right)]),
     ],
 };
 
@@ -824,7 +823,7 @@ const JET: Programs = Programs {
     echo: Some(&[meld(HAND).add(ECHOED)]),
     dogmas: &[
         (
-            true,
+            D,
             &[
                 return_(Board(
                     Executor,
@@ -845,7 +844,7 @@ const JET: Programs = Programs {
                 .shortcut(Shortcut::AnyOrder),
             ],
         ),
-        (false, &[draw(10), foreshadow(LAST)]),
+        (N, &[draw(10), foreshadow(LAST)]),
     ],
 };
 
@@ -866,7 +865,7 @@ const KARAOKE: Programs = Programs {
     ]),
     dogmas: &[
         (
-            false,
+            N,
             &[transfer(
                 Board(Executor, ColorSet::Only(&Color::ALL), BoardRegion::Bottom),
                 Destination::Hand(Executor),
@@ -875,7 +874,7 @@ const KARAOKE: Programs = Programs {
             .shortcut(ORIGIN_ALL)],
         ),
         (
-            false,
+            N,
             &[
                 achieve(filtered(
                     &AvailableAchievements,
@@ -898,7 +897,7 @@ const COLOR: Slot = Slot::effect(0);
 const STREAMING: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             if_(&Empty(COLOR), 1),
             choose(Executor, Choice::Color(ColorSet::OfCards(&TOPS))).keep(COLOR),
@@ -933,7 +932,7 @@ const CALCULATOR: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 score(Board(
                     Executor,
@@ -958,7 +957,7 @@ const CALCULATOR: Programs = Programs {
                 repeat_keeping(REPEATED),
             ],
         ),
-        (false, &[splay(&[Blue], Splay::Up)]),
+        (N, &[splay(&[Blue], Splay::Up)]),
     ],
 };
 
@@ -982,7 +981,7 @@ const DICE: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 draw(1).set(CardSet::Echoes),
                 reveal(LAST),
@@ -992,7 +991,7 @@ const DICE: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 if_(&Foreseen, 3),
                 draw(4),
@@ -1025,7 +1024,7 @@ const LINGUISTICS: Programs = Programs {
         foreshadow(LAST),
     ]),
     dogmas: &[(
-        false,
+        N,
         &[
             choose(
                 Executor,
@@ -1050,7 +1049,7 @@ const LINGUISTICS: Programs = Programs {
 const LIQUID_FIRE: Programs = Programs {
     echo: None,
     dogmas: &[(
-        true,
+        D,
         &[
             draw_age(Expr::Bonuses(&MY_BONUSES, Tally::Max)).keep(DRAWN),
             transfer(DRAWN_IN_HAND, Destination::Forecast(Demander)),
@@ -1072,7 +1071,7 @@ const LIQUID_FIRE: Programs = Programs {
 const TELESCOPE: Programs = Programs {
     echo: Some(&[draw(5).set(CardSet::Echoes), foreshadow(LAST)]),
     dogmas: &[(
-        false,
+        N,
         &[
             verb(Verb::Place, FORECAST).optional(),
             if_(DID, 2),
@@ -1094,7 +1093,7 @@ const TOILET: Programs = Programs {
     echo: Some(&[draw(4), tuck(LAST)]),
     dogmas: &[
         (
-            true,
+            D,
             &[return_(SCORE)
                 .per_value(&PerValue {
                     source: ValueSource::Bonuses(Bonuses {
@@ -1106,7 +1105,7 @@ const TOILET: Programs = Programs {
                 .shortcut(ORIGIN)],
         ),
         (
-            false,
+            N,
             &[return_(HAND).optional(), if_(DID, 1), draw_age(LAST_VALUE)],
         ),
     ],
@@ -1120,7 +1119,7 @@ const HELICOPTER_OWN: Selector = filtered(&TOPS, &[Has(Is(Reg::Chosen))]);
 const HELICOPTER: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             choose(Executor, Choice::Card(&HELICOPTER_TOPS)),
             if_(&Compare(Count(&HELICOPTER_OWN), Cmp::Greater, Const(0)), 2),
@@ -1151,7 +1150,7 @@ const ATM: Programs = Programs {
     ]),
     dogmas: &[
         (
-            true,
+            D,
             &[transfer(
                 filtered(
                     &TOPS,
@@ -1164,8 +1163,8 @@ const ATM: Programs = Programs {
                 Destination::Board(Demander),
             )],
         ),
-        (false, &[splay(&[Purple], Splay::Up)]),
-        (false, &[deck_junk(10)]),
+        (N, &[splay(&[Purple], Splay::Up)]),
+        (N, &[deck_junk(10)]),
     ],
 };
 
@@ -1175,7 +1174,7 @@ const EMAIL: Programs = Programs {
     echo: Some(&[draw(10), foreshadow(LAST)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 draw(9),
                 foreshadow(LAST),
@@ -1185,7 +1184,7 @@ const EMAIL: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 bind(filtered(
                     &TOPS,
@@ -1203,7 +1202,7 @@ const LASER: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 return_(SCORE).exactly(Const(4)).shortcut(ORIGIN_ALL),
                 return_(Selector::StandardAchievements)
@@ -1212,7 +1211,7 @@ const LASER: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 draw(11),
                 foreshadow(LAST),
@@ -1232,7 +1231,7 @@ const ROCK: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            true,
+            D,
             &[
                 transfer(TopOf(Executor, Green), Destination::Hand(Demander)),
                 if_(
@@ -1250,7 +1249,7 @@ const ROCK: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 score(TOPS).optional(),
                 if_(
@@ -1281,7 +1280,7 @@ const COKE: Programs = Programs {
     echo: Some(&[draw(4), tuck(LAST)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 draw(6),
                 reveal(LAST),
@@ -1292,7 +1291,7 @@ const COKE: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 if_(&Foreseen, 1),
                 score(filtered(&TOPS, &[Lacks(Test::Color(Red))]))
@@ -1317,7 +1316,7 @@ const OCTANT: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            true,
+            D,
             &[
                 transfer(OCTANT_TOPS, Destination::Board(Demander))
                     .per_color(None)
@@ -1327,7 +1326,7 @@ const OCTANT: Programs = Programs {
                 foreshadow(LAST),
             ],
         ),
-        (false, &[draw(6), foreshadow(LAST)]),
+        (N, &[draw(6), foreshadow(LAST)]),
     ],
 };
 
@@ -1338,7 +1337,7 @@ const STOVE: Programs = Programs {
     echo: Some(&[score(filtered(&TOPS, &[Lacks(HasIcon(Icon::Industry))]))]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 draw(4),
                 tuck(LAST).keep(MOVED),
@@ -1359,7 +1358,7 @@ const STOVE: Programs = Programs {
                 score(LAST),
             ],
         ),
-        (false, &[splay(&[Green], Splay::Right)]),
+        (N, &[splay(&[Green], Splay::Right)]),
     ],
 };
 
@@ -1369,14 +1368,14 @@ const SEED_DRILL: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            true,
+            D,
             &[return_(filtered(
                 &TOPS,
                 &[Has(ValueIs(Cmp::Less, Const(3)))],
             ))],
         ),
         (
-            false,
+            N,
             junk_then_highest!(
                 Expr::Chosen,
                 choose(Executor, Choice::Value(ValueChoices::Boxed(&[3, 4, 5])))
@@ -1392,7 +1391,7 @@ const LIGHTNING_ROD: Programs = Programs {
     echo: Some(&[draw(5), tuck(LAST)]),
     dogmas: &[
         (
-            true,
+            D,
             &[
                 draw(5),
                 tuck(LAST).keep(MOVED),
@@ -1403,8 +1402,8 @@ const LIGHTNING_ROD: Programs = Programs {
                 )),
             ],
         ),
-        (false, &[return_(TOPS)]),
-        (false, &[deck_junk(6)]),
+        (N, &[return_(TOPS)]),
+        (N, &[deck_junk(6)]),
     ],
 };
 
@@ -1417,7 +1416,7 @@ const THERMOMETER: Programs = Programs {
         BoardRegion::Bottom,
     ))]),
     dogmas: &[(
-        false,
+        N,
         &[
             draw_age(Add(&Max(&TopOf(Executor, Yellow)), 1)),
             meld(LAST),
@@ -1457,7 +1456,7 @@ const PIANO: Programs = Programs {
         draw_age(Expr::Chosen),
     ]),
     dogmas: &[(
-        false,
+        N,
         &[
             if_(
                 &All(&[
@@ -1497,7 +1496,7 @@ const TUNING_FORK: Programs = Programs {
         draw_age(Expr::Chosen),
     ]),
     dogmas: &[(
-        false,
+        N,
         &[
             foreshadow(HAND),
             if_(DID, 7),
@@ -1520,14 +1519,14 @@ const PRESSURE_COOKER: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 if_(&Foreseen, 1),
                 meld(HAND).all().shortcut(Shortcut::ByColor),
             ],
         ),
         (
-            false,
+            N,
             &[
                 return_(HAND).all().shortcut(ORIGIN_ALL),
                 // Reselected live, one top per color, in the player's order:
@@ -1560,7 +1559,7 @@ const PALAMPORE: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 choose(
                     Executor,
@@ -1573,9 +1572,9 @@ const PALAMPORE: Programs = Programs {
                 score(LAST),
             ],
         ),
-        (false, &[splay(&[Purple], Splay::Right)]),
+        (N, &[splay(&[Purple], Splay::Right)]),
         (
-            false,
+            N,
             &[
                 if_(
                     &Compare(bonus_count(&MY_BONUSES), Cmp::AtLeast, Const(6)),
@@ -1594,7 +1593,7 @@ const CROSSWORD: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 for_each(
                     Domain::Bonuses(
@@ -1617,7 +1616,7 @@ const CROSSWORD: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[return_(filtered(&HAND, &[Filter::Lowest]))
                 .exactly(bonus_count(&Bonuses {
                     on: Executor,
@@ -1636,7 +1635,7 @@ const WRISTWATCH: Programs = Programs {
     echo: Some(&[tuck(TOPS)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 if_(&Foreseen, 1),
                 return_(Board(
@@ -1649,7 +1648,7 @@ const WRISTWATCH: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 for_each(Domain::Range(1, 11), Order::Ascending, Some(ITEM), 3),
                 // Tested live: an earlier meld can add or cover a bonus.
@@ -1678,7 +1677,7 @@ const BARCODE: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            true,
+            D,
             &[return_(SCORE)
                 .per_value(&PerValue {
                     source: ValueSource::Bonuses(MY_BONUSES),
@@ -1687,7 +1686,7 @@ const BARCODE: Programs = Programs {
                 .shortcut(ORIGIN)],
         ),
         (
-            false,
+            N,
             &[
                 splay(&Color::ALL, Splay::Up),
                 if_(&Foreseen, 1),
@@ -1713,7 +1712,7 @@ const BARCODE: Programs = Programs {
 const ARTIFICIAL_HEART: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             if_(&Foreseen, 2),
             achieve(filtered(
@@ -1741,7 +1740,7 @@ const SUDOKU: Programs = Programs {
         .optional()
         .shortcut(Shortcut::ByColor)]),
     dogmas: &[(
-        false,
+        N,
         &[
             choose(Executor, Choice::Value(ValueChoices::Any)),
             // The drawn card: a replaced meld still executes it.
@@ -1773,7 +1772,7 @@ const SCISSORS: Programs = Programs {
     ))]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 choose(
                     Executor,
@@ -1801,7 +1800,7 @@ const SCISSORS: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[score(filtered(
                 &Selector::Tops(Either),
                 &[Has(Test::Code("B031"))],
@@ -1818,7 +1817,7 @@ const MAGNIFYING_GLASS: Programs = Programs {
     echo: Some(&[draw(4), return_(HAND)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 return_(HAND)
                     .group(3, GroupConstraint::SameValue)
@@ -1829,7 +1828,7 @@ const MAGNIFYING_GLASS: Programs = Programs {
                 draw_age(Add(&Max(&Selector::Slot(MOVED)), 2)),
             ],
         ),
-        (false, &[splay(&[Yellow, Blue], Splay::Left)]),
+        (N, &[splay(&[Yellow, Blue], Splay::Left)]),
     ],
 };
 
@@ -1841,7 +1840,7 @@ const LOOM: Programs = Programs {
     echo: Some(&[score(filtered(&TOPS, &[Filter::Lowest]))]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 return_(SCORE)
                     .group(2, GroupConstraint::DifferentValues)
@@ -1854,7 +1853,7 @@ const LOOM: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 for_each(
                     Domain::Colors(ColorSet::Only(&Color::ALL)),
@@ -1886,10 +1885,10 @@ const LOOM: Programs = Programs {
 const NOVEL: Programs = Programs {
     echo: Some(&[return_(FORECAST).all().shortcut(ORIGIN_ALL)]),
     dogmas: &[
-        (false, &[draw(3)]),
-        (false, &[splay(&[Purple], Splay::Left)]),
+        (N, &[draw(3)]),
+        (N, &[splay(&[Purple], Splay::Left)]),
         (
-            false,
+            N,
             &[
                 if_(
                     &Cond::CommonIcon {
@@ -1910,7 +1909,7 @@ const NOVEL: Programs = Programs {
 const HUMAN_GENOME: Programs = Programs {
     echo: Some(&[draw(11)]),
     dogmas: &[(
-        false,
+        N,
         &[
             choose(
                 Executor,
@@ -1944,7 +1943,7 @@ const SHOWING_CHOSEN: Selector = filtered(
 const MERITOCRACY: Programs = Programs {
     echo: None,
     dogmas: &[(
-        true,
+        D,
         &[
             choose(Executor, Choice::MostIcons(Demander)),
             if_(&Foreseen, 2),
@@ -1969,7 +1968,7 @@ const MERITOCRACY: Programs = Programs {
 const ROBOCAR: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             choose(Opponent, Choice::Card(&HAND)),
             meld(Selector::Reg(Reg::Chosen)),
@@ -1993,7 +1992,7 @@ const DEEPFAKE_OWN: Slot = Slot::effect(2);
 const DEEPFAKE: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             if_(&Cond::OwnTurn, 8),
             choose(Executor, Choice::Card(&Selector::Tops(Either))).keep(ITEM),
@@ -2024,7 +2023,7 @@ const MACHINE_GUN: Programs = Programs {
     ]),
     dogmas: &[
         (
-            true,
+            D,
             &[
                 transfer(
                     filtered(&TOPS, &[Has(Test::Bonus)]),
@@ -2041,7 +2040,7 @@ const MACHINE_GUN: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[return_(filtered(&TOPS, &[Lacks(Test::Color(Red))]))
                 .per_color(None)
                 .shortcut(ORIGIN_ALL)],
@@ -2054,7 +2053,7 @@ const MACHINE_GUN: Programs = Programs {
 const BANDAGE: Programs = Programs {
     echo: Some(&[meld(filtered(&HAND, &[Has(HasIcon(Health))])).reveal_if_empty(&HAND)]),
     dogmas: &[(
-        true,
+        D,
         &[
             reveal_all(filtered(&SCORE, &[Lacks(Test::Inspectable(Executor))])).keep(PROOF),
             return_(filtered(&VERIFIED_SCORE, &[Has(HasIcon(Efficiency))]))
@@ -2078,7 +2077,7 @@ const PARACHUTE: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            true,
+            D,
             &[
                 reveal_all(HAND).keep(PROOF),
                 transfer(
@@ -2091,7 +2090,7 @@ const PARACHUTE: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 if_(&Foreseen, 1),
                 junk(Board(
@@ -2112,7 +2111,7 @@ const PARACHUTE: Programs = Programs {
 const DIGITAL_PET: Programs = Programs {
     echo: None,
     dogmas: &[(
-        true,
+        D,
         &[
             draw(11).keep(DRAWN),
             reveal(LAST),
@@ -2142,7 +2141,7 @@ const DIGITAL_PET: Programs = Programs {
 const ALGOCRACY: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             choose(
                 Executor,
@@ -2202,11 +2201,11 @@ const FLUTE: Programs = Programs {
     echo: Some(&[splay(&Color::ALL, Splay::Left)]),
     dogmas: &[
         (
-            true,
+            D,
             &[return_(filtered(&HAND, &[Lacks(Test::Set(CardSet::Base))]))],
         ),
         (
-            false,
+            N,
             &[
                 draw(1).set(CardSet::Echoes),
                 reveal(LAST),
@@ -2223,13 +2222,13 @@ const CROSSBOW: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            true,
+            D,
             &[transfer(
                 filtered(&HAND, &[Lacks(Test::Set(CardSet::Base))]),
                 Destination::Score(Demander),
             )],
         ),
-        (false, &[transfer(HAND, Destination::Board(Opponent))]),
+        (N, &[transfer(HAND, Destination::Board(Opponent))]),
     ],
 };
 
@@ -2240,14 +2239,14 @@ const WATERMILL: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 choose(Executor, Choice::Value(ValueChoices::Bonuses(&MY_BONUSES))),
                 draw_age(Expr::Chosen),
             ],
         ),
         (
-            false,
+            N,
             &[
                 tuck(HAND).keep(MOVED),
                 if_(&Foreseen, 1),
@@ -2273,7 +2272,7 @@ const DENTURES: Programs = Programs {
     echo: Some(&[draw(6), tuck(LAST).add(ECHOED)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 if_(&Compare(Count(&DENTURES_PILE), Cmp::AtMost, Const(1)), 3),
                 draw(6),
@@ -2288,7 +2287,7 @@ const DENTURES: Programs = Programs {
                 )),
             ],
         ),
-        (false, &[splay(&[Blue], Splay::Right)]),
+        (N, &[splay(&[Blue], Splay::Right)]),
     ],
 };
 
@@ -2298,7 +2297,7 @@ const DENTURES: Programs = Programs {
 const KATANA: Programs = Programs {
     echo: None,
     dogmas: &[(
-        true,
+        D,
         &[
             transfer(
                 filtered(&TOPS, &[Has(HasIcon(Icon::Authority))]),
@@ -2321,7 +2320,7 @@ const DEODORANT: Programs = Programs {
     echo: Some(&[draw(3), meld(LAST)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 if_(
                     &Compare(
@@ -2338,7 +2337,7 @@ const DEODORANT: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 if_(
                     &Compare(
@@ -2361,15 +2360,15 @@ const SANDPAPER: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 return_(HAND).up_to(None).optional().shortcut(ORIGIN),
                 draws(Expr::Done, 3, Then::Keep),
             ],
         ),
-        (false, &[meld(HAND)]),
+        (N, &[meld(HAND)]),
         (
-            false,
+            N,
             &[
                 if_(&Foreseen, 1),
                 foreshadow(HAND).all().shortcut(ORIGIN_ALL),
@@ -2385,7 +2384,7 @@ const HOMING_PIGEONS: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            true,
+            D,
             &[return_(filtered(
                 &SCORE,
                 &[Has(Test::ValueIn(&Selector::Hand(Demander)))],
@@ -2394,7 +2393,7 @@ const HOMING_PIGEONS: Programs = Programs {
             .shortcut(ORIGIN_ALL)],
         ),
         (
-            false,
+            N,
             &[
                 splay(&[Red, Green], Splay::Left),
                 if_(&Foreseen, 2),
@@ -2419,7 +2418,7 @@ const ALMANAC: Programs = Programs {
     echo: Some(&[draw(4).set(CardSet::Echoes), foreshadow(LAST)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 return_(filtered(&FORECAST, &[Has(Test::Bonus)]))
                     .optional()
@@ -2431,7 +2430,7 @@ const ALMANAC: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 if_(&Foreseen, 1),
                 foreshadow(Forecast(Opponent)).all().shortcut(ORIGIN_ALL),
@@ -2479,7 +2478,7 @@ const SUNGLASSES: Programs = Programs {
         score(SPLAYED_HAND).verify().reveal_if_empty(&HAND),
     ]),
     dogmas: &[(
-        false,
+        N,
         &[
             if_(&Not(&Cond::Must), 2),
             Instruction::Splay(SplayStep {
@@ -2535,7 +2534,7 @@ const KOBUKSON: Programs = Programs {
     })]),
     dogmas: &[
         (
-            true,
+            D,
             &[
                 return_(filtered(&TOPS, &[Has(HasIcon(Icon::Authority))]))
                     .per_color(None)
@@ -2544,8 +2543,8 @@ const KOBUKSON: Programs = Programs {
                 tuck(LAST),
             ],
         ),
-        (false, &[draw(4), tuck(LAST)]),
-        (false, &[if_(&Foreseen, 2), draw(5), meld(LAST)]),
+        (N, &[draw(4), tuck(LAST)]),
+        (N, &[if_(&Foreseen, 2), draw(5), meld(LAST)]),
     ],
 };
 
@@ -2556,7 +2555,7 @@ const SHURIKEN: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            true,
+            D,
             &[
                 transfer(
                     Selector::Union(&[
@@ -2597,7 +2596,7 @@ const SHURIKEN: Programs = Programs {
                 .shortcut(Shortcut::AnyOrder),
             ],
         ),
-        (false, &[splay(&[Purple], Splay::Right)]),
+        (N, &[splay(&[Purple], Splay::Right)]),
     ],
 };
 
@@ -2609,7 +2608,7 @@ const PENCIL_PACKET: Selector = filtered(&HAND, &[Has(InSlot(PENCIL_DRAWS))]);
 const PENCIL: Programs = Programs {
     echo: Some(&[draw(5)]),
     dogmas: &[(
-        false,
+        N,
         &[
             return_(HAND)
                 .up_to(Some(Const(3)))
@@ -2639,9 +2638,9 @@ const PENCIL: Programs = Programs {
 const CHINTZ: Programs = Programs {
     echo: None,
     dogmas: &[
-        (false, &[draw(4)]),
+        (N, &[draw(4)]),
         (
-            false,
+            N,
             &[
                 if_(&Compare(Count(&HAND), Cmp::Equal, Const(1)), 3),
                 draw(4),
@@ -2650,7 +2649,7 @@ const CHINTZ: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 if_(&Foreseen, 1),
                 transfer(HAND, Destination::Supply)
@@ -2666,9 +2665,9 @@ const CHINTZ: Programs = Programs {
 const SLIDE_RULE: Programs = Programs {
     echo: None,
     dogmas: &[
-        (false, &[splay(&[Yellow], Splay::Right)]),
+        (N, &[splay(&[Yellow], Splay::Right)]),
         (
-            false,
+            N,
             &[draw_age(Expr::Sum(&[
                 Max(&filtered(&TOPS, &[Filter::Lowest])),
                 Count(&filtered(&TOPS, &[Has(Test::StackSplayed(None))])),
@@ -2702,7 +2701,7 @@ const CLOCK: Programs = Programs {
         all: false,
     })]),
     dogmas: &[(
-        true,
+        D,
         &[
             choose(Demander, Choice::Color(ColorSet::Only(&Color::ALL)))
                 .alias(Alias::SameKey(&CLOCK_VISIBLE)),
@@ -2743,7 +2742,7 @@ const BAROMETER: Programs = Programs {
     )]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 choose(
                     Executor,
@@ -2757,7 +2756,7 @@ const BAROMETER: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 return_(FORECAST)
                     .all()
@@ -2802,7 +2801,7 @@ const GLOBE: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 return_(HAND)
                     .all()
@@ -2823,10 +2822,7 @@ const GLOBE: Programs = Programs {
                 splay_set(ColorSet::Only(&Color::ALL), Splay::Right),
             ],
         ),
-        (
-            false,
-            &[if_(&Foreseen, 1), foreshadow(Selector::Tops(Either))],
-        ),
+        (N, &[if_(&Foreseen, 1), foreshadow(Selector::Tops(Either))]),
     ],
 };
 
@@ -2835,7 +2831,7 @@ const GLOBE: Programs = Programs {
 const SHRAPNEL: Programs = Programs {
     echo: None,
     dogmas: &[(
-        true,
+        D,
         &[
             draw(6),
             tuck(LAST).keep(MOVED),
@@ -2860,7 +2856,7 @@ const SHRAPNEL: Programs = Programs {
 const HOT_AIR_BALLOON: Programs = Programs {
     echo: Some(&[draw(7), score(LAST)]),
     dogmas: &[(
-        false,
+        N,
         &[
             achieve(filtered(
                 &Selector::Tops(Opponent),
@@ -2885,7 +2881,7 @@ const HOT_AIR_BALLOON: Programs = Programs {
 const STEAMBOAT: Programs = Programs {
     echo: None,
     dogmas: &[(
-        true,
+        D,
         &[
             draw(6).keep(DRAWN),
             reveal(LAST),
@@ -2923,7 +2919,7 @@ const BIFOCALS: Programs = Programs {
     echo: Some(&[return_(FORECAST)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 draw(7),
                 foreshadow(LAST),
@@ -2933,7 +2929,7 @@ const BIFOCALS: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 splay(&[Green], Splay::Right),
                 if_(DID, 1),
@@ -2950,7 +2946,7 @@ const INDIAN_CLUBS: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            true,
+            D,
             &[
                 return_(SCORE).exactly(Const(2)).shortcut(ORIGIN),
                 if_(&Foreseen, 1),
@@ -2958,7 +2954,7 @@ const INDIAN_CLUBS: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[score(HAND)
                 .per_value(&PerValue {
                     source: ValueSource::Cards(&SCORE),
@@ -2977,7 +2973,7 @@ const KALEIDOSCOPE: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 draw(7),
                 meld(LAST).keep(MOVED),
@@ -2985,7 +2981,7 @@ const KALEIDOSCOPE: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 // All printed values are at most 11. Twelve preserves both
                 // comparisons while keeping a large Figure icon count out of
@@ -3033,9 +3029,9 @@ const RUBBER: Programs = Programs {
         tuck(LAST),
     ]),
     dogmas: &[
-        (false, &[score(filtered(&TOPS, &[Lacks(Test::Bonus)]))]),
-        (false, &[splay(&[Red], Splay::Up)]),
-        (false, &[if_(&Foreseen, 1), foreshadow(TOPS)]),
+        (N, &[score(filtered(&TOPS, &[Lacks(Test::Bonus)]))]),
+        (N, &[splay(&[Red], Splay::Up)]),
+        (N, &[if_(&Foreseen, 1), foreshadow(TOPS)]),
     ],
 };
 
@@ -3056,7 +3052,7 @@ const ELEVATOR: Programs = Programs {
         Board(Executor, ColorSet::Only(&[Green]), BoardRegion::Bottom),
     ]))]),
     dogmas: &[(
-        false,
+        N,
         &[
             choose(Executor, Choice::Value(ValueChoices::Among(&SCORE))).keep(ITEM),
             if_(&Not(&Empty(ITEM)), 6),
@@ -3083,7 +3079,7 @@ const FERTILIZER: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 return_(HAND).optional().keep(MOVED),
                 if_(DID, 1),
@@ -3098,7 +3094,7 @@ const FERTILIZER: Programs = Programs {
                 .shortcut(Shortcut::AnyOrder),
             ],
         ),
-        (false, &[draw_age(Count(&HAND)), foreshadow(LAST)]),
+        (N, &[draw_age(Count(&HAND)), foreshadow(LAST)]),
     ],
 };
 
@@ -3118,7 +3114,7 @@ const JEANS: Programs = Programs {
     ]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 Instruction::Bind(Binding::Value(
                     ITEM,
@@ -3134,7 +3130,7 @@ const JEANS: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 unless_decks_empty!(7, 8),
                 choose(Executor, Choice::Value(ValueChoices::Boxed(&[7, 8]))),
@@ -3144,7 +3140,7 @@ const JEANS: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 if_(&Foreseen, 2),
                 choose(Executor, Choice::Card(&Selector::Junk)),
@@ -3160,7 +3156,7 @@ const TELEGRAPH: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[Instruction::Splay(SplayStep {
                 who: Executor,
                 choices: SplayChoices::Options(&[SplayOption {
@@ -3173,9 +3169,9 @@ const TELEGRAPH: Programs = Programs {
                 all: false,
             })],
         ),
-        (false, &[splay(&[Blue], Splay::Up)]),
+        (N, &[splay(&[Blue], Splay::Up)]),
         (
-            false,
+            N,
             &[
                 if_(&Foreseen, 2),
                 for_each(
@@ -3214,14 +3210,14 @@ const PHOTOGRAPHY: Programs = Programs {
     echo: Some(&[meld(FORECAST)]),
     dogmas: &[
         (
-            true,
+            D,
             &[transfer(
                 filtered(&TOPS, &[Filter::Highest]),
                 Destination::Hand(Executor),
             )],
         ),
         (
-            false,
+            N,
             &[
                 if_(
                     &Cond::Any(&[
@@ -3246,7 +3242,7 @@ const PHOTOGRAPHY: Programs = Programs {
 const TYPEWRITER: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             return_(HAND)
                 .all()
@@ -3274,9 +3270,9 @@ const ICE_CREAM: Programs = Programs {
         &[Lacks(Test::Color(Purple)), Lacks(Test::Bonus)],
     ))]),
     dogmas: &[
-        (true, &[draw(1), meld(LAST)]),
+        (D, &[draw(1), meld(LAST)]),
         (
-            false,
+            N,
             junk_then_highest!(
                 Expr::Chosen,
                 choose(Executor, Choice::Value(ValueChoices::Boxed(&[6, 7, 8, 9])))
@@ -3328,9 +3324,9 @@ const SAXOPHONE_IMAGES: Selector = filtered(
 const SAXOPHONE: Programs = Programs {
     echo: None,
     dogmas: &[
-        (false, &[splay(&[Purple], Splay::Up)]),
+        (N, &[splay(&[Purple], Splay::Up)]),
         (
-            false,
+            N,
             &[
                 Instruction::Bind(Binding::Value(ITEM, Count(&SAXOPHONE_IMAGES))),
                 if_(&Compare(Expr::Slot(ITEM), Cmp::Equal, Const(4)), 2),
@@ -3349,12 +3345,12 @@ const AIR_CONDITIONER: Programs = Programs {
     echo: Some(&[score(HAND).optional()]),
     dogmas: &[
         (
-            true,
+            D,
             &[return_(filtered(&SCORE, &[Has(Test::ValueIn(&TOPS))]))
                 .all()
                 .shortcut(ORIGIN_ALL)],
         ),
-        (false, &[deck_junk(9)]),
+        (N, &[deck_junk(9)]),
     ],
 };
 
@@ -3363,9 +3359,9 @@ const AIR_CONDITIONER: Programs = Programs {
 const TRACTOR: Programs = Programs {
     echo: Some(&[draw(7)]),
     dogmas: &[
-        (false, &[draw(7), score(LAST)]),
-        (false, &[draw(7)]),
-        (false, &[if_(&Foreseen, 1), draws(Const(7), 7, Then::Score)]),
+        (N, &[draw(7), score(LAST)]),
+        (N, &[draw(7)]),
+        (N, &[if_(&Foreseen, 1), draws(Const(7), 7, Then::Score)]),
     ],
 };
 
@@ -3375,7 +3371,7 @@ const NYLON: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            false,
+            N,
             &[
                 for_each(Domain::Times(Const(3)), Order::Printed, None, 2),
                 draw(8),
@@ -3394,7 +3390,7 @@ const NYLON: Programs = Programs {
                 REPEAT,
             ],
         ),
-        (false, &[splay(&[Red], Splay::Up)]),
+        (N, &[splay(&[Red], Splay::Up)]),
     ],
 };
 
@@ -3407,7 +3403,7 @@ const SLICED_BREAD: Programs = Programs {
         draws(Const(2), 8, Then::Keep),
     ]),
     dogmas: &[(
-        false,
+        N,
         &[
             return_(SCORE).keep(MOVED),
             // No successful return still gives undefined-value zero.
@@ -3426,7 +3422,7 @@ const RADIO_MELDED: Slot = Slot::effect(3);
 const RADIO_TELESCOPE: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             Instruction::Bind(Binding::Value(RADIO_NINES, colors_with!(Icon::Concept))),
             Instruction::Bind(Binding::Value(RADIO_TENS, Count(&TOPS))),
@@ -3465,7 +3461,7 @@ const NO_TELEVISION_SCORE: Cond = Compare(
 const TELEVISION: Programs = Programs {
     echo: Some(&[draw(8), meld(LAST)]),
     dogmas: &[(
-        false,
+        N,
         &[
             choose(Executor, Choice::Value(ValueChoices::Any))
                 .alias(Alias::NoOpWhen(&NO_TELEVISION_SCORE))
@@ -3501,7 +3497,7 @@ const CAMCORDER: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            true,
+            D,
             &[
                 transfer(HAND, Destination::Hand(Demander))
                     .all()
@@ -3510,7 +3506,7 @@ const CAMCORDER: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 meld(filtered(&HAND, &[Has(BoxedValues(&[9]))]))
                     .all()
@@ -3531,7 +3527,7 @@ const SOCIAL_NETWORKING: Programs = Programs {
     echo: Some(&[score(filtered(&TOPS, &[Lacks(Test::Color(Red))]))]),
     dogmas: &[
         (
-            true,
+            D,
             &[
                 choose(Executor, Choice::Icon { except: None }),
                 transfer(
@@ -3543,7 +3539,7 @@ const SOCIAL_NETWORKING: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 if_(
                     &All(&[
@@ -3581,7 +3577,7 @@ const MP3: Programs = Programs {
     echo: Some(&[draw(10), score(LAST)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 choose(Executor, Choice::Value(ValueChoices::Bonuses(&MY_BONUSES))),
                 draw_age(Expr::Chosen),
@@ -3589,7 +3585,7 @@ const MP3: Programs = Programs {
             ],
         ),
         (
-            false,
+            N,
             &[
                 return_(HAND).up_to(None).shortcut(ORIGIN),
                 for_each(
@@ -3611,10 +3607,10 @@ const MP3: Programs = Programs {
 const GPS: Programs = Programs {
     echo: None,
     dogmas: &[
-        (true, &[return_(FORECAST).all().shortcut(ORIGIN_ALL)]),
-        (false, &[splay(&[Yellow], Splay::Up)]),
+        (D, &[return_(FORECAST).all().shortcut(ORIGIN_ALL)]),
+        (N, &[splay(&[Yellow], Splay::Up)]),
         (
-            false,
+            N,
             &[
                 draws(Const(3), 11, Then::Keep).keep(DRAWN),
                 if_(&Foreseen, 1),
@@ -3640,7 +3636,7 @@ const PUZZLE_CUBE: Programs = Programs {
     echo: Some(&[meld(SCORE)]),
     dogmas: &[
         (
-            false,
+            N,
             &[
                 choose(Executor, Choice::Color(ColorSet::OfCards(&TOPS))),
                 score(Board(Executor, ColorSet::Chosen, BoardRegion::Bottom))
@@ -3674,7 +3670,7 @@ const PUZZLE_CUBE: Programs = Programs {
                 WIN,
             ],
         ),
-        (false, &[draw(10), meld(LAST)]),
+        (N, &[draw(10), meld(LAST)]),
     ],
 };
 
@@ -3684,7 +3680,7 @@ const PUZZLE_CUBE: Programs = Programs {
 const DRONE: Programs = Programs {
     echo: None,
     dogmas: &[(
-        false,
+        N,
         &[
             draw(10),
             reveal(LAST).keep(ITEM),
@@ -3730,7 +3726,7 @@ const EXOSKELETON: Programs = Programs {
     echo: None,
     dogmas: &[
         (
-            true,
+            D,
             &[transfer(
                 filtered(
                     &HAND,
@@ -3742,7 +3738,7 @@ const EXOSKELETON: Programs = Programs {
             .shortcut(Shortcut::AnyOrder)],
         ),
         (
-            false,
+            N,
             &[
                 achieve(filtered(
                     &Selector::Hand(Either),

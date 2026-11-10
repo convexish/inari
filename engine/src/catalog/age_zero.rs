@@ -1,5 +1,7 @@
 //! Age 0 card programs (introduced by Bear Grylls), in code order. Each
 //! comment is the printed text. "You lose" is elimination.
+use super::{Program, demand, plain};
+use crate::model::EffectKind;
 use crate::program::build::*;
 
 use Color::{Blue, Green, Purple, Red, Yellow};
@@ -10,8 +12,6 @@ use Icon::Food;
 use Selector::{Board, Score as ScoreOf, Tops};
 use Test::{Code, ColorOf, ColorOnBoard, Icon as HasIcon, Is, Value as ValueIs, Values};
 use Who::{Demander, Executor, Opponent};
-
-type Program = &'static [Instruction];
 
 const BIND_LAST: Instruction = bind(Selector::Reg(Reg::Last));
 const LOSE: Instruction = Instruction::Win(WinRule::Loses(Executor));
@@ -281,23 +281,8 @@ const KNOTS: [Program; 1] = [&[
     draw(1),
 ]];
 
-/// The printed effects of an Age 0 card as (demand, program) pairs.
-pub(super) fn effects(code: &str) -> Option<&'static [(bool, Program)]> {
-    const fn plain<const N: usize>(programs: [Program; N]) -> [(bool, Program); N] {
-        let mut out = [(false, programs[0]); N];
-        let mut i = 0;
-        while i < N {
-            out[i] = (false, programs[i]);
-            i += 1;
-        }
-        out
-    }
-    // The first effect of each listed card is a demand.
-    const fn demand<const N: usize>(programs: [Program; N]) -> [(bool, Program); N] {
-        let mut out = plain(programs);
-        out[0].0 = true;
-        out
-    }
+/// The authored effects of an Age 0 card, by publisher code.
+pub(super) fn effects(code: &str) -> Option<&'static [(EffectKind, Program)]> {
     Some(match code {
         "Z001" => &const { plain(FRESH_WATER) },
         "Z002" => &const { demand(SHELTER) },

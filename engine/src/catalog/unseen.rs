@@ -1,3 +1,4 @@
+use super::Program;
 use crate::model::{CityIcon, EffectKind};
 use crate::program::build::*;
 
@@ -17,8 +18,6 @@ use Test::{
     SharesIconWith, StackShows, StackSplayed, Value as ValueIs, ValueCount, ValueIn,
 };
 use Who::{Demander, Either, Executor, Opponent};
-
-type Program = &'static [Instruction];
 
 const D: EffectKind = EffectKind::Demand;
 const N: EffectKind = EffectKind::NonDemand;
@@ -3195,7 +3194,7 @@ const QUANTUM_COMPUTERS: &[(EffectKind, Program)] = &[
 ];
 
 /// The authored effects of an Unseen card, by publisher code.
-pub fn effects(code: &str) -> Option<&'static [(EffectKind, Program)]> {
+pub(super) fn effects(code: &str) -> Option<&'static [(EffectKind, Program)]> {
     Some(match code {
         "U001" => ASSASSINATION,
         "U002" => MAZE,

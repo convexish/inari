@@ -1,4 +1,6 @@
 //! Base card programs, in catalog order. Each comment is the printed text.
+use super::{Program, demand, plain};
+use crate::model::EffectKind;
 use crate::program::build::*;
 
 use Color::{Blue, Green, Purple, Red, Yellow};
@@ -10,8 +12,6 @@ use Metric::{Achievements, Icons};
 use Selector::{AvailableAchievements, BaseDeck, Board, Score as ScoreOf, TopOf, Tops};
 use Test::{Code, ColorOnBoard, Icon as HasIcon, StackShows, StackSplayed, Value as ValueIs};
 use Who::{Demander, Either, Executor, Opponent};
-
-type Program = &'static [Instruction];
 
 const DEMANDER_HAND: Destination = Destination::Hand(Demander);
 const DEMANDER_SCORE: Destination = Destination::Score(Demander);
@@ -1732,24 +1732,8 @@ const WHATABOUTISM: [Program; 1] = [&[
     exchange(SCORE, ScoreOf(Demander), &[None, None]),
 ]];
 
-/// The printed effects of a Base card as (demand, program) pairs, or `None`
-/// for an unknown code.
-pub(super) fn effects(code: &str) -> Option<&'static [(bool, Program)]> {
-    const fn plain<const N: usize>(programs: [Program; N]) -> [(bool, Program); N] {
-        let mut out = [(false, programs[0]); N];
-        let mut i = 0;
-        while i < N {
-            out[i] = (false, programs[i]);
-            i += 1;
-        }
-        out
-    }
-    // The first effect of each listed card is a demand.
-    const fn demand<const N: usize>(programs: [Program; N]) -> [(bool, Program); N] {
-        let mut out = plain(programs);
-        out[0].0 = true;
-        out
-    }
+/// The authored effects of a Base card, by publisher code.
+pub(super) fn effects(code: &str) -> Option<&'static [(EffectKind, Program)]> {
     Some(match code {
         "B001" => &const { demand(ARCHERY) },
         "B002" => &const { plain(METALWORKING) },

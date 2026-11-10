@@ -7,6 +7,7 @@
 use crate::model::{
     Card, CardSet, Color, Effect, EffectKind, Error, Icon, SLOTS, Symbol, four_slots,
 };
+use crate::program::Instruction;
 
 mod age_zero;
 mod age_zero_metadata;
@@ -31,6 +32,27 @@ mod proof_lint_tests;
 mod unseen;
 mod unseen_metadata;
 pub use unseen_metadata::UNSEEN_METADATA;
+
+/// One printed effect's instructions.
+type Program = &'static [Instruction];
+
+/// A card's dogma effects, none of them a demand.
+const fn plain<const N: usize>(programs: [Program; N]) -> [(EffectKind, Program); N] {
+    let mut out = [(EffectKind::NonDemand, programs[0]); N];
+    let mut i = 0;
+    while i < N {
+        out[i].1 = programs[i];
+        i += 1;
+    }
+    out
+}
+
+/// A card's dogma effects, the first of them a demand.
+const fn demand<const N: usize>(programs: [Program; N]) -> [(EffectKind, Program); N] {
+    let mut out = plain(programs);
+    out[0].0 = EffectKind::Demand;
+    out
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct CardMetadata {
@@ -192,14 +214,7 @@ pub fn artifacts_card(code: &str) -> Result<Card, Error> {
         artifacts::effects(code).ok_or(Error::Unsupported("Artifacts program not authored"))?;
     Ok(Card {
         set: CardSet::Artifacts,
-        effects: effects
-            .iter()
-            .map(|&(kind, program)| Effect {
-                kind,
-                instructions: program.to_vec(),
-            })
-            .collect(),
-        ..programmed(metadata, &[])
+        ..programmed(metadata, effects)
     })
 }
 
@@ -209,14 +224,7 @@ pub fn unseen_card(code: &str) -> Result<Card, Error> {
     let effects = unseen::effects(code).ok_or(Error::Unsupported("Unseen program not authored"))?;
     Ok(Card {
         set: CardSet::Unseen,
-        effects: effects
-            .iter()
-            .map(|&(kind, program)| Effect {
-                kind,
-                instructions: program.to_vec(),
-            })
-            .collect(),
-        ..programmed(metadata, &[])
+        ..programmed(metadata, effects)
     })
 }
 
@@ -231,10 +239,7 @@ pub fn age_zero_card(code: &str) -> Result<Card, Error> {
     Ok(programmed(metadata, effects))
 }
 
-fn programmed(
-    metadata: &'static CardMetadata,
-    effects: &'static [(bool, &'static [crate::program::Instruction])],
-) -> Card {
+fn programmed(metadata: &'static CardMetadata, effects: &'static [(EffectKind, Program)]) -> Card {
     Card {
         code: metadata.code,
         set: CardSet::Base,
@@ -246,8 +251,8 @@ fn programmed(
         featured: metadata.featured,
         effects: effects
             .iter()
-            .map(|&(demand, program)| Effect {
-                kind: EffectKind::from_demand(demand),
+            .map(|&(kind, program)| Effect {
+                kind,
                 instructions: program.to_vec(),
             })
             .collect(),
