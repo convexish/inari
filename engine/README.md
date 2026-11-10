@@ -164,13 +164,11 @@ Dogma action (these three combine freely), and `no-achieve` never
 takes Achieve actions (so `figures` plays the same games as Base, isolating
 the Figures code's cost). `Game::new_game(seed, expansions)` deals any
 supported combination.
-Recorded traces of the other expansion combinations (`tests/fixtures/`) replay
-through the trace tests (`random_game_traces.rs`, `echoes_traces.rs`, `artifacts_traces.rs`,
-`unseen_traces.rs`).
 
-`tests/random_game_traces.rs` replays 300 seeded random games and compares a
-digest of every offered option, choice, action and event with
-`tests/fixtures/random_base_traces.txt`. An interpreter or language refactor
+`tests/random_game_traces.rs` replays 25 seeded random games in each of the 32
+expansion combinations and compares a digest of every offered option, choice,
+action, event and resulting position with
+`tests/fixtures/random_game_traces.txt`. An interpreter or language refactor
 must reproduce it exactly; a deliberate rules change regenerates it with
 `UPDATE_TRACES=1`.
 
