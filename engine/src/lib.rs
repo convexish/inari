@@ -25,6 +25,7 @@ mod search;
 mod search_pool;
 pub mod session;
 mod shortcuts;
+pub mod strength;
 mod tracking;
 
 // Reuse the native acceptance fixtures in crate-private shortcut oracle tests.
