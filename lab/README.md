@@ -11,6 +11,7 @@ with the commands that reproduce it.
 |---|---|---|
 | 2026-11-15 | [Opening hands](reports/2026-11-15-base-opening-hands.md) | Which Base opening hands and starting melds win? |
 | 2026-11-15 | [Hand vs. skill](reports/2026-11-15-hand-vs-skill-example.md) | Does the best hand against the worst beat a stronger player? |
+| 2026-11-15 | [Artifacts game endings](reports/2026-11-15-artifacts-game-endings.md) | How are Artifacts games decided at 800 Elo, and by which cards? |
 
 ## Running
 
@@ -27,6 +28,7 @@ binary's `//!` header lists its options and its output columns.
 |---|---|
 | `opening_hands` | Self-play from random Base deals with coin-flip starting melds |
 | `hand_matchup` | Deals where one seat has a chosen good hand and the other a bad one, each played with both seatings, between two settings |
+| `endings` | Self-play on one expansion combination, recording how each game ends and which card ended it |
 | `beta_duel` | Policy play at two inverse temperatures on duplicate deals, every expansion mode |
 | `search_net_smoke` | Learned search against greedy play or another search setting |
 
