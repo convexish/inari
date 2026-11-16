@@ -1,15 +1,12 @@
 # Inari: Innovation Artificial Intelligence
 
-An unofficial implementation of [Innovation Ultimate](https://asmadigames.com/innovation)
-by Carl Chudyk.
+An unofficial implementation of [Innovation Ultimate](https://asmadigames.com/innovation) by Carl Chudyk.
 
-This repo has three parts:
+This repo has three main parts:
 
-- **`engine/`**: a rules engine for two-player games, supporting every
-  expansion (Echoes, Figures, Cities, Unseen, Artifacts) in any combination
-- **A neural-network AI opponent**: the engine's network and search, with the
-  trained weights in `weights/`
-- **`app/`**: Inari, a desktop app for hotseat play or play against the AI
+- A rules engine for two-player games, supporting every expansion (Echoes, Figures, Cities, Unseen, Artifacts) in any combination
+- A neural-network AI opponent
+- A desktop app for hotseat play or play against the AI
 
 ## Download
 

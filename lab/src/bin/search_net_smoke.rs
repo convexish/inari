@@ -1,6 +1,6 @@
 //! Learned search against the same network's greedy play, or against another
-//! search setting, on duplicate deals with seats swapped. `cargo run --release
-//! --example search_net_smoke -- <weights.bin> <deals> <iterations>
+//! search setting, on duplicate deals with seats swapped. `pixi run lab
+//! search_net_smoke <weights.bin> <deals> <iterations>
 //! [workers=N] [first=K] [c=X] [temperature=X] [leaf_batch=N]
 //! [vs_iterations=N] [vs_c=X] [vs_temperature=X] [vs_vloss=X] [vs_weights=PATH]
 //! [rule=visits|value|shrunk|netq|prior] [sample=T] [shrink=K] [vloss=X] [policy=on|off]

@@ -3,3 +3,6 @@
 
 # saves + setup when running app locally
 .inari
+
+# raw experiment output; reproducible from lab/reports
+/lab/runs

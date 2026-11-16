@@ -13,6 +13,7 @@ zig = "*"
 [tasks]
 check = { cmd = "python scripts/card_metadata.py --check && cargo fmt --all --check && cargo clippy --locked --all-targets -- -D warnings && cargo test --locked", description = "Format, lint and test" }
 metadata = { cmd = "python scripts/card_metadata.py", description = "Regenerate engine/src/catalog/*_metadata.rs from data/*.json" }
+lab = { cmd = "cargo run --locked -q -p lab --profile lab --bin", description = "Run an experiment: pixi run lab <name> run [options] > lab/runs/<file>.csv (see lab/README.md)" }
 play-app = { cmd = "cargo run --locked -p inari --profile desktop --", description = "Run the app" }
 build-windows = { cmd = "cargo zigbuild --locked -p inari --profile desktop --target x86_64-pc-windows-gnu && echo target/x86_64-pc-windows-gnu/desktop/inari.exe", description = "Build the Windows app" }
 dist-windows = { cmd = "cargo zigbuild --locked -p inari --profile dist --target x86_64-pc-windows-gnu && echo target/x86_64-pc-windows-gnu/dist/inari.exe", description = "Build the Windows app to ship (smaller, slower to build)" }

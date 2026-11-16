@@ -66,7 +66,7 @@ Both run the same `Instruction::Subgame`; a `Game` flag picks the behavior:
 - **Printed rule** (`Game::with_subgames`): the parent game is suspended and a
   child game plays on the same decks; its winner's cards join the parent and
   the effect continues. The app uses it; duels opt in (`subgames=on` in
-  `search_net_smoke`).
+  `lab/src/bin/search_net_smoke.rs`).
 
 Search worlds are always cloned with the flag off, so the AI values the effect
 as a draw and, inside a child, plays to win the child.

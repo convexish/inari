@@ -1,5 +1,5 @@
 //! Policy-head play at two inverse temperatures on duplicate deals.
-//! `cargo run --release --example beta_duel -- <weights.bin> [workers=N]`
+//! `pixi run lab beta_duel <weights.bin> [workers=N]`
 //! reads jobs from stdin, one per line: `mode x y seed`, where `mode` is a
 //! training-mode index (0..32), `x` and `y` are inverse temperatures (`inf`
 //! and `-inf` allowed) and `seed` is the deal. Each side samples its policy

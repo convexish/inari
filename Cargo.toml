@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["engine", "engine-py", "app"]
+members = ["engine", "engine-py", "app", "lab"]
 
 # Policy: dependencies are exact-pinned; build and test with --locked.
 
@@ -21,6 +21,12 @@ inherits = "release"
 
 # Fast optimized desktop builds, separate from training's release artifacts.
 [profile.desktop]
+inherits = "release"
+lto = false
+codegen-units = 16
+
+# Experiments in lab/: optimized, quick to rebuild after an engine edit.
+[profile.lab]
 inherits = "release"
 lto = false
 codegen-units = 16

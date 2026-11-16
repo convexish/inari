@@ -7,7 +7,7 @@ enabled set's authored catalog. Figures also adds the Decrees and the 15
 dormant Age 0 cards. Initial hands and standard achievements come only from
 Base; expansion decks shuffle afterward. `engine-py/` exposes the training
 pools and native network to Python as `inno_engine`; `app/` is the desktop
-table.
+table; `lab/` runs experiments.
 
 [ARCHITECTURE.md](../doc/design/ARCHITECTURE.md) owns architectural contracts and
 regression probes; [SHORTCUTS.md](../doc/design/SHORTCUTS.md)
@@ -206,7 +206,7 @@ in the observation contract; callers choose a fallback.
   the root. `SearchConfig::learned` uses the training search's PUCT 0.25 and
   prior temperature 0.3, and `leaf_batch` lets leaves wait as a batched tree
   does. Optional Dirichlet root noise is for self-play.
-  `examples/search_net_smoke.rs` plays it against the same network's greedy
+  `lab/src/bin/search_net_smoke.rs` plays it against the same network's greedy
   play on duplicate deals (`subgames=on` plays Martian Internet's printed
   subgame instead of the draw variant).
 - **Batched** (`search::Tree`, `SearchPool`): a tree runs until up to
