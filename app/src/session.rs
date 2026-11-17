@@ -593,6 +593,13 @@ impl Game {
         self.save();
         self.refresh();
     }
+    /// The AI is to move or thinking: the table must keep ticking.
+    pub fn waiting_on_ai(&self) -> bool {
+        self.thinking()
+            || (!self.two_player
+                && self.error.is_none()
+                && self.to_move().is_some_and(|p| p != self.human))
+    }
     pub fn human_turn(&self) -> bool {
         !self.thinking() && self.error.is_none() && self.to_move() == Some(self.human)
     }

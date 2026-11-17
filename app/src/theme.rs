@@ -2,8 +2,8 @@
 //! layout, fonts and card geometry are shared, so interface changes apply to
 //! every theme. Drawing code asks for a role here, never a literal colour.
 
+use super::gfx::Color;
 use inno_engine::Color as CardColor;
-use macroquad::prelude::Color;
 use serde::{Deserialize, Serialize};
 
 use super::faces::Set;

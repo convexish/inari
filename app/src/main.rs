@@ -5,6 +5,7 @@
 mod clipboard;
 mod engine;
 mod faces;
+mod gfx;
 mod session;
 mod sprites;
 mod strength;
@@ -12,7 +13,7 @@ mod table;
 mod theme;
 mod ui;
 
-use macroquad::prelude::*;
+use eframe::egui;
 
 fn main() {
     // Windows keeps setup, networks and saves beside the exe.
@@ -30,22 +31,50 @@ fn main() {
             std::process::exit(2);
         }
     };
-    macroquad::Window::from_config(
-        Conf {
-            window_title: "Inari".into(),
-            window_width: 1840,
-            window_height: 960,
-            high_dpi: true,
-            sample_count: 1,
-            icon: Some(miniquad::conf::Icon {
-                small: mark(16).try_into().unwrap(),
-                medium: mark(32).try_into().unwrap(),
-                big: mark(64).try_into().unwrap(),
-            }),
-            ..Default::default()
-        },
-        ui::run(options),
+    let icon = egui::IconData {
+        rgba: mark(64),
+        width: 64,
+        height: 64,
+    };
+    let native = eframe::NativeOptions {
+        viewport: egui::ViewportBuilder::default()
+            .with_title("Inari")
+            // Wayland compositors match the window to its desktop entry by this.
+            .with_app_id("inari")
+            .with_inner_size([gfx::W, gfx::H])
+            .with_min_inner_size([gfx::W / 4., gfx::H / 4.])
+            .with_icon(icon),
+        event_loop_builder: x11_under_wsl(),
+        ..Default::default()
+    };
+    let result = eframe::run_native(
+        "Inari",
+        native,
+        Box::new(|cc| Ok(Box::new(ui::App::new(cc, options)))),
     );
+    if let Err(error) = result {
+        eprintln!("Inari could not open its window: {error}");
+        std::process::exit(1);
+    }
+}
+
+/// WSLg's compositor (Weston 9) segfaults when a native Wayland window is
+/// maximized from its Windows title bar, closing every window with it.
+/// Under WSL the table goes through XWayland; real Linux desktops such as
+/// Hyprland keep native Wayland.
+#[cfg(target_os = "linux")]
+fn x11_under_wsl() -> Option<eframe::EventLoopBuilderHook> {
+    use winit::platform::x11::EventLoopBuilderExtX11;
+    let x11 = clipboard::is_wsl() && std::env::var_os("DISPLAY").is_some();
+    x11.then(|| -> eframe::EventLoopBuilderHook {
+        Box::new(|builder| {
+            builder.with_x11();
+        })
+    })
+}
+#[cfg(not(target_os = "linux"))]
+fn x11_under_wsl() -> Option<eframe::EventLoopBuilderHook> {
+    None
 }
 
 /// The Inari mark in Cloisonné as straight RGBA rows, for the window icon and
@@ -57,26 +86,11 @@ fn mark(px: usize) -> Vec<u8> {
 
 #[cfg(test)]
 mod tests {
-    use macroquad::prelude::Image;
-
     fn png(px: usize) -> Vec<u8> {
         let path = std::env::temp_dir().join(format!("inari-mark-{}-{px}.png", std::process::id()));
-        let path = path.to_str().unwrap();
-        // export_png writes rows bottom-up, as for screen captures.
-        let bytes = super::mark(px)
-            .chunks(px * 4)
-            .rev()
-            .flatten()
-            .copied()
-            .collect();
-        Image {
-            width: px as u16,
-            height: px as u16,
-            bytes,
-        }
-        .export_png(path);
-        let png = std::fs::read(path).unwrap();
-        std::fs::remove_file(path).unwrap();
+        super::gfx::write_png(&path, px, px, &super::mark(px)).unwrap();
+        let png = std::fs::read(&path).unwrap();
+        std::fs::remove_file(&path).unwrap();
         png
     }
 

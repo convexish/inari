@@ -1551,14 +1551,6 @@ mod tests {
                 );
             }
         }
-        // export_png writes rows bottom-up, as for screen captures.
-        let bytes = sheet.bytes();
-        let flipped = bytes.chunks(w * 4).rev().flatten().copied().collect();
-        macroquad::prelude::Image {
-            width: w as u16,
-            height: h as u16,
-            bytes: flipped,
-        }
-        .export_png(&path);
+        crate::gfx::write_png(std::path::Path::new(&path), w, h, &sheet.bytes()).unwrap();
     }
 }

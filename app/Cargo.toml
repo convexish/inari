@@ -12,6 +12,11 @@ path = "src/main.rs"
 
 [dependencies]
 inno-engine = { path = "../engine" }
-macroquad = { version = "=0.4.16", default-features = false }
+eframe = { version = "=0.37.0", default-features = false, features = ["glow", "wayland", "x11", "clipboard"] }
+png = "=0.18.1"
 serde = { version = "=1.0.228", features = ["derive"] }
 serde_json = "=1.0.150"
+
+# Linux only: picks X11 under WSL (see main.rs). The version eframe resolves.
+[target.'cfg(target_os = "linux")'.dependencies]
+winit = { version = "=0.30.13", default-features = false, features = ["x11", "wayland"] }

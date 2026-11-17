@@ -4,14 +4,19 @@
 //! Colours come from the current theme (see theme.rs).
 use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
+use eframe::egui::{self, CursorIcon, TextureHandle, ViewportCommand};
 use inno_engine::{Color as CardColor, Icon, Special, Splay};
-use macroquad::prelude::*;
 
 use super::faces::{
     COLORS, CityIcon, FaceId, ICONS, Lead, Set, backs, face, faces, icon_named, names, paragraphs,
     stack_index,
+};
+use super::gfx::{
+    self, BLACK, Color, Face, H, Key as KeyCode, Rect, Vec2, W, draw_circle, draw_line,
+    draw_rectangle, draw_rectangle_lines, rrect, vec2,
 };
 use super::session::{DATA_DIR, Game, Options, Settings, fresh_seed, parse_seed};
 use super::sprites::{self, Glyph, Pixmap};
@@ -20,9 +25,6 @@ use super::table::{
     DeckRow, Entry, Held, Outcome, Seg, StackView, decree_text, name, plain, title_case,
 };
 use super::theme::{Control, Palette, Theme, rgba};
-
-const W: f32 = 1840.;
-const H: f32 = 960.;
 
 /// The theme drawn this frame; `run` sets it from the settings.
 fn pal() -> &'static Palette {
@@ -60,56 +62,20 @@ const ICONS_H: f32 = 132.;
 const TABS_Y: f32 = OPP_Y + ICONS_H + 8.;
 const LOG_Y: f32 = TABS_Y + 34.;
 
-#[derive(Clone, Copy, PartialEq, Eq)]
-enum Face {
-    Body,
-    Bold,
-    Title,
-}
-
 thread_local! {
-    static FONTS: RefCell<[Option<Font>; 3]> = const { RefCell::new([None, None, None]) };
-    /// Physical pixels per layout unit: text and sprites are rasterized at this density.
+    /// Physical pixels per layout unit: sprites are rasterized at this density.
     static PX: Cell<f32> = const { Cell::new(1.) };
     static THEME: Cell<Theme> = const { Cell::new(Theme::Cloisonne) };
 }
 
-/// The design's fonts ship with the app (SIL Open Font License; see
-/// engine/assets/fonts), so text looks the same on every platform.
-async fn load_fonts() {
-    let load = |bytes: &[u8]| load_ttf_font_from_bytes(bytes).ok();
-    let fonts = [
-        load(include_bytes!("../assets/fonts/AlegreyaSans-Medium.ttf")),
-        load(include_bytes!("../assets/fonts/AlegreyaSans-Bold.ttf")),
-        load(include_bytes!("../assets/fonts/Cinzel-Bold.ttf")),
-    ];
-    FONTS.with(|slot| *slot.borrow_mut() = fonts);
-}
-
-fn with_face<R>(face: Face, f: impl FnOnce(Option<&Font>) -> R) -> R {
-    FONTS.with(|fonts| {
-        let fonts = fonts.borrow();
-        let font = match face {
-            Face::Body => fonts[0].as_ref(),
-            Face::Bold => fonts[1].as_ref().or(fonts[0].as_ref()),
-            Face::Title => fonts[2].as_ref().or(fonts[1].as_ref()),
-        };
-        f(font)
-    })
-}
-fn font_px(size: f32) -> (u16, f32) {
-    let px = (size * PX.get()).round().clamp(1., 400.);
-    (px as u16, size / px)
-}
 fn face_of(bold: bool) -> Face {
     if bold { Face::Bold } else { Face::Body }
 }
 fn measure(text: &str, size: f32, bold: bool) -> f32 {
-    measure_face(text, size, face_of(bold))
+    gfx::measure(text, size, face_of(bold))
 }
 fn measure_face(text: &str, size: f32, face: Face) -> f32 {
-    let (px, scale) = font_px(size);
-    with_face(face, |font| measure_text(text, font, px, scale).width)
+    gfx::measure(text, size, face)
 }
 fn draw_str(text: &str, x: f32, y: f32, size: f32, color: Color, bold: bool) {
     draw_face(text, x, y, size, color, face_of(bold));
@@ -127,22 +93,19 @@ fn centered_title(text: &str, cx: f32, y: f32, size: f32, color: Color) {
         color,
     );
 }
+/// A centred numeral in a chip; selectable ones are copied with the text
+/// around them.
+fn chip_numeral(text: &str, cx: f32, y: f32, size: f32, color: Color, selectable: bool) {
+    if selectable {
+        let x = cx - measure_face(text, size, Face::Title) / 2.;
+        gfx::selectable_text(text, x, y, size, color, Face::Title);
+    } else {
+        centered_title(text, cx, y, size, color);
+    }
+}
+/// Text with its baseline at `y`.
 fn draw_face(text: &str, x: f32, y: f32, size: f32, color: Color, face: Face) {
-    let (px, scale) = font_px(size);
-    with_face(face, |font| {
-        draw_text_ex(
-            text,
-            x,
-            y,
-            TextParams {
-                font,
-                font_size: px,
-                font_scale: scale,
-                color,
-                ..Default::default()
-            },
-        );
-    });
+    gfx::draw_text(text, x, y, size, color, face);
 }
 fn label(text: &str, x: f32, y: f32, size: f32, color: Color) {
     draw_str(text, x, y, size, color, false);
@@ -206,32 +169,6 @@ fn wrapped(text: &str, r: Rect, size: f32, color: Color) -> f32 {
 
 fn inset(r: Rect, d: f32) -> Rect {
     Rect::new(r.x + d, r.y + d, r.w - 2. * d, r.h - 2. * d)
-}
-/// A rounded rectangle drawn as one triangle fan, so translucent colours
-/// shade evenly.
-fn rrect(r: Rect, radius: f32, c: Color) {
-    use std::f32::consts::{FRAC_PI_2, PI};
-    let rad = radius.min(r.w / 2.).min(r.h / 2.).max(0.);
-    if rad < 0.5 {
-        draw_rectangle(r.x, r.y, r.w, r.h, c);
-        return;
-    }
-    // Seven points round each corner, clockwise from the top right.
-    const STEPS: usize = 7;
-    let corners = [
-        (r.right() - rad, r.y + rad, -FRAC_PI_2),
-        (r.right() - rad, r.bottom() - rad, 0.),
-        (r.x + rad, r.bottom() - rad, FRAC_PI_2),
-        (r.x + rad, r.y + rad, PI),
-    ];
-    let point = |i: usize| {
-        let (cx, cy, a0) = corners[i / STEPS % 4];
-        let a = a0 + FRAC_PI_2 * (i % STEPS) as f32 / (STEPS - 1) as f32;
-        vec2(cx + rad * a.cos(), cy + rad * a.sin())
-    };
-    for i in 0..4 * STEPS {
-        draw_triangle(r.center(), point(i), point(i + 1), c);
-    }
 }
 fn boxed(r: Rect, radius: f32, fill: Color, edge: Color) {
     rrect(r, radius, edge);
@@ -320,18 +257,15 @@ struct Input {
     keys: bool,
 }
 impl Input {
+    /// This frame's pointer, in canvas units.
     fn read() -> Self {
-        let scale = (screen_width() / W).min(screen_height() / H);
-        let origin = vec2(
-            (screen_width() - W * scale) / 2.,
-            (screen_height() - H * scale) / 2.,
-        );
+        let p = gfx::pointer();
         Self {
-            mouse: (Vec2::from(mouse_position()) - origin) / scale,
-            click: is_mouse_button_pressed(MouseButton::Left),
-            held: is_mouse_button_down(MouseButton::Left),
-            right_click: is_mouse_button_pressed(MouseButton::Right),
-            scroll: mouse_wheel().1,
+            mouse: p.pos,
+            click: p.click,
+            held: p.held,
+            right_click: p.right_click,
+            scroll: p.scroll,
             keys: true,
         }
     }
@@ -375,6 +309,9 @@ impl Input {
             },
             (true, Style::Bar, false) => p.bar_button,
         };
+        if hover {
+            gfx::cursor(CursorIcon::PointingHand);
+        }
         boxed(r, 5., fill, edge);
         let size = if r.h < 34. { 14. } else { 16. };
         let bold = !matches!(style, Style::Secondary);
@@ -468,7 +405,7 @@ struct Art {
     theme: Theme,
     /// Martian Internet's text follows the rule the match plays.
     martian_internet_printed: bool,
-    sprites: RefCell<HashMap<Key, Texture2D>>,
+    sprites: RefCell<HashMap<Key, TextureHandle>>,
     /// Layout coordinates and font sizes are in logical units, not pixels.
     layouts: RefCell<HashMap<(FaceId, u32), FxLayout>>,
     titles: RefCell<HashMap<(FaceId, u32), TitleLayout>>,
@@ -530,20 +467,9 @@ impl Art {
         let mut cache = self.sprites.borrow_mut();
         let t = cache.entry(key).or_insert_with(|| {
             let pm = build(key);
-            let t = Texture2D::from_rgba8(pm.w as u16, pm.h as u16, &pm.bytes());
-            t.set_filter(FilterMode::Linear);
-            t
+            gfx::load_texture("sprite", pm.w, pm.h, &pm.bytes())
         });
-        draw_texture_ex(
-            t,
-            r.x,
-            r.y,
-            WHITE,
-            DrawTextureParams {
-                dest_size: Some(r.size()),
-                ..Default::default()
-            },
-        );
+        gfx::draw_texture(t.id(), r);
     }
     fn icon(&self, icon: Icon, x: f32, y: f32, s: f32) {
         self.sprite(Key::Icon(icon, phys(s)), Rect::new(x, y, s, s));
@@ -863,6 +789,12 @@ struct View {
     /// Stays open while the pointer moves from a Safe stat into its card backs.
     safe: Option<(usize, Rect)>,
     popup: Option<Popup>,
+    /// How far the popup's title bar has been dragged from the centre.
+    popup_offset: Vec2,
+    /// Where the popup was last drawn, and whether its title bar is being
+    /// dragged: the choice panel beneath must not take that pointer.
+    popup_rect: Option<Rect>,
+    popup_dragged: bool,
     /// The decision whose pile popup was already opened automatically.
     auto_popup: Option<usize>,
     /// First visible hand row.
@@ -986,26 +918,44 @@ fn flow(pieces: Vec<Piece>, width: f32, size: f32) -> Vec<Vec<(f32, Piece)>> {
     rows
 }
 
-/// Draws one piece whose row starts at `top`; hovering a card chip zooms it.
-fn draw_piece(p: &Piece, x: f32, top: f32, size: f32, input: &Input, art: &Art, view: &mut View) {
+/// Draws one piece whose row starts at `at`; hovering a card chip zooms it.
+/// Selectable pieces (the log's) can be highlighted and copied as text.
+fn draw_piece(
+    p: &Piece,
+    at: Vec2,
+    size: f32,
+    selectable: bool,
+    input: &Input,
+    art: &Art,
+    view: &mut View,
+) {
+    let (x, top) = (at.x, at.y);
     let h = size + 5.;
     let base = top + size * 1.02;
+    let text = |t: &str, x: f32, size: f32, color: Color, bold: bool| {
+        if selectable {
+            gfx::selectable_text(t, x, base, size, color, face_of(bold));
+        } else {
+            draw_str(t, x, base, size, color, bold);
+        }
+    };
     match p {
-        Piece::Word(t, bold, tone) => draw_str(t, x, base, size, tone.color(), *bold),
+        Piece::Word(t, bold, tone) => text(t, x, size, tone.color(), *bold),
         Piece::Card(id, title) => {
             let c = face(*id);
             let tw = measure(title, size * 0.93, false);
             let r = Rect::new(x + 1., top, tw + size + 8., h);
             rrect(r, 3., band(c.color));
-            draw_str(title, r.x + 4., base, size * 0.93, pal().title_ink, true);
+            text(title, r.x + 4., size * 0.93, pal().title_ink, true);
             let age = Rect::new(r.right() - size - 1., r.y + 1., size, h - 2.);
             rrect(age, 2., shade(c.color));
-            centered_title(
+            chip_numeral(
                 &c.age.to_string(),
                 age.center().x,
                 base - 0.5,
                 size * 0.8,
                 pal().title_ink,
+                selectable,
             );
             if r.contains(input.mouse) {
                 view.zoom = Some(*id);
@@ -1017,12 +967,19 @@ fn draw_piece(p: &Piece, x: f32, top: f32, size: f32, input: &Input, art: &Art, 
         }
         Piece::Back(set, age) => {
             let r = Rect::new(x + 2., top, size + 2., h);
-            back_chip(*set, *age, r);
+            back_chip(*set, *age, r, selectable);
             if r.contains(input.mouse) {
                 view.tooltip = Some(format!("A hidden {} {age} card", set.name()));
             }
         }
-        Piece::Icon(icon) => art.icon(*icon, x + 2., top + 1., size + 2.),
+        Piece::Icon(icon) => {
+            // Copied as its name; drawn over the name's selection highlight.
+            if selectable {
+                let name = title_case(icon.name());
+                gfx::selectable_stand_in(&name, x + 2., base, size + 2., size, Face::Body);
+            }
+            art.icon(*icon, x + 2., top + 1., size + 2.);
+        }
     }
 }
 
@@ -1185,21 +1142,16 @@ fn log_panel(game: &Game, r: Rect, input: &Input, art: &Art, view: &mut View) {
                 // A wash fading to the right, stronger for the current turn.
                 let wash = pal().log_wash;
                 let strength = wash.a * if *current { 1. } else { 0.52 };
-                for i in 0..8 {
-                    let t = i as f32 / 8.;
-                    draw_rectangle(
-                        band.x + band.w * t,
-                        band.y,
-                        band.w / 8. + 0.5,
-                        band.h,
-                        Color {
-                            a: strength * (1. - t),
-                            ..wash
-                        },
-                    );
-                }
+                gfx::draw_gradient(
+                    band,
+                    Color {
+                        a: strength,
+                        ..wash
+                    },
+                    Color { a: 0., ..wash },
+                );
                 draw_rectangle(band.x, band.y, 2., band.h, pal().accent);
-                title(
+                gfx::selectable_text(
                     text,
                     band.x + 9.,
                     band.y + 16.,
@@ -1209,11 +1161,20 @@ fn log_panel(game: &Game, r: Rect, input: &Input, art: &Art, view: &mut View) {
                     } else {
                         pal().log_head
                     },
+                    Face::Title,
                 );
             }
             Row::Items(x, items) => {
                 for (px, piece) in items {
-                    draw_piece(piece, r.x + x + px, top, LOG_SIZE, input, art, view);
+                    draw_piece(
+                        piece,
+                        vec2(r.x + x + px, top),
+                        LOG_SIZE,
+                        true,
+                        input,
+                        art,
+                        view,
+                    );
                 }
             }
         }
@@ -1231,14 +1192,11 @@ fn log_panel(game: &Game, r: Rect, input: &Input, art: &Art, view: &mut View) {
             if active { pal().accent } else { pal().line },
         );
     }
-    if view.log_scroll.is_some()
-        && input.button(
-            "Jump to latest",
-            Rect::new(r.center().x - 70., r.bottom() - 40., 140., 30.),
-            true,
-            Style::Primary,
-        )
-    {
+    let jump = Rect::new(r.center().x - 70., r.bottom() - 40., 140., 30.);
+    if view.log_scroll.is_some() {
+        gfx::cover("jump-to-latest", jump);
+    }
+    if view.log_scroll.is_some() && input.button("Jump to latest", jump, true, Style::Primary) {
         view.log_scroll = None;
     }
     view.log = Some(log);
@@ -1265,13 +1223,13 @@ fn help_panel(r: Rect, input: &Input, view: &mut View) {
         .enumerate()
     {
         let caps = !line.is_empty() && line.chars().all(|c| !c.is_lowercase());
-        draw_str(
+        gfx::selectable_text(
             line,
             r.x + 14.,
             r.y + 14. + size + i as f32 * row,
             size,
             if caps { pal().accent } else { pal().ink },
-            caps,
+            face_of(caps),
         );
     }
 }
@@ -1498,7 +1456,7 @@ fn safe_popup_rect(anchor: Rect, count: usize) -> Rect {
 
 /// The pulsing glow around a legal choice.
 fn glow(r: Rect) {
-    let pulse = (get_time() * 3.).sin() as f32 * 0.5 + 0.5;
+    let pulse = (gfx::time() * 3.).sin() as f32 * 0.5 + 0.5;
     for i in 1..=6 {
         let d = i as f32 * 1.6 + 1.;
         let a = (0.3 - i as f32 * 0.045).max(0.) * (0.65 + 0.35 * pulse);
@@ -1551,15 +1509,16 @@ fn card_back(art: &Art, set: Set, age: u8, r: Rect, legal: bool) {
 }
 
 /// A small face-down card: its set colour and age are public.
-fn back_chip(set: Set, age: u8, r: Rect) {
+fn back_chip(set: Set, age: u8, r: Rect, selectable: bool) {
     rrect(r, 2., set_color(set));
     draw_rectangle_lines(r.x, r.y, r.w, r.h, 1., pal().back_edge);
-    centered_title(
+    chip_numeral(
         &age.to_string(),
         r.center().x,
         r.y + r.h * 0.73,
         r.h * 0.6,
         set_on_back(set),
+        selectable,
     );
 }
 
@@ -2054,12 +2013,12 @@ fn display_slot(game: &Game, player: usize, r: Rect, input: &Input, art: &Art, v
         ..pal().accent
     };
     let dash = |a: Vec2, b: Vec2| {
-        let len = a.distance(b);
+        let len = (b - a).length();
         let steps = (len / 10.) as usize;
         for k in 0..steps {
             let t0 = k as f32 / steps as f32;
             let t1 = t0 + 0.55 / steps as f32;
-            let (p, q) = (a.lerp(b, t0), a.lerp(b, t1));
+            let (p, q) = (a + (b - a) * t0, a + (b - a) * t1);
             draw_line(p.x, p.y, q.x, q.y, 1.5, edge);
         }
     };
@@ -2250,7 +2209,7 @@ fn supply(game: &Game, r: Rect, input: &Input, art: &Art, view: &mut View) {
         } else {
             (Rect::new(x, r.y + 6., 16., 21.), 14., r.y + 22.)
         };
-        back_chip(Set::Base, age as u8, chip);
+        back_chip(Set::Base, age as u8, chip, false);
         let base = base_row.counts[age];
         let base_text = base.to_string();
         title(
@@ -2357,7 +2316,7 @@ fn supply(game: &Game, r: Rect, input: &Input, art: &Art, view: &mut View) {
         if legal {
             glow(tile);
         }
-        back_chip(set, age, tile);
+        back_chip(set, age, tile, false);
         if Rect::new(tile.x, tile.y, pitch, tile.h).contains(input.mouse) {
             view.tooltip = Some(format!(
                 "{} {age} achievement{}",
@@ -2789,7 +2748,7 @@ fn choices(game: &mut Game, input: &Input, art: &Art, view: &mut View) {
         return;
     }
     if choice.player != game.human || game.thinking() {
-        let dots = ".".repeat((get_time() * 2.) as usize % 4);
+        let dots = ".".repeat((gfx::time() * 2.) as usize % 4);
         let text = if choice.player == game.human {
             "Stopping the previous search".to_string()
         } else {
@@ -2865,7 +2824,15 @@ fn choices(game: &mut Game, input: &Input, art: &Art, view: &mut View) {
     .next()
     {
         for (x, piece) in &row {
-            draw_piece(piece, prompt_x + x, band.y + 8., 15., input, art, view);
+            draw_piece(
+                piece,
+                vec2(prompt_x + x, band.y + 8.),
+                15.,
+                true,
+                input,
+                art,
+                view,
+            );
         }
     }
     // Option buttons flow left to right, three rows per page.
@@ -2891,15 +2858,15 @@ fn choices(game: &mut Game, input: &Input, art: &Art, view: &mut View) {
     let pages = rows.len().div_ceil(3).max(1);
     view.choices_page = view.choices_page.min(pages - 1);
     const KEYS: [KeyCode; 9] = [
-        KeyCode::Key1,
-        KeyCode::Key2,
-        KeyCode::Key3,
-        KeyCode::Key4,
-        KeyCode::Key5,
-        KeyCode::Key6,
-        KeyCode::Key7,
-        KeyCode::Key8,
-        KeyCode::Key9,
+        KeyCode::Num1,
+        KeyCode::Num2,
+        KeyCode::Num3,
+        KeyCode::Num4,
+        KeyCode::Num5,
+        KeyCode::Num6,
+        KeyCode::Num7,
+        KeyCode::Num8,
+        KeyCode::Num9,
     ];
     let mut shown = 0;
     for (row_i, row) in rows.iter().skip(view.choices_page * 3).take(3).enumerate() {
@@ -2930,7 +2897,7 @@ fn choices(game: &mut Game, input: &Input, art: &Art, view: &mut View) {
                 if px + pw > b.right() - 8. {
                     break;
                 }
-                draw_piece(p, px, b.y + 6., size, input, art, view);
+                draw_piece(p, vec2(px, b.y + 6.), size, false, input, art, view);
                 px += pw;
             }
             if hover {
@@ -2939,7 +2906,7 @@ fn choices(game: &mut Game, input: &Input, art: &Art, view: &mut View) {
                     picked = Some(*i);
                 }
             }
-            if input.keys && shown < KEYS.len() && is_key_pressed(KEYS[shown]) {
+            if input.keys && shown < KEYS.len() && gfx::key_pressed(KEYS[shown]) {
                 picked = Some(*i);
             }
             shown += 1;
@@ -3137,12 +3104,16 @@ fn side(game: &Game, input: &Input, art: &Art, view: &mut View) {
             if let Some(result) = result {
                 view.copying = None;
                 match result {
-                    Ok(()) => view.copied_at = Some(get_time()),
+                    Ok(()) => view.copied_at = Some(gfx::clock()),
                     Err(error) => view.copy_error = Some(error),
                 }
             }
         }
-        let copied = view.copied_at.is_some_and(|t| get_time() - t < 1.5);
+        // "Copied" shows for a moment: keep painting until it goes.
+        let copied = view.copied_at.is_some_and(|t| gfx::clock() - t < 1.5);
+        if copied || view.copying.is_some() {
+            gfx::time();
+        }
         let copy_rect = Rect::new(SIDE_X + SIDE_W - 100., TABS_Y, 100., 28.);
         if input.button(
             if view.copying.is_some() {
@@ -3168,8 +3139,8 @@ fn side(game: &Game, input: &Input, art: &Art, view: &mut View) {
                     let _ = sender.send(super::clipboard::copy_windows(&text));
                 });
             } else {
-                miniquad::window::clipboard_set(&text);
-                view.copied_at = Some(get_time());
+                gfx::ctx().copy_text(text);
+                view.copied_at = Some(gfx::clock());
             }
         }
         if copy_rect.contains(input.mouse)
@@ -3380,12 +3351,18 @@ fn popup_window(game: &Game, input: &Input, art: &Art, view: &mut View) {
     let ch = cw * CARD_H / CARD_W;
     let pw = (per_row as f32 * (cw + 14.) + 34.).max(measure(&title, 17., true) + 90.);
     let ph = 60. + rows as f32 * (ch + caption_h) + 10.;
+    // Centred over the table, then wherever its title bar was dragged; the
+    // title bar always stays on the table so it can be dragged back.
+    let x = POPUP_AREA.x + (POPUP_AREA.w - pw) / 2. + view.popup_offset.x;
+    let y = POPUP_AREA.y + (POPUP_AREA.h - ph) / 2. + view.popup_offset.y;
     let r = Rect::new(
-        POPUP_AREA.x + (POPUP_AREA.w - pw) / 2.,
-        POPUP_AREA.y + (POPUP_AREA.h - ph) / 2.,
+        x.clamp(120. - pw, W - 120.),
+        y.clamp(POPUP_AREA.y, H - 40.),
         pw,
         ph,
     );
+    view.popup_offset += vec2(r.x - x, r.y - y);
+    view.popup_rect = Some(r);
     draw_rectangle(r.x + 4., r.y + 6., r.w, r.h, pal().shadow);
     panel(r);
     draw_rectangle(r.x + 4., r.y + 4., r.w - 8., 36., pal().strip);
@@ -3400,6 +3377,16 @@ fn popup_window(game: &Game, input: &Input, art: &Art, view: &mut View) {
     draw_face(&title, r.x + 16., r.y + 28., 16., pal().accent, Face::Title);
     let close = Rect::new(r.right() - 38., r.y + 8., 28., 28.);
     let close_hover = close.contains(input.mouse);
+    // Selectable text beneath stays out of reach; the title bar drags.
+    gfx::cover("popup", r);
+    let bar = gfx::cover("popup-title", Rect::new(r.x, r.y, r.w - 46., 40.));
+    view.popup_dragged = bar.dragged();
+    if bar.dragged() {
+        view.popup_offset += bar.drag_delta();
+        gfx::cursor(CursorIcon::Grabbing);
+    } else if bar.hovered() {
+        gfx::cursor(CursorIcon::Grab);
+    }
     boxed(
         close,
         5.,
@@ -3630,10 +3617,7 @@ fn top_bar(game: &mut Game, input: &Input, menu: &mut bool) -> bool {
         .max(if game.two_player { 460. } else { 550. })
         .min(ex - 24. - status_w);
     heading(&status, status_x, 26., status_size, p.bar_accent);
-    let ctrl = is_key_down(KeyCode::LeftControl)
-        || is_key_down(KeyCode::RightControl)
-        || is_key_down(KeyCode::LeftSuper)
-        || is_key_down(KeyCode::RightSuper);
+    let ctrl = gfx::command_down();
     if game.two_player {
         if input.button(
             "Switch seats",
@@ -3669,7 +3653,7 @@ fn top_bar(game: &mut Game, input: &Input, menu: &mut bool) -> bool {
                 true,
                 Style::Bar,
             ))
-            || (input.keys && !ctrl && is_key_pressed(KeyCode::P)))
+            || (input.keys && !ctrl && gfx::key_pressed(KeyCode::P)))
     {
         game.toggle_peek();
     }
@@ -3678,7 +3662,7 @@ fn top_bar(game: &mut Game, input: &Input, menu: &mut bool) -> bool {
         Rect::new(W - 316., 5., 150., 30.),
         game.can_undo(),
         Style::Bar,
-    ) || (input.keys && ctrl && is_key_pressed(KeyCode::Z) && game.can_undo());
+    ) || (input.keys && ctrl && gfx::key_pressed(KeyCode::Z) && game.can_undo());
     if input.button(
         "Setup  (Esc)",
         Rect::new(W - 156., 5., 140., 30.),
@@ -3724,8 +3708,22 @@ fn draw_table(game: &mut Game, real: &Input, art: &Art, view: &mut View, menu: &
         anchor.contains(real.mouse)
             || safe_popup_rect(anchor, game.view.players[player].safe.len()).contains(real.mouse)
     });
-    // A popup covers the table but leaves the choice panel and top bar live.
-    let live = if safe_hover { &blocked } else { real };
+    // A popup covers the table but leaves the choice panel and top bar live,
+    // except where it has been dragged over them. Its rect is last frame's:
+    // the popup is drawn last, on top.
+    let over_popup =
+        popup && (view.popup_dragged || view.popup_rect.is_some_and(|r| r.contains(real.mouse)));
+    let under_popup = Input {
+        keys: real.keys,
+        ..Input::blocked()
+    };
+    let live = if safe_hover {
+        &blocked
+    } else if over_popup {
+        &under_popup
+    } else {
+        real
+    };
     let input = if popup { &blocked } else { live };
     table_background(art);
     let rival = 1 - game.human;
@@ -3767,6 +3765,7 @@ fn pinned_card(art: &Art, view: &View) {
         return;
     };
     draw_rectangle(0., 0., W, H, pal().scrim);
+    gfx::cover("pinned", Rect::new(0., 0., W, H));
     let (w, h) = (700., 500.);
     let r = Rect::new((W - w) / 2., (H - h) / 2. - 14., w, h);
     rrect(Rect::new(r.x + 6., r.y + 9., w, h), 23., pal().card_shadow);
@@ -3783,72 +3782,20 @@ fn pinned_card(art: &Art, view: &View) {
 
 // ------------------------------------------------------------------- setup
 
-#[derive(Default)]
-struct Editor {
-    focus: Option<usize>,
-    select_all: bool,
-}
-impl Editor {
-    fn field(&mut self, id: usize, text: &mut String, r: Rect, input: &Input) {
-        if input.click && r.contains(input.mouse) {
-            self.focus = Some(id);
-            self.select_all = false;
-        }
-        if self.focus == Some(id) {
-            let ctrl = is_key_down(KeyCode::LeftControl)
-                || is_key_down(KeyCode::RightControl)
-                || is_key_down(KeyCode::LeftSuper)
-                || is_key_down(KeyCode::RightSuper);
-            if ctrl && is_key_pressed(KeyCode::A) {
-                self.select_all = true;
-            }
-            if is_key_pressed(KeyCode::Backspace) || is_key_pressed(KeyCode::Delete) {
-                if self.select_all {
-                    text.clear();
-                    self.select_all = false;
-                } else {
-                    text.pop();
-                }
-            }
-            if ctrl && is_key_pressed(KeyCode::V) {
-                if self.select_all {
-                    text.clear();
-                    self.select_all = false;
-                }
-                if let Some(paste) = miniquad::window::clipboard_get() {
-                    text.push_str(paste.trim());
-                }
-            }
-            while let Some(c) = get_char_pressed() {
-                if !ctrl && !c.is_control() {
-                    if self.select_all {
-                        text.clear();
-                        self.select_all = false;
-                    }
-                    text.push(c);
-                }
-            }
-        }
-        let focused = self.focus == Some(id);
-        boxed(
-            r,
-            5.,
-            pal().table,
-            if focused { pal().accent } else { pal().line },
-        );
-        if focused {
-            boxed(inset(r, 1.), 4., pal().table, pal().accent);
-        }
-        let mut shown = text.clone();
-        while !shown.is_empty() && measure(&shown, 17., false) > r.w - 25. {
-            shown.remove(0);
-        }
-        if self.select_all && focused {
-            let w = measure(&shown, 17., false);
-            draw_rectangle(r.x + 10., r.y + 10., w + 4., r.h - 20., pal().selection);
-        }
-        label(&shown, r.x + 12., r.y + r.h / 2. + 6., 17., pal().ink);
+/// A setup text field in the table's style around a real egui text edit:
+/// caret, mouse selection, arrow keys and the clipboard all work.
+fn field(id: &str, text: &mut String, r: Rect) {
+    let focused = gfx::has_focus(id);
+    boxed(
+        r,
+        5.,
+        pal().table,
+        if focused { pal().accent } else { pal().line },
+    );
+    if focused {
+        boxed(inset(r, 1.), 4., pal().table, pal().accent);
     }
+    gfx::text_field(id, text, inset(r, 2.), 17., pal().ink);
 }
 
 struct SetupFields {
@@ -3864,7 +3811,6 @@ enum SetupAction {
 fn setup(
     settings: &mut Settings,
     input: &Input,
-    editor: &mut Editor,
     fields: &mut SetupFields,
     has_game: bool,
     busy: bool,
@@ -3931,7 +3877,7 @@ fn setup(
             style(settings.two_player == two_player),
         ) {
             settings.two_player = two_player;
-            editor.focus = None;
+            gfx::drop_focus();
         }
     }
     let top = row("Expansions");
@@ -4019,11 +3965,10 @@ fn setup(
                 fields.elo = elo.to_string();
             }
         }
-        editor.field(
-            2,
+        field(
+            "elo",
             &mut fields.elo,
             Rect::new(x + 4. * 106., top, full - 4. * 106., 40.),
-            input,
         );
     }
     let parsed = if settings.two_player {
@@ -4036,10 +3981,10 @@ fn setup(
         (settings.sims, settings.temperature) = strength::setting(elo);
     }
     let top = row("Seed");
-    editor.field(3, &mut fields.seed, Rect::new(x, top, full, 40.), input);
+    field("seed", &mut fields.seed, Rect::new(x, top, full, 40.));
     let seed = parse_seed(&fields.seed);
     let top = row("Saved game (.json / .txt)");
-    editor.field(1, &mut settings.resume, Rect::new(x, top, full, 40.), input);
+    field("resume", &mut settings.resume, Rect::new(x, top, full, 40.));
     let message = parsed.as_ref().err().or(seed.as_ref().err());
     if let Some(message) = message {
         wrapped(message, Rect::new(x, y, full, 30.), 15., pal().error);
@@ -4076,228 +4021,370 @@ fn setup(
     None
 }
 
-pub async fn run(options: Options) {
-    prevent_quit();
-    load_fonts().await;
-    let mut settings = options.settings;
-    let mut fields = SetupFields {
-        elo: settings.elo.map(|elo| elo.to_string()).unwrap_or_default(),
-        seed: options.seed.unwrap_or_else(|| fresh_seed(None)).to_string(),
-    };
-    let mut art = Art::default();
-    let mut game: Option<Game> = None;
-    let mut opening = None;
-    let mut menu = true;
-    let mut error = String::new();
-    let mut editor = Editor::default();
-    let mut view = View::default();
-    let mut fullscreen = false;
-    let mut smoke_frames = 0;
-    let mut smoke_chose = options.resume;
-    let smoke_started = Instant::now();
-    let mut last_choice_count = 0;
-    let mut request = options.start.then_some(options.resume);
-    loop {
-        if is_quit_requested() {
-            break;
+/// The desktop app: the setup screen, then the table.
+pub struct App {
+    options: Options,
+    settings: Settings,
+    fields: SetupFields,
+    art: Art,
+    game: Option<Game>,
+    opening: Option<std::sync::mpsc::Receiver<Result<Game, String>>>,
+    menu: bool,
+    error: String,
+    view: View,
+    /// The theme egui's own widgets were last styled for.
+    styled: Option<Theme>,
+    smoke_frames: usize,
+    smoke_chose: bool,
+    smoke_started: Instant,
+    /// The smoke test's screenshot, once written: Ok(steps) or the error.
+    smoke_shot: Arc<Mutex<Option<Result<usize, String>>>>,
+    smoke_requested: bool,
+    last_choice_count: usize,
+    /// A game to open next frame: Some(resume).
+    request: Option<bool>,
+}
+
+impl App {
+    pub fn new(cc: &eframe::CreationContext<'_>, options: Options) -> Self {
+        gfx::install_fonts(&cc.egui_ctx);
+        // The table scales itself to the window; Ctrl+/- zoom would fight it.
+        cc.egui_ctx.options_mut(|o| o.zoom_with_keyboard = false);
+        if super::clipboard::is_wsl() {
+            cc.egui_ctx.add_plugin(CopyThroughWindows);
         }
-        if options.screenshot.is_some() && smoke_started.elapsed().as_secs() >= 30 {
-            eprintln!(
-                "Desktop smoke timed out: {}",
-                game.as_ref()
-                    .and_then(|g| g.error.as_deref())
-                    .unwrap_or(&error)
-            );
-            std::process::exit(1);
+        let settings = options.settings.clone();
+        let fields = SetupFields {
+            elo: settings.elo.map(|elo| elo.to_string()).unwrap_or_default(),
+            seed: options.seed.unwrap_or_else(|| fresh_seed(None)).to_string(),
+        };
+        Self {
+            request: options.start.then_some(options.resume),
+            smoke_chose: options.resume,
+            options,
+            settings,
+            fields,
+            art: Art::default(),
+            game: None,
+            opening: None,
+            menu: true,
+            error: String::new(),
+            view: View::default(),
+            styled: None,
+            smoke_frames: 0,
+            smoke_started: Instant::now(),
+            smoke_shot: Arc::default(),
+            smoke_requested: false,
+            last_choice_count: 0,
         }
-        let frame_start = Instant::now();
-        let input = Input::read();
-        let scale = (screen_width() / W).min(screen_height() / H);
-        THEME.set(settings.theme);
-        // A match shows the rule it plays; new matches play the printed one.
-        let martian_internet_printed = game
-            .as_ref()
-            .is_none_or(|g| g.view.martian_internet_printed);
-        art.begin_frame(scale * screen_dpi_scale(), martian_internet_printed);
-        set_camera(&Camera2D {
-            // Camera2D flips screen Y internally; positive zoom keeps UI Y down.
-            zoom: vec2(2. * scale / screen_width(), 2. * scale / screen_height()),
-            target: vec2(W / 2., H / 2.),
-            ..Default::default()
-        });
-        clear_background(pal().backdrop);
-        if is_key_pressed(KeyCode::F11) {
-            fullscreen = !fullscreen;
-            set_fullscreen(fullscreen);
+    }
+
+    /// Scales the canvas to fit the window and returns its origin in points.
+    fn fit(ctx: &egui::Context) -> Vec2 {
+        let density = ctx.pixels_per_point();
+        let pixels = ctx.content_rect().size() * density;
+        let wanted = (pixels.x / W).min(pixels.y / H).max(0.1);
+        if (wanted - density).abs() > 1e-4 {
+            // Applies from the next frame, which egui paints at once.
+            ctx.set_pixels_per_point(wanted);
         }
-        if is_key_pressed(KeyCode::Escape) {
-            if !menu && view.pinned.is_some() {
+        let screen = ctx.content_rect();
+        screen.min.to_vec2() + (screen.size() - vec2(W, H)) / 2.
+    }
+
+    fn keys(&mut self, ctx: &egui::Context) {
+        if gfx::key_pressed(KeyCode::F11) {
+            let fullscreen = ctx.input(|i| i.viewport().fullscreen.unwrap_or(false));
+            ctx.send_viewport_cmd(ViewportCommand::Fullscreen(!fullscreen));
+        }
+        if gfx::key_pressed(KeyCode::Escape) {
+            let view = &mut self.view;
+            if !self.menu && view.pinned.is_some() {
                 view.pinned = None;
-            } else if !menu && view.safe.is_some() {
+            } else if !self.menu && view.safe.is_some() {
                 view.safe = None;
-            } else if !menu && view.popup.is_some() {
+            } else if !self.menu && view.popup.is_some() {
                 view.popup = None;
-            } else if game.is_some()
-                && (!menu || settings.two_player || strength::parse_elo(&fields.elo).is_ok())
+            } else if self.game.is_some()
+                && (!self.menu
+                    || self.settings.two_player
+                    || strength::parse_elo(&self.fields.elo).is_ok())
             {
-                menu = !menu;
-                editor.focus = None;
+                self.menu = !self.menu;
+                gfx::drop_focus();
             }
         }
-        if let Some(g) = &mut game {
-            if !menu && (g.sims != settings.sims || g.temperature != settings.temperature) {
+        if gfx::key_pressed(KeyCode::F12) {
+            let _ = std::fs::create_dir_all(DATA_DIR);
+            let path = std::path::Path::new(DATA_DIR).join("screenshot.png");
+            ctx.request_screenshot(move |image| {
+                if let Err(e) = save_screenshot(&image, &path) {
+                    eprintln!("Could not save screenshot: {e}");
+                }
+            });
+        }
+    }
+
+    /// Advances the game and its AI, and opens a requested game on a worker.
+    fn update(&mut self) {
+        if let Some(g) = &mut self.game {
+            let settings = &self.settings;
+            if !self.menu && (g.sims != settings.sims || g.temperature != settings.temperature) {
                 g.set_sims(settings.sims);
                 g.set_temperature(settings.temperature);
                 if let Err(message) = settings.save() {
-                    error = message;
+                    self.error = message;
                 }
             }
-            g.tick(!menu);
-            if g.steps() != last_choice_count {
-                last_choice_count = g.steps();
-                view.choices_page = 0;
-                view.card_options = None;
+            g.tick(!self.menu);
+            if g.steps() != self.last_choice_count {
+                self.last_choice_count = g.steps();
+                self.view.choices_page = 0;
+                self.view.card_options = None;
             }
         }
         // Load/replay on a worker too: long saves or slow disks never freeze the window.
-        if let Some(resume) = request.take() {
-            let s = settings.clone();
+        if let Some(resume) = self.request.take() {
             let seed = if resume {
-                None
+                Ok(None)
             } else {
-                match parse_seed(&fields.seed) {
-                    Ok(seed) => Some(seed),
-                    Err(message) => {
-                        error = message;
-                        continue;
+                parse_seed(&self.fields.seed).map(Some)
+            };
+            match seed {
+                Err(message) => self.error = message,
+                Ok(seed) => {
+                    let s = self.settings.clone();
+                    let (tx, rx) = std::sync::mpsc::channel();
+                    match std::thread::Builder::new()
+                        .name("play-app-load".into())
+                        .spawn(move || {
+                            let _ = tx.send(Game::open(&s, resume, seed));
+                        }) {
+                        Ok(_) => {
+                            self.opening = Some(rx);
+                            self.error = "Loading game and opponent...".into();
+                        }
+                        Err(e) => self.error = format!("Could not load game: {e}"),
                     }
                 }
-            };
-            let (tx, rx) = std::sync::mpsc::channel();
-            match std::thread::Builder::new()
-                .name("play-app-load".into())
-                .spawn(move || {
-                    let _ = tx.send(Game::open(&s, resume, seed));
-                }) {
-                Ok(_) => {
-                    opening = Some(rx);
-                    error = "Loading game and opponent...".into();
-                }
-                Err(e) => error = format!("Could not load game: {e}"),
             }
         }
-        if let Some(rx) = &opening {
+        if let Some(rx) = &self.opening {
             match rx.try_recv() {
                 Ok(result) => {
-                    opening = None;
+                    self.opening = None;
                     match result {
                         Ok(g) => {
-                            fields.seed = fresh_seed(Some(g.seed)).to_string();
+                            let settings = &mut self.settings;
+                            self.fields.seed = fresh_seed(Some(g.seed)).to_string();
                             settings.echoes = g.view.echoes;
                             settings.figures = g.view.figures;
                             settings.cities = g.view.cities;
                             settings.unseen = g.view.unseen;
                             settings.artifacts = g.view.artifacts;
                             settings.resume = g.path.to_string_lossy().into();
-                            error = settings.save().err().unwrap_or_default();
-                            game = Some(g);
-                            menu = false;
-                            view = View::default();
+                            self.error = settings.save().err().unwrap_or_default();
+                            self.game = Some(g);
+                            self.menu = false;
+                            self.view = View::default();
                         }
                         Err(e) => {
-                            error = e;
-                            menu = true;
+                            self.error = e;
+                            self.menu = true;
                         }
                     }
                 }
                 Err(std::sync::mpsc::TryRecvError::Disconnected) => {
-                    opening = None;
-                    error = "Game loader stopped unexpectedly.".into();
+                    self.opening = None;
+                    self.error = "Game loader stopped unexpectedly.".into();
                 }
                 Err(std::sync::mpsc::TryRecvError::Empty) => {}
             }
         }
-        if menu {
-            for file in get_dropped_files() {
-                if let Some(path) = file.path
-                    && path.extension().is_some_and(|e| e == "json" || e == "txt")
-                {
-                    settings.resume = path.to_string_lossy().into();
+    }
+
+    fn setup_screen(&mut self, ctx: &egui::Context, input: &Input) {
+        for file in ctx.input(|i| i.raw.dropped_files.clone()) {
+            let path = file.path();
+            if path.extension().is_some_and(|e| e == "json" || e == "txt") {
+                self.settings.resume = path.to_string_lossy().into();
+            }
+        }
+        let theme = self.settings.theme;
+        table_background(&self.art);
+        let action = setup(
+            &mut self.settings,
+            input,
+            &mut self.fields,
+            self.game.is_some(),
+            self.opening.is_some() || self.game.as_ref().is_some_and(Game::thinking),
+            &self.error,
+        );
+        // A theme applies at once and is remembered without starting a game.
+        if self.settings.theme != theme
+            && let Err(message) = self.settings.save()
+        {
+            self.error = message;
+        }
+        match action {
+            Some(SetupAction::Start { resume }) => self.request = Some(resume),
+            Some(SetupAction::Return) => {
+                self.menu = false;
+                gfx::drop_focus();
+            }
+            None => {}
+        }
+    }
+
+    /// `--smoke-test`: play to a human decision, save a screenshot, quit.
+    fn smoke(&mut self, ctx: &egui::Context) {
+        let Some(path) = self.options.screenshot.clone() else {
+            return;
+        };
+        ctx.request_repaint();
+        if let Some(result) = self.smoke_shot.lock().unwrap().take() {
+            match result {
+                Ok(steps) => {
+                    println!(
+                        "Desktop smoke passed: {steps} saved choices, human decision ready, screenshot written."
+                    );
+                    std::process::exit(0);
+                }
+                Err(e) => {
+                    eprintln!("Desktop smoke failed: {e}");
+                    std::process::exit(1);
                 }
             }
-            let theme = settings.theme;
-            table_background(&art);
-            let action = setup(
-                &mut settings,
-                &input,
-                &mut editor,
-                &mut fields,
-                game.is_some(),
-                opening.is_some() || game.as_ref().is_some_and(Game::thinking),
-                &error,
+        }
+        if self.smoke_started.elapsed().as_secs() >= 30 {
+            eprintln!(
+                "Desktop smoke timed out: {}",
+                self.game
+                    .as_ref()
+                    .and_then(|g| g.error.as_deref())
+                    .unwrap_or(&self.error)
             );
-            // A theme applies at once and is remembered without starting a game.
-            if settings.theme != theme
-                && let Err(message) = settings.save()
-            {
-                error = message;
-            }
-            match action {
-                Some(SetupAction::Start { resume }) => request = Some(resume),
-                Some(SetupAction::Return) => {
-                    menu = false;
-                    editor.focus = None;
-                }
-                None => {}
-            }
-        } else if let Some(g) = &mut game {
-            table(g, &input, &art, &mut view, &mut menu);
+            std::process::exit(1);
+        }
+        if self.menu && self.opening.is_none() && self.request.is_none() {
+            eprintln!("Desktop smoke failed: {}", self.error);
+            std::process::exit(1);
+        }
+        let Some(g) = &mut self.game else {
+            return;
+        };
+        if self.menu || self.smoke_requested {
+            return;
+        }
+        self.smoke_frames += 1;
+        if g.human_turn() && (!self.smoke_chose || (g.two_player && g.steps() < 2)) {
+            g.choose_option(0);
+            self.smoke_chose = true;
+            // This frame shows the state before the choice: capture a later one.
+            self.smoke_frames = 0;
+        }
+        if self.smoke_frames > 5 && g.human_turn() && g.steps() >= 2 {
+            self.smoke_requested = true;
+            let steps = g.steps();
+            let shot = self.smoke_shot.clone();
+            ctx.request_screenshot(move |image| {
+                let result = save_screenshot(&image, std::path::Path::new(&path)).map(|()| steps);
+                *shot.lock().unwrap() = Some(result);
+            });
+        }
+    }
+}
+
+/// Saves a captured frame as a PNG.
+fn save_screenshot(image: &egui::ColorImage, path: &std::path::Path) -> Result<(), String> {
+    let [w, h] = image.size;
+    gfx::write_png(path, w, h, image.as_raw())
+}
+
+impl eframe::App for App {
+    fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        let ctx = ui.ctx().clone();
+        let origin = Self::fit(&ctx);
+        THEME.set(self.settings.theme);
+        if self.styled != Some(self.settings.theme) {
+            gfx::apply_theme(&ctx, pal());
+            self.styled = Some(self.settings.theme);
+        }
+        gfx::begin(&ctx, origin);
+        // A match shows the rule it plays; new matches play the printed one.
+        let martian_internet_printed = self
+            .game
+            .as_ref()
+            .is_none_or(|g| g.view.martian_internet_printed);
+        self.art
+            .begin_frame(ctx.pixels_per_point(), martian_internet_printed);
+        let input = Input::read();
+        self.keys(&ctx);
+        self.update();
+        if self.menu {
+            self.setup_screen(&ctx, &input);
+        } else if let Some(g) = &mut self.game {
+            table(g, &input, &self.art, &mut self.view, &mut self.menu);
+            let settings = &mut self.settings;
             if g.two_player && (settings.human != g.human || settings.auto_switch != g.auto_switch)
             {
                 settings.human = g.human;
                 settings.auto_switch = g.auto_switch;
                 if let Err(message) = settings.save() {
-                    error = message;
-                }
-            }
-            if let Some(screenshot) = &options.screenshot {
-                smoke_frames += 1;
-                if g.human_turn() && (!smoke_chose || (g.two_player && g.steps() < 2)) {
-                    g.choose_option(0);
-                    smoke_chose = true;
-                    // This frame shows the state before the choice: capture
-                    // a later one.
-                    smoke_frames = 0;
-                }
-                if smoke_frames > 5 && g.human_turn() && g.steps() >= 2 {
-                    set_default_camera();
-                    get_screen_data().export_png(screenshot);
-                    println!(
-                        "Desktop smoke passed: {} saved choices, human decision ready, screenshot written.",
-                        g.steps()
-                    );
-                    break;
+                    self.error = message;
                 }
             }
         }
-        if options.screenshot.is_some() && menu && opening.is_none() && request.is_none() {
-            eprintln!("Desktop smoke failed: {error}");
-            std::process::exit(1);
+        let animating = gfx::end();
+        self.smoke(&ctx);
+        // egui paints again on any input. Between inputs, keep painting only
+        // while something moves by itself: the AI, a load, a pulsing glow.
+        let busy = self.opening.is_some()
+            || self.request.is_some()
+            || self.game.as_ref().is_some_and(Game::waiting_on_ai);
+        if animating || busy {
+            ctx.request_repaint_after(Duration::from_millis(33));
         }
-        set_default_camera();
-        if is_key_pressed(KeyCode::F12) {
-            let _ = std::fs::create_dir_all(DATA_DIR);
-            let path = std::path::Path::new(DATA_DIR).join("screenshot.png");
-            get_screen_data().export_png(&path.display().to_string());
-        }
-        // A static card table needs only 30 fps; cap even on uncapped WSL/X11.
-        let remaining = Duration::from_millis(33).saturating_sub(frame_start.elapsed());
-        std::thread::sleep(remaining);
-        next_frame().await;
     }
-    // Font atlases own textures. Drop them while macroquad's context is alive,
-    // instead of during thread-local destruction after the window has closed.
-    FONTS.with(|slot| *slot.borrow_mut() = [None, None, None]);
+
+    fn clear_color(&self, _visuals: &egui::Visuals) -> [f32; 4] {
+        let c = pal().backdrop;
+        egui::Color32::from(c).to_normalized_gamma_f32()
+    }
+}
+
+/// WSL's X11 clipboard bridge drops text copied from the window: send each
+/// copy (Ctrl+C on a selection) to the Windows clipboard instead.
+///
+/// A plugin, so it runs at the end of egui's pass: selected labels copy
+/// there, after the app's own code. Plugins run in the order they are
+/// added, and egui adds its label selection before the app can add this.
+struct CopyThroughWindows;
+
+impl egui::Plugin for CopyThroughWindows {
+    fn debug_name(&self) -> &'static str {
+        "copy-through-windows"
+    }
+
+    fn on_end_pass(&mut self, ui: &mut egui::Ui) {
+        let mut copies = Vec::new();
+        ui.ctx().output_mut(|o| {
+            o.commands.retain(|command| match command {
+                egui::OutputCommand::CopyText(text) => {
+                    copies.push(text.clone());
+                    false
+                }
+                _ => true,
+            });
+        });
+        for text in copies {
+            std::thread::spawn(move || {
+                if let Err(e) = super::clipboard::copy_windows(&text) {
+                    eprintln!("{e}");
+                }
+            });
+        }
+    }
 }
 
 #[cfg(test)]
@@ -4345,10 +4432,13 @@ mod tests {
     fn repeated_resizing_keeps_only_current_density_sprites() {
         let original_density = PX.get();
         let mut art = Art::default();
-        // Unmanaged placeholder handles exercise cache eviction without
-        // opening a window or allocating real GPU resources in unit tests.
-        let placeholder = Texture2D::from_miniquad_texture(
-            macroquad::miniquad::TextureId::from_raw_id(macroquad::miniquad::RawId::OpenGl(0)),
+        // A context without a window hands out texture handles without
+        // allocating GPU resources.
+        let ctx = egui::Context::default();
+        let placeholder = ctx.load_texture(
+            "placeholder",
+            egui::ColorImage::example(),
+            Default::default(),
         );
         for i in 0..=150 {
             let density = 0.5 + i as f32 / 300.;
