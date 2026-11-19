@@ -2267,7 +2267,9 @@ fn supply(game: &Game, r: Rect, input: &Input, art: &Art, view: &mut View) {
     caps("Achieve", r.x + 12., y + 15., 10.5);
     let available = &supply.achievements;
     let junked = &supply.junk;
-    let junk_text = junked.len().to_string();
+    // Special achievements are cards, so the junk's count includes them.
+    let junk_count = junked.len() + supply.junk_specials.len();
+    let junk_text = junk_count.to_string();
     let none = "none available";
     let none_w = measure(none, 13., false);
     let label_w = |text: &str| measure_face(text, 10.5, Face::Title) + 8.;
@@ -2385,10 +2387,9 @@ fn supply(game: &Game, r: Rect, input: &Input, art: &Art, view: &mut View) {
             .iter()
             .map(|&sp| title_case(sp.name()))
             .collect::<Vec<_>>();
-        let plural = if junked.len() == 1 { "" } else { "s" };
+        let plural = if junk_count == 1 { "" } else { "s" };
         view.tooltip = Some(format!(
-            "Junk: {} card{plural}\n{}: {}\nSpecial achievements: {}\nClick to see the junk",
-            junked.len(),
+            "Junk: {junk_count} card{plural}\n{}: {}\nSpecial achievements: {}\nClick to see the junk",
             if supply.junk_visible {
                 "Cards"
             } else {
@@ -3267,24 +3268,30 @@ fn popup_window(game: &Game, input: &Input, art: &Art, view: &mut View) {
             )
         }
         Popup::Junk => {
-            let junk = &game.view.supply.junk;
-            (
-                junk.iter()
-                    .map(|&id| {
-                        if game.view.supply.junk_visible {
-                            Tile::Face(id)
-                        } else {
-                            Tile::Back(face(id).set, face(id).age)
-                        }
-                    })
-                    .collect(),
-                Vec::new(),
-                format!(
-                    "Junk · {} card{}",
-                    junk.len(),
-                    if junk.len() == 1 { "" } else { "s" }
-                ),
-            )
+            let supply = &game.view.supply;
+            let (junk, specials) = (&supply.junk, &supply.junk_specials);
+            // Junked special achievements follow the other cards, drawn as
+            // in an achievements popup.
+            let tiles = junk
+                .iter()
+                .map(|&id| {
+                    if supply.junk_visible {
+                        Tile::Face(id)
+                    } else {
+                        Tile::Back(face(id).set, face(id).age)
+                    }
+                })
+                .chain(specials.iter().map(|&sp| {
+                    Tile::Token(
+                        Glyph::Achievement,
+                        title_case(sp.name()),
+                        Some(special_summary(sp)),
+                    )
+                }))
+                .collect();
+            let n = junk.len() + specials.len();
+            let title = format!("Junk · {n} card{}", if n == 1 { "" } else { "s" });
+            (tiles, Vec::new(), title)
         }
         Popup::Pile(player, pile) => {
             let cards = pile_cards(game, player, pile);
