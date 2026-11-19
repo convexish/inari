@@ -2007,6 +2007,7 @@ impl Game {
                     }
                     _ => {}
                 }
+                self.reduce_refused_admission(step, context, &mut targets);
                 let positional = from.selects_deck_top();
                 let named = self.named_references(from, context, regs);
                 let operations = targets

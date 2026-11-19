@@ -287,6 +287,43 @@ impl Game {
         }
     }
 
+    /// A single move into a full Forecast or Safe (Rubber, Globe, Tuning
+    /// Fork): capacity refuses the chosen card before any karma sees it, so
+    /// every pick ends the same way, with no card moved, recorded or shown.
+    /// Keep the first. Blind picks keep their menu for the native sampler.
+    pub(super) fn reduce_refused_admission(
+        &self,
+        step: Move,
+        context: Context,
+        targets: &mut Vec<Target>,
+    ) {
+        #[cfg(test)]
+        if self.shortcuts_disabled {
+            return;
+        }
+        if targets.len() < 2 || step.verify || step.when.is_some() || step.by.is_some() {
+            return;
+        }
+        let zone = match step.to {
+            Destination::Forecast(who) => self.one_player(who, context).map(Zone::Forecast),
+            Destination::Safe(who) => self.one_player(who, context).map(Zone::Safe),
+            _ => return,
+        };
+        let Ok(zone) = zone else {
+            return;
+        };
+        if self.position.has_room(zone)
+            || targets.iter().any(|&target| {
+                target.physical == zone
+                    || !Self::unaliased(target)
+                    || !self.position.can_view(target.physical, context.controller)
+            })
+        {
+            return;
+        }
+        targets.truncate(1);
+    }
+
     /// Oars: the lowest-first policy, for an ordinary demand whose executor moves cards
     /// from their own hand.
     pub(super) fn reduce_lowest_first(
@@ -947,6 +984,10 @@ mod chosen_value_tests;
 #[cfg(test)]
 #[path = "reference_subset_shortcut_tests.rs"]
 mod reference_subset_tests;
+
+#[cfg(test)]
+#[path = "refused_admission_shortcut_tests.rs"]
+mod refused_admission_tests;
 
 #[cfg(test)]
 #[path = "constrained_tests.rs"]

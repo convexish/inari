@@ -778,7 +778,23 @@ fn globe_foreseen_can_foreshadow_other_board_and_refuses_full_forecast_before_re
             } else {
                 start(f, source, 1, A, false)
             };
-            finish(&mut game, |menu| choose_card(menu, other));
+            finish(&mut game, |menu| {
+                // A full Forecast refuses every top alike: no menu.
+                let foreshadow = menu.options.iter().any(|option| {
+                    matches!(
+                        option,
+                        Alternative::Move {
+                            verb: Verb::Foreshadow,
+                            ..
+                        }
+                    )
+                });
+                assert!(
+                    !(full && foreshadow),
+                    "refused foreshadow is not a choice: {menu:?}"
+                );
+                choose_card(menu, other)
+            });
             assert_eq!(
                 game.position.locate(other),
                 Some(if foreseen && !full {

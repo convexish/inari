@@ -342,7 +342,11 @@ fn rubber_native_foreseen_foreshadows_a_top_and_respects_a_full_forecast() {
             let mut events = Vec::new();
             finish(&mut game, &mut events, |m| {
                 if m.options.iter().any(|o|matches!(o,Alternative::Move{verb:Verb::Meld,target:TargetDescriptor::Known{card,source:Zone::Forecast(A)}} if *card==source)){named(m,source)}
-            else if m.options.iter().any(|o|matches!(o,Alternative::Move{verb:Verb::Foreshadow,target:TargetDescriptor::Known{card,..}} if *card==target)){named(m,target)}else{decline(m)}
+            else if m.options.iter().any(|o|matches!(o,Alternative::Move{verb:Verb::Foreshadow,target:TargetDescriptor::Known{card,..}} if *card==target)){
+                // A full Forecast refuses every top alike: no menu.
+                assert!(!full, "refused foreshadow is not a choice: {m:?}");
+                named(m,target)
+            }else{decline(m)}
             });
             assert_eq!(
                 game.position.locate(target),

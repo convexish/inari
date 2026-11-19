@@ -1220,13 +1220,16 @@ fn tuning_fork_full_forecast_ends_before_draw_return_or_repeat() {
         tech(&mut f, Color::Yellow, 2, Zone::Forecast(A));
     }
     let kept = tech(&mut f, Color::Green, 3, Zone::Hand(A));
+    let also_kept = tech(&mut f, Color::Blue, 1, Zone::Hand(A));
     let undrawn = draw_card(&mut f, Color::Red, 3);
     let mut game = start(f, card, 0, E);
     let mut events = vec![];
+    // Every card in hand would be refused: which one is not asked.
     finish(&mut game, &mut events, |_| {
         panic!("refused admission is not a choice")
     });
     assert_eq!(game.position.locate(kept), Some(Zone::Hand(A)));
+    assert_eq!(game.position.locate(also_kept), Some(Zone::Hand(A)));
     assert_eq!(
         game.position.locate(undrawn),
         Some(Zone::Deck(Deck::base(3)))

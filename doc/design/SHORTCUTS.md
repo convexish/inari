@@ -32,7 +32,8 @@ order a floor measures, so a choice removes exactly the options above it.
 Other rules: hidden sweeps that must move every matching card take physical
 order (hands are revealed first, so they never reach this); moves into a Safe
 keep their order; exchange cohorts and committed groups are sets; splays that
-would all change nothing are not asked.
+would all change nothing are not asked, nor are visible single picks into a
+full Forecast or Safe (Rubber, Globe).
 
 ## Choice aliases
 
