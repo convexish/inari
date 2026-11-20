@@ -799,6 +799,8 @@ struct View {
     auto_popup: Option<usize>,
     /// First visible hand row.
     hand_scroll: usize,
+    /// While the hand's scrollbar is dragged: where on the thumb it was grabbed.
+    hand_drag: Option<f32>,
     copied_at: Option<f64>,
     copying: Option<std::sync::mpsc::Receiver<Result<(), String>>>,
     copy_error: Option<String>,
@@ -1205,7 +1207,7 @@ fn log_panel(game: &Game, r: Rect, input: &Input, art: &Art, view: &mut View) {
 fn help_panel(r: Rect, input: &Input, view: &mut View) {
     panel(r);
     let text = format!(
-        "HOW TO PLAY\n\nWhen it is your move, legal cards glow. Click one to choose it, or click a button in the choice panel below your hand (keys 1-9 work too).\n\nClick a glowing supply achievement to claim it. Hover a player's Safe to see its ordered secrets; click a glowing secret to choose it. Safe numbers show count/capacity. Unknown fronts stay hidden, even in your own Safe.\n\nRight-click a card, or a card name in the log, to see it full size; click again to close it. Hovering a name in the log also previews it. Copy log puts the whole log on the clipboard.\n\nScroll over your hand to see more rows. Each player's summary counts every zone: achievements, score, hand, forecast, Safe and Museums, with the limit after a slash. Issued Decrees sit with the achievements. Hover a count for details and click it to see the cards: fronts for your own hand and forecast, backs for the opponent's unless a rule lets you look (Emperor Meiji's borrowed hand, a Hitchhiking controller's inspection). Click the junk count to see the junk; with Wernher von Braun it shows its fronts. The forecast opens by itself when you promote.\n\nUnder each stack: the splay direction, the icons, bonuses and echo effects that buried cards add, and the stack size. Click the size to see every card in the stack. With Artifacts, the sixth column is the artifact on display.\n\nIn 2-player mode, Switch seats changes your view. Autoswitch follows the next actual choice, including shared effects and demands; forced choices and shortcuts resolve first.\n\nUndo (Ctrl+Z) restores your previous choice (either player's in 2-player mode). Esc opens setup. F11 toggles fullscreen. F12 saves a screenshot.\n\nQUICK REFERENCE\n\n{RULES}\n\nInari plays Innovation, a game by Carl Chudyk. Fonts: Cinzel and Alegreya Sans (SIL Open Font License)."
+        "HOW TO PLAY\n\nWhen it is your move, legal cards glow. Click one to choose it, or click a button in the choice panel below your hand (keys 1-9 work too).\n\nClick a glowing supply achievement to claim it. Hover a player's Safe to see its ordered secrets; click a glowing secret to choose it. Safe numbers show count/capacity. Unknown fronts stay hidden, even in your own Safe.\n\nRight-click a card, or a card name in the log, to see it full size; click again to close it. Hovering a name in the log also previews it. Copy log puts the whole log on the clipboard.\n\nScroll over your hand, or drag the bar at its right edge, to see more rows. Each player's summary counts every zone: achievements, score, hand, forecast, Safe and Museums, with the limit after a slash. Issued Decrees sit with the achievements. Hover a count for details and click it to see the cards: fronts for your own hand and forecast, backs for the opponent's unless a rule lets you look (Emperor Meiji's borrowed hand, a Hitchhiking controller's inspection). Click the junk count to see the junk; with Wernher von Braun it shows its fronts. The forecast opens by itself when you promote.\n\nUnder each stack: the splay direction, the icons, bonuses and echo effects that buried cards add, and the stack size. Click the size to see every card in the stack. With Artifacts, the sixth column is the artifact on display.\n\nIn 2-player mode, Switch seats changes your view. Autoswitch follows the next actual choice, including shared effects and demands; forced choices and shortcuts resolve first.\n\nUndo (Ctrl+Z) restores your previous choice (either player's in 2-player mode). Esc opens setup. F11 toggles fullscreen. F12 saves a screenshot.\n\nQUICK REFERENCE\n\n{RULES}\n\nInari plays Innovation, a game by Carl Chudyk. Fonts: Cinzel and Alegreya Sans (SIL Open Font License)."
     );
     let size = 15.;
     let all = lines(&text, r.w - 28., size);
@@ -2546,6 +2548,32 @@ fn hand(game: &Game, input: &Input, art: &Art, view: &mut View) {
     }
     view.hand_scroll = view.hand_scroll.min(max_scroll);
     let top = area.y;
+    // The scrollbar: drag the thumb, or click the track to jump there.
+    let track = Rect::new(
+        area.right() - 16.,
+        top,
+        16.,
+        HAND_ROWS as f32 * (HAND_H + HAND_GAP) - HAND_GAP,
+    );
+    let thumb = track.h * HAND_ROWS as f32 / rows.max(1) as f32;
+    let travel = track.h - thumb;
+    let thumb_y = |scroll: usize| track.y + travel * scroll as f32 / max_scroll.max(1) as f32;
+    if max_scroll > 0 && input.click && track.contains(input.mouse) {
+        let grab = input.mouse.y - thumb_y(view.hand_scroll);
+        view.hand_drag = Some(if (0. ..=thumb).contains(&grab) {
+            grab
+        } else {
+            thumb / 2.
+        });
+    }
+    if let Some(grab) = view.hand_drag {
+        if input.held && max_scroll > 0 {
+            let t = ((input.mouse.y - grab - track.y) / travel).clamp(0., 1.);
+            view.hand_scroll = (t * max_scroll as f32).round() as usize;
+        } else {
+            view.hand_drag = None;
+        }
+    }
     if cards.is_empty() {
         let slot = Rect::new(area.x, top, HAND_W, HAND_H);
         draw_rectangle_lines(slot.x, slot.y, slot.w, slot.h, 1.5, pal().line);
@@ -2578,38 +2606,20 @@ fn hand(game: &Game, input: &Input, art: &Art, view: &mut View) {
         notes.push("Opponent's hand · you control their turn".to_string());
     }
     if max_scroll > 0 {
-        let track = Rect::new(
-            area.right() - 6.,
-            top,
-            4.,
-            HAND_ROWS as f32 * (HAND_H + HAND_GAP) - HAND_GAP,
-        );
-        rrect(track, 2., pal().strip);
-        let thumb = track.h * HAND_ROWS as f32 / rows as f32;
+        let active = view.hand_drag.is_some() || track.contains(input.mouse);
+        let w = if active { 8. } else { 6. };
+        let x = track.right() - 4. - w;
+        rrect(Rect::new(x, track.y, w, track.h), w / 2., pal().strip);
         rrect(
-            Rect::new(
-                track.x,
-                track.y + (track.h - thumb) * view.hand_scroll as f32 / max_scroll as f32,
-                track.w,
-                thumb,
-            ),
-            2.,
+            Rect::new(x, thumb_y(view.hand_scroll), w, thumb),
+            w / 2.,
             pal().accent,
         );
         notes.push(format!(
-            "Rows {}–{} of {rows} · scroll",
+            "Rows {}–{} of {rows}",
             view.hand_scroll + 1,
             view.hand_scroll + HAND_ROWS
         ));
-        // Legal cards scrolled out of view still need to be discoverable.
-        let hidden = cards
-            .iter()
-            .enumerate()
-            .filter(|&(i, _)| i < first || i >= first + HAND_ROWS * per_row)
-            .any(|(_, &id)| legal_card(game, id));
-        if hidden {
-            notes.push("More choosable cards when scrolled".into());
-        }
     }
     let mut x = area.right() - 14.;
     for note in notes.iter().rev() {
