@@ -310,8 +310,10 @@ const RECORD_HEADER: &str = "inari-next-record";
 
 /// The network weights shipped inside the app.
 const BUILTIN_WEIGHTS: &[u8] = include_bytes!("../../weights/inari_v1.0.bin");
-/// The status line's name for the built-in network.
-const BUILTIN_NAME: &str = "Inari v1.0";
+/// The status line's name for the built-in network: the app's version.
+fn builtin_name() -> String {
+    format!("Inari {}", crate::VERSION)
+}
 /// The built-in network, parsed once.
 static BUILTIN_NET: LazyLock<Arc<Net>> = LazyLock::new(|| {
     Arc::new(Net::from_bytes(BUILTIN_WEIGHTS).expect("the built-in network loads"))
@@ -352,7 +354,7 @@ impl Play {
         if settings.two_player {
             "2-player".into()
         } else {
-            BUILTIN_NAME.into()
+            builtin_name()
         }
     }
 
@@ -779,7 +781,7 @@ mod tests {
             };
             let mut game = Game::open(&settings, false, Some(11)).unwrap();
             assert!(!game.random_ai());
-            assert_eq!(game.model_name, BUILTIN_NAME);
+            assert_eq!(game.model_name, builtin_name());
             // The instant random AI keeps this whole-game test fast.
             game.play.net = None;
             assert!(game.random_ai());
@@ -919,7 +921,7 @@ mod tests {
             let mut game = Game::open(&settings, false, Some(13)).unwrap();
             game.play.net = Some(tiny.clone());
             game.set_sims(sims);
-            assert_eq!(game.model_name, BUILTIN_NAME);
+            assert_eq!(game.model_name, builtin_name());
             assert!(!game.random_ai() && !game.thinking());
             if sims == 0 {
                 assert_eq!(game.ai_label(), "greedy network");

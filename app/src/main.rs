@@ -15,6 +15,13 @@ mod ui;
 
 use eframe::egui;
 
+/// The release tag the build was made from (set by the release workflow), or
+/// "dev" for local builds.
+pub const VERSION: &str = match option_env!("INARI_VERSION") {
+    Some(version) => version,
+    None => "dev",
+};
+
 fn main() {
     // Windows keeps setup, networks and saves beside the exe.
     if cfg!(windows)
