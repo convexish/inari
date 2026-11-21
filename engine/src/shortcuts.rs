@@ -75,10 +75,12 @@ impl Figure {
 impl Position {
     /// A reduced phase's dependencies plus the rule consequences of its
     /// operations: with Cities, a meld or junk can claim a special
-    /// achievement and a splay can draw a City.
+    /// achievement and a splay can draw a City. A junk claims only for a
+    /// City junked from a hand, so a sweep outside the piles never claims.
     fn consequence_dependencies<'a>(
         &self,
         dependencies: &'a [ShortcutDependency],
+        outside_piles: bool,
     ) -> std::borrow::Cow<'a, [ShortcutDependency]> {
         use ShortcutDependency::*;
         if !self.expansions().cities() {
@@ -90,7 +92,8 @@ impl Position {
                 // Cities' tokens have no cost or eligibility, so only claim
                 // karmas observe them, never Daedalus's or Leeuwenhoek's
                 // claim modifiers.
-                Move(Verb::Meld | Verb::Junk) => &[ClaimReaction],
+                Move(Verb::Meld) => &[ClaimReaction],
+                Move(Verb::Junk) if !outside_piles => &[ClaimReaction],
                 Splay => &[Draw],
                 _ => continue,
             };
@@ -114,7 +117,7 @@ impl Position {
         outside_piles: bool,
         live: bool,
     ) -> bool {
-        let dependencies = &self.consequence_dependencies(dependencies)[..];
+        let dependencies = &self.consequence_dependencies(dependencies, outside_piles)[..];
         figure.shortcut_dependencies().iter().any(|dependency| {
             dependencies.contains(dependency)
                 && match dependency {

@@ -419,4 +419,21 @@ fn shortcut_guards_include_city_consequences() {
         });
         assert_eq!(clear, [true, false], "{figure:?} {dependency:?}");
     }
+    // Only a City junked from a hand claims: a whole-deck junk (Babylon's
+    // Uplift) stays reduced under claim karmas like Zhang Heng's.
+    for figure in [Figure::HedyLamarr, Figure::ZhangHeng] {
+        let mut layout = Layout::default();
+        let card = Card::from_code(figure.code()).unwrap();
+        let zone = Zone::Board(A, card.color);
+        layout.add(card, zone);
+        let position = layout.position(Expansions::FIGURES.union(Expansions::CITIES));
+        assert!(
+            position.dependencies_clear(&[Move(Verb::Junk)], Context::new(A), true),
+            "{figure:?}"
+        );
+        assert!(
+            !position.dependencies_clear(&[Move(Verb::Junk)], Context::new(A), false),
+            "{figure:?}"
+        );
+    }
 }
