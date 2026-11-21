@@ -69,7 +69,8 @@ const BRETHREN_MELDED: Slot = Slot::action(3);
 const BRETHREN_NEXT: Expr = Add(&Max(&Selector::Reg(Reg::Slot(BRETHREN_MELDED))), 1);
 /// Cards returned by a later instruction of the same effect.
 const RETURNED: Slot = Slot::effect(2);
-/// The Prophecies' reference secret, kept apart from the drawn card.
+/// The Prophecies' reference secret, chosen face down and kept apart from
+/// the drawn card.
 const REFERENCE: Slot = Slot::effect(2);
 const HAND_AND_SCORE: Selector = Selector::Union(&[HAND, SCORE]);
 const DRAWN_IN_HAND: Selector = filtered(&HAND, &[Has(InSlot(DRAWN))]);
@@ -1233,7 +1234,8 @@ const QUACKERY: &[(EffectKind, Program)] = &[
 // Choose to either draw and safeguard a [4], or draw and reveal a card of
 // value one higher than one of your secrets. If you reveal a red or purple
 // card, meld one of your other secrets. If you do, safeguard the drawn card.
-// The reference secret is revealed in place and excluded from "other".
+// The reference secret is chosen face down (its back shows its value) and
+// excluded from "other"; only the drawn card is revealed.
 const THE_PROPHECIES: &[(EffectKind, Program)] = &[(
     N,
     &[
@@ -1252,7 +1254,7 @@ const THE_PROPHECIES: &[(EffectKind, Program)] = &[(
         draw_age(Const(0)),
         reveal(LAST),
         Instruction::Jump(7),
-        reveal(SAFE).keep(REFERENCE),
+        choose(Executor, Choice::Card(&SAFE)).keep(REFERENCE),
         draw_age(Add(&Value(Reg::Slot(REFERENCE)), 1)),
         reveal(LAST).keep(DRAWN),
         if_(

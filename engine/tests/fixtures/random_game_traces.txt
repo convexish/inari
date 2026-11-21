@@ -421,16 +421,16 @@ unseen 3 3d808f990ac88639 243
 unseen 4 2dfe676798338479 397
 unseen 5 c9379ec4152c117a 305
 unseen 6 4096b9410fe9556b 371
-unseen 7 1db29f80b6a104f7 250
+unseen 7 b3c826c6eae592e9 250
 unseen 8 9a6c480fed03220b 213
 unseen 9 5ccafdaca2051556 432
 unseen 10 9fac7eda7f376e42 281
 unseen 11 3933e3d1827e8c39 293
-unseen 12 d541fa2a21a8870a 363
-unseen 13 275022cf1c7ea39b 411
+unseen 12 1239eec4de1a25c0 363
+unseen 13 d1aa30902e1b27a8 411
 unseen 14 2b667b4dfc29b242 212
 unseen 15 75213f28dad742fe 226
-unseen 16 d67407ef530bf841 420
+unseen 16 112efc0cbb939368 420
 unseen 17 06691eead9ec7178 410
 unseen 18 d395f397f49b1482 304
 unseen 19 a9779c104f1cbb0b 288
@@ -446,13 +446,13 @@ figures+unseen 2 322d9ba78f317a69 231
 figures+unseen 3 634b9441c72b44b0 333
 figures+unseen 4 fc2d16314c2cca22 344
 figures+unseen 5 ffe7194dfcd16128 543
-figures+unseen 6 7990e075ee84d078 512
+figures+unseen 6 5783f84ff7ccb3d4 512
 figures+unseen 7 9897ad09c074f04d 330
 figures+unseen 8 930c89519660d807 315
 figures+unseen 9 133f289c89894f5b 283
-figures+unseen 10 2113dde805440e3d 261
+figures+unseen 10 ef6e7a3577ed546c 261
 figures+unseen 11 65d287193a6dd691 320
-figures+unseen 12 637bd3e690ae755c 349
+figures+unseen 12 bc18d7e318dee1f0 349
 figures+unseen 13 9bb402b1be8ea870 389
 figures+unseen 14 f3366e1b06ec30df 199
 figures+unseen 15 72f205e482dbfe86 484
@@ -472,13 +472,13 @@ cities+unseen 2 486a581a16d2bfe5 206
 cities+unseen 3 f3fcbfcafe3c94db 401
 cities+unseen 4 5ae9c0c98e7c73d7 262
 cities+unseen 5 7330fe395fa7db8e 276
-cities+unseen 6 6dc412fdf59c0674 298
-cities+unseen 7 49738837e7dcfa46 320
+cities+unseen 6 4aa189b7164c7aa4 298
+cities+unseen 7 3baf3f239ec07397 320
 cities+unseen 8 a495c153b9ca0417 438
 cities+unseen 9 649e2f876ddc795d 321
 cities+unseen 10 62231edfb5396aff 341
 cities+unseen 11 a306d26d7c4c2f9a 287
-cities+unseen 12 29042e4d7df03ca8 328
+cities+unseen 12 47c7a616235810d3 328
 cities+unseen 13 6f6b8ece68335da1 424
 cities+unseen 14 0263f4689695a9d6 357
 cities+unseen 15 140ec5ddd1811a4d 335
@@ -490,11 +490,11 @@ cities+unseen 20 5e55040f01c8e19a 252
 cities+unseen 21 ed5b806850f3a0e2 378
 cities+unseen 22 3369cec8b4622290 294
 cities+unseen 23 8bc2fc6408183dc6 345
-cities+unseen 24 f55ee77ce0cb7ab0 443
+cities+unseen 24 f46af4b916008e4c 443
 # cities+unseen Witness { figure_reactions: 0, city_draws: 375, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1812, safeguards: 144, secrets_out: 97, unseen_claims: 33, flips: 0 }
 figures+cities+unseen 0 9ee8836e6dc96d29 215
 figures+cities+unseen 1 3245d11e9b3e760d 491
-figures+cities+unseen 2 eca649131011aa77 472
+figures+cities+unseen 2 b890d22ac54ec7a0 472
 figures+cities+unseen 3 53680b350b129dbc 393
 figures+cities+unseen 4 8d659893d6b3c3a1 319
 figures+cities+unseen 5 304d81731e14535d 243
@@ -519,7 +519,7 @@ figures+cities+unseen 23 8518801c0a6809ed 281
 figures+cities+unseen 24 0c7ff3fbec67a02f 465
 # figures+cities+unseen Witness { figure_reactions: 1218, city_draws: 390, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1722, safeguards: 99, secrets_out: 76, unseen_claims: 25, flips: 0 }
 echoes+unseen 0 3c12c0cb0cb655a5 204
-echoes+unseen 1 ed558c7dd6e28b3c 337
+echoes+unseen 1 2b0a554a13407513 337
 echoes+unseen 2 09503daa6de2fcaf 294
 echoes+unseen 3 accabb62e9e3826e 270
 echoes+unseen 4 5c0fed2c1188e32c 210
@@ -530,11 +530,11 @@ echoes+unseen 8 cfbdb8daff6cc241 208
 echoes+unseen 9 579e61d9787cfd4a 420
 echoes+unseen 10 56d71d46d6c4f363 287
 echoes+unseen 11 5b57bccfa74c37b6 223
-echoes+unseen 12 7f2e5eec4e6ed378 267
+echoes+unseen 12 d2ad01f1b6170b0c 267
 echoes+unseen 13 13580417822453b0 359
 echoes+unseen 14 0e86d2774b4b6a50 337
 echoes+unseen 15 ba771c5d50dcb987 249
-echoes+unseen 16 9ee58e29f342e841 216
+echoes+unseen 16 a98beb29c58728c1 216
 echoes+unseen 17 22fae524d72537f3 435
 echoes+unseen 18 388c098b68e2606a 338
 echoes+unseen 19 5a585f226527208b 294
@@ -546,7 +546,7 @@ echoes+unseen 24 519e374140e78dab 398
 # echoes+unseen Witness { figure_reactions: 0, city_draws: 0, echo_draws: 1672, forecast_moves: 385, promotions: 240, top_echo_dogmas: 427, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1140, safeguards: 57, secrets_out: 45, unseen_claims: 30, flips: 0 }
 figures+echoes+unseen 0 e1f8b97a8b2c272d 313
 figures+echoes+unseen 1 11d1606210ebc60e 311
-figures+echoes+unseen 2 388b9e9c85c4b7da 493
+figures+echoes+unseen 2 4b2dff2312b24900 493
 figures+echoes+unseen 3 68f8f462fa321c5e 445
 figures+echoes+unseen 4 e371eaf2baa45e0e 192
 figures+echoes+unseen 5 3c97d74fa342ed1f 186
@@ -555,7 +555,7 @@ figures+echoes+unseen 7 39247d90bfb64353 438
 figures+echoes+unseen 8 88c1c1dea613423d 263
 figures+echoes+unseen 9 f641a432307ffeef 444
 figures+echoes+unseen 10 bc6f2b15c2b52b48 391
-figures+echoes+unseen 11 ae945ee806747dcf 276
+figures+echoes+unseen 11 a54b68c0f06d9bee 276
 figures+echoes+unseen 12 5fb37575ebaa7570 293
 figures+echoes+unseen 13 4559e1726fa871ae 407
 figures+echoes+unseen 14 42a12026a957a208 464
@@ -565,7 +565,7 @@ figures+echoes+unseen 17 ade98ef41ec73b70 203
 figures+echoes+unseen 18 6b785afaeda854aa 283
 figures+echoes+unseen 19 0ea52eb1875b2719 409
 figures+echoes+unseen 20 c2deafab5acd5a40 281
-figures+echoes+unseen 21 8ca9697ce3da3cad 320
+figures+echoes+unseen 21 845eceee24b6ffbd 320
 figures+echoes+unseen 22 c1ab5d9c6b4cfbdb 301
 figures+echoes+unseen 23 38571b447cbb9d04 253
 figures+echoes+unseen 24 5ecf01d04c206279 291
@@ -575,7 +575,7 @@ cities+echoes+unseen 1 40455be7890d04ea 261
 cities+echoes+unseen 2 14fda8bd29530a65 346
 cities+echoes+unseen 3 ea3229c3e97d4425 435
 cities+echoes+unseen 4 44a6697d51897d14 365
-cities+echoes+unseen 5 a95115f1082182b0 412
+cities+echoes+unseen 5 1b12de55d25cca28 412
 cities+echoes+unseen 6 49b09e9b46b6058d 368
 cities+echoes+unseen 7 d1c37fa5555d4b37 335
 cities+echoes+unseen 8 1d858921943ea461 269
@@ -606,7 +606,7 @@ figures+cities+echoes+unseen 6 107b090886c0b472 356
 figures+cities+echoes+unseen 7 fc40a1c9676d8437 281
 figures+cities+echoes+unseen 8 86fa69f8f5667bb2 244
 figures+cities+echoes+unseen 9 be455dc07050ba18 393
-figures+cities+echoes+unseen 10 867e610d826bd5d5 246
+figures+cities+echoes+unseen 10 69a067d5f0ae8ade 246
 figures+cities+echoes+unseen 11 65376fe4dc0ab3f1 402
 figures+cities+echoes+unseen 12 d0cceb07e425b7e7 353
 figures+cities+echoes+unseen 13 86092b1b669f4722 370
@@ -615,21 +615,21 @@ figures+cities+echoes+unseen 15 94e75d3f7fee9f2a 503
 figures+cities+echoes+unseen 16 3b11ff5042079ec1 241
 figures+cities+echoes+unseen 17 ad975deadc646ff0 301
 figures+cities+echoes+unseen 18 769ad5cce043ee29 277
-figures+cities+echoes+unseen 19 dcc14d31a5812ca8 520
+figures+cities+echoes+unseen 19 63d6fee4a2a95973 520
 figures+cities+echoes+unseen 20 6b7aacbe3f8714bb 305
 figures+cities+echoes+unseen 21 78955b580a8f7227 470
 figures+cities+echoes+unseen 22 983173a826c11069 216
-figures+cities+echoes+unseen 23 f17863a8025ee95f 391
+figures+cities+echoes+unseen 23 5bfb43d29b111089 391
 figures+cities+echoes+unseen 24 a979e6b10771af34 512
 # figures+cities+echoes+unseen Witness { figure_reactions: 1388, city_draws: 379, echo_draws: 1392, forecast_moves: 349, promotions: 225, top_echo_dogmas: 401, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1103, safeguards: 69, secrets_out: 57, unseen_claims: 26, flips: 0 }
 artifacts+unseen 0 f9f25873542801a4 280
 artifacts+unseen 1 5da95a47f88075f6 387
 artifacts+unseen 2 e93c4ea0264144e3 315
 artifacts+unseen 3 4354abe82ec9c0d5 460
-artifacts+unseen 4 b97209dc0b27457c 309
+artifacts+unseen 4 f424af19644ad60d 309
 artifacts+unseen 5 ca1e221ac3ed1154 239
 artifacts+unseen 6 e717979190e37bd8 232
-artifacts+unseen 7 b940adbc60bbb2c2 236
+artifacts+unseen 7 abbd4824ee34054c 236
 artifacts+unseen 8 6a2f4a0571a93429 290
 artifacts+unseen 9 5aed80dadfb3cb36 297
 artifacts+unseen 10 36791c9b72715afc 375
@@ -733,7 +733,7 @@ echoes+artifacts+unseen 3 eab61f76bd0f6436 385
 echoes+artifacts+unseen 4 c6e3a7ca5d8ab54d 271
 echoes+artifacts+unseen 5 d9202b0e305abe72 194
 echoes+artifacts+unseen 6 b742ef61cbd3b999 212
-echoes+artifacts+unseen 7 94f4e76c7cefa39b 406
+echoes+artifacts+unseen 7 3c9792c27d27492a 406
 echoes+artifacts+unseen 8 4afac0a68ee002aa 299
 echoes+artifacts+unseen 9 28d7cdd40c746a24 341
 echoes+artifacts+unseen 10 29d4a53404a18bc3 364

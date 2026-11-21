@@ -205,7 +205,7 @@ fn quackery_offers_score_or_draw_and_draws_by_returned_icons() {
 }
 
 #[test]
-fn prophecies_reveals_a_reference_secret_and_melds_another_before_safeguarding() {
+fn prophecies_chooses_a_hidden_reference_secret_and_melds_another_before_safeguarding() {
     let mut f = Fixture::default();
     let card = f.card("U043", Zone::Board(A, Color::Blue));
     let reference = f.tech(Color::Yellow, 3, Zone::Safe(A), vec![]);
@@ -227,7 +227,7 @@ fn prophecies_reveals_a_reference_secret_and_melds_another_before_safeguarding()
         .position(|option| {
             matches!(
                 option,
-                Alternative::Reveal {
+                Alternative::Select {
                     target: TargetDescriptor::Hidden { slot: 0, .. }
                 }
             )
@@ -237,7 +237,8 @@ fn prophecies_reveals_a_reference_secret_and_melds_another_before_safeguarding()
     complete(run(&mut game, &mut events, &[]));
     let _ = branch;
     let position = game.position();
-    // The drawn red 4 was revealed, the other secret melded, the 4 safeguarded.
+    // Only the drawn red 4 was revealed; the reference stayed hidden, the
+    // other secret melded and the 4 safeguarded.
     assert_eq!(position.top(A, Color::Green), Some(other));
     assert_eq!(position.cards(Zone::Safe(A)), &[reference, four]);
     let revealed: Vec<_> = events
@@ -247,7 +248,7 @@ fn prophecies_reveals_a_reference_secret_and_melds_another_before_safeguarding()
             _ => None,
         })
         .collect();
-    assert_eq!(revealed, vec![reference, four]);
+    assert_eq!(revealed, vec![four]);
     for viewer in Player::ALL {
         game.determinize(viewer, 2).unwrap();
     }
