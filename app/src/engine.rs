@@ -122,6 +122,16 @@ pub fn mode_name(expansions: n::Expansions) -> String {
 /// `peek` shows the suspended parent's boards during a Martian Internet
 /// subgame (nothing can be chosen on them); otherwise the live game's.
 pub fn view(m: &Match, viewer: usize, two_player: bool, peek: bool) -> TableView {
+    view_with_log(m, viewer, two_player, peek, true)
+}
+
+fn view_with_log(
+    m: &Match,
+    viewer: usize,
+    two_player: bool,
+    peek: bool,
+    include_log: bool,
+) -> TableView {
     let (turn, action, actions) = clock(m);
     let expansions = m.record().expansions;
     let game = m.game();
@@ -161,7 +171,11 @@ pub fn view(m: &Match, viewer: usize, two_player: bool, peek: bool) -> TableView
         private_owner: viewer,
         supply: supply(m, viewer),
         decision: if peeking { None } else { decision(m, viewer) },
-        log: log_entries(m, viewer, two_player),
+        log: if include_log {
+            log_entries(m, viewer, two_player)
+        } else {
+            Vec::new()
+        },
     }
 }
 

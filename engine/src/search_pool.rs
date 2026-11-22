@@ -693,23 +693,42 @@ mod tests {
         // Games move between workers from step to step.
         let seeds = [3, 4, 5, 6, 7];
         let modes = [0, 31, 5, 16, 9];
-        let (finished, visits, leaves) = run(1, None, 1, &seeds, &modes);
+        let (one, three) = std::thread::scope(|s| {
+            let a = s.spawn(|| run(1, None, 1, &seeds, &modes));
+            let b = s.spawn(|| run(3, None, 1, &seeds, &modes));
+            (a.join().unwrap(), b.join().unwrap())
+        });
+        let (finished, visits, leaves) = &one;
         assert_eq!(finished.len(), 5);
         assert!(finished.iter().all(|f| f.decisions <= 40));
-        assert!(!visits.is_empty() && leaves > visits.len());
-        assert_eq!(run(3, None, 1, &seeds, &modes), (finished, visits, leaves));
+        assert!(!visits.is_empty() && *leaves > visits.len());
+        assert_eq!(three, one);
     }
 
     #[test]
     fn collected_batches_change_with_timing_but_games_do_not() {
         let seeds = [3, 4, 5, 6, 7];
         let modes = [0, 31, 5, 16, 9];
-        let exact = run(1, None, 1, &seeds, &modes);
-        assert_eq!(run(3, Some(1), 1, &seeds, &modes), exact);
-        assert_eq!(run(2, Some(6), 1, &seeds, &modes), exact);
-        // Two batches out at once: the next is collected before the last is answered.
-        assert_eq!(run(3, Some(4), 2, &seeds, &modes), exact);
-        assert_eq!(run(1, Some(1), 3, &seeds, &modes), exact);
+        let configs = [
+            (1, None, 1),
+            (3, Some(1), 1),
+            (2, Some(6), 1),
+            // Two batches out at once: the next is collected before the last is answered.
+            (3, Some(4), 2),
+            (1, Some(1), 3),
+        ];
+        let results: Vec<_> = std::thread::scope(|s| {
+            let handles: Vec<_> = configs
+                .into_iter()
+                .map(|(workers, min_rows, depth)| {
+                    s.spawn(move || run(workers, min_rows, depth, &seeds, &modes))
+                })
+                .collect();
+            handles.into_iter().map(|h| h.join().unwrap()).collect()
+        });
+        for result in &results[1..] {
+            assert_eq!(result, &results[0]);
+        }
     }
 
     #[test]

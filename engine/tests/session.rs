@@ -151,39 +151,43 @@ fn malformed_text_and_unknown_or_wrong_mode_codes_are_errors() {
 
 #[test]
 fn random_replays_preserve_game_prompt_and_tagged_events() {
-    for expansions in MODES {
-        for seed in 0..6 {
-            let mut session = Match::new(expansions, seed).unwrap();
-            let mut policy = Rng::new(seed ^ 0x5EED);
-            for _ in 0..160 {
-                let Some(step) = session.random_step(policy.next_u64()) else {
-                    break;
-                };
-                let previous_events = session.events().len();
-                session.apply(step).unwrap();
-                let tag = session.record().steps.len();
-                assert!(
-                    session.events()[previous_events..]
-                        .iter()
-                        .all(|(index, _)| *index == tag)
-                );
-                match session.prompt() {
-                    Prompt::Decision(decision) => {
-                        assert_eq!(session.to_move(), Some(decision.player))
+    std::thread::scope(|scope| {
+        for expansions in MODES {
+            for seed in 0..6 {
+                scope.spawn(move || {
+                    let mut session = Match::new(expansions, seed).unwrap();
+                    let mut policy = Rng::new(seed ^ 0x5EED);
+                    for _ in 0..160 {
+                        let Some(step) = session.random_step(policy.next_u64()) else {
+                            break;
+                        };
+                        let previous_events = session.events().len();
+                        session.apply(step).unwrap();
+                        let tag = session.record().steps.len();
+                        assert!(
+                            session.events()[previous_events..]
+                                .iter()
+                                .all(|(index, _)| *index == tag)
+                        );
+                        match session.prompt() {
+                            Prompt::Decision(decision) => {
+                                assert_eq!(session.to_move(), Some(decision.player))
+                            }
+                            Prompt::Turn { player, .. } => {
+                                assert_eq!(*player, session.game().position().turn_owner());
+                                assert_eq!(session.to_move(), Some(*player));
+                            }
+                            Prompt::Over(_) => assert_eq!(session.to_move(), None),
+                        }
                     }
-                    Prompt::Turn { player, .. } => {
-                        assert_eq!(*player, session.game().position().turn_owner());
-                        assert_eq!(session.to_move(), Some(*player));
-                    }
-                    Prompt::Over(_) => assert_eq!(session.to_move(), None),
-                }
+                    let replay = Match::from_record(session.record()).unwrap();
+                    assert_same(&session, &replay);
+                    let decoded = Record::from_text(&session.record().to_text().unwrap()).unwrap();
+                    assert_same(&session, &Match::from_record(&decoded).unwrap());
+                });
             }
-            let replay = Match::from_record(session.record()).unwrap();
-            assert_same(&session, &replay);
-            let decoded = Record::from_text(&session.record().to_text().unwrap()).unwrap();
-            assert_same(&session, &Match::from_record(&decoded).unwrap());
         }
-    }
+    });
 }
 
 #[test]
@@ -337,70 +341,84 @@ fn complete_random_game(expansions: Expansions, seed: u64) {
 
 #[test]
 fn finished_games_with_unseen_save_and_replay() {
-    for bits in [16u8, 31] {
-        let expansions = Expansions::from_bits(bits).unwrap();
-        for seed in 0..3 {
-            let mut session = Match::new(expansions, seed).unwrap();
-            let mut policy = Rng::new(seed);
-            while let Some(step) = session.random_step(policy.next_u64()) {
-                session.apply(step).unwrap();
+    std::thread::scope(|scope| {
+        for bits in [16u8, 31] {
+            let expansions = Expansions::from_bits(bits).unwrap();
+            for seed in 0..3 {
+                scope.spawn(move || {
+                    let mut session = Match::new(expansions, seed).unwrap();
+                    let mut policy = Rng::new(seed);
+                    while let Some(step) = session.random_step(policy.next_u64()) {
+                        session.apply(step).unwrap();
+                    }
+                    let text = session.record().to_text().unwrap();
+                    let replayed = Match::from_record(&Record::from_text(&text).unwrap()).unwrap();
+                    assert_same(&replayed, &session);
+                });
             }
-            let text = session.record().to_text().unwrap();
-            let replayed = Match::from_record(&Record::from_text(&text).unwrap()).unwrap();
-            assert_same(&replayed, &session);
         }
-    }
+    });
 }
 
 #[test]
 fn turn_and_free_dogma_events_mark_turn_starts_promotions_and_showcases() {
-    let (mut promoted, mut showcased) = (0, 0);
-    for bits in [0b01100u8, 0b11111] {
-        let expansions = Expansions::from_bits(bits).unwrap();
-        for seed in 0..12 {
-            let mut session = Match::new(expansions, seed).unwrap();
-            let mut policy = Rng::new(seed);
-            while let Some(step) = session.random_step(policy.next_u64()) {
-                session.apply(step).unwrap();
-            }
-            let mut turn_owner = None;
-            let mut forecast_meld = None;
-            for (_, event) in session.events() {
-                match event {
-                    Event::TurnBegan { player } => {
-                        assert_ne!(turn_owner, Some(*player), "turns alternate");
-                        turn_owner = Some(*player);
+    let (promoted, showcased) = std::thread::scope(|scope| {
+        let mut handles = Vec::new();
+        for bits in [0b01100u8, 0b11111] {
+            let expansions = Expansions::from_bits(bits).unwrap();
+            for seed in 0..12 {
+                handles.push(scope.spawn(move || {
+                    let (mut promoted, mut showcased) = (0, 0);
+                    let mut session = Match::new(expansions, seed).unwrap();
+                    let mut policy = Rng::new(seed);
+                    while let Some(step) = session.random_step(policy.next_u64()) {
+                        session.apply(step).unwrap();
                     }
-                    // A showcase rotates the turn owner's display at turn
-                    // start, after its turn began.
-                    Event::Moved(mv) if mv.verb == Some(Verb::Rotate) => {
-                        assert_eq!(Some(mv.executor), turn_owner);
-                    }
-                    Event::Moved(mv)
-                        if mv.verb == Some(Verb::Meld)
-                            && matches!(mv.source, Zone::Forecast(_)) =>
-                    {
-                        forecast_meld = Some(mv.card);
-                    }
-                    Event::DogmaStarted {
-                        player, card, kind, ..
-                    } => match kind {
-                        DogmaKind::Promoted => {
-                            assert_eq!(forecast_meld, Some(*card));
-                            promoted += 1;
+                    let mut turn_owner = None;
+                    let mut forecast_meld = None;
+                    for (_, event) in session.events() {
+                        match event {
+                            Event::TurnBegan { player } => {
+                                assert_ne!(turn_owner, Some(*player), "turns alternate");
+                                turn_owner = Some(*player);
+                            }
+                            // A showcase rotates the turn owner's display at turn
+                            // start, after its turn began.
+                            Event::Moved(mv) if mv.verb == Some(Verb::Rotate) => {
+                                assert_eq!(Some(mv.executor), turn_owner);
+                            }
+                            Event::Moved(mv)
+                                if mv.verb == Some(Verb::Meld)
+                                    && matches!(mv.source, Zone::Forecast(_)) =>
+                            {
+                                forecast_meld = Some(mv.card);
+                            }
+                            Event::DogmaStarted {
+                                player, card, kind, ..
+                            } => match kind {
+                                DogmaKind::Promoted => {
+                                    assert_eq!(forecast_meld, Some(*card));
+                                    promoted += 1;
+                                }
+                                DogmaKind::Showcased => {
+                                    assert_eq!(Some(*player), turn_owner);
+                                    showcased += 1;
+                                }
+                                DogmaKind::Action | DogmaKind::Free => {}
+                            },
+                            _ => {}
                         }
-                        DogmaKind::Showcased => {
-                            assert_eq!(Some(*player), turn_owner);
-                            showcased += 1;
-                        }
-                        DogmaKind::Action | DogmaKind::Free => {}
-                    },
-                    _ => {}
-                }
+                    }
+                    assert!(turn_owner.is_some());
+                    (promoted, showcased)
+                }));
             }
-            assert!(turn_owner.is_some());
         }
-    }
+        handles
+            .into_iter()
+            .map(|h| h.join().unwrap())
+            .fold((0, 0), |a, b| (a.0 + b.0, a.1 + b.1))
+    });
     assert!(
         promoted > 0 && showcased > 0,
         "{promoted} promoted, {showcased} showcased"

@@ -206,70 +206,147 @@ fn a_shared_priest_king_leaves_the_owner_able_to_sample() {
 
 #[test]
 fn rows_hold_the_header_scalars_tokens_and_one_option_per_legal_step() {
-    for expansions in MODES {
-        roots(expansions, 2, |game, status, actor, _| {
-            let observation = game.observe(actor).unwrap();
-            assert_eq!(observation.options.len(), options(status, game));
-            assert_eq!(observation.scalars.len(), SCALARS);
-            let row = observation.row();
-            assert_eq!(
-                row.len(),
-                HEADER
-                    + SCALARS
-                    + TOKEN_FIELDS * observation.tokens.len()
-                    + OPTION_FIELDS * observation.options.len()
-            );
-            assert_eq!(row[0], (FAMILY + GENERATION) as f32);
-            assert_eq!(row[3] as usize, observation.tokens.len());
-            assert_eq!(row[4] as usize, observation.options.len());
-            assert_eq!(row[5] as usize, actor.index());
-            assert_eq!(row[7], (6 + expansions.count()) as f32);
-            assert!(row.iter().all(|x| x.is_finite()));
-            // The other player is not choosing: no options for them.
-            assert!(game.observe(actor.opponent()).unwrap().options.is_empty());
-            for option in &observation.options {
-                let k = option[field::KIND] as u8;
-                match status {
-                    Status::Complete(_) => assert!((kind::DRAW..=kind::DECREE_ACTION).contains(&k)),
-                    _ => assert!(k >= kind::VALUE),
-                }
-                // A named Figure is a card identity, not a token.
-                if k == kind::NAME_FIGURE {
-                    assert!(option[field::CARD] > 0.0, "{option:?}");
-                    assert_eq!(option[field::TOKEN], 0.0);
-                    assert!(option[field::NUMBER] >= 1.0);
-                }
-                // Auspice lives in the slot field; tokens split specials
-                // (1–20) from Decrees (21–25); an exchange names two zones.
-                if k == kind::SHOWCASE || k == kind::DOGMA {
-                    assert!(option[field::SLOT] <= 1.0 && option[field::ICON] == 0.0);
-                    assert!(option[field::CARD] > 0.0);
-                }
-                if k == kind::DECREE {
-                    assert!((21.0..=25.0).contains(&option[field::TOKEN]), "{option:?}");
-                }
-                if matches!(
-                    k,
-                    kind::JUNK_SPECIAL | kind::RESTORE_SPECIAL | kind::CLAIM_SPECIAL
-                ) {
-                    assert!((1.0..=20.0).contains(&option[field::TOKEN]), "{option:?}");
-                }
-                if k == kind::EXCHANGE {
-                    assert!(option[field::ZONE] > 0.0 && option[field::SECOND_ZONE] > 0.0);
-                    assert_eq!(option[field::SECOND], 0.0);
-                } else {
-                    assert_eq!(option[field::SECOND_ZONE], 0.0);
-                }
-                if k == kind::MATCHING_PAIR {
-                    assert!(option[field::SECOND] > 0.0 || option[field::CARD] == 0.0);
-                }
-            }
-            for token in &observation.tokens {
-                assert!((token.group as usize) < GROUPS);
-                assert!(token.weight > 0.0);
-            }
-        });
-    }
+    // Also checks option class masks, exact f32 option fields, and Unseen
+    // Safe/FirstDrawn layout in the same 32-mode pass rather than replaying
+    // the same games three times. Each mode runs on its own thread.
+    let seen = std::thread::scope(|scope| {
+        let handles: Vec<_> = MODES
+            .into_iter()
+            .map(|expansions| {
+                scope.spawn(move || {
+                    let mut seen = (false, false, false);
+                    roots(expansions, 2, |game, status, actor, _| {
+                        let observation = game.observe(actor).unwrap();
+                        assert_eq!(observation.options.len(), options(status, game));
+                        assert_eq!(observation.scalars.len(), SCALARS);
+                        let row = observation.row();
+                        assert_eq!(
+                            row.len(),
+                            HEADER
+                                + SCALARS
+                                + TOKEN_FIELDS * observation.tokens.len()
+                                + OPTION_FIELDS * observation.options.len()
+                        );
+                        assert_eq!(row[0], (FAMILY + GENERATION) as f32);
+                        assert_eq!(row[3] as usize, observation.tokens.len());
+                        assert_eq!(row[4] as usize, observation.options.len());
+                        assert_eq!(row[5] as usize, actor.index());
+                        assert_eq!(row[7], (6 + expansions.count()) as f32);
+                        assert!(row.iter().all(|x| x.is_finite()));
+                        // The other player is not choosing: no options for them.
+                        assert!(game.observe(actor.opponent()).unwrap().options.is_empty());
+                        for option in &observation.options {
+                            for &x in option.iter() {
+                                assert!(
+                                    x.fract() == 0.0 && (0.0..16_777_216.0).contains(&x),
+                                    "{option:?}"
+                                );
+                            }
+                            let k = option[field::KIND] as u8;
+                            match status {
+                                Status::Complete(_) => {
+                                    assert!((kind::DRAW..=kind::DECREE_ACTION).contains(&k))
+                                }
+                                _ => assert!(k >= kind::VALUE),
+                            }
+                            // A named Figure is a card identity, not a token.
+                            if k == kind::NAME_FIGURE {
+                                assert!(option[field::CARD] > 0.0, "{option:?}");
+                                assert_eq!(option[field::TOKEN], 0.0);
+                                assert!(option[field::NUMBER] >= 1.0);
+                            }
+                            // Auspice lives in the slot field; tokens split specials
+                            // (1–20) from Decrees (21–25); an exchange names two zones.
+                            if k == kind::SHOWCASE || k == kind::DOGMA {
+                                assert!(option[field::SLOT] <= 1.0 && option[field::ICON] == 0.0);
+                                assert!(option[field::CARD] > 0.0);
+                            }
+                            if k == kind::DECREE {
+                                assert!(
+                                    (21.0..=25.0).contains(&option[field::TOKEN]),
+                                    "{option:?}"
+                                );
+                            }
+                            if matches!(
+                                k,
+                                kind::JUNK_SPECIAL | kind::RESTORE_SPECIAL | kind::CLAIM_SPECIAL
+                            ) {
+                                assert!((1.0..=20.0).contains(&option[field::TOKEN]), "{option:?}");
+                            }
+                            if k == kind::EXCHANGE {
+                                assert!(
+                                    option[field::ZONE] > 0.0 && option[field::SECOND_ZONE] > 0.0
+                                );
+                                assert_eq!(option[field::SECOND], 0.0);
+                            } else {
+                                assert_eq!(option[field::SECOND_ZONE], 0.0);
+                            }
+                            if k == kind::MATCHING_PAIR {
+                                assert!(option[field::SECOND] > 0.0 || option[field::CARD] == 0.0);
+                            }
+                            if expansions.unseen() {
+                                match option[field::ZONE] as u8 {
+                                    19 => seen.2 = true,
+                                    // Only Bear Grylls' junk-everything sweep can name it.
+                                    20 if option[field::VERB] as u8 == Verb::Junk as u8 + 1 => {}
+                                    20 => panic!("no card selects from the other Safe: {option:?}"),
+                                    _ => {}
+                                }
+                            } else {
+                                assert!(!matches!(option[field::ZONE] as u8, 19 | 20));
+                            }
+                        }
+                        for token in &observation.tokens {
+                            assert!((token.group as usize) < GROUPS);
+                            assert!(token.weight > 0.0);
+                            if token.group == Group::Options {
+                                assert!(token.code < 256, "{token:?}");
+                                assert!(token.code != 0, "a named card has a class: {token:?}");
+                            }
+                            assert!(token.code < 1 << 24, "{token:?}");
+                            if expansions.unseen() {
+                                match token.group {
+                                    Group::MySafe => {
+                                        assert!(token.code != 0 && token.code < 512, "{token:?}");
+                                        seen.0 = true;
+                                    }
+                                    Group::TheirSafe => {
+                                        assert!(token.code != 0 && token.code < 512, "{token:?}");
+                                        seen.1 = true;
+                                    }
+                                    _ => {}
+                                }
+                            } else {
+                                assert!(!matches!(token.group, Group::MySafe | Group::TheirSafe));
+                            }
+                        }
+                        let s = &observation.scalars;
+                        for player in 0..2 {
+                            let base = scalar::PLAYERS + player * scalar::PLAYER;
+                            if expansions.unseen() {
+                                assert!(s[base + scalar::SAFE_LIMIT] > 0.0);
+                                assert!(
+                                    s[base + scalar::SAFE_ROOM] <= s[base + scalar::SAFE_LIMIT]
+                                );
+                            } else {
+                                assert_eq!(s[base + scalar::SAFE_LIMIT], 0.0);
+                                assert_eq!(s[base + scalar::SAFE_ROOM], 0.0);
+                                assert_eq!(s[base + scalar::FIRST_DRAWN], 0.0);
+                            }
+                        }
+                    });
+                    seen
+                })
+            })
+            .collect();
+        handles
+            .into_iter()
+            .map(|h| h.join().unwrap())
+            .fold((false, false, false), |a, b| {
+                (a.0 || b.0, a.1 || b.1, a.2 || b.2)
+            })
+    });
+    assert_eq!(seen, (true, true, true), "(my Safe, their Safe, zone 19)");
 }
 
 #[test]
@@ -427,26 +504,8 @@ fn option_codes_are_class_masks_and_option_fields_are_exact() {
     ] {
         assert_eq!(observation::option_class(k), 0);
     }
-    for expansions in MODES {
-        roots(expansions, 2, |game, _, actor, _| {
-            let observation = game.observe(actor).unwrap();
-            for token in &observation.tokens {
-                if token.group == Group::Options {
-                    assert!(token.code < 256, "{token:?}");
-                    assert!(token.code != 0, "a named card has a class: {token:?}");
-                }
-                assert!(token.code < 1 << 24, "{token:?}");
-            }
-            for option in &observation.options {
-                for &x in option.iter() {
-                    assert!(
-                        x.fract() == 0.0 && (0.0..16_777_216.0).contains(&x),
-                        "{option:?}"
-                    );
-                }
-            }
-        });
-    }
+    // Per-root checks across all 32 modes run inside
+    // `rows_hold_the_header_scalars_tokens_and_one_option_per_legal_step`.
 }
 
 /// Alex Trebek's named draw: every name option names the Figure's card
@@ -596,79 +655,8 @@ fn unseen_games_fill_their_reserved_layout() {
             assert!(observation.options.is_empty());
         }
     }
-
-    // Random Unseen play reaches secrets on both sides, with slot bits and
-    // own-Safe options (every printed Safe selector is the executor's own,
-    // so zone 20 names only Bear Grylls' junk sweep); without Unseen the Safe groups
-    // stay empty.
-    let mut seen = (false, false, false);
-    for expansions in MODES {
-        if !expansions.unseen() {
-            continue;
-        }
-        roots(expansions, 2, |game, _, actor, _| {
-            let observation = game.observe(actor).unwrap();
-            for token in &observation.tokens {
-                match token.group {
-                    Group::MySafe => {
-                        assert!(token.code != 0 && token.code < 512, "{token:?}");
-                        seen.0 = true;
-                    }
-                    Group::TheirSafe => {
-                        assert!(token.code != 0 && token.code < 512, "{token:?}");
-                        seen.1 = true;
-                    }
-                    _ => {}
-                }
-            }
-            let s = &observation.scalars;
-            for player in 0..2 {
-                let base = scalar::PLAYERS + player * scalar::PLAYER;
-                assert!(s[base + scalar::SAFE_LIMIT] > 0.0);
-                assert!(s[base + scalar::SAFE_ROOM] <= s[base + scalar::SAFE_LIMIT]);
-            }
-            for option in &observation.options {
-                match option[field::ZONE] as u8 {
-                    19 => seen.2 = true,
-                    // Only Bear Grylls' junk-everything sweep can name it.
-                    20 if option[field::VERB] as u8 == Verb::Junk as u8 + 1 => {}
-                    20 => panic!("no card selects from the other Safe: {option:?}"),
-                    _ => {}
-                }
-            }
-        });
-    }
-    assert_eq!(seen, (true, true, true), "(my Safe, their Safe, zone 19)");
-    for expansions in MODES {
-        if expansions.unseen() {
-            continue;
-        }
-        roots(expansions, 1, |game, _, actor, _| {
-            let observation = game.observe(actor).unwrap();
-            assert!(
-                !observation
-                    .tokens
-                    .iter()
-                    .any(|t| matches!(t.group, Group::MySafe | Group::TheirSafe))
-            );
-            for player in 0..2 {
-                let base = scalar::PLAYERS + player * scalar::PLAYER;
-                assert_eq!(s_at(&observation, base + scalar::SAFE_LIMIT), 0.0);
-                assert_eq!(s_at(&observation, base + scalar::SAFE_ROOM), 0.0);
-                assert_eq!(s_at(&observation, base + scalar::FIRST_DRAWN), 0.0);
-            }
-            assert!(
-                !observation
-                    .options
-                    .iter()
-                    .any(|o| matches!(o[field::ZONE] as u8, 19 | 20))
-            );
-        });
-    }
-}
-
-fn s_at(observation: &observation::Observation, at: usize) -> f32 {
-    observation.scalars[at]
+    // Random-play Safe/FirstDrawn checks across all 32 modes run inside
+    // `rows_hold_the_header_scalars_tokens_and_one_option_per_legal_step`.
 }
 #[test]
 fn cities_games_fill_their_reserved_layout() {

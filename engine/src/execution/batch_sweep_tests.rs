@@ -9,6 +9,9 @@ const MAX_STEPS: usize = 1500;
 /// Enumeration caps for the oracle comparison from one decision.
 const MAX_LEAVES: usize = 4000;
 const MAX_DEPTH: usize = 12;
+/// Default cap on parallel sweep workers: each worker retains cloned
+/// positions during leaf enumeration, so uncapped core counts can spike RSS.
+const DEFAULT_MAX_WORKERS: usize = 8;
 
 /// `SWEEP_ONLY=mode,seed` narrows the oracle to one game, for a diagnosis.
 fn only_game() -> Option<(u8, u64)> {
@@ -22,6 +25,19 @@ fn games_per_mode() -> u64 {
         .ok()
         .and_then(|games| games.parse().ok())
         .unwrap_or(6)
+}
+
+/// `SWEEP_WORKERS=n` overrides the default worker cap for larger machines.
+fn sweep_workers(jobs: usize) -> usize {
+    let requested = std::env::var("SWEEP_WORKERS")
+        .ok()
+        .and_then(|workers| workers.parse().ok())
+        .unwrap_or_else(|| {
+            std::thread::available_parallelism()
+                .map_or(1, usize::from)
+                .min(DEFAULT_MAX_WORKERS)
+        });
+    requested.max(1).min(jobs.max(1))
 }
 
 /// The innermost program step running at this decision.
@@ -312,105 +328,136 @@ fn batch_menus_without_shortcuts_in_random_play() {
 /// the outcomes unrestricted play reaches from the same position.
 #[test]
 fn reduced_batches_match_the_unrestricted_oracle_in_random_play() {
+    use std::sync::atomic::{AtomicUsize, Ordering};
+
+    let only = only_game();
+    let jobs: Vec<(u8, u64)> = (0..Expansions::COMBINATIONS as u8)
+        .flat_map(|mode| (0..games_per_mode()).map(move |seed| (mode, seed)))
+        .filter(|&job| only.is_none_or(|want| want == job))
+        .collect();
+    let workers = sweep_workers(jobs.len());
+    let next = AtomicUsize::new(0);
+    let results: Vec<_> = std::thread::scope(|s| {
+        let handles: Vec<_> = (0..workers)
+            .map(|_| {
+                s.spawn(|| {
+                    let mut compared = 0;
+                    let mut skipped = 0;
+                    let mut witnesses: BTreeMap<String, (usize, usize)> = BTreeMap::new();
+                    loop {
+                        let index = next.fetch_add(1, Ordering::Relaxed);
+                        let Some(&(mode, seed)) = jobs.get(index) else {
+                            break;
+                        };
+                        let expansions = Expansions::from_bits(mode).unwrap();
+                        play_random(expansions, seed, |game, _, before| {
+                            let (start, key) = if let Some((batch, program)) = asking_batch(game) {
+                                // Compare from a batch's first menu: a later menu's floor
+                                // already encodes the order chosen so far, which the
+                                // unrestricted continuation would not have to honour.
+                                if batch.shortcut.is_none() || !batch.visited.is_empty() {
+                                    return;
+                                }
+                                // Policies, not equivalences: Oars' lowest-first and a
+                                // deck junked top-down before a blind highest-junk claim.
+                                if matches!(
+                                    batch.shortcut,
+                                    Some(Shortcut::DeckTop | Shortcut::LowestFirst)
+                                ) {
+                                    return;
+                                }
+                                (game, describe(game, batch, &program))
+                            } else if let Some(key) = asking_selected(game) {
+                                (game, key)
+                            } else if let Some(key) = asking_alias(game) {
+                                // The alias shaped this very menu: start from the step
+                                // before it, so the oracle builds the menu unrestricted.
+                                (before, key)
+                            } else {
+                                return;
+                            };
+                            let mut manual = start.clone();
+                            manual.shortcuts_disabled = true;
+                            let (mut budget_a, mut budget_b) = (MAX_LEAVES, MAX_LEAVES);
+                            let (Some(reduced), Some(manual)) = (
+                                leaves(start.clone(), 0, &mut budget_a),
+                                leaves(manual, 0, &mut budget_b),
+                            ) else {
+                                skipped += 1;
+                                return;
+                            };
+                            for (left, right, what) in [
+                                (&manual, &reduced, "missing"),
+                                (&reduced, &manual, "invented"),
+                            ] {
+                                for outcome in left {
+                                    if !right.contains(outcome) {
+                                        let summary = |(position, rng): &(Position, Rng)| {
+                                            let cards = |zone| {
+                                                position
+                                                    .cards(zone)
+                                                    .iter()
+                                                    .map(|&card| {
+                                                        position.card(card).code.to_string()
+                                                    })
+                                                    .collect::<Vec<_>>()
+                                            };
+                                            format!(
+                                                "rng {rng:?} hands {:?}/{:?} score {:?}/{:?} decks {:?}",
+                                                cards(Zone::Hand(Player::One)),
+                                                cards(Zone::Hand(Player::Two)),
+                                                cards(Zone::Score(Player::One)),
+                                                cards(Zone::Score(Player::Two)),
+                                                (1..=3)
+                                                    .map(|age| cards(Zone::Deck(Deck::base(age))))
+                                                    .collect::<Vec<_>>(),
+                                            )
+                                        };
+                                        let mut source = start.clone();
+                                        source.shortcuts_disabled = what == "missing";
+                                        let trail = paths(source, 0, Vec::new())
+                                            .into_iter()
+                                            .find(|(leaf, _)| leaf == outcome)
+                                            .map(|(_, trail)| trail.join("\n    "))
+                                            .unwrap_or_default();
+                                        let mut other = start.clone();
+                                        other.shortcuts_disabled = what != "missing";
+                                        let other_trails: Vec<_> = paths(other, 0, Vec::new())
+                                            .into_iter()
+                                            .map(|(_, trail)| trail.join(" | "))
+                                            .collect();
+                                        panic!(
+                                            "{key}: {what} outcome in {expansions:?} seed {seed}\n  {}\n  via\n    {trail}\nother side's paths:\n  {}",
+                                            summary(outcome),
+                                            other_trails.join("\n  ")
+                                        );
+                                    }
+                                }
+                            }
+                            compared += 1;
+                            let entry = witnesses.entry(key).or_default();
+                            entry.0 += 1;
+                            if reduced.len() < manual.len() {
+                                entry.1 += 1;
+                            }
+                        });
+                    }
+                    (compared, skipped, witnesses)
+                })
+            })
+            .collect();
+        handles.into_iter().map(|h| h.join().unwrap()).collect()
+    });
     let mut compared = 0;
     let mut skipped = 0;
     let mut witnesses: BTreeMap<String, (usize, usize)> = BTreeMap::new();
-    let only = only_game();
-    for mode in 0..Expansions::COMBINATIONS as u8 {
-        let expansions = Expansions::from_bits(mode).unwrap();
-        for seed in 0..games_per_mode() {
-            if only.is_some_and(|(m, s)| (m, s) != (mode, seed)) {
-                continue;
-            }
-            play_random(expansions, seed, |game, _, before| {
-                let (start, key) = if let Some((batch, program)) = asking_batch(game) {
-                    // Compare from a batch's first menu: a later menu's floor
-                    // already encodes the order chosen so far, which the
-                    // unrestricted continuation would not have to honour.
-                    if batch.shortcut.is_none() || !batch.visited.is_empty() {
-                        return;
-                    }
-                    // Policies, not equivalences: Oars' lowest-first and a
-                    // deck junked top-down before a blind highest-junk claim.
-                    if matches!(
-                        batch.shortcut,
-                        Some(Shortcut::DeckTop | Shortcut::LowestFirst)
-                    ) {
-                        return;
-                    }
-                    (game, describe(game, batch, &program))
-                } else if let Some(key) = asking_selected(game) {
-                    (game, key)
-                } else if let Some(key) = asking_alias(game) {
-                    // The alias shaped this very menu: start from the step
-                    // before it, so the oracle builds the menu unrestricted.
-                    (before, key)
-                } else {
-                    return;
-                };
-                let mut manual = start.clone();
-                manual.shortcuts_disabled = true;
-                let (mut budget_a, mut budget_b) = (MAX_LEAVES, MAX_LEAVES);
-                let (Some(reduced), Some(manual)) = (
-                    leaves(start.clone(), 0, &mut budget_a),
-                    leaves(manual, 0, &mut budget_b),
-                ) else {
-                    skipped += 1;
-                    return;
-                };
-                for (left, right, what) in [
-                    (&manual, &reduced, "missing"),
-                    (&reduced, &manual, "invented"),
-                ] {
-                    for outcome in left {
-                        if !right.contains(outcome) {
-                            let summary = |(position, rng): &(Position, Rng)| {
-                                let cards = |zone| {
-                                    position
-                                        .cards(zone)
-                                        .iter()
-                                        .map(|&card| position.card(card).code.to_string())
-                                        .collect::<Vec<_>>()
-                                };
-                                format!(
-                                    "rng {rng:?} hands {:?}/{:?} score {:?}/{:?} decks {:?}",
-                                    cards(Zone::Hand(Player::One)),
-                                    cards(Zone::Hand(Player::Two)),
-                                    cards(Zone::Score(Player::One)),
-                                    cards(Zone::Score(Player::Two)),
-                                    (1..=3)
-                                        .map(|age| cards(Zone::Deck(Deck::base(age))))
-                                        .collect::<Vec<_>>(),
-                                )
-                            };
-                            let mut source = start.clone();
-                            source.shortcuts_disabled = what == "missing";
-                            let trail = paths(source, 0, Vec::new())
-                                .into_iter()
-                                .find(|(leaf, _)| leaf == outcome)
-                                .map(|(_, trail)| trail.join("\n    "))
-                                .unwrap_or_default();
-                            let mut other = start.clone();
-                            other.shortcuts_disabled = what != "missing";
-                            let other_trails: Vec<_> = paths(other, 0, Vec::new())
-                                .into_iter()
-                                .map(|(_, trail)| trail.join(" | "))
-                                .collect();
-                            panic!(
-                                "{key}: {what} outcome in {expansions:?} seed {seed}\n  {}\n  via\n    {trail}\nother side's paths:\n  {}",
-                                summary(outcome),
-                                other_trails.join("\n  ")
-                            );
-                        }
-                    }
-                }
-                compared += 1;
-                let entry = witnesses.entry(key).or_default();
-                entry.0 += 1;
-                if reduced.len() < manual.len() {
-                    entry.1 += 1;
-                }
-            });
+    for (c, s, w) in results {
+        compared += c;
+        skipped += s;
+        for (key, (seen, reduced)) in w {
+            let entry = witnesses.entry(key).or_default();
+            entry.0 += seen;
+            entry.1 += reduced;
         }
     }
     if std::env::var_os("SWEEP_REPORT").is_some() {

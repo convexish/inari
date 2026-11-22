@@ -107,207 +107,237 @@ fn museum_artifacts_are_named_and_clickable_meld_options() {
 
 #[test]
 fn seeded_snapshots_match_native_piles_options_counts_and_clock() {
-    let mut completed = [0; MODES.len()];
-    let mut choices = 0;
-    let mut legal_achievements = 0;
-    for (mode, expansions) in MODES.into_iter().enumerate() {
-        for seed in 1..=2 {
-            let mut m = Match::new(expansions, seed).unwrap();
-            for step in 0..600 {
-                let pos = m.game().position();
-                for viewer in 0..2 {
-                    let v = view(&m, viewer, step % 2 == 0, false);
-                    assert_eq!(v.figures, expansions.figures());
-                    assert_eq!(v.cities, expansions.cities());
-                    assert_eq!(v.echoes, expansions.echoes());
-                    assert_eq!(v.unseen, expansions.unseen());
-                    assert_eq!(v.artifacts, expansions.artifacts());
-                    assert_eq!(v.supply.museums_available, pos.available_museums());
-                    assert_eq!(v.supply.museums_junked, pos.junked_museums());
-                    assert_eq!(v.private_owner, viewer);
-                    assert_eq!(v.current_player, index(pos.turn_owner()));
-                    assert_eq!(v.achievements_needed, 6 + expansions.count());
-                    assert_eq!(
-                        v.decision.as_ref().map_or(0, |d| d.options.len()),
-                        option_steps(&m).len()
-                    );
-                    if let Some(d) = &v.decision {
-                        assert_eq!(Some(player(d.player)), m.to_move());
-                        assert!(
-                            d.options
-                                .iter()
-                                .all(|o| !plain(&o.segs, viewer, false).is_empty())
-                        );
-                    }
-                    match m.prompt() {
-                        Prompt::Turn { .. } => {
-                            assert_eq!(v.action, usize::from(pos.regular_actions_started()) + 1)
+    let results: Vec<(usize, usize, usize)> = std::thread::scope(|scope| {
+        let handles: Vec<_> = MODES
+            .into_iter()
+            .map(|expansions| {
+                scope.spawn(move || {
+                    let mut completed = 0;
+                    let mut choices = 0;
+                    let mut legal_achievements = 0;
+                    for seed in 1..=2 {
+                        let mut m = Match::new(expansions, seed).unwrap();
+                        for step in 0..600 {
+                            let pos = m.game().position();
+                            for viewer in 0..2 {
+                                let v = view_with_log(&m, viewer, step % 2 == 0, false, false);
+                                assert_eq!(v.figures, expansions.figures());
+                                assert_eq!(v.cities, expansions.cities());
+                                assert_eq!(v.echoes, expansions.echoes());
+                                assert_eq!(v.unseen, expansions.unseen());
+                                assert_eq!(v.artifacts, expansions.artifacts());
+                                assert_eq!(v.supply.museums_available, pos.available_museums());
+                                assert_eq!(v.supply.museums_junked, pos.junked_museums());
+                                assert_eq!(v.private_owner, viewer);
+                                assert_eq!(v.current_player, index(pos.turn_owner()));
+                                assert_eq!(v.achievements_needed, 6 + expansions.count());
+                                assert_eq!(
+                                    v.decision.as_ref().map_or(0, |d| d.options.len()),
+                                    option_steps(&m).len()
+                                );
+                                if let Some(d) = &v.decision {
+                                    assert_eq!(Some(player(d.player)), m.to_move());
+                                    assert!(
+                                        d.options
+                                            .iter()
+                                            .all(|o| !plain(&o.segs, viewer, false).is_empty())
+                                    );
+                                }
+                                match m.prompt() {
+                                    Prompt::Turn { .. } => {
+                                        assert_eq!(
+                                            v.action,
+                                            usize::from(pos.regular_actions_started()) + 1
+                                        )
+                                    }
+                                    Prompt::Decision(_) | Prompt::Over(_)
+                                        if pos.regular_actions_started() > 0 =>
+                                    {
+                                        assert_eq!(
+                                            v.action,
+                                            usize::from(pos.regular_actions_started())
+                                        )
+                                    }
+                                    _ => {}
+                                }
+                                assert_eq!(v.actions, if v.turn == 1 { 1 } else { 2 });
+                                for p in Player::ALL {
+                                    let pv = &v.players[index(p)];
+                                    for (i, c) in COLORS.into_iter().enumerate() {
+                                        let st = &pv.stacks[i];
+                                        assert_eq!(
+                                            face_codes(&st.cards),
+                                            codes(m.game(), pos.cards(Zone::Board(p, c)))
+                                        );
+                                        assert_eq!(st.splay, pos.splay(p, c));
+                                        assert!(st.cards.iter().all(|&id| face(id).color == c));
+                                    }
+                                    check_sorted_pile(m.game(), pos.cards(Zone::Hand(p)), &pv.hand);
+                                    check_sorted_pile(
+                                        m.game(),
+                                        pos.cards(Zone::Score(p)),
+                                        &pv.score,
+                                    );
+                                    check_sorted_pile(
+                                        m.game(),
+                                        pos.cards(Zone::Forecast(p)),
+                                        &pv.forecast,
+                                    );
+                                    assert_eq!(pv.forecast_limit, pos.forecast_limit(p));
+                                    let cards: Vec<_> = pv
+                                        .achievements
+                                        .iter()
+                                        .filter_map(|a| match a {
+                                            Held::Card(c) => Some(*c),
+                                            _ => None,
+                                        })
+                                        .collect();
+                                    assert_eq!(
+                                        face_codes(&cards),
+                                        codes(m.game(), pos.cards(Zone::Achievements(p)))
+                                    );
+                                    let specials: Vec<_> = pv
+                                        .achievements
+                                        .iter()
+                                        .filter_map(|a| match a {
+                                            Held::Special(s) => Some(*s),
+                                            _ => None,
+                                        })
+                                        .collect();
+                                    assert_eq!(
+                                        specials,
+                                        pos.specials()
+                                            .filter(|&s| pos.special_location(s)
+                                                == SpecialLocation::Owned(p))
+                                            .collect::<Vec<_>>()
+                                    );
+                                    assert_eq!(
+                                        pv.decrees,
+                                        Decree::ALL
+                                            .into_iter()
+                                            .filter(|&d| pos.decree_location(d)
+                                                == DecreeLocation::Owned(p))
+                                            .map(|d| (decree(d).to_owned(), d.color()))
+                                            .collect::<Vec<_>>()
+                                    );
+                                    assert_eq!(
+                                        pv.achievement_count,
+                                        pos.effective_achievement_count(p)
+                                    );
+                                    assert_eq!(pv.score_total, pos.score(p));
+                                    assert_eq!(pv.bonus_score, pos.bonus_score(p));
+                                    assert_eq!(pv.icons, ICONS.map(|i| pos.icon_count(p, i)));
+                                    assert_eq!(pv.safe.len(), pos.cards(Zone::Safe(p)).len());
+                                    assert_eq!(
+                                        pv.display,
+                                        pos.cards(Zone::Display(p))
+                                            .first()
+                                            .map(|&c| face_of(m.game(), c))
+                                    );
+                                    assert_eq!(
+                                        pv.museums.iter().map(|(_, f)| *f).collect::<Vec<_>>(),
+                                        pos.cards(Zone::Museum(p))
+                                            .iter()
+                                            .map(|&c| face_of(m.game(), c))
+                                            .collect::<Vec<_>>()
+                                    );
+                                    assert_eq!(
+                                        pv.achievements
+                                            .iter()
+                                            .filter(|h| matches!(h, Held::Museum(_)))
+                                            .count(),
+                                        pos.claimed_museums(p)
+                                    );
+                                }
+                                assert_eq!(
+                                    face_codes(&v.supply.junk),
+                                    codes(m.game(), pos.cards(Zone::Junk))
+                                );
+                                let available: BTreeSet<_> = v
+                                    .supply
+                                    .specials
+                                    .iter()
+                                    .flatten()
+                                    .map(|&s| s as usize)
+                                    .collect();
+                                let expected: BTreeSet<_> = pos
+                                    .specials()
+                                    .filter(|&s| {
+                                        pos.special_location(s) == SpecialLocation::Available
+                                    })
+                                    .map(|s| s as usize)
+                                    .collect();
+                                assert_eq!(available, expected);
+                                let sets: Vec<_> = n::CardSet::ALL
+                                    .into_iter()
+                                    .filter(|&s| expansions.includes(s))
+                                    .collect();
+                                assert_eq!(v.supply.decks.len(), sets.len());
+                                for (row, &s) in v.supply.decks.iter().zip(&sets) {
+                                    assert_eq!(row.set, Set::from(s));
+                                    for age in 0..=11 {
+                                        assert_eq!(
+                                            row.counts[age],
+                                            pos.cards(Zone::Deck(n::Deck {
+                                                set: s,
+                                                age: age as u8
+                                            }))
+                                            .len()
+                                        );
+                                    }
+                                    if !pos.age_zero_introduced() {
+                                        assert_eq!(row.counts[0], 0);
+                                    }
+                                }
+                                let mut expected: Vec<_> = pos
+                                    .cards(Zone::AvailableAchievements)
+                                    .iter()
+                                    .map(|&c| {
+                                        let printed = pos.card(c).origin_deck();
+                                        (printed.age, Set::from(printed.set))
+                                    })
+                                    .collect();
+                                expected.sort();
+                                assert_eq!(
+                                    v.supply
+                                        .achievements
+                                        .iter()
+                                        .map(|a| (a.age, a.set))
+                                        .collect::<Vec<_>>(),
+                                    expected
+                                );
+                                for a in &v.supply.achievements {
+                                    let legal = m.to_move() == Some(player(viewer))
+                                        && achieve_step(&m, a.age, a.set).is_some();
+                                    assert_eq!(a.legal, legal);
+                                    legal_achievements += usize::from(legal);
+                                }
+                                if matches!(m.prompt(), Prompt::Over(_)) {
+                                    assert!(v.over.is_some());
+                                } else {
+                                    assert!(v.over.is_none());
+                                }
+                            }
+                            let Some(next) = m.random_step(seed * 1000 + step) else {
+                                completed += 1;
+                                break;
+                            };
+                            choices += usize::from(matches!(next, Step::Choice(_)));
+                            m.apply(next).unwrap();
                         }
-                        Prompt::Decision(_) | Prompt::Over(_)
-                            if pos.regular_actions_started() > 0 =>
-                        {
-                            assert_eq!(v.action, usize::from(pos.regular_actions_started()))
-                        }
-                        _ => {}
                     }
-                    assert_eq!(v.actions, if v.turn == 1 { 1 } else { 2 });
-                    for p in Player::ALL {
-                        let pv = &v.players[index(p)];
-                        for (i, c) in COLORS.into_iter().enumerate() {
-                            let st = &pv.stacks[i];
-                            assert_eq!(
-                                face_codes(&st.cards),
-                                codes(m.game(), pos.cards(Zone::Board(p, c)))
-                            );
-                            assert_eq!(st.splay, pos.splay(p, c));
-                            assert!(st.cards.iter().all(|&id| face(id).color == c));
-                        }
-                        check_sorted_pile(m.game(), pos.cards(Zone::Hand(p)), &pv.hand);
-                        check_sorted_pile(m.game(), pos.cards(Zone::Score(p)), &pv.score);
-                        check_sorted_pile(m.game(), pos.cards(Zone::Forecast(p)), &pv.forecast);
-                        assert_eq!(pv.forecast_limit, pos.forecast_limit(p));
-                        let cards: Vec<_> = pv
-                            .achievements
-                            .iter()
-                            .filter_map(|a| match a {
-                                Held::Card(c) => Some(*c),
-                                _ => None,
-                            })
-                            .collect();
-                        assert_eq!(
-                            face_codes(&cards),
-                            codes(m.game(), pos.cards(Zone::Achievements(p)))
-                        );
-                        let specials: Vec<_> = pv
-                            .achievements
-                            .iter()
-                            .filter_map(|a| match a {
-                                Held::Special(s) => Some(*s),
-                                _ => None,
-                            })
-                            .collect();
-                        assert_eq!(
-                            specials,
-                            pos.specials()
-                                .filter(|&s| pos.special_location(s) == SpecialLocation::Owned(p))
-                                .collect::<Vec<_>>()
-                        );
-                        assert_eq!(
-                            pv.decrees,
-                            Decree::ALL
-                                .into_iter()
-                                .filter(|&d| pos.decree_location(d) == DecreeLocation::Owned(p))
-                                .map(|d| (decree(d).to_owned(), d.color()))
-                                .collect::<Vec<_>>()
-                        );
-                        assert_eq!(pv.achievement_count, pos.effective_achievement_count(p));
-                        assert_eq!(pv.score_total, pos.score(p));
-                        assert_eq!(pv.bonus_score, pos.bonus_score(p));
-                        assert_eq!(pv.icons, ICONS.map(|i| pos.icon_count(p, i)));
-                        assert_eq!(pv.safe.len(), pos.cards(Zone::Safe(p)).len());
-                        assert_eq!(
-                            pv.display,
-                            pos.cards(Zone::Display(p))
-                                .first()
-                                .map(|&c| face_of(m.game(), c))
-                        );
-                        assert_eq!(
-                            pv.museums.iter().map(|(_, f)| *f).collect::<Vec<_>>(),
-                            pos.cards(Zone::Museum(p))
-                                .iter()
-                                .map(|&c| face_of(m.game(), c))
-                                .collect::<Vec<_>>()
-                        );
-                        assert_eq!(
-                            pv.achievements
-                                .iter()
-                                .filter(|h| matches!(h, Held::Museum(_)))
-                                .count(),
-                            pos.claimed_museums(p)
-                        );
-                    }
-                    assert_eq!(
-                        face_codes(&v.supply.junk),
-                        codes(m.game(), pos.cards(Zone::Junk))
-                    );
-                    let available: BTreeSet<_> = v
-                        .supply
-                        .specials
-                        .iter()
-                        .flatten()
-                        .map(|&s| s as usize)
-                        .collect();
-                    let expected: BTreeSet<_> = pos
-                        .specials()
-                        .filter(|&s| pos.special_location(s) == SpecialLocation::Available)
-                        .map(|s| s as usize)
-                        .collect();
-                    assert_eq!(available, expected);
-                    let sets: Vec<_> = n::CardSet::ALL
-                        .into_iter()
-                        .filter(|&s| expansions.includes(s))
-                        .collect();
-                    assert_eq!(v.supply.decks.len(), sets.len());
-                    for (row, &s) in v.supply.decks.iter().zip(&sets) {
-                        assert_eq!(row.set, Set::from(s));
-                        for age in 0..=11 {
-                            assert_eq!(
-                                row.counts[age],
-                                pos.cards(Zone::Deck(n::Deck {
-                                    set: s,
-                                    age: age as u8
-                                }))
-                                .len()
-                            );
-                        }
-                        if !pos.age_zero_introduced() {
-                            assert_eq!(row.counts[0], 0);
-                        }
-                    }
-                    let mut expected: Vec<_> = pos
-                        .cards(Zone::AvailableAchievements)
-                        .iter()
-                        .map(|&c| {
-                            let printed = pos.card(c).origin_deck();
-                            (printed.age, Set::from(printed.set))
-                        })
-                        .collect();
-                    expected.sort();
-                    assert_eq!(
-                        v.supply
-                            .achievements
-                            .iter()
-                            .map(|a| (a.age, a.set))
-                            .collect::<Vec<_>>(),
-                        expected
-                    );
-                    for a in &v.supply.achievements {
-                        let legal = m.to_move() == Some(player(viewer))
-                            && achieve_step(&m, a.age, a.set).is_some();
-                        assert_eq!(a.legal, legal);
-                        legal_achievements += usize::from(legal);
-                    }
-                    if matches!(m.prompt(), Prompt::Over(_)) {
-                        assert!(v.over.is_some());
-                    } else {
-                        assert!(v.over.is_none());
-                    }
-                }
-                let Some(next) = m.random_step(seed * 1000 + step) else {
-                    completed[mode] += 1;
-                    break;
-                };
-                choices += usize::from(matches!(next, Step::Choice(_)));
-                m.apply(next).unwrap();
-            }
-        }
-    }
+                    (completed, choices, legal_achievements)
+                })
+            })
+            .collect();
+        handles.into_iter().map(|h| h.join().unwrap()).collect()
+    });
     assert!(
-        completed.into_iter().all(|count| count > 0),
+        results.iter().all(|&(completed, _, _)| completed > 0),
         "bounded games must reach terminal prompts"
     );
-    assert!(choices > 50);
-    assert!(legal_achievements > 0);
+    assert!(results.iter().map(|&(_, c, _)| c).sum::<usize>() > 50);
+    assert!(results.iter().map(|&(_, _, a)| a).sum::<usize>() > 0);
 }
 
 // Independent physical-location oracle. In the log, ordinary reveals
@@ -565,103 +595,115 @@ fn assert_private_log(
 
 #[test]
 fn seeded_logs_and_menus_only_expose_visible_packet_or_retained_source_faces() {
-    let mut backs = 0;
-    for expansions in MODES {
-        for seed in [10] {
-            let mut m = Match::new(expansions, seed).unwrap();
-            let initial = locations(m.game());
-            for step in 0..400 {
-                for viewer in 0..2 {
-                    let v = view(&m, viewer, true, false);
-                    let mut visible: BTreeSet<_> = locations(m.game())
-                        .into_iter()
-                        .filter(|(_, z)| public_to(m.game(), *z, viewer))
-                        .map(|(c, _)| face_of(m.game(), c))
-                        .collect();
-                    if let Prompt::Decision(native) = m.prompt() {
-                        let action_step = m
-                            .record()
-                            .steps
-                            .iter()
-                            .rposition(|step| matches!(step, Step::Action(_)))
-                            .map_or(0, |i| i + 1);
-                        // Both players saw this action's reveals.
-                        for (step, event) in m.events() {
-                            if let Event::Revealed { card, .. } = event
-                                && *step >= action_step
-                            {
-                                visible.insert(face_of(m.game(), *card));
+    let backs: usize = std::thread::scope(|scope| {
+        let handles: Vec<_> = MODES
+            .into_iter()
+            .map(|expansions| {
+                scope.spawn(move || {
+                    let mut backs = 0;
+                    for seed in [10] {
+                        let mut m = Match::new(expansions, seed).unwrap();
+                        let initial = locations(m.game());
+                        for step in 0..400 {
+                            for viewer in 0..2 {
+                                let d = view_with_log(&m, viewer, true, false, false).decision;
+                                let mut visible: BTreeSet<_> = locations(m.game())
+                                    .into_iter()
+                                    .filter(|(_, z)| public_to(m.game(), *z, viewer))
+                                    .map(|(c, _)| face_of(m.game(), c))
+                                    .collect();
+                                if let Prompt::Decision(native) = m.prompt() {
+                                    let action_step = m
+                                        .record()
+                                        .steps
+                                        .iter()
+                                        .rposition(|step| matches!(step, Step::Action(_)))
+                                        .map_or(0, |i| i + 1);
+                                    // Both players saw this action's reveals.
+                                    for (step, event) in m.events() {
+                                        if let Event::Revealed { card, .. } = event
+                                            && *step >= action_step
+                                        {
+                                            visible.insert(face_of(m.game(), *card));
+                                        }
+                                    }
+                                    for option in &native.options {
+                                        if let Alternative::Move {
+                                            verb: Verb::Return,
+                                            target:
+                                                TargetDescriptor::Known {
+                                                    card,
+                                                    source: source @ Zone::Deck(_),
+                                                },
+                                        } = option
+                                        {
+                                            assert!(
+                                                m.events().iter().any(|(step, event)| {
+                                                    *step >= action_step
+                                                        && matches!(event,
+                                                        Event::Revealed { card: c, source: z, .. }
+                                                            if c == card && z == source)
+                                                }),
+                                                "Search returns must have been revealed during this action"
+                                            );
+                                            visible.insert(face_of(m.game(), *card));
+                                        }
+                                    }
+                                }
+                                if let Some(d) = d {
+                                    let retained_source = match m.prompt() {
+                                        Prompt::Decision(native) => native
+                                            .source_card(player(viewer))
+                                            .map(|card| face_of(m.game(), card)),
+                                        _ => None,
+                                    };
+                                    for seg in &d.prompt {
+                                        if let Seg::Card(id) = seg {
+                                            assert!(
+                                                visible.contains(id)
+                                                    || Some(*id) == retained_source
+                                            );
+                                        }
+                                    }
+                                    for option in d.options {
+                                        if let Some(id) = option.card {
+                                            assert!(visible.contains(&id));
+                                        }
+                                        for seg in option.segs {
+                                            if let Seg::Card(id) = seg {
+                                                assert!(visible.contains(&id));
+                                            }
+                                            if let Seg::Back(..) = seg {
+                                                backs += 1;
+                                            }
+                                        }
+                                    }
+                                }
                             }
+                            let Some(next) = m.random_step(seed * 2000 + step) else {
+                                break;
+                            };
+                            m.apply(next).unwrap();
                         }
-                        for option in &native.options {
-                            if let Alternative::Move {
-                                verb: Verb::Return,
-                                target:
-                                    TargetDescriptor::Known {
-                                        card,
-                                        source: source @ Zone::Deck(_),
-                                    },
-                            } = option
-                            {
-                                assert!(
-                                    m.events().iter().any(|(step, event)| {
-                                        *step >= action_step
-                                            && matches!(event,
-                                            Event::Revealed { card: c, source: z, .. }
-                                                if c == card && z == source)
-                                    }),
-                                    "Search returns must have been revealed during this action"
-                                );
-                                visible.insert(face_of(m.game(), *card));
-                            }
+                        // The log is built from the event history alone, so the final
+                        // log covers every line each earlier log showed.
+                        let movements = movement_visibility(&m);
+                        for viewer in 0..2 {
+                            assert_private_log(
+                                &m,
+                                &initial,
+                                viewer,
+                                &log_entries(&m, viewer, true),
+                                &movements,
+                            );
                         }
                     }
-                    if let Some(d) = v.decision {
-                        let retained_source = match m.prompt() {
-                            Prompt::Decision(native) => native
-                                .source_card(player(viewer))
-                                .map(|card| face_of(m.game(), card)),
-                            _ => None,
-                        };
-                        for seg in &d.prompt {
-                            if let Seg::Card(id) = seg {
-                                assert!(visible.contains(id) || Some(*id) == retained_source);
-                            }
-                        }
-                        for option in d.options {
-                            if let Some(id) = option.card {
-                                assert!(visible.contains(&id));
-                            }
-                            for seg in option.segs {
-                                if let Seg::Card(id) = seg {
-                                    assert!(visible.contains(&id));
-                                }
-                                if let Seg::Back(..) = seg {
-                                    backs += 1;
-                                }
-                            }
-                        }
-                    }
-                }
-                let Some(next) = m.random_step(seed * 2000 + step) else {
-                    break;
-                };
-                m.apply(next).unwrap();
-            }
-            // The log is built from the event history alone, so the final
-            // log covers every line each earlier log showed.
-            let movements = movement_visibility(&m);
-            for viewer in 0..2 {
-                assert_private_log(
-                    &m,
-                    &initial,
-                    viewer,
-                    &log_entries(&m, viewer, true),
-                    &movements,
-                );
-            }
-        }
-    }
+                    backs
+                })
+            })
+            .collect();
+        handles.into_iter().map(|h| h.join().unwrap()).sum()
+    });
     assert!(backs > 100);
 }
 
