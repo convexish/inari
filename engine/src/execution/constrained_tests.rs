@@ -84,9 +84,20 @@ fn mobility(expansions: Expansions) {
     let red = top(&mut f, "B076", A);
     let reward = f.card("B078", Zone::Deck(Deck::base(8)));
     let mut game = Game::new(f.position(), expansions).unwrap();
+    let mut manual = game.clone();
+    manual.shortcuts_disabled = true;
     start(&mut game, source, 0);
+    start(&mut manual, source, 0);
+    // Two tied highest non-red non-Industry tops must both transfer to the
+    // demander's unordered score pile; per-color never revisits Blue's buried
+    // card, so reduced play skips the order pick and matches unrestricted play.
     let mut events = Vec::new();
-    let menu = decision(&mut game, &mut events);
+    assert_eq!(
+        settle(&mut game, &mut events),
+        Status::Complete(ReturnValue::Unit)
+    );
+    let mut manual_events = Vec::new();
+    let menu = decision(&mut manual, &mut manual_events);
     let eligible: Vec<_> = menu
         .options
         .iter()
@@ -102,20 +113,24 @@ fn mobility(expansions: Expansions) {
     assert!(
         !eligible.contains(&excluded) && !eligible.contains(&red) && !eligible.contains(&purple)
     );
-    game.choose(
-        menu.options
-            .iter()
-            .position(|option| {
-                matches!(option,
+    manual
+        .choose(
+            menu.options
+                .iter()
+                .position(|option| {
+                    matches!(option,
         Alternative::Move { target: TargetDescriptor::Known { card, .. }, .. } if *card == blue)
-            })
-            .unwrap(),
-    )
-    .unwrap();
+                })
+                .unwrap(),
+        )
+        .unwrap();
     assert_eq!(
-        finish(&mut game, &mut events),
+        finish(&mut manual, &mut manual_events),
         Status::Complete(ReturnValue::Unit)
     );
+    manual.shortcuts_disabled = false;
+    assert_eq!(game, manual);
+    assert_eq!(events, manual_events);
     assert_eq!(originals(&events, Verb::Transfer), [blue, green]);
     assert_eq!(game.position.top(A, Color::Blue), Some(buried));
     assert_eq!(game.position.top(A, Color::Purple), Some(purple));

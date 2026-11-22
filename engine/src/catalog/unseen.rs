@@ -1999,7 +1999,9 @@ const CAMOUFLAGE: &[(EffectKind, Program)] = &[
                 .shortcut(Shortcut::AnyOrder),
             safeguard(JUNKED).all(),
             Instruction::Jump(1),
-            score(SAFE).group(2, GroupConstraint::SameValue),
+            score(SAFE)
+                .group(2, GroupConstraint::SameValue)
+                .shortcut(Shortcut::AnyOrder),
         ],
     ),
     (N, &[draws(M(Executor, Metric::Specials), 7, Then::Keep)]),
@@ -2280,11 +2282,11 @@ const ENIGMA_MACHINE: &[(EffectKind, Program)] = &[
             Instruction::Jump(3),
             transfer(SAFE, Destination::Hand(Executor))
                 .all()
-                .shortcut(ORIGIN_ALL),
+                .shortcut(Shortcut::AnyOrder),
             Instruction::Jump(1),
             transfer(HAND, Destination::Supply)
                 .all()
-                .shortcut(ORIGIN_ALL),
+                .shortcut(Shortcut::AnyOrder),
         ],
     ),
     (N, &[resplay(Splay::Left, Splay::Up)]),
@@ -2360,7 +2362,7 @@ const HANDBAG: &[(EffectKind, Program)] = &[(
         .per_color(None)
         .shortcut(ORIGIN_ALL),
         Instruction::Jump(4),
-        tuck(SCORE).all().shortcut(ORIGIN_ALL),
+        tuck(SCORE).all().shortcut(Shortcut::ByColor),
         Instruction::Jump(2),
         choose(Executor, Choice::Value(ValueChoices::Among(&HAND))),
         score(filtered(&HAND, &[same_value(Expr::Chosen)]))
@@ -3046,7 +3048,8 @@ const ESCAPE_ROOM: &[(EffectKind, Program)] = &[
             &TOPS,
             &[Lacks(ColorIs(Yellow)), Has(HasIcon(Efficiency))],
         ))
-        .per_color(Some(Const(4)))],
+        .per_color(Some(Const(4)))
+        .shortcut(ORIGIN_ALL)],
     ),
 ];
 
@@ -3064,7 +3067,7 @@ const FASHION_MASK: &[(EffectKind, Program)] = &[
         &[
             tuck(PROSPEROUS_OR_INDUSTRIOUS_TOPS)
                 .per_color(None)
-                .shortcut(ORIGIN_ALL)
+                .shortcut(Shortcut::ByColor)
                 .keep(MOVED),
             safeguard(filtered(
                 &Board(Executor, ALL_COLORS, ALL_OF),

@@ -443,15 +443,19 @@ impl Game {
         }
         // A Safe is an ordered hidden pile: arrival order into it is a real choice even
         // when every card fits, and its same-back secrets are distinct public slots,
-        // never one random back group. Junking is the exception: secrets leave for the
-        // unordered junk with the same outcome in any order; karmas that react to
-        // junking (Rod Serling) are checked below.
-        if matches!(batch.to, Destination::Safe(_))
-            || (batch.to != Destination::Junk
-                && targets
-                    .iter()
-                    .any(|target| matches!(target.physical, Zone::Safe(_))))
-        {
+        // never one random back group. Departures to unordered piles (junk, score, hand)
+        // leave any remaining secrets in the same relative order without disclosing
+        // hidden fronts under each shortcut's own preconditions (`AnyOrder` requires
+        // `all_must_go`; `ByOrigin` orders only by public backs); karmas that react to
+        // the verb (e.g. Rod Serling on junk) are checked below.
+        let leaves_safe = targets
+            .iter()
+            .any(|target| matches!(target.physical, Zone::Safe(_)));
+        let safe_departure_ok = matches!(
+            batch.to,
+            Destination::Junk | Destination::Score(_) | Destination::Hand(_)
+        );
+        if matches!(batch.to, Destination::Safe(_)) || (leaves_safe && !safe_departure_ok) {
             return;
         }
         #[cfg(test)]
@@ -569,9 +573,11 @@ impl Game {
                     return;
                 }
                 // A finite top-card quota need not exhaust the live closure.
-                // Keep its initial choice if removing a top could expose another.
-                // Covered nonmatching cards are conservatively retained too.
+                // Keep its initial choice if removing a top could expose another
+                // (a per-color batch marks each color done, so it never revisits
+                // a newly exposed top of that color).
                 if batch.limit.is_some()
+                    && !batch.per_color
                     && batch.from.selects_tops()
                     && targets.iter().any(|target| {
                         matches!(target.physical, Zone::Board(_, _))
@@ -1000,3 +1006,7 @@ mod board_depth_tests;
 #[cfg(test)]
 #[path = "cities_shortcut_tests.rs"]
 mod cities_tests;
+
+#[cfg(test)]
+#[path = "unseen_shortcut_tests.rs"]
+mod unseen_tests;
