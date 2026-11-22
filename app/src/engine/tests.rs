@@ -351,10 +351,79 @@ fn public_to(game: &Game, z: Zone, viewer: usize) -> bool {
         ) && game.position().can_view(z, player(viewer)))
 }
 
-fn assert_private_log(m: &Match, initial: &BTreeMap<CardId, Zone>, viewer: usize, log: &[Entry]) {
+struct MovementVisibility {
+    card: CardId,
+    sees_zone: [bool; 2],
+    publicly_known_at_destination: bool,
+}
+
+/// A viewing grant can expire before the next decision. Replay a frame at
+/// a time to check physical visibility while each movement is taking place.
+fn movement_visibility(m: &Match) -> Vec<MovementVisibility> {
+    let record = m.record();
+    let mut game = Game::new_game(record.seed, record.expansions)
+        .unwrap()
+        .with_tracking()
+        .unwrap()
+        .with_narration()
+        .with_subgames(record.subgames);
+    let mut movements = Vec::new();
+    let mut events = Vec::new();
+    for step in std::iter::once(None).chain(record.steps.iter().copied().map(Some)) {
+        match step {
+            Some(Step::Action(action)) => game.take_action(action, n::ActionKind::Regular).unwrap(),
+            Some(Step::Choice(index)) => game.choose(index).unwrap(),
+            None => {}
+        }
+        loop {
+            let status = game.advance(1, &mut events).unwrap();
+            for event in events.drain(..) {
+                let mut moved = |card, source, destination| {
+                    let sees_zone = [0, 1].map(|viewer| {
+                        public_to(&game, source, viewer) || public_to(&game, destination, viewer)
+                    });
+                    let publicly_known_at_destination = game
+                        .public_tracker()
+                        .unwrap()
+                        .belief(destination)
+                        .iter()
+                        .any(|slot| slot.known() == Some(card));
+                    movements.push(MovementVisibility {
+                        card,
+                        sees_zone,
+                        publicly_known_at_destination,
+                    });
+                };
+                match event {
+                    Event::Moved(mv) => moved(mv.card, mv.source, mv.destination),
+                    Event::Exchanged { movements, .. } => {
+                        for mv in movements {
+                            moved(mv.card, mv.source, mv.destination);
+                        }
+                    }
+                    _ => {}
+                }
+            }
+            if !matches!(status, n::Status::WorkLimit) {
+                break;
+            }
+        }
+    }
+    movements
+}
+
+fn assert_private_log(
+    m: &Match,
+    initial: &BTreeMap<CardId, Zone>,
+    viewer: usize,
+    log: &[Entry],
+    movements: &[MovementVisibility],
+) {
+    let mut movements = movements.iter();
     let mut physical = initial.clone();
     let mut events = m.events().iter().peekable();
     let mut allowed = Vec::<BTreeSet<FaceId>>::new();
+    let mut shown = BTreeMap::<CardId, Zone>::new();
     for tag in 0..=m.record().steps.len() {
         if let Some(Step::Action(a)) = tag.checked_sub(1).and_then(|i| m.record().steps.get(i)) {
             match a {
@@ -382,12 +451,20 @@ fn assert_private_log(m: &Match, initial: &BTreeMap<CardId, Zone>, viewer: usize
                 continue;
             }
             let mut visible = BTreeSet::new();
-            let mut moved = |c: CardId, src: Zone, dst: Zone| {
-                assert_eq!(physical[&c], src);
-                if public_to(m.game(), src, viewer) || public_to(m.game(), dst, viewer) {
-                    visible.insert(face_of(m.game(), c));
+            let mut moved = |card: CardId, src: Zone, dst: Zone| {
+                let seen = movements.next().expect("replayed movement");
+                assert_eq!(seen.card, card);
+                assert_eq!(physical.insert(card, dst), Some(src));
+                // Follow a disclosed identity through a hidden move only while
+                // the public tracker can still identify it at the destination.
+                let followed =
+                    shown.remove(&card) == Some(src) && seen.publicly_known_at_destination;
+                if seen.sees_zone[viewer] || followed {
+                    visible.insert(face_of(m.game(), card));
                 }
-                physical.insert(c, dst);
+                if followed || seen.sees_zone == [true, true] {
+                    shown.insert(card, dst);
+                }
             };
             match event {
                 Event::Moved(mv) => moved(mv.card, mv.source, mv.destination),
@@ -399,6 +476,24 @@ fn assert_private_log(m: &Match, initial: &BTreeMap<CardId, Zone>, viewer: usize
                 Event::Revealed { card, source, .. } => {
                     assert_eq!(physical[card], *source);
                     visible.insert(face_of(m.game(), *card));
+                    shown.insert(*card, *source);
+                }
+                Event::FigureSearch {
+                    deck,
+                    name,
+                    found: Some(card),
+                    ..
+                } => {
+                    let source = Zone::Deck(*deck);
+                    assert_eq!(physical[card], source);
+                    assert_eq!(
+                        name.expect("a search hit names a Figure").code,
+                        m.game().position().card(*card).code
+                    );
+                    shown.insert(*card, source);
+                }
+                Event::Shuffled { deck, .. } => {
+                    shown.retain(|_, source| *source != Zone::Deck(*deck));
                 }
                 // An endorsed Dogma's card is a public top card, a free
                 // Dogma's a public top or displayed card, and a karma's
@@ -445,6 +540,7 @@ fn assert_private_log(m: &Match, initial: &BTreeMap<CardId, Zone>, viewer: usize
             allowed.push(visible);
         }
     }
+    assert!(movements.next().is_none());
     assert_eq!(physical, locations(m.game()));
     let mut allowed = allowed.iter();
     for entry in log {
@@ -554,8 +650,15 @@ fn seeded_logs_and_menus_only_expose_visible_packet_or_retained_source_faces() {
             }
             // The log is built from the event history alone, so the final
             // log covers every line each earlier log showed.
+            let movements = movement_visibility(&m);
             for viewer in 0..2 {
-                assert_private_log(&m, &initial, viewer, &log_entries(&m, viewer, true));
+                assert_private_log(
+                    &m,
+                    &initial,
+                    viewer,
+                    &log_entries(&m, viewer, true),
+                    &movements,
+                );
             }
         }
     }
@@ -672,6 +775,115 @@ fn oars_impossible_transfer_lists_the_revealed_hand_in_the_app_log() {
     );
     assert!(lines[0].contains(&Seg::Card(face_of(&game, CardId(1)))));
     assert!(lines[1].contains(&Seg::Card(face_of(&game, CardId(2)))));
+}
+
+fn activate_maze(other_card: &str) -> Game {
+    let cards = ["U002", "B001", "B003", other_card].map(|code| n::Card::from_code(code).unwrap());
+    let mut game = Game::new(
+        n::Position::new(
+            cards.to_vec(),
+            &[
+                (CardId(0), Zone::Board(Player::One, n::Color::Red)),
+                (CardId(1), Zone::Hand(Player::One)),
+                (CardId(2), Zone::Hand(Player::Two)),
+                (CardId(3), Zone::Hand(Player::Two)),
+            ],
+            Player::One,
+        )
+        .unwrap(),
+        n::Expansions::UNSEEN,
+    )
+    .unwrap();
+    game.take_action(
+        Action::Dogma {
+            card: CardId(0),
+            auspice: false,
+        },
+        n::ActionKind::Regular,
+    )
+    .unwrap();
+    game
+}
+
+#[test]
+fn maze_names_the_scored_card_its_color_proof_revealed() {
+    // Maze demands a red card from the opponent's hand; Oars is scored only
+    // after a reveal proves its color, while Agriculture stays hidden.
+    let mut game = activate_maze("B004");
+    let mut events = Vec::new();
+    assert!(matches!(
+        game.advance(4096, &mut events).unwrap(),
+        n::Status::Complete(_)
+    ));
+    let lines: Vec<_> = events
+        .iter()
+        .map(|event| plain(&sentence(&game, event, 0), 0, false))
+        .collect();
+    assert_eq!(
+        lines,
+        [
+            "AI reveals Archery [1] from your hand",
+            "AI reveals Oars [1] from their hand",
+            "AI scores Oars [1]",
+        ]
+    );
+    let scored = events
+        .iter()
+        .find(|event| matches!(event, Event::Moved(m) if m.verb == Some(Verb::Score)))
+        .expect("Oars is scored");
+    let Event::Moved(movement) = scored else {
+        unreachable!()
+    };
+    assert_eq!(movement.card, CardId(2));
+    assert!(movement.public);
+    for (viewer, expected) in [(0, "AI scores Oars [1]"), (1, "You score Oars [1]")] {
+        let line = sentence(&game, scored, viewer);
+        assert_eq!(plain(&line, viewer, false), expected);
+        assert!(line.contains(&Seg::Card(face_of(&game, CardId(2)))));
+    }
+}
+
+#[test]
+fn maze_logs_each_scored_card_when_the_target_chooses_among_matches() {
+    let mut game = activate_maze("B002");
+    let mut events = Vec::new();
+    let n::Status::Decision(menu) = game.advance(4096, &mut events).unwrap() else {
+        panic!("target chooses which matching red card to score");
+    };
+    assert_eq!(menu.player, Player::Two);
+    let pick = menu
+        .options
+        .iter()
+        .position(|option| {
+            matches!(
+                option,
+                Alternative::Move {
+                    verb: Verb::Score,
+                    target: TargetDescriptor::Known {
+                        card: CardId(3),
+                        ..
+                    },
+                }
+            )
+        })
+        .expect("Metalworking is an option");
+    game.choose(pick).unwrap();
+    assert!(matches!(
+        game.advance(4096, &mut events).unwrap(),
+        n::Status::Complete(_)
+    ));
+    let lines: Vec<_> = events
+        .iter()
+        .map(|event| plain(&sentence(&game, event, 0), 0, false))
+        .collect();
+    assert_eq!(
+        lines,
+        vec![
+            "AI reveals Archery [1] from your hand",
+            "AI reveals Metalworking [1] from their hand",
+            "AI scores Metalworking [1]",
+        ]
+    );
 }
 
 #[test]
@@ -1071,6 +1283,16 @@ fn calicut_return_options_show_the_public_packet_until_each_card_is_returned() {
             );
             assert_eq!(game.position().cards(Zone::Hand(Player::One)), [CardId(5)]);
             for viewer in 0..2 {
+                for event in &events {
+                    if let Event::Moved(mv) = event
+                        && mv.source == deck
+                    {
+                        assert!(
+                            sentence(&game, event, viewer)
+                                .contains(&Seg::Card(face_of(&game, mv.card)))
+                        );
+                    }
+                }
                 for &card in game.position().cards(deck) {
                     assert!(!visible_cards(&game, viewer).contains(&face_of(&game, card)));
                 }
@@ -1341,6 +1563,7 @@ fn log_nesting_follows_dogmas_executions_and_karma_bodies() {
             destination: Zone::Hand(Player::One),
             executor: Player::One,
             inside_karma,
+            public: false,
         })
     };
     let started = |inside_karma| Event::ExecutionStarted {
@@ -1414,6 +1637,7 @@ fn event_sentences_use_event_time_visibility_and_name_specials_and_decrees() {
             destination,
             executor: Player::Two,
             inside_karma: false,
+            public: false,
         })
     };
     let cases = [

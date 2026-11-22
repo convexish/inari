@@ -763,6 +763,10 @@ pub struct Movement {
     pub destination: Zone,
     pub executor: Player,
     pub inside_karma: bool,
+    /// Whether the moving card's identity was publicly known at commit
+    /// (verified or revealed for the move, or physically visible to both
+    /// players).
+    pub public: bool,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -3537,7 +3541,12 @@ impl Game {
                         .map_or(tracking::Departure::Unordered, |knowledge| {
                             tracking::Departure::Retained(knowledge.evidence.pick())
                         });
-                    self.commit_departure(request, context, retain, departure, events)?
+                    let public = selected.is_some_and(|selected| {
+                        (selected.evidence
+                            | knowledge.map_or(Evidence::NONE, |knowledge| knowledge.evidence))
+                        .is_public()
+                    });
+                    self.commit_departure(request, context, retain, departure, public, events)?
                 };
                 // Resolved above the requested age, at discovery or after a
                 // First reaction emptied the resolved deck.
@@ -4002,7 +4011,7 @@ impl Game {
             .push(Frame::operation(Operation::Shuffle { deck }, context));
         if let Some(card) = found {
             let source = Zone::Deck(deck);
-            self.frames.push(Frame::operation(
+            self.frames.push(Frame::captured_operation(
                 Operation::Move {
                     verb: Verb::Transfer,
                     target: Target {
@@ -4013,6 +4022,7 @@ impl Game {
                     destination: Zone::Hand(context.executor),
                 },
                 context,
+                Captured::new(card, Evidence::PUBLIC),
             ));
         }
     }
@@ -4671,6 +4681,7 @@ impl Game {
             context,
             retain,
             tracking::Departure::Unordered,
+            false,
             events,
         )
     }
@@ -4681,6 +4692,7 @@ impl Game {
         context: Context,
         retain: bool,
         departure: tracking::Departure,
+        public: bool,
         events: &mut Vec<Event>,
     ) -> Result<OperationOutcome, Error> {
         let (verb, card, source, destination) = match request {
@@ -4992,6 +5004,7 @@ impl Game {
             } else {
                 departure
             },
+            public,
             context,
             events,
         )
@@ -5009,11 +5022,21 @@ impl Game {
         source: Zone,
         destination: Zone,
         departure: tracking::Departure,
+        public: bool,
         context: Context,
         events: &mut Vec<Event>,
     ) -> Result<OperationOutcome, Error> {
+        let public = public
+            || Player::ALL.into_iter().all(|viewer| {
+                self.position.can_view(source, viewer)
+                    || self.position.can_view(destination, viewer)
+            });
         let value = self.position.value(card);
         let slots = self.track_extract(card, source, destination, departure);
+        debug_assert!(
+            !public || slots.is_none_or(|slots| slots[crate::tracking::COMMON].is_known()),
+            "public movement must be known to the public tracker"
+        );
         let cards = self.position.zone_mut(source);
         let index = cards
             .iter()
@@ -5067,6 +5090,7 @@ impl Game {
             destination,
             executor: context.executor,
             inside_karma: context.suppress_karma(),
+            public,
         }));
         self.refresh_tracking()?;
         self.refresh_meld_knowledge();

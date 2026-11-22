@@ -135,6 +135,7 @@ fn effect_card_claim_and_achieve_movement_wait_for_first_and_retain_the_original
                 destination: Zone::Achievements(A),
                 executor: A,
                 inside_karma: false,
+                public: false,
             })
         );
         assert_eq!(game.position().cards(Zone::Achievements(A)), &[card]);

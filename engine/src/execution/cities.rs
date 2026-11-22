@@ -509,6 +509,7 @@ impl Game {
                         source,
                         Zone::Hand(player),
                         tracking::Departure::Position,
+                        true,
                         context,
                         events,
                     )?;
@@ -580,6 +581,7 @@ impl Game {
             deck,
             deck,
             tracking::Departure::Position,
+            true,
             context,
             events,
         )?;

@@ -32,6 +32,10 @@ impl Evidence {
         self.0 & Self::known_to(viewer).0 != 0
     }
 
+    pub(crate) fn is_public(self) -> bool {
+        self.0 & Self::KNOWN == Self::KNOWN
+    }
+
     pub(crate) fn pick(self) -> Option<Pick> {
         ((self.0 as u8) >> 2).checked_sub(1).map(Pick::new)
     }

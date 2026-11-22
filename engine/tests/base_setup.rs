@@ -224,6 +224,7 @@ fn starting_melds_are_not_actions_and_title_order_not_id_order_selects_the_start
                     destination: Zone::Board(player, game.position().card(card).color),
                     executor: player,
                     inside_karma: false,
+                    public: true,
                 })
             );
             assert_eq!(game.position().cards(Zone::Hand(player)).len(), 1);

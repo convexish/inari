@@ -118,6 +118,12 @@ pub(crate) struct Slot {
     picks: u64,
 }
 
+impl Slot {
+    pub(crate) fn is_known(self) -> bool {
+        self.mask.count_ones() == 1
+    }
+}
+
 /// One hidden world: the sampled card at each real position, each live
 /// pick's sampled card, and the sampling observer's beliefs re-aligned with
 /// the sampled positions.

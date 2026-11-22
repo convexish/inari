@@ -979,7 +979,11 @@ fn moved_card(game: &Game, card: CardId, source: Zone, destination: Zone, viewer
 fn movement_sentence(game: &Game, m: &Movement, viewer: usize) -> Vec<Seg> {
     let base = m.verb.map_or("draw", verb);
     let mut segs = subject(m.executor, viewer, base, &format!("{base}s"));
-    segs.push(moved_card(game, m.card, m.source, m.destination, viewer));
+    segs.push(if m.public {
+        Seg::Card(face_of(game, m.card))
+    } else {
+        moved_card(game, m.card, m.source, m.destination, viewer)
+    });
     // Routine draws/melds need no redundant zone, nor do returns (always the
     // bottom of the card's own deck). Transfers always name both ends;
     // scoring from the board and foreign-hand melds name their source.

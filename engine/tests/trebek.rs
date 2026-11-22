@@ -204,7 +204,8 @@ fn hit_transfers_the_exact_buried_figure_then_shuffles_then_resumes_the_draw() {
             source: Zone::Deck(Deck::figures(7)),
             destination: Zone::Hand(A),
             executor: A,
-            inside_karma: true
+            inside_karma: true,
+            public: true,
         }
     );
     assert_eq!(

@@ -175,6 +175,7 @@ fn homers_tuck_cannot_satisfy_agricultures_if_you_do() {
             destination: Zone::Board(A, Color::Purple),
             executor: A,
             inside_karma: true,
+            public: true,
         }
     );
     assert_eq!(

@@ -219,6 +219,7 @@ fn whole_hand_has_no_quota_and_canonical_events_are_exact() {
                 destination: Zone::Deck(game.position.card(card).origin_deck()),
                 executor: A,
                 inside_karma: false,
+                public: false,
             })
         })
         .collect();

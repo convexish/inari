@@ -160,7 +160,8 @@ fn medicine_junks_one_native_back_sample_and_preserves_rod_instead() {
                                 source: Zone::AvailableAchievements,
                                 destination: Zone::Junk,
                                 executor: A,
-                                inside_karma: false
+                                inside_karma: false,
+                                public: false,
                             })]
                         );
                     }

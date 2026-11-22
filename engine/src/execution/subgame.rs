@@ -263,6 +263,7 @@ impl Game {
                     Zone::Deck(deck),
                     Zone::Junk,
                     tracking::Departure::Position,
+                    false,
                     context,
                     events,
                 )?;
