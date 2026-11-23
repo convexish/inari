@@ -250,7 +250,7 @@ impl Game {
     /// Removing a card from a board can expose whatever lies beneath it.
     /// A covered Figure in a candidate's stack blocks the reduction if it
     /// could observe these moves once exposed.
-    fn exposure_blocks(
+    pub(super) fn exposure_blocks(
         &self,
         targets: &[Target],
         dependencies: &[ShortcutDependency],
@@ -1014,3 +1014,7 @@ mod unseen_tests;
 #[cfg(test)]
 #[path = "draw_age_alias_tests.rs"]
 mod draw_age_alias_tests;
+
+#[cfg(test)]
+#[path = "decree_shortcut_tests.rs"]
+mod decree_shortcut_tests;

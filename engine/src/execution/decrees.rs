@@ -24,6 +24,8 @@ pub(super) struct DecreeProgress {
     claim: bool,
     stage: Stage,
     visited: Vec<HeldCard>,
+    /// Start of the uninterrupted origin-ordered suffix in `Stage::Score`.
+    ordered_since: Option<u8>,
 }
 
 impl DecreeProgress {
@@ -34,6 +36,7 @@ impl DecreeProgress {
             claim: _,
             stage: _,
             visited,
+            ordered_since: _,
         } = self;
         map.context(context);
         for card in visited {
@@ -55,11 +58,110 @@ impl DecreeProgress {
             claim,
             stage: Stage::Begin,
             visited: Vec::new(),
+            ordered_since: None,
         }
     }
 }
 
 impl Game {
+    fn decree_shortcuts_enabled(&self) -> bool {
+        #[cfg(test)]
+        {
+            !self.shortcuts_disabled
+        }
+        #[cfg(not(test))]
+        {
+            true
+        }
+    }
+
+    /// Reduce Rivalry's score-return choices when every candidate is unaliased,
+    /// no Figure observes returns or score membership, and no blind origin
+    /// deck has duplicate cards (preserving exact native RNG streams).
+    fn reduce_decree_score_returns(
+        &self,
+        progress: &mut DecreeProgress,
+        remaining: u8,
+        targets: &mut Vec<Target>,
+    ) {
+        let previous_ordered_since = progress.ordered_since.take();
+        if targets.len() <= 1 || !self.decree_shortcuts_enabled() {
+            return;
+        }
+        let context = progress.context;
+        let score_zone = Zone::Score(context.executor.opponent());
+        if !self.position.dependencies_clear(
+            &[
+                ShortcutDependency::Move(Verb::Return),
+                ShortcutDependency::ScoreMembership,
+            ],
+            context,
+            false,
+        ) || targets.iter().any(|target| {
+            target.physical != score_zone
+                || (!self.position.can_view(target.physical, context.controller)
+                    && targets
+                        .iter()
+                        .filter(|other| {
+                            other.physical == target.physical
+                                && self.origin_group(**other) == self.origin_group(*target)
+                        })
+                        .count()
+                        > 1)
+        }) {
+            return;
+        }
+        let visited = progress.visited.len() as u8;
+        let since = previous_ordered_since.unwrap_or(visited);
+        let floor = if visited > since {
+            progress
+                .visited
+                .last()
+                .map(|id| self.display_key(id.inner, false, false))
+        } else {
+            None
+        };
+        let required = usize::from(remaining).min(targets.len());
+        let mut keys: Vec<u32> = targets
+            .iter()
+            .map(|target| self.display_key(target.card, false, false))
+            .collect();
+        keys.sort_unstable();
+        let keep = |target: &Target| {
+            let own = self.display_key(target.card, false, false);
+            let suffix = keys.len() - keys.partition_point(|&other| other < own);
+            floor.is_none_or(|floor| own >= floor) && suffix >= required
+        };
+        if !targets.iter().any(keep) {
+            return;
+        }
+        targets.retain(keep);
+        progress.ordered_since = Some(since);
+    }
+
+    /// Reduce War/Rivalry top-card return order across distinct origin decks
+    /// when no live or exposed Figure observes returns. Same-deck return
+    /// orders remain a real choice.
+    fn reduce_decree_top_returns(&self, context: Context, targets: &mut Vec<Target>) {
+        if targets.len() <= 1 || !self.decree_shortcuts_enabled() {
+            return;
+        }
+        let dependencies = [ShortcutDependency::Move(Verb::Return)];
+        if !self
+            .position
+            .dependencies_clear(&dependencies, context, true)
+            || self.exposure_blocks(targets, &dependencies, context, true)
+        {
+            return;
+        }
+        if let Some(min) = targets
+            .iter()
+            .map(|&target| self.origin_group(target))
+            .min()
+        {
+            targets.retain(|&target| self.origin_group(target) == min);
+        }
+    }
     pub(super) fn select_decree_value(&mut self, value: u8) {
         let Some(Frame::Decree(progress)) = self.frames.last_mut() else {
             unreachable!("War caller");
@@ -183,13 +285,31 @@ impl Game {
                         };
                         self.frames.push(Frame::Decree(progress));
                         let minimum = u8::from(!self.position.age_zero_introduced());
+                        let mut values: Vec<u8> = (minimum..=11).collect();
+                        let mut aliased = false;
+                        if self.decree_shortcuts_enabled() {
+                            let opponent = context.executor.opponent();
+                            let present = Color::ALL
+                                .into_iter()
+                                .filter_map(|color| self.position.top(opponent, color))
+                                .fold(0_u16, |mask, card| mask | (1 << self.position.value(card)));
+                            let before = values.len();
+                            let mut first_noop = true;
+                            values.retain(|&value| {
+                                present & (1 << value) != 0
+                                    || std::mem::replace(&mut first_noop, false)
+                            });
+                            aliased = values.len() < before;
+                        }
+                        let mut options = DecisionOptions::new(
+                            values.iter().copied().map(Alternative::Value).collect(),
+                            context,
+                        );
+                        options.aliased = aliased;
                         self.frames.push(Frame::Choose {
                             player: context.controller,
-                            options: DecisionOptions::new(
-                                (minimum..=11).map(Alternative::Value).collect(),
-                                context,
-                            ),
-                            tasks: (minimum..=11).map(Task::DecreeValue).collect(),
+                            options,
+                            tasks: values.into_iter().map(Task::DecreeValue).collect(),
                         });
                         return Ok(());
                     }
@@ -214,24 +334,26 @@ impl Game {
                 }
             }
             Stage::Score { remaining } => {
-                let targets = self
+                let mut targets = self
                     .position
                     .targets(LogicalZone::Score(context.executor.opponent()))
                     .filter(|t| !contains_card(&progress.visited, t.card))
                     .collect::<Vec<_>>();
                 if remaining == 0 || targets.is_empty() {
+                    progress.ordered_since = None;
                     progress.stage = Stage::Tops {
                         value: None,
                         colors: 0,
                     };
                     self.frames.push(Frame::Decree(progress));
                 } else {
+                    self.reduce_decree_score_returns(&mut progress, remaining, &mut targets);
                     self.frames.push(Frame::Decree(progress));
                     self.decree_return_choices(context, targets);
                 }
             }
             Stage::Tops { value, colors } => {
-                let targets = Color::ALL
+                let mut targets = Color::ALL
                     .into_iter()
                     .filter(|&color| colors & (1 << color as u8) == 0)
                     .filter_map(|color| {
@@ -239,7 +361,7 @@ impl Game {
                         let card = *self.position.cards(physical).last()?;
                         let definition = self.position.card(card);
                         let matches = value.map_or(definition.figure.is_some(), |value| {
-                            definition.value == value
+                            self.position.value(card) == value
                         });
                         (matches && !contains_card(&progress.visited, card)).then_some(Target {
                             card,
@@ -252,6 +374,7 @@ impl Game {
                     progress.stage = Stage::Claim;
                     self.frames.push(Frame::Decree(progress));
                 } else {
+                    self.reduce_decree_top_returns(context, &mut targets);
                     self.frames.push(Frame::Decree(progress));
                     self.decree_return_choices(context, targets);
                 }

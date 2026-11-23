@@ -47,9 +47,9 @@ figures 19 470a9853554cfcf0 220
 figures 20 c73286e86e2277bc 266
 figures 21 c81e99bcfc61d7d9 182
 figures 22 e4c7181cc4a74803 199
-figures 23 0348d6d887f6bfc7 271
+figures 23 efd716b4c7bccdd9 250
 figures 24 5d9bb1d03b33cd09 250
-# figures Witness { figure_reactions: 666, city_draws: 0, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
+# figures Witness { figure_reactions: 642, city_draws: 0, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
 cities 0 b5e0a6845c6401a7 215
 cities 1 c6fe23273cd43460 242
 cities 2 30d096c325f56e83 278
@@ -86,7 +86,7 @@ figures+cities 6 a5419002e8ee6009 208
 figures+cities 7 8b01d12575cd5646 188
 figures+cities 8 99a886890fe39deb 354
 figures+cities 9 65b372b4c30e0231 277
-figures+cities 10 6b1c14dc60a9594d 191
+figures+cities 10 8f386c9ac311eaf2 216
 figures+cities 11 87495d1f4ee3f81d 225
 figures+cities 12 405d2cf1c3d98cf5 125
 figures+cities 13 baca920ba68f083e 212
@@ -101,7 +101,7 @@ figures+cities 21 af61eb782521a0c9 383
 figures+cities 22 2c5d53593e35b581 221
 figures+cities 23 6050b816ae0454d2 231
 figures+cities 24 a71fc4c48baaa982 245
-# figures+cities Witness { figure_reactions: 808, city_draws: 288, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
+# figures+cities Witness { figure_reactions: 840, city_draws: 290, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
 echoes 0 8108816600ae943f 250
 echoes 1 e2fb5234ad53422d 196
 echoes 2 32c8ec20929c6ba5 188
@@ -135,11 +135,11 @@ figures+echoes 3 25ed3c540a868533 302
 figures+echoes 4 a32d22a75233e7ce 283
 figures+echoes 5 d37806780c90c420 235
 figures+echoes 6 b0abc72ca31d1db0 272
-figures+echoes 7 13e915d509c0c28d 327
+figures+echoes 7 7e5e564529acf73d 324
 figures+echoes 8 957d97953a519daa 284
-figures+echoes 9 b4c322bf9f47b7ee 292
+figures+echoes 9 bc06f74c94ab123e 292
 figures+echoes 10 1e6539d3ac9e0413 259
-figures+echoes 11 58a4903b844f532e 330
+figures+echoes 11 3bb19321d7667d7e 307
 figures+echoes 12 d57f95a73a90a31a 342
 figures+echoes 13 d052964415014d8e 273
 figures+echoes 14 1d364928decd10b8 214
@@ -152,8 +152,8 @@ figures+echoes 20 557915b8d7fe3990 194
 figures+echoes 21 d775dbf027b2262f 202
 figures+echoes 22 79c5e9987d045409 282
 figures+echoes 23 e71e0847f757d2ca 353
-figures+echoes 24 54f0ab79ecf12b36 408
-# figures+echoes Witness { figure_reactions: 1268, city_draws: 0, echo_draws: 1356, forecast_moves: 343, promotions: 205, top_echo_dogmas: 396, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
+figures+echoes 24 1eeadba4605e93d8 424
+# figures+echoes Witness { figure_reactions: 1271, city_draws: 0, echo_draws: 1338, forecast_moves: 338, promotions: 211, top_echo_dogmas: 389, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
 cities+echoes 0 927e508e9420bb14 327
 cities+echoes 1 797c33b632078d42 219
 cities+echoes 2 664e1ff27469c7b2 327
@@ -180,8 +180,8 @@ cities+echoes 22 31efc4caaa132d9b 250
 cities+echoes 23 a064f249d2f34866 309
 cities+echoes 24 8b5904724f40b9a0 327
 # cities+echoes Witness { figure_reactions: 0, city_draws: 333, echo_draws: 1623, forecast_moves: 312, promotions: 208, top_echo_dogmas: 410, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
-figures+cities+echoes 0 4d77f173d480ce02 351
-figures+cities+echoes 1 29434576810b127d 436
+figures+cities+echoes 0 cab6be398a62ca3b 366
+figures+cities+echoes 1 6f178159b6696127 399
 figures+cities+echoes 2 0ad6456d0989a685 383
 figures+cities+echoes 3 2311312fbeeac482 283
 figures+cities+echoes 4 b02ff967d3e5e784 347
@@ -205,7 +205,7 @@ figures+cities+echoes 21 917d653068b0f72f 306
 figures+cities+echoes 22 54784c4123bf84ba 277
 figures+cities+echoes 23 b781276b22eaa8cd 345
 figures+cities+echoes 24 8c1f21ec94902733 199
-# figures+cities+echoes Witness { figure_reactions: 1035, city_draws: 369, echo_draws: 1488, forecast_moves: 314, promotions: 190, top_echo_dogmas: 388, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
+# figures+cities+echoes Witness { figure_reactions: 1017, city_draws: 371, echo_draws: 1467, forecast_moves: 310, promotions: 191, top_echo_dogmas: 385, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
 artifacts 0 14649c03c9b5c050 272
 artifacts 1 c8ecf15e0a3f3146 148
 artifacts 2 17b88bd2a56f9888 292
@@ -235,7 +235,7 @@ artifacts 24 924873120c16cd57 205
 figures+artifacts 0 a6562046d84b9b3e 245
 figures+artifacts 1 f7c020da7a06232b 179
 figures+artifacts 2 0d266af2e0c0dcc1 292
-figures+artifacts 3 787d0caf5efe4b66 316
+figures+artifacts 3 690dc7dde1419b0b 307
 figures+artifacts 4 a4f0e6e795406f06 355
 figures+artifacts 5 fa8451ee84b5ad15 168
 figures+artifacts 6 c8e08f07bcb058f1 260
@@ -257,7 +257,7 @@ figures+artifacts 21 dd766ce0de55c6c2 185
 figures+artifacts 22 3b609073ad53d6cb 333
 figures+artifacts 23 adec53e465af1bb7 368
 figures+artifacts 24 ebbed8ffe5db09a8 265
-# figures+artifacts Witness { figure_reactions: 881, city_draws: 0, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 14, digs: 517, seizures: 58, rotations: 502, museum_claims: 42, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
+# figures+artifacts Witness { figure_reactions: 884, city_draws: 0, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 14, digs: 514, seizures: 59, rotations: 499, museum_claims: 43, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
 cities+artifacts 0 51f641c903f216db 154
 cities+artifacts 1 eaed7e891b53361e 215
 cities+artifacts 2 bf4ea44d0000a6c9 235
@@ -292,7 +292,7 @@ figures+cities+artifacts 4 b64326cda7b0ebb7 249
 figures+cities+artifacts 5 467e47333388243c 288
 figures+cities+artifacts 6 f581b9e580dfe152 69
 figures+cities+artifacts 7 f86ce590b27bbef0 270
-figures+cities+artifacts 8 ef77062b5df56837 254
+figures+cities+artifacts 8 1f004c10ea0b5623 242
 figures+cities+artifacts 9 b8b334e057b91957 286
 figures+cities+artifacts 10 2e704aa51d67fbcb 230
 figures+cities+artifacts 11 c991591d4679fb5c 224
@@ -309,7 +309,7 @@ figures+cities+artifacts 21 402c836a3e110e7c 68
 figures+cities+artifacts 22 536ed9063b2b6f10 219
 figures+cities+artifacts 23 a0266a3b5eb56e9c 392
 figures+cities+artifacts 24 d47c1ce360b85411 280
-# figures+cities+artifacts Witness { figure_reactions: 462, city_draws: 276, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 13, digs: 467, seizures: 68, rotations: 443, museum_claims: 23, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
+# figures+cities+artifacts Witness { figure_reactions: 495, city_draws: 278, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 13, digs: 469, seizures: 68, rotations: 444, museum_claims: 23, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
 echoes+artifacts 0 c4241dbcf82859b1 218
 echoes+artifacts 1 31e48dd94803bcdb 139
 echoes+artifacts 2 37a918255f9cbd9b 214
@@ -341,7 +341,7 @@ figures+echoes+artifacts 1 1a46622e669380dc 290
 figures+echoes+artifacts 2 2701460488335105 263
 figures+echoes+artifacts 3 83b1e9c25145f5b2 297
 figures+echoes+artifacts 4 659a100f60b77800 364
-figures+echoes+artifacts 5 6cbcd9403063aec5 297
+figures+echoes+artifacts 5 b07f72cb73aca14a 320
 figures+echoes+artifacts 6 db0b9e96b87e69b1 234
 figures+echoes+artifacts 7 74e6e3d931916dcc 376
 figures+echoes+artifacts 8 72fa83b376a1a7af 226
@@ -355,13 +355,13 @@ figures+echoes+artifacts 15 f73b1f797f6a23c7 255
 figures+echoes+artifacts 16 1e3e77a5088a02b0 185
 figures+echoes+artifacts 17 8af9d36fa74a81f9 160
 figures+echoes+artifacts 18 1162c2b0301eab1f 82
-figures+echoes+artifacts 19 33d416feae9fafe0 215
+figures+echoes+artifacts 19 0fdf59fc92ad2849 264
 figures+echoes+artifacts 20 5cffd2bdc3c631fa 328
 figures+echoes+artifacts 21 228bf2f0790d7796 329
 figures+echoes+artifacts 22 b8f3873a04879254 196
 figures+echoes+artifacts 23 7c7de5d0cfe1a9eb 459
 figures+echoes+artifacts 24 58e225698aa54874 255
-# figures+echoes+artifacts Witness { figure_reactions: 809, city_draws: 0, echo_draws: 1216, forecast_moves: 196, promotions: 129, top_echo_dogmas: 288, artifact_draws: 18, digs: 508, seizures: 64, rotations: 493, museum_claims: 38, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
+# figures+echoes+artifacts Witness { figure_reactions: 815, city_draws: 0, echo_draws: 1204, forecast_moves: 192, promotions: 127, top_echo_dogmas: 289, artifact_draws: 18, digs: 513, seizures: 65, rotations: 497, museum_claims: 39, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
 cities+echoes+artifacts 0 ea456343039fefb9 303
 cities+echoes+artifacts 1 dfe5ea2715d50a47 303
 cities+echoes+artifacts 2 a81b4826a10416d9 207
@@ -390,7 +390,7 @@ cities+echoes+artifacts 24 c7fb031b9ab083bd 261
 # cities+echoes+artifacts Witness { figure_reactions: 0, city_draws: 311, echo_draws: 1310, forecast_moves: 221, promotions: 146, top_echo_dogmas: 250, artifact_draws: 15, digs: 525, seizures: 87, rotations: 505, museum_claims: 36, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
 figures+cities+echoes+artifacts 0 bfa5902005a4d8cf 326
 figures+cities+echoes+artifacts 1 49d72a5b03479aec 308
-figures+cities+echoes+artifacts 2 04601780a36d7892 309
+figures+cities+echoes+artifacts 2 834634209dfacaaf 309
 figures+cities+echoes+artifacts 3 4a5fae3567c2db7e 342
 figures+cities+echoes+artifacts 4 643099d8a007ddd1 217
 figures+cities+echoes+artifacts 5 9c2b017fd9921857 87
@@ -402,7 +402,7 @@ figures+cities+echoes+artifacts 10 06d6bb33a69d2fd5 379
 figures+cities+echoes+artifacts 11 9775111a1eaceeee 327
 figures+cities+echoes+artifacts 12 fe701068f27a3766 249
 figures+cities+echoes+artifacts 13 3d384cb0217e4a2f 312
-figures+cities+echoes+artifacts 14 5fcbb7808dbe8896 396
+figures+cities+echoes+artifacts 14 8ea53a0890d0a322 282
 figures+cities+echoes+artifacts 15 b2741b8b79451c40 232
 figures+cities+echoes+artifacts 16 abd5c929e400cd7f 187
 figures+cities+echoes+artifacts 17 19e23730f2bc9591 240
@@ -413,7 +413,7 @@ figures+cities+echoes+artifacts 21 15933225630b3177 174
 figures+cities+echoes+artifacts 22 94ba6b02728f1bc1 270
 figures+cities+echoes+artifacts 23 51140b63df8749d0 276
 figures+cities+echoes+artifacts 24 859b5503cd8d5cf5 225
-# figures+cities+echoes+artifacts Witness { figure_reactions: 1130, city_draws: 318, echo_draws: 1268, forecast_moves: 187, promotions: 125, top_echo_dogmas: 190, artifact_draws: 20, digs: 546, seizures: 80, rotations: 519, museum_claims: 37, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
+# figures+cities+echoes+artifacts Witness { figure_reactions: 1129, city_draws: 318, echo_draws: 1251, forecast_moves: 180, promotions: 121, top_echo_dogmas: 183, artifact_draws: 18, digs: 537, seizures: 81, rotations: 511, museum_claims: 37, unseen_draws: 0, safeguards: 0, secrets_out: 0, unseen_claims: 0, flips: 0 }
 unseen 0 598a6633d432f460 364
 unseen 1 227be61e62e9d4ad 276
 unseen 2 2257275f4e445e16 311
@@ -454,7 +454,7 @@ figures+unseen 10 8b4ffd163273aada 261
 figures+unseen 11 71ca1b0770281f4b 320
 figures+unseen 12 2d09d9854676bbc9 325
 figures+unseen 13 9cc6b20101397cc9 389
-figures+unseen 14 f8852758d195716a 199
+figures+unseen 14 fc5154a32207fb08 201
 figures+unseen 15 bac325c771479b5b 484
 figures+unseen 16 ddaaa358219c1d1d 280
 figures+unseen 17 8642377a9cf0e28f 211
@@ -465,7 +465,7 @@ figures+unseen 21 88dfd1e38c1ed056 274
 figures+unseen 22 2b21dec1649686f6 291
 figures+unseen 23 024491e259ccc493 449
 figures+unseen 24 366a63c7892a6197 326
-# figures+unseen Witness { figure_reactions: 1245, city_draws: 0, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1925, safeguards: 152, secrets_out: 106, unseen_claims: 31, flips: 0 }
+# figures+unseen Witness { figure_reactions: 1254, city_draws: 0, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1925, safeguards: 152, secrets_out: 106, unseen_claims: 31, flips: 0 }
 cities+unseen 0 0fb7595995ad04ca 311
 cities+unseen 1 5d146ce0fa0148c5 336
 cities+unseen 2 ee2e592b327d4e6c 484
@@ -493,13 +493,13 @@ cities+unseen 23 7fa1d7acb7957baf 344
 cities+unseen 24 50b631fab7cb9a97 430
 # cities+unseen Witness { figure_reactions: 0, city_draws: 374, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1867, safeguards: 148, secrets_out: 103, unseen_claims: 35, flips: 0 }
 figures+cities+unseen 0 83f5916f1afa18da 215
-figures+cities+unseen 1 96aaf01fb4e9785e 492
+figures+cities+unseen 1 9e000e78bd2800bc 339
 figures+cities+unseen 2 b1ca2ccf32fe5e95 472
 figures+cities+unseen 3 6ebe57502d0b42a6 372
 figures+cities+unseen 4 f19ffdcb4d83c5d5 312
 figures+cities+unseen 5 db34b4205ee07bf0 243
 figures+cities+unseen 6 437f3d175a371e27 350
-figures+cities+unseen 7 c86989e64acf6072 302
+figures+cities+unseen 7 3c42cd92063a0175 302
 figures+cities+unseen 8 7ce0ae3a3145dca4 430
 figures+cities+unseen 9 69431e22f9c8e351 214
 figures+cities+unseen 10 6d4ed9d8928109d9 345
@@ -508,16 +508,16 @@ figures+cities+unseen 12 16e3427debe4ef3a 291
 figures+cities+unseen 13 3867d8ccf332902e 261
 figures+cities+unseen 14 44bdaf4fc62e5ac5 350
 figures+cities+unseen 15 1ae85b6deb08e046 298
-figures+cities+unseen 16 cea9813672d6b6d2 380
-figures+cities+unseen 17 1f8d192526f55802 237
+figures+cities+unseen 16 bd6dea8f965c4031 348
+figures+cities+unseen 17 d6869898f022bd1e 237
 figures+cities+unseen 18 bddbe4a7c2caaada 321
-figures+cities+unseen 19 3d700642c72841cf 347
-figures+cities+unseen 20 c0950ec3f48e730a 294
+figures+cities+unseen 19 dcb7aea08c4bd588 309
+figures+cities+unseen 20 0d115ab3f6440235 294
 figures+cities+unseen 21 f03e007110f0fb73 219
 figures+cities+unseen 22 bf5ab38c3c2cab96 506
 figures+cities+unseen 23 10f795955208c00d 281
 figures+cities+unseen 24 265eb2a4143c93cc 465
-# figures+cities+unseen Witness { figure_reactions: 1118, city_draws: 392, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1687, safeguards: 101, secrets_out: 82, unseen_claims: 25, flips: 0 }
+# figures+cities+unseen Witness { figure_reactions: 1112, city_draws: 388, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1654, safeguards: 99, secrets_out: 79, unseen_claims: 27, flips: 0 }
 echoes+unseen 0 38d612b4e9d52a84 204
 echoes+unseen 1 24a09f964f60e3e8 314
 echoes+unseen 2 03c4ed236ce3e121 288
@@ -550,8 +550,8 @@ figures+echoes+unseen 2 096385ee277c6b2e 493
 figures+echoes+unseen 3 fcab5a59d514d958 421
 figures+echoes+unseen 4 638b4d4b482c4ecb 192
 figures+echoes+unseen 5 ec0d0be0b743fe93 186
-figures+echoes+unseen 6 3a5ad116bf2d1a85 316
-figures+echoes+unseen 7 8a7a48b87f3929cc 360
+figures+echoes+unseen 6 b6f969d4e6de38f7 351
+figures+echoes+unseen 7 2067314ecb181333 419
 figures+echoes+unseen 8 60354a6831044d91 261
 figures+echoes+unseen 9 1c5c33ef8ba3d32b 316
 figures+echoes+unseen 10 208daea5896d633d 337
@@ -559,17 +559,17 @@ figures+echoes+unseen 11 5551c6000893ed83 276
 figures+echoes+unseen 12 09eeb4639e83f19d 341
 figures+echoes+unseen 13 845fd385daede10c 293
 figures+echoes+unseen 14 862fc06c0708ca3f 226
-figures+echoes+unseen 15 16a663533dd8118c 330
+figures+echoes+unseen 15 4cb8e1b30aa549a6 336
 figures+echoes+unseen 16 5ff39c53affb30d1 235
 figures+echoes+unseen 17 0f9a16634554328f 255
 figures+echoes+unseen 18 4438d0693655af83 247
 figures+echoes+unseen 19 db05c1f1f03db21d 399
-figures+echoes+unseen 20 10104917c240b9ed 281
+figures+echoes+unseen 20 e48161ac6867f017 281
 figures+echoes+unseen 21 3379108df7d3cea6 405
 figures+echoes+unseen 22 65acd43da138033e 301
-figures+echoes+unseen 23 059ad98ba04f68ba 284
+figures+echoes+unseen 23 51af9367e703cccc 284
 figures+echoes+unseen 24 ba1cadca83868a14 291
-# figures+echoes+unseen Witness { figure_reactions: 1063, city_draws: 0, echo_draws: 1463, forecast_moves: 426, promotions: 260, top_echo_dogmas: 411, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1060, safeguards: 51, secrets_out: 39, unseen_claims: 27, flips: 0 }
+# figures+echoes+unseen Witness { figure_reactions: 1113, city_draws: 0, echo_draws: 1477, forecast_moves: 429, promotions: 257, top_echo_dogmas: 418, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1080, safeguards: 51, secrets_out: 38, unseen_claims: 26, flips: 0 }
 cities+echoes+unseen 0 276f46d745956fb1 436
 cities+echoes+unseen 1 deb4614d94955bd7 257
 cities+echoes+unseen 2 8e88b79c65a55e2f 353
@@ -607,7 +607,7 @@ figures+cities+echoes+unseen 7 a94fa819b508c505 281
 figures+cities+echoes+unseen 8 2169f1f20d224806 244
 figures+cities+echoes+unseen 9 c271388c840a2cd3 392
 figures+cities+echoes+unseen 10 2f2a1a6033c8db5c 246
-figures+cities+echoes+unseen 11 77c5ea76fcab0db5 402
+figures+cities+echoes+unseen 11 454b5b6d5969b5b3 402
 figures+cities+echoes+unseen 12 c7f03802a2aec5a5 353
 figures+cities+echoes+unseen 13 48e0765651c7107e 362
 figures+cities+echoes+unseen 14 9a4a82d5cab81366 277
@@ -616,12 +616,12 @@ figures+cities+echoes+unseen 16 911472cb9b8767d4 241
 figures+cities+echoes+unseen 17 6a475b58ae764740 301
 figures+cities+echoes+unseen 18 8d3662f8f6b458c7 297
 figures+cities+echoes+unseen 19 7f697121388bfabb 495
-figures+cities+echoes+unseen 20 8ea7df7fa9fc53ac 255
+figures+cities+echoes+unseen 20 3ae76e0a0bcdfc0a 305
 figures+cities+echoes+unseen 21 feb62cb8a186cdc3 325
 figures+cities+echoes+unseen 22 594daa2fcacee972 230
 figures+cities+echoes+unseen 23 658964d8034b689f 240
 figures+cities+echoes+unseen 24 d779120ca7408c86 512
-# figures+cities+echoes+unseen Witness { figure_reactions: 1161, city_draws: 379, echo_draws: 1369, forecast_moves: 324, promotions: 206, top_echo_dogmas: 385, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1033, safeguards: 61, secrets_out: 48, unseen_claims: 28, flips: 0 }
+# figures+cities+echoes+unseen Witness { figure_reactions: 1183, city_draws: 377, echo_draws: 1359, forecast_moves: 312, promotions: 198, top_echo_dogmas: 377, artifact_draws: 0, digs: 0, seizures: 0, rotations: 0, museum_claims: 0, unseen_draws: 1052, safeguards: 62, secrets_out: 49, unseen_claims: 29, flips: 0 }
 artifacts+unseen 0 db6882924b3528f8 239
 artifacts+unseen 1 b995958944c9de51 480
 artifacts+unseen 2 d03594222ccb733f 315
@@ -650,14 +650,14 @@ artifacts+unseen 24 803db9c4ff679f04 332
 # artifacts+unseen Witness { figure_reactions: 0, city_draws: 0, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 29, digs: 611, seizures: 81, rotations: 591, museum_claims: 40, unseen_draws: 1766, safeguards: 95, secrets_out: 71, unseen_claims: 25, flips: 0 }
 figures+artifacts+unseen 0 bdea69210e76b89c 381
 figures+artifacts+unseen 1 9d283809b75e9b57 375
-figures+artifacts+unseen 2 5f87524265166b65 324
+figures+artifacts+unseen 2 823a9f264f3cc5d9 333
 figures+artifacts+unseen 3 5ed3720d760ca674 289
 figures+artifacts+unseen 4 a9ac3ff9a1b826fa 293
 figures+artifacts+unseen 5 98a00786f88d2742 339
 figures+artifacts+unseen 6 f5d24be45864f47d 392
 figures+artifacts+unseen 7 0877e92a3a8ad03e 167
 figures+artifacts+unseen 8 58a1c12354d29554 373
-figures+artifacts+unseen 9 f2a2cc9d84ce85e0 411
+figures+artifacts+unseen 9 c459ae974cc3965b 411
 figures+artifacts+unseen 10 269fb15ffc842f79 371
 figures+artifacts+unseen 11 16a831e7b290dbe2 305
 figures+artifacts+unseen 12 e9fba854c9bbc22d 254
@@ -673,7 +673,7 @@ figures+artifacts+unseen 21 04f16cb9169b2ee7 105
 figures+artifacts+unseen 22 5eea96f3c7b1bc63 273
 figures+artifacts+unseen 23 2f71114d6a1ec5db 363
 figures+artifacts+unseen 24 eeb6fe5e2b98ee48 368
-# figures+artifacts+unseen Witness { figure_reactions: 1042, city_draws: 0, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 17, digs: 591, seizures: 102, rotations: 573, museum_claims: 44, unseen_draws: 1425, safeguards: 77, secrets_out: 56, unseen_claims: 25, flips: 0 }
+# figures+artifacts+unseen Witness { figure_reactions: 1042, city_draws: 0, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 17, digs: 593, seizures: 102, rotations: 574, museum_claims: 44, unseen_draws: 1426, safeguards: 77, secrets_out: 56, unseen_claims: 25, flips: 0 }
 cities+artifacts+unseen 0 4bd1ed976dfeeb4e 337
 cities+artifacts+unseen 1 0dab1565fb518795 133
 cities+artifacts+unseen 2 8fc432a8715957fc 294
@@ -716,16 +716,16 @@ figures+cities+artifacts+unseen 12 1332e03359688e50 196
 figures+cities+artifacts+unseen 13 c386a16297d04d96 350
 figures+cities+artifacts+unseen 14 0cb9ac4fdf98cebb 340
 figures+cities+artifacts+unseen 15 56dd712295077066 81
-figures+cities+artifacts+unseen 16 8f14b6c65a085e62 326
+figures+cities+artifacts+unseen 16 1fcd6b410dc33a53 211
 figures+cities+artifacts+unseen 17 b24104487f7ae6ce 260
 figures+cities+artifacts+unseen 18 4a3d4aae78e36336 244
-figures+cities+artifacts+unseen 19 d6f9348ad47863a7 245
+figures+cities+artifacts+unseen 19 9f118e51ca5e462d 188
 figures+cities+artifacts+unseen 20 aa36e8e06fddda5e 260
 figures+cities+artifacts+unseen 21 5147fa6eaed27f6b 286
 figures+cities+artifacts+unseen 22 f0d1dbf0aed0ab2f 316
 figures+cities+artifacts+unseen 23 3d9980f4b8529d3c 360
-figures+cities+artifacts+unseen 24 15a393da2c868dda 334
-# figures+cities+artifacts+unseen Witness { figure_reactions: 576, city_draws: 290, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 9, digs: 564, seizures: 92, rotations: 536, museum_claims: 44, unseen_draws: 1154, safeguards: 34, secrets_out: 28, unseen_claims: 26, flips: 1 }
+figures+cities+artifacts+unseen 24 4378049c34607708 340
+# figures+cities+artifacts+unseen Witness { figure_reactions: 503, city_draws: 286, echo_draws: 0, forecast_moves: 0, promotions: 0, top_echo_dogmas: 0, artifact_draws: 9, digs: 558, seizures: 94, rotations: 529, museum_claims: 44, unseen_draws: 1130, safeguards: 35, secrets_out: 27, unseen_claims: 26, flips: 1 }
 echoes+artifacts+unseen 0 9a20fbd55019f24c 380
 echoes+artifacts+unseen 1 844b1550d42b422d 316
 echoes+artifacts+unseen 2 ba490cbc79abec89 96
@@ -758,7 +758,7 @@ figures+echoes+artifacts+unseen 2 ef695e01d60b5ec9 333
 figures+echoes+artifacts+unseen 3 3dae30a2cbb1db0b 321
 figures+echoes+artifacts+unseen 4 0b5a0cb0c33c7fc5 471
 figures+echoes+artifacts+unseen 5 516747d27cfb2cfd 299
-figures+echoes+artifacts+unseen 6 b5e286eb8786fac9 310
+figures+echoes+artifacts+unseen 6 a1e8b771e994138a 292
 figures+echoes+artifacts+unseen 7 f5848ffad1dcf7ba 50
 figures+echoes+artifacts+unseen 8 08c388ae58ba3e98 266
 figures+echoes+artifacts+unseen 9 f7e0df1a3f2e4fe1 34
@@ -768,16 +768,16 @@ figures+echoes+artifacts+unseen 12 664a589e3a0a05d8 311
 figures+echoes+artifacts+unseen 13 b4ec63ce41f37907 377
 figures+echoes+artifacts+unseen 14 0e273bda4ecda988 321
 figures+echoes+artifacts+unseen 15 39c71c27f0df63a0 312
-figures+echoes+artifacts+unseen 16 cf458ccf2ff1c06c 504
+figures+echoes+artifacts+unseen 16 2628aabb390b1300 504
 figures+echoes+artifacts+unseen 17 fa7d3515ea380f3e 335
-figures+echoes+artifacts+unseen 18 5e69c52dae7d54d3 357
+figures+echoes+artifacts+unseen 18 178ca2e0f565a4ce 399
 figures+echoes+artifacts+unseen 19 c348ea277d2772f2 321
 figures+echoes+artifacts+unseen 20 0d6580cb721d502e 335
 figures+echoes+artifacts+unseen 21 77ea8f1be9075685 60
 figures+echoes+artifacts+unseen 22 fc809ca4834c1314 317
 figures+echoes+artifacts+unseen 23 cfedbd02eecc7705 272
 figures+echoes+artifacts+unseen 24 c539fff5df10ef5b 280
-# figures+echoes+artifacts+unseen Witness { figure_reactions: 920, city_draws: 0, echo_draws: 1267, forecast_moves: 273, promotions: 161, top_echo_dogmas: 301, artifact_draws: 13, digs: 509, seizures: 74, rotations: 487, museum_claims: 31, unseen_draws: 905, safeguards: 42, secrets_out: 30, unseen_claims: 24, flips: 0 }
+# figures+echoes+artifacts+unseen Witness { figure_reactions: 872, city_draws: 0, echo_draws: 1250, forecast_moves: 256, promotions: 152, top_echo_dogmas: 301, artifact_draws: 14, digs: 505, seizures: 78, rotations: 483, museum_claims: 32, unseen_draws: 905, safeguards: 43, secrets_out: 31, unseen_claims: 23, flips: 0 }
 cities+echoes+artifacts+unseen 0 089a865a8fcd0f53 310
 cities+echoes+artifacts+unseen 1 cfcd3c9ff01bde86 176
 cities+echoes+artifacts+unseen 2 a83f9e6aa8a7ae4d 272

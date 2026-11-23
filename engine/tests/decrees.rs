@@ -235,9 +235,14 @@ fn war_returns_only_one_top_of_the_chosen_value_per_opposing_color() {
     issue(&mut game, Decree::War, A);
     let mut events = Vec::new();
     let menu = decision(&mut game, &mut events);
+    // Opponent has top values 2 and 3; all no-op values collapse to 1.
     assert_eq!(
         menu.options,
-        (1..=11).map(Alternative::Value).collect::<Vec<_>>()
+        [
+            Alternative::Value(1),
+            Alternative::Value(2),
+            Alternative::Value(3)
+        ]
     );
     game.choose(2).unwrap();
     choose_card(&mut game, &mut events, green);
@@ -271,12 +276,22 @@ fn war_offers_zero_only_after_introduction_and_allows_an_intentional_noop_value(
             },
             vec![],
         );
+        // One opposing top card so the single no-op value (0 once Age 0 is
+        // introduced, else 1) stays on offer alongside it.
+        f.tech(Color::Blue, 3, Zone::Board(B, Color::Blue), vec![]);
         let mut game = Game::new(f.position(), Expansions::FIGURES).unwrap();
         issue(&mut game, Decree::War, A);
         let mut events = Vec::new();
         let menu = decision(&mut game, &mut events);
         assert_eq!(menu.options.contains(&Alternative::Value(0)), introduced);
-        game.choose(menu.options.len() - 1).unwrap(); // 11, even with no opposing top.
+        assert_eq!(
+            menu.options,
+            [
+                Alternative::Value(u8::from(!introduced)),
+                Alternative::Value(3)
+            ]
+        );
+        game.choose(0).unwrap(); // Intentional no-op value leaves opponent's 3 on board.
         assert_eq!(
             finish(&mut game, &mut events),
             Status::Complete(ReturnValue::Unit)
@@ -306,17 +321,20 @@ fn rivalry_samples_three_hidden_score_cards_then_returns_one_figure_per_color() 
     let mut game = Game::seeded(f.position(), Expansions::FIGURES, 42).unwrap();
     issue(&mut game, Decree::Rivalry, A);
     let mut events = Vec::new();
-    choose_card(&mut game, &mut events, green); // Singleton blind groups auto-sample first.
-    assert_eq!(events.len(), 3);
-    assert_eq!(
-        events.iter().map(|e| moved(e).card).collect::<Vec<_>>(),
-        expected
-    );
+    // Singleton blind score group auto-samples; distinct-age Figures (Shen Kuo 3,
+    // Yi Sun-sin 4) return in canonical origin-deck order without an order pick.
     assert_eq!(
         finish(&mut game, &mut events),
         Status::Complete(ReturnValue::Unit)
     );
     assert_eq!(events.len(), 6);
+    assert_eq!(
+        events[..3]
+            .iter()
+            .map(|e| moved(e).card)
+            .collect::<Vec<_>>(),
+        expected
+    );
     assert_eq!(moved(&events[3]).card, green);
     assert_eq!(moved(&events[4]).card, red);
     assert_eq!(game.position().cards(Zone::Score(B)), remaining);
