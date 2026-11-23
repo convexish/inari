@@ -351,6 +351,7 @@ fn reduced_batches_match_the_unrestricted_oracle_in_random_play() {
                         };
                         let expansions = Expansions::from_bits(mode).unwrap();
                         play_random(expansions, seed, |game, _, before| {
+                            let mut alias_start;
                             let (start, key) = if let Some((batch, program)) = asking_batch(game) {
                                 // Compare from a batch's first menu: a later menu's floor
                                 // already encodes the order chosen so far, which the
@@ -372,7 +373,30 @@ fn reduced_batches_match_the_unrestricted_oracle_in_random_play() {
                             } else if let Some(key) = asking_alias(game) {
                                 // The alias shaped this very menu: start from the step
                                 // before it, so the oracle builds the menu unrestricted.
-                                (before, key)
+                                // First finish any already-started MoveAll sitting in
+                                // `before` whose monotone floor encoded an earlier choice,
+                                // or disabling shortcuts would reopen passed-over cards.
+                                let active_batches = |state: &Game| {
+                                    state
+                                        .frames
+                                        .iter()
+                                        .filter(|f| {
+                                            matches!(f, Frame::MoveAll(b) if !b.visited.is_empty())
+                                        })
+                                        .count()
+                                };
+                                let target_batches = active_batches(game);
+                                alias_start = before.clone();
+                                while active_batches(&alias_start) > target_batches {
+                                    if !matches!(
+                                        alias_start.advance(1, &mut Vec::new()),
+                                        Ok(Status::WorkLimit)
+                                    ) {
+                                        skipped += 1;
+                                        return;
+                                    }
+                                }
+                                (&alias_start, key)
                             } else {
                                 return;
                             };

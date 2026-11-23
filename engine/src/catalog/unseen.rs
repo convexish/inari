@@ -76,6 +76,9 @@ const HAND_AND_SCORE: Selector = Selector::Union(&[HAND, SCORE]);
 const DRAWN_IN_HAND: Selector = filtered(&HAND, &[Has(InSlot(DRAWN))]);
 const DEMANDER_HAND: Selector = Selector::Hand(Demander);
 const ALL_OF: BoardRegion = BoardRegion::BelowTop(0);
+/// The resolved Base draw age of the chosen value, merging values that skip
+/// over empty Base decks to the same draw (or exhaustion).
+const DRAW_AGE_CHOSEN: Expr = Expr::DrawAge(&Expr::Chosen);
 /// The executor has no cards of the chosen colour: moving them all changes
 /// nothing, so every such colour is the same choice.
 const NO_CARDS_OF_CHOSEN_COLOR: Cond = Compare(
@@ -1545,7 +1548,8 @@ const POPULAR_SCIENCE: &[(EffectKind, Program)] = &[
             if_(&Compare(Count(&GREEN_TOPS), Cmp::Equal, Const(0)), 2),
             draw_age(Const(0)),
             Instruction::Jump(2),
-            choose(Executor, Choice::Value(ValueChoices::Among(&GREEN_TOPS))),
+            choose(Executor, Choice::Value(ValueChoices::Among(&GREEN_TOPS)))
+                .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
             draw_age(Expr::Chosen),
             meld(LAST),
         ],
@@ -1794,7 +1798,8 @@ const ATTIC: &[(EffectKind, Program)] = &[
             if_(&Compare(Count(&SCORE), Cmp::Equal, Const(0)), 2),
             draw_age(Const(0)),
             Instruction::Jump(2),
-            choose(Executor, Choice::Value(ValueChoices::Among(&SCORE))),
+            choose(Executor, Choice::Value(ValueChoices::Among(&SCORE)))
+                .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
             draw_age(Expr::Chosen),
             score(LAST),
         ],

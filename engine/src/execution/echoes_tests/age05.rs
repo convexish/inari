@@ -1051,6 +1051,7 @@ fn piano_and_tuning_fork_echoes_choose_distinct_values_from_both_players_backs_o
             let c = tech(&mut f, Color::Red, age, zone);
             f.cards[c.0 as usize].set = set;
         }
+        draw_card(&mut f, Color::Blue, 2);
         let chosen = draw_card(&mut f, Color::Green, 4);
         let mut game = start(f, card, Card::ECHO, E);
         let mut events = vec![];

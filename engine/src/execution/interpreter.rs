@@ -426,6 +426,13 @@ impl Game {
                 Some(value) if value != 0 => value,
                 _ => return Ok(None),
             },
+            Expr::DrawAge(inner) => match self.eval_u8(*inner, context, regs)? {
+                Some(value) => i64::from(
+                    self.draw_deck(value, None, context.executor)?
+                        .map_or(12, |deck| deck.age),
+                ),
+                None => return Ok(None),
+            },
             Expr::Sum(terms) => {
                 let mut sum = 0;
                 for &term in terms {
@@ -2472,18 +2479,27 @@ impl Game {
             };
             keys.push(key);
         }
+        // For DrawAge aliases, keep the highest value in each class so the
+        // representative matches the actual deck drawn (e.g. [3] rather than
+        // [1] when decks 1-2 are empty). Other aliases keep the first.
+        let prefer_last = matches!(alias, Alias::SameKey(Expr::DrawAge(_)));
+        let mut keep = vec![false; keys.len()];
         let mut seen: Vec<i64> = Vec::new();
-        let keep: Vec<bool> = keys
-            .iter()
-            .map(|key| match key {
-                Some(key) if seen.contains(key) => false,
+        let order: Box<dyn Iterator<Item = usize>> = if prefer_last {
+            Box::new((0..keys.len()).rev())
+        } else {
+            Box::new(0..keys.len())
+        };
+        for i in order {
+            match keys[i] {
+                Some(key) if seen.contains(&key) => {}
                 Some(key) => {
-                    seen.push(*key);
-                    true
+                    seen.push(key);
+                    keep[i] = true;
                 }
-                None => true,
-            })
-            .collect();
+                None => keep[i] = true,
+            }
+        }
         let before = tasks.len();
         let mut index = 0;
         options.retain(|_| {

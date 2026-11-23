@@ -334,9 +334,11 @@ fn public_expr(expr: &Expr) -> bool {
         Expr::DistinctColors(source)
         | Expr::IconsAmong(source, _)
         | Expr::IconTypesAmong(source) => public_selector(source) && !hidden_source(source),
-        Expr::Add(inner, _) | Expr::Mul(inner, _) | Expr::Div(inner, _) | Expr::NonZero(inner) => {
-            public_expr(inner)
-        }
+        Expr::Add(inner, _)
+        | Expr::Mul(inner, _)
+        | Expr::Div(inner, _)
+        | Expr::NonZero(inner)
+        | Expr::DrawAge(inner) => public_expr(inner),
         Expr::Sum(terms) => terms.iter().all(public_expr),
         Expr::Visible(query) => public_colors(&query.colors),
         Expr::IconsOn(..)

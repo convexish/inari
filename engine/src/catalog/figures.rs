@@ -2000,7 +2000,8 @@ const THERESE_KIRONGOZI: FigureDef = figure(
         On::Dogma(None),
         Opponent,
         &[
-            choose(Executor, Choice::Value(ValueChoices::Any)),
+            choose(Executor, Choice::Value(ValueChoices::Any))
+                .alias(Alias::SameKey(&Expr::DrawAge(&Expr::Chosen))),
             draw_age(Expr::Chosen),
             reveal(LAST),
             return_(LAST),

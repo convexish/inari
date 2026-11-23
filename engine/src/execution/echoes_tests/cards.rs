@@ -1250,6 +1250,7 @@ fn an_endorsed_charitable_trust_melds_only_the_last_echo_draw() {
     let mut layout = Layout::default();
     let trust = layout.add(card("E030"), Zone::Board(A, Color::Green));
     endorsable(&mut layout, Color::Red, Icon::Prosperity);
+    deck_card(&mut layout, CardSet::Base, Color::Yellow, 3);
     let three = deck_card(&mut layout, CardSet::Base, Color::Purple, 3);
     let four = deck_card(&mut layout, CardSet::Base, Color::Blue, 4);
     let mut values = 0;

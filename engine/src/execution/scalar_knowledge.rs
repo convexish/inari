@@ -350,9 +350,11 @@ impl Game {
             Expr::IconsOn(reg, _) | Expr::BonusOf(reg) => {
                 self.reg_named(reg, context, regs, viewer)
             }
-            Expr::Add(expr, _) | Expr::Mul(expr, _) | Expr::Div(expr, _) | Expr::NonZero(expr) => {
-                self.expr_known(*expr, context, regs, viewer)
-            }
+            Expr::Add(expr, _)
+            | Expr::Mul(expr, _)
+            | Expr::Div(expr, _)
+            | Expr::NonZero(expr)
+            | Expr::DrawAge(expr) => self.expr_known(*expr, context, regs, viewer),
             Expr::Sum(exprs) => exprs
                 .iter()
                 .all(|&expr| self.expr_known(expr, context, regs, viewer)),

@@ -1010,3 +1010,7 @@ mod cities_tests;
 #[cfg(test)]
 #[path = "unseen_shortcut_tests.rs"]
 mod unseen_tests;
+
+#[cfg(test)]
+#[path = "draw_age_alias_tests.rs"]
+mod draw_age_alias_tests;

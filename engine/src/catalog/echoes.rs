@@ -86,6 +86,10 @@ macro_rules! junk_then_highest {
 /// The chosen value's Base deck is empty: junking it changes nothing, so
 /// every empty deck is the same choice.
 const EMPTY_CHOSEN_DECK: Cond = Compare(Count(&BaseDeck(Expr::Chosen)), Cmp::Equal, Const(0));
+/// The resolved Base draw age of the chosen value, merging values that skip
+/// over empty Base decks to the same draw (or exhaustion).
+const DRAW_AGE_CHOSEN: Expr = Expr::DrawAge(&Expr::Chosen);
+const BAROMETER_DRAW_AGE: Expr = Expr::DrawAge(&Add(&Expr::Chosen, 2));
 
 /// Colors on the executor's board showing the icon.
 macro_rules! colors_with {
@@ -412,7 +416,9 @@ const BELL: Programs = Programs {
 // card with neither Authority nor Industry, then draw and meld a [2].
 const HORSESHOES: Programs = Programs {
     echo: Some(&[
-        choose(Executor, Choice::Value(ValueChoices::Boxed(&[2, 3]))).optional(),
+        choose(Executor, Choice::Value(ValueChoices::Boxed(&[2, 3])))
+            .optional()
+            .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
         draw_age(Expr::Chosen),
         foreshadow(LAST),
     ]),
@@ -541,7 +547,8 @@ const LEVER: Programs = Programs {
 // card, if eligible. If you meld a [4], return your top green card.
 const CHARITABLE_TRUST: Programs = Programs {
     echo: Some(&[
-        choose(Executor, Choice::Value(ValueChoices::Boxed(&[3, 4]))),
+        choose(Executor, Choice::Value(ValueChoices::Boxed(&[3, 4])))
+            .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
         draw_age(Expr::Chosen).add(ECHOED),
     ]),
     dogmas: &[(
@@ -859,7 +866,8 @@ const KARAOKE: Programs = Programs {
         if_(&Compare(Count(&HAND), Cmp::Equal, Const(0)), 2),
         draw_age(Const(0)),
         Instruction::Jump(2),
-        choose(Executor, Choice::Value(ValueChoices::Among(&HAND))),
+        choose(Executor, Choice::Value(ValueChoices::Among(&HAND)))
+            .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
         draw_age(Expr::Chosen),
         meld(LAST).add(ECHOED),
     ]),
@@ -1144,7 +1152,7 @@ const HELICOPTER: Programs = Programs {
 // top without Prosperity! / You may splay purple up. / Junk the [10] deck.
 const ATM: Programs = Programs {
     echo: Some(&[
-        choose(Executor, Choice::Value(ValueChoices::Any)),
+        choose(Executor, Choice::Value(ValueChoices::Any)).alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
         draw_age(Expr::Chosen),
         score(LAST),
     ]),
@@ -1452,7 +1460,8 @@ const PIANO: Programs = Programs {
         choose(
             Executor,
             Choice::Value(ValueChoices::Among(&Selector::Hand(Either))),
-        ),
+        )
+        .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
         draw_age(Expr::Chosen),
     ]),
     dogmas: &[(
@@ -1492,7 +1501,8 @@ const TUNING_FORK: Programs = Programs {
         choose(
             Executor,
             Choice::Value(ValueChoices::Among(&Selector::Score(Either))),
-        ),
+        )
+        .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
         draw_age(Expr::Chosen),
     ]),
     dogmas: &[(
@@ -1567,7 +1577,8 @@ const PALAMPORE: Programs = Programs {
                         on: Executor,
                         only: Repeated,
                     })),
-                ),
+                )
+                .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
                 draw_age(Expr::Chosen),
                 score(LAST),
             ],
@@ -1742,7 +1753,8 @@ const SUDOKU: Programs = Programs {
     dogmas: &[(
         N,
         &[
-            choose(Executor, Choice::Value(ValueChoices::Any)),
+            choose(Executor, Choice::Value(ValueChoices::Any))
+                .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
             // The drawn card: a replaced meld still executes it.
             draw_age(Expr::Chosen).keep(DRAWN),
             meld(LAST),
@@ -1915,7 +1927,8 @@ const HUMAN_GENOME: Programs = Programs {
                 Executor,
                 Choice::Branch(&[(0, "Draw and score"), (3, "Skip")]),
             ),
-            choose(Executor, Choice::Value(ValueChoices::Any)),
+            choose(Executor, Choice::Value(ValueChoices::Any))
+                .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
             draw_age(Expr::Chosen),
             score(LAST),
             transfer(
@@ -2241,7 +2254,8 @@ const WATERMILL: Programs = Programs {
         (
             N,
             &[
-                choose(Executor, Choice::Value(ValueChoices::Bonuses(&MY_BONUSES))),
+                choose(Executor, Choice::Value(ValueChoices::Bonuses(&MY_BONUSES)))
+                    .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
                 draw_age(Expr::Chosen),
             ],
         ),
@@ -2750,7 +2764,8 @@ const BAROMETER: Programs = Programs {
                         on: Either,
                         only: BonusValues::All,
                     })),
-                ),
+                )
+                .alias(Alias::SameKey(&BAROMETER_DRAW_AGE)),
                 draw_age(Add(&Expr::Chosen, 2)),
                 foreshadow(LAST),
             ],
@@ -3579,7 +3594,8 @@ const MP3: Programs = Programs {
         (
             N,
             &[
-                choose(Executor, Choice::Value(ValueChoices::Bonuses(&MY_BONUSES))),
+                choose(Executor, Choice::Value(ValueChoices::Bonuses(&MY_BONUSES)))
+                    .alias(Alias::SameKey(&DRAW_AGE_CHOSEN)),
                 draw_age(Expr::Chosen),
                 score(LAST),
             ],

@@ -328,6 +328,9 @@ pub enum Expr {
     Div(&'static Expr, i64),
     /// Undefined when zero ("draw a card of that value" after nothing).
     NonZero(&'static Expr),
+    /// Resolved age of an ordinary draw of this value after skipping empty
+    /// Base decks (12 if every Base deck at or above it is empty).
+    DrawAge(&'static Expr),
     /// Sum of defined terms; undefined if any term is.
     Sum(&'static [Expr]),
     /// Visible cards, icons or images on the requested boards and colors.
@@ -1375,9 +1378,11 @@ impl Expr {
             | Self::Total(selector)
             | Self::IconsAmong(selector, _)
             | Self::IconTypesAmong(selector) => selector.reads_operand_front(operand),
-            Self::Add(expr, _) | Self::Mul(expr, _) | Self::Div(expr, _) | Self::NonZero(expr) => {
-                expr.reads_operand_front(operand)
-            }
+            Self::Add(expr, _)
+            | Self::Mul(expr, _)
+            | Self::Div(expr, _)
+            | Self::NonZero(expr)
+            | Self::DrawAge(expr) => expr.reads_operand_front(operand),
             Self::Sum(exprs) => exprs.iter().any(|expr| expr.reads_operand_front(operand)),
             Self::BonusOf(reg) => operand.has(reg),
             Self::Bonuses(bonuses, _) => bonuses.reads_operand_front(operand),

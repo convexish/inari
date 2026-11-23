@@ -15,16 +15,16 @@ fn public_verification_makes_the_diagnosed_roots_searchable() {
         (Expansions::FIGURES, 251, &[(147, "B060")]),
         (
             Expansions::ECHOES,
-            1,
-            &[(101, "E038"), (102, "E038"), (103, "E038"), (104, "E038")],
+            5,
+            &[(109, "E038"), (110, "E038"), (111, "E038"), (112, "E038")],
         ),
         (echoes_cities, 2, &[(114, "E041"), (115, "E041")]),
         (echoes_cities, 1, &[(138, "E038")]),
         (echoes_cities, 17, &[(154, "E006")]),
         (
             echoes_cities.union(Expansions::FIGURES),
-            12,
-            &[(98, "E038"), (99, "E038")],
+            3,
+            &[(97, "E038"), (98, "E038")],
         ),
         // Live unbounded batches over a hidden hand, interrupted by a
         // reaction that asks the other player: Yi Sun-sin replacing
@@ -66,8 +66,8 @@ fn public_verification_makes_the_diagnosed_roots_searchable() {
                 .union(Expansions::ECHOES)
                 .union(Expansions::ARTIFACTS)
                 .union(Expansions::UNSEEN),
-            171,
-            &[(372, "A105")],
+            234,
+            &[(474, "A105")],
         ),
         // Boerhaave Microscope sums a returned hidden hand card and a named
         // top card; their distinctness is public, so Emmy Noether's
@@ -174,7 +174,7 @@ fn a_failed_attempt_keeps_sampled_worlds_consistent() {
     let expansions = Expansions::FIGURES
         .union(Expansions::ECHOES)
         .union(Expansions::UNSEEN);
-    let (seed, root) = (28675, 355);
+    let (seed, root) = (244, 167);
     let mut game = Game::new_game(seed, expansions)
         .unwrap()
         .with_tracking()
