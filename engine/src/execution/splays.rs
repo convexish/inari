@@ -87,36 +87,47 @@ impl Game {
                 }
             }
         }
-        // Piles that would stay as they are (one card, or already splayed
-        // that way) are one no-op whichever the player names: the first
-        // stands for all of them, unless a Figure watching splays could tell
-        // them apart. The oracle keeps the full menu.
+        // For an optional splay (outside Blackmail's must), Decline already
+        // yields Disposition::Inapplicable before any karma sees the
+        // operation, so every no-op splay is interchangeable with Decline.
+        // Otherwise, piles that would stay as they are collapse to one no-op
+        // unless a Figure watching splays could tell them apart.
         let before = result.len();
-        if before > 1
-            && !self.splay_alias_oracle()
-            && self
-                .position
-                .dependencies_clear(&[ShortcutDependency::Splay], context, true)
-        {
-            let mut first_noop = true;
-            result.retain(|operation| match *operation {
-                Operation::Splay {
-                    player,
-                    color,
-                    direction,
-                } => {
-                    self.can_splay(player, color, direction)
-                        || std::mem::replace(&mut first_noop, false)
-                }
-                _ => true,
-            });
+        if !self.splay_alias_oracle() {
+            if step.optional && !context.must() {
+                result.retain(|operation| match *operation {
+                    Operation::Splay {
+                        player,
+                        color,
+                        direction,
+                    } => self.can_splay(player, color, direction),
+                    _ => true,
+                });
+            } else if before > 1
+                && self
+                    .position
+                    .dependencies_clear(&[ShortcutDependency::Splay], context, true)
+            {
+                let mut first_noop = true;
+                result.retain(|operation| match *operation {
+                    Operation::Splay {
+                        player,
+                        color,
+                        direction,
+                    } => {
+                        self.can_splay(player, color, direction)
+                            || std::mem::replace(&mut first_noop, false)
+                    }
+                    _ => true,
+                });
+            }
         }
         let merged = result.len() < before;
-        // A mandatory splay whose every offered pile would stay as it is:
-        // whichever the player names, nothing changes, so the choice is not
-        // asked. An optional one keeps its decline.
+        // A mandatory splay (or one forced by Blackmail) whose every offered
+        // pile would stay as it is: whichever the player names, nothing
+        // changes, so the choice is not asked.
         if result.len() > 1
-            && !step.optional
+            && (!step.optional || context.must())
             && !self.splay_alias_oracle()
             && result.iter().all(|operation| match *operation {
                 Operation::Splay {

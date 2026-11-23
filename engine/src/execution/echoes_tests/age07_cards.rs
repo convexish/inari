@@ -876,20 +876,20 @@ fn telegraph_copies_matching_opponent_splay_including_unsplayed_and_allows_decli
             game.position.players[B.index()].splays[Color::Blue as usize] = direction;
             start(&mut game, source, 0, A, 0);
             let mut events = Vec::new();
+            if direction == Splay::Right {
+                // Copying the direction blue already has changes nothing, and
+                // every other color is already unsplayed: an optional splay
+                // with no real change skips the choice altogether.
+                finish(&mut game, &mut events, decline);
+                assert_eq!(game.position.splay(A, Color::Blue), Splay::Right);
+                assert_eq!(game.position.splay(B, Color::Blue), direction);
+                continue;
+            }
             let menu = decision(&mut game, &mut events);
-            // Copying the direction blue already has changes nothing, so
-            // that option is merged with the other no-op colours: any
-            // splay option then stands for it.
             let selected = menu
                 .options
                 .iter()
                 .position(|o| matches!(o, Alternative::Splay { player: A, color: Color::Blue, direction: d } if *d == direction))
-                .or_else(|| {
-                    assert_eq!(direction, Splay::Right);
-                    menu.options
-                        .iter()
-                        .position(|o| matches!(o, Alternative::Splay { .. }))
-                })
                 .unwrap();
             game.choose(if accept { selected } else { decline(&menu) })
                 .unwrap();

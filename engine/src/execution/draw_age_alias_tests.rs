@@ -223,3 +223,28 @@ fn holography_merges_colors_that_neither_score_nor_splay_aslant() {
     start_effect(&mut game, source, 0);
     assert_eq!(compare(game), (2, 3));
 }
+
+#[test]
+fn optional_splay_drops_noop_colors_matching_decline_even_with_splay_karma() {
+    for (b_blue_splay, expected) in [(Splay::Right, (1, 6)), (Splay::Up, (2, 6))] {
+        let mut f = Fixture::default();
+        let source = f.card("E071", Zone::Junk);
+        for owner in Player::ALL {
+            for age in [1, 2] {
+                f.tech(Color::Blue, age, Zone::Board(owner, Color::Blue), vec![]);
+            }
+        }
+        // Shen Kuo watches splays, but `!can_splay` returns Inapplicable before discovery.
+        f.figure(Figure::ShenKuo, Zone::Board(A, Color::Green));
+        let pos = f
+            .position()
+            .with_splay(A, Color::Blue, Splay::Right)
+            .unwrap()
+            .with_splay(B, Color::Blue, b_blue_splay)
+            .unwrap();
+        let mut game =
+            Game::seeded(pos, Expansions::ECHOES.union(Expansions::FIGURES), 67).unwrap();
+        start_effect(&mut game, source, 0);
+        assert_eq!(compare(game), expected);
+    }
+}
