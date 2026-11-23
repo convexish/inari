@@ -1020,6 +1020,20 @@ const RHAZES: FigureDef = figure(
     )],
 );
 
+const ALHAZEN_ICONS: Expr = Expr::Sum(&[
+    Expr::Visible(&Visibility {
+        who: Who::Executor,
+        colors: ColorSet::Chosen,
+        seen: Seen::Icon(Authority),
+    }),
+    Expr::Visible(&Visibility {
+        who: Who::Executor,
+        colors: ColorSet::Chosen,
+        seen: Seen::Icon(Concept),
+    }),
+]);
+const ALHAZEN_DRAW_AGE: Expr = Expr::DrawAge(&ALHAZEN_ICONS);
+
 // If you would take a Draw action, instead tuck a top card with [Authority]
 // from anywhere. Then draw a card of value equal to the number of
 // [Authority] or [Concept] in a color on your board.
@@ -1030,19 +1044,9 @@ const ALHAZEN: FigureDef = figure(
         Executor,
         &[
             tuck(filtered(&Tops(Either), &[Has(HasIcon(Authority))])),
-            choose(Executor, Choice::Color(ColorSet::OfCards(&Tops(Executor)))),
-            draw_age(Expr::Sum(&[
-                Expr::Visible(&Visibility {
-                    who: Who::Executor,
-                    colors: ColorSet::Chosen,
-                    seen: Seen::Icon(Authority),
-                }),
-                Expr::Visible(&Visibility {
-                    who: Who::Executor,
-                    colors: ColorSet::Chosen,
-                    seen: Seen::Icon(Concept),
-                }),
-            ])),
+            choose(Executor, Choice::Color(ColorSet::OfCards(&Tops(Executor))))
+                .alias(Alias::SameKey(&ALHAZEN_DRAW_AGE)),
+            draw_age(ALHAZEN_ICONS),
         ],
     )],
 );

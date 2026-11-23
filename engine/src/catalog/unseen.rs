@@ -3154,6 +3154,29 @@ const LOWER_CLAIMED: Selector = filtered(
     &[Has(ValueIs(Cmp::Less, Expr::Min(&SCORE)))],
 );
 
+/// At most five cards of the chosen colour and unable to splay it aslant
+/// (fewer than two cards or already splayed aslant): Holography does nothing.
+const HOLOGRAPHY_NO_OP: Cond = All(&[
+    Compare(
+        Count(&Board(Executor, ColorSet::Chosen, BoardRegion::BelowTop(5))),
+        Cmp::Equal,
+        Const(0),
+    ),
+    Any(&[
+        Compare(
+            Count(&Board(Executor, ColorSet::Chosen, ALL_OF)),
+            Cmp::AtMost,
+            Const(1),
+        ),
+        Cond::Splayed {
+            who: Executor,
+            colors: ColorSet::Chosen,
+            direction: Splay::Aslant,
+            present: true,
+        },
+    ]),
+]);
+
 // Choose red, blue, or green. Score all but your top five cards of that
 // color, then splay it aslant. If you do both, exchange all the lowest cards
 // in your score pile with all your claimed standard achievements of lower
@@ -3161,7 +3184,8 @@ const LOWER_CLAIMED: Selector = filtered(
 const HOLOGRAPHY: &[(EffectKind, Program)] = &[(
     N,
     &[
-        choose(Executor, Choice::Color(ColorSet::Only(&[Red, Blue, Green]))),
+        choose(Executor, Choice::Color(ColorSet::Only(&[Red, Blue, Green])))
+            .alias(Alias::NoOpWhen(&HOLOGRAPHY_NO_OP)),
         once(2),
         score(Board(Executor, ColorSet::Chosen, BoardRegion::BelowTop(5)))
             .all()

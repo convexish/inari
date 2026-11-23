@@ -33,8 +33,8 @@ fn public_verification_makes_the_diagnosed_roots_searchable() {
         (Expansions::FIGURES, 2684, &[(79, "F037")]),
         (
             Expansions::FIGURES.union(Expansions::ECHOES),
-            9,
-            &[(106, "F037")],
+            37,
+            &[(116, "F037")],
         ),
         (
             Expansions::FIGURES.union(Expansions::UNSEEN),
@@ -174,7 +174,7 @@ fn a_failed_attempt_keeps_sampled_worlds_consistent() {
     let expansions = Expansions::FIGURES
         .union(Expansions::ECHOES)
         .union(Expansions::UNSEEN);
-    let (seed, root) = (244, 167);
+    let (seed, root) = (905, 231);
     let mut game = Game::new_game(seed, expansions)
         .unwrap()
         .with_tracking()

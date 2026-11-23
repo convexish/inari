@@ -151,3 +151,75 @@ fn barometer_and_attic_merge_values_sharing_resolved_draw_age() {
     start_effect(&mut game, source, 2);
     assert_eq!(compare(game), (1, 3));
 }
+
+#[test]
+fn alhazen_merges_colors_with_the_same_resolved_draw_age() {
+    let mut f = Fixture::default();
+    // Alhazen (Blue, 2 Concept) plus Red (1 Concept), Green (2 Concept) and
+    // Purple (3 Concept), with no Authority tops to tuck. Only Base 2 and
+    // Base 3 exist: Red (1->2), Blue (2) and Green (2) all resolve to Base 2;
+    // Purple (3) resolves to Base 3.
+    f.figure(Figure::Alhazen, Zone::Board(A, Color::Blue));
+    let red = f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
+    f.cards[usize::from(red.0)].symbols[0] = Symbol::Icon(Icon::Concept);
+    let green = f.tech(Color::Green, 1, Zone::Board(A, Color::Green), vec![]);
+    f.cards[usize::from(green.0)].symbols[..2].fill(Symbol::Icon(Icon::Concept));
+    let purple = f.tech(Color::Purple, 1, Zone::Board(A, Color::Purple), vec![]);
+    f.cards[usize::from(purple.0)].symbols[..3].fill(Symbol::Icon(Icon::Concept));
+    f.tech(Color::Yellow, 2, Zone::Deck(Deck::base(2)), vec![]);
+    f.tech(Color::Yellow, 3, Zone::Deck(Deck::base(3)), vec![]);
+    let mut game = Game::seeded(f.position(), Expansions::FIGURES, 53).unwrap();
+    game.take_action(Action::Draw, ActionKind::Regular).unwrap();
+    assert_eq!(compare(game), (2, 4));
+}
+
+#[test]
+fn ship_of_the_line_sussex_merges_empty_board_colors() {
+    // Two populated colors (Red, Blue) and three empty colors -> 3 options instead of 5.
+    let mut f = Fixture::default();
+    let source = f.card("A047", Zone::Board(A, Color::Red));
+    f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);
+    let mut game = Game::seeded(f.position(), Expansions::ARTIFACTS, 59).unwrap();
+    start_effect(&mut game, source, 0);
+    assert_eq!(compare(game), (3, 5));
+
+    // Empty board -> all 5 colors are no-ops -> 0 decisions.
+    let mut f = Fixture::default();
+    let source = f.card("A047", Zone::Junk);
+    let mut game = Game::seeded(f.position(), Expansions::ARTIFACTS, 59).unwrap();
+    start_effect(&mut game, source, 0);
+    assert_eq!(compare(game), (1, 5));
+}
+
+#[test]
+fn holography_merges_colors_that_neither_score_nor_splay_aslant() {
+    // Red: 1 card (no-op); Blue: 2 cards already splayed aslant (no-op); Green: 0 cards (no-op).
+    let mut f = Fixture::default();
+    let source = f.card("U114", Zone::Junk);
+    f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
+    f.tech(Color::Blue, 1, Zone::Board(A, Color::Blue), vec![]);
+    f.tech(Color::Blue, 2, Zone::Board(A, Color::Blue), vec![]);
+    let pos = f
+        .position()
+        .with_splay(A, Color::Blue, Splay::Aslant)
+        .unwrap();
+    let mut game = Game::seeded(pos, Expansions::UNSEEN, 61).unwrap();
+    start_effect(&mut game, source, 0);
+    assert_eq!(compare(game), (1, 3));
+
+    // Adding a 6th card to aslant Blue makes Blue score its bottom card, while Red & Green
+    // remain no-ops -> 2 options (Blue + 1 no-op) instead of 3.
+    let mut f = Fixture::default();
+    let source = f.card("U114", Zone::Junk);
+    f.tech(Color::Red, 1, Zone::Board(A, Color::Red), vec![]);
+    for age in 1..=6 {
+        f.tech(Color::Blue, age, Zone::Board(A, Color::Blue), vec![]);
+    }
+    let pos = f
+        .position()
+        .with_splay(A, Color::Blue, Splay::Aslant)
+        .unwrap();
+    let mut game = Game::seeded(pos, Expansions::UNSEEN, 61).unwrap();
+    start_effect(&mut game, source, 0);
+    assert_eq!(compare(game), (2, 3));
+}

@@ -2444,10 +2444,12 @@ impl Game {
     }
 
     /// Merge the options an [`Alias`] proves interchangeable, keeping the
-    /// first of each class in menu order. The annotated condition may read
-    /// only what both players see (backs, boards, decks, achievements), or
-    /// the menu's shape would disclose something; the catalog lint enforces
-    /// that, so the merge itself never consults a tracker.
+    /// highest value per class for [`Alias::SameKey`] with [`Expr::DrawAge`]
+    /// on value choices and the first of each class in menu order otherwise.
+    /// The annotated condition may read only what both players see (backs,
+    /// boards, decks, achievements), or the menu's shape would disclose
+    /// something; the catalog lint enforces that, so the merge itself never
+    /// consults a tracker.
     fn alias_choice(
         &self,
         alias: Alias,
@@ -2479,10 +2481,12 @@ impl Game {
             };
             keys.push(key);
         }
-        // For DrawAge aliases, keep the highest value in each class so the
-        // representative matches the actual deck drawn (e.g. [3] rather than
-        // [1] when decks 1-2 are empty). Other aliases keep the first.
-        let prefer_last = matches!(alias, Alias::SameKey(Expr::DrawAge(_)));
+        // For value DrawAge aliases, keep the highest value in each class so
+        // the representative matches the actual deck drawn (e.g. [3] rather
+        // than [1] when decks 1-2 are empty). Color and other aliases keep the
+        // first option in menu order.
+        let prefer_last = matches!(alias, Alias::SameKey(Expr::DrawAge(_)))
+            && matches!(tasks.first(), Some(Task::ChooseValue(_)));
         let mut keep = vec![false; keys.len()];
         let mut seen: Vec<i64> = Vec::new();
         let order: Box<dyn Iterator<Item = usize>> = if prefer_last {

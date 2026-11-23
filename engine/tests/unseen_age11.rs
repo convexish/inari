@@ -288,7 +288,8 @@ fn holography_scores_below_five_splays_aslant_and_swaps_low_scores_for_lower_ach
     effect(&mut game, card, 0, A, A);
     let mut events = Vec::new();
     let colors = decision(&mut game, &mut events);
-    assert_eq!(colors.options.len(), 3);
+    // Red is active; empty blue and green merge into one no-op option.
+    assert_eq!(colors.options.len(), 2);
     game.choose(0).unwrap();
     complete(run(&mut game, &mut events, &[]));
     let position = game.position();

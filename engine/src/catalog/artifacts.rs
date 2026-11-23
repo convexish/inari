@@ -69,6 +69,13 @@ const fn deck_junk(value: Expr) -> Instruction {
 /// The chosen value's Base deck is empty: junking it changes nothing, so
 /// every empty deck is the same choice.
 const EMPTY_CHOSEN_DECK: Cond = Compare(Count(&BaseDeck(Expr::Chosen)), Cmp::Equal, Const(0));
+/// The executor has no cards of the chosen colour: scoring them all changes
+/// nothing, so every such colour is the same choice.
+const NO_CARDS_OF_CHOSEN_COLOR: Cond = Compare(
+    Count(&Board(Executor, ColorSet::Chosen, BoardRegion::BelowTop(0))),
+    Cmp::Equal,
+    Const(0),
+);
 
 const fn same_value(value: Expr) -> Filter {
     Has(ValueIs(Cmp::Equal, value))
@@ -1071,7 +1078,7 @@ const SHIP_OF_THE_LINE_SUSSEX: &[(EffectKind, Program)] = &[(
     N,
     &[
         if_(&Compare(Count(&SCORE), Cmp::Equal, Const(0)), 3),
-        choose(Executor, Choice::Colors(1)),
+        choose(Executor, Choice::Colors(1)).alias(Alias::NoOpWhen(&NO_CARDS_OF_CHOSEN_COLOR)),
         score(CHOSEN_OWN_STACK).all().shortcut(Shortcut::AnyOrder),
         Instruction::Jump(1),
         return_(SCORE).all().shortcut(ORIGIN_ALL),
