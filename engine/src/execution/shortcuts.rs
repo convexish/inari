@@ -1018,3 +1018,7 @@ mod draw_age_alias_tests;
 #[cfg(test)]
 #[path = "decree_shortcut_tests.rs"]
 mod decree_shortcut_tests;
+
+#[cfg(test)]
+#[path = "procedure_shortcut_tests.rs"]
+mod procedure_shortcut_tests;

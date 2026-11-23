@@ -31,18 +31,26 @@ order a floor measures, so a choice removes exactly the options above it.
 
 Other rules: hidden sweeps that must move every matching card take physical
 order (hands are revealed first, so they never reach this); moves into a Safe
-keep their order; exchange cohorts and committed groups are sets; splays that
-would all change nothing are not asked, nor are visible single picks into a
-full Forecast or Safe (Rubber, Globe).
+keep their order while departures from a Safe to unordered piles (`Junk`,
+`Score`, `Hand`) may reduce under their shortcut's own preconditions; exchange
+cohorts and committed groups are sets; cross-deck matching pairs (Hypersonics)
+deduplicate commuting orders; optional splays drop no-op directions and splays
+that would all change nothing are not asked; War merges no-op values and
+War/Rivalry commute independent returns; Fusion skips its value step when
+neither value matches a top card; visible single picks into a full Forecast or
+Safe (Rubber, Globe) are not asked.
 
 ## Choice aliases
 
 `.alias(..)` on a value or colour choice merges options that lead to the same
 place: `Alias::NoOpWhen(cond)` keeps the first no-op option,
-`Alias::SameKey(expr)` the first per key. The condition may read only what both
-players see (card backs show values; colours of hidden cards are private);
-the lint `alias_conditions_are_public` enforces this. Aliases never consult a
-tracker, so tracked games and search worlds build the same menu.
+`Alias::SameKey(Expr::DrawAge(_))` on a value choice keeps the highest value
+per resolved deck age (so a draw-age merge offers the resolved age), and any
+other `Alias::SameKey(expr)` keeps the first option per key. The condition may
+read only what both players see (card backs show values; colours of hidden
+cards are private); the lint `alias_conditions_are_public` enforces this.
+Aliases never consult a tracker, so tracked games and search worlds build the
+same menu.
 
 ## Figure guard
 

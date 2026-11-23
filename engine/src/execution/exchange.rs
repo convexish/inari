@@ -525,18 +525,13 @@ impl Game {
         }
         let pile = physical(selection.zones[side]);
         if selection.context.controller != selection.context.executor
-            || targets.iter().any(|target| {
-                target.physical != pile
-                    || !self.position.can_view(pile, selection.context.controller)
-            })
-            || (self.position.figures()
-                && Player::ALL.into_iter().any(|player| {
-                    Color::ALL.into_iter().any(|color| {
-                        self.position
-                            .top(player, color)
-                            .is_some_and(|card| self.position.card(card).figure.is_some())
-                    })
-                }))
+            || targets
+                .iter()
+                .chain(&selection.selected[side])
+                .any(|target| {
+                    target.physical != pile
+                        || !self.position.can_view(pile, selection.context.controller)
+                })
         {
             return;
         }

@@ -277,7 +277,21 @@ impl Game {
                         .filter_map(|decrease| value.checked_sub(decrease))
                         .filter(|&value| value >= minimum)
                         .collect();
-                    if values.is_empty() {
+                    #[cfg(test)]
+                    let skip_noop = !self.shortcuts_disabled;
+                    #[cfg(not(test))]
+                    let skip_noop = true;
+                    let any_match = !skip_noop
+                        || self
+                            .select(
+                                Selector::Tops(Who::Executor),
+                                context,
+                                Regs::EMPTY,
+                                Excluded::default(),
+                            )?
+                            .iter()
+                            .any(|target| values.contains(&self.position.value(target.card)));
+                    if values.is_empty() || !any_match {
                         self.complete(ReturnValue::Unit);
                     } else {
                         let options = values.iter().copied().map(Alternative::Value).collect();

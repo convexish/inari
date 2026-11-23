@@ -54,6 +54,26 @@ impl Game {
                 "matching pair requires public board cards",
             ));
         }
+        let pair_shortcuts_enabled = {
+            #[cfg(test)]
+            {
+                !self.shortcuts_disabled
+            }
+            #[cfg(not(test))]
+            {
+                true
+            }
+        };
+        let dependencies = [ShortcutDependency::Move(verb)];
+        let unordered_dest = matches!(
+            to,
+            Destination::Junk | Destination::Score(_) | Destination::Hand(_)
+        );
+        let live_clear = pair_shortcuts_enabled
+            && matches!(from, Selector::Tops(_))
+            && self
+                .position
+                .dependencies_clear(&dependencies, context, true);
         let mut options = Vec::new();
         let mut tasks = Vec::new();
         for &first in &targets {
@@ -64,6 +84,15 @@ impl Game {
                     && card.color != other.color
                     && self.position.value(first.card) == self.position.value(second.card)
                 {
+                    let commutes = live_clear
+                        && (unordered_dest
+                            || (verb == Verb::Return
+                                && to == Destination::Deck
+                                && card.origin_deck() != other.origin_deck()))
+                        && !self.exposure_blocks(&[first, second], &dependencies, context, true);
+                    if commutes && (card.color as u8) > (other.color as u8) {
+                        continue;
+                    }
                     options.push(Alternative::MatchingPair {
                         first: self.position.descriptor(first, context.controller),
                         second: self.position.descriptor(second, context.controller),
